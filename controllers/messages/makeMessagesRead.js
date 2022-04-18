@@ -1,9 +1,7 @@
 const db = require("../../db");
 const { handleDbError } = require("../../utils/db/dbErrorHandler");
 const { getAuthUserId } = require("../../utils/users/getAuthUserId");
-const {
-  removeMessageNotification,
-} = require("../notifications/messagesNotifications");
+const { removeMessageNotification } = require("../notifications/messagesNotifications");
 
 const makeMessagesRead = async (req, res) => {
   const currentUserId = getAuthUserId(req.headers);
@@ -36,12 +34,7 @@ const makeMessagesRead = async (req, res) => {
   }
 };
 
-const makeMessagesReadAndReturnTheirIds = async (
-  senderId,
-  receiverId,
-  client,
-  res
-) => {
+const makeMessagesReadAndReturnTheirIds = async (senderId, receiverId, client, res) => {
   try {
     const query = `
       UPDATE messages

@@ -1,8 +1,6 @@
 const db = require("../../db");
 const { handleDbError } = require("../../utils/db/dbErrorHandler");
-const {
-  getFilterAdsDBCondition,
-} = require("../../utils/posts/getFilterCondition");
+const { getFilterAdsDBCondition } = require("../../utils/posts/getFilterCondition");
 
 const getNumOfPosts = async (req, res) => {
   const filters = req.query;
