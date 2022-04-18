@@ -1,11 +1,12 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "sharity website",
+  "description": "charity website server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon -L src/index.js"
   },
   "author": "",
   "license": "ISC",

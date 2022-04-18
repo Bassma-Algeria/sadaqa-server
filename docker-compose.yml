@@ -1,6 +1,27 @@
 version: '3'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 5000:5000
+    depends_on:
+      - postgres-db
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres-db/sadaqa
+      - CLIENT_URL=http://localhost:3000
+      - GOOGLE_CLIENT_ID=232265737613-v88f9mhc1kq5gqi73r6p10pmtlflvuij.apps.googleusercontent.com
+      - GOOGLE_CLIENT_SECRET=qGDlASaptRpN8pqpBiKo0Jjo
+      - GOOGLE_REDIRECTED_URL=https://developers.google.com/oauthplayground
+      - GOOGLE_REFRESH_TOKEN=1//04ZNPRfd7TnXNCgYIARAAGAQSNwF-L9IrAWpF4_sVjuhYGqjjHBmizON5DTBQEs6_GD9XtPkEQUUewmIbZVMUudWQJkVMdNY4ONc
+      - JWT_SECRET_KEY=11111111
+    restart: always
+    volumes:
+      - ./src:/home/app/src
+      - /home/app/node_modules
+
   postgres-db:
     build:
       context: .
