@@ -96,8 +96,7 @@ jobs:
           ports: 80
           registry-username: ${{ secrets.ACR_USERNAME }}
           registry-password: ${{ secrets.ACR_PASSWORD }}
-          secure-environment-variables: |
-            DATABASE_URL=${{ secrets.DATABASE_URL }} |
+          secure-environment-variables: DATABASE_URL=${{ secrets.DATABASE_URL }} |
             CLIENT_URL=${{ secrets.CLIENT_URL }} |
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} |
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} |
