@@ -21,4 +21,4 @@ USER node
 
 EXPOSE 80
 
-CMD ["pm2-runtime", "index.js"]
+CMD ["pm2-runtime", "src/index.js"]
