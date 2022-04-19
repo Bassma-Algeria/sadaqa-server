@@ -1,9 +1,6 @@
-const { reseller } = require("googleapis/build/src/apis/reseller");
 const db = require("../../db");
 const { handleDbError } = require("../../utils/db/dbErrorHandler");
-const {
-  deleteImgFromDrive,
-} = require("../../utils/driveAndGmail/driveFunctions");
+const { deleteImgFromDrive } = require("../../utils/driveAndGmail/driveFunctions");
 const { getAuthUserId } = require("../../utils/users/getAuthUserId");
 
 const deletePost = async (req, res) => {
@@ -14,12 +11,7 @@ const deletePost = async (req, res) => {
   try {
     await client.query("BEGIN");
 
-    const isCurrentUserOwnThisPost = isAuthUserOwnerOfPost(
-      currentUserId,
-      postId,
-      client,
-      res
-    );
+    const isCurrentUserOwnThisPost = isAuthUserOwnerOfPost(currentUserId, postId, client, res);
     if (!isCurrentUserOwnThisPost) {
       return res.status(401).json({
         success: false,
@@ -87,8 +79,7 @@ const getPicsDriveIds = async (postId, client, res) => {
 
     const { rows } = await client.query(query, values);
 
-    const driveIds =
-      rows.length > 0 ? rows.map((row) => row.g_drive_photo_id) : rows;
+    const driveIds = rows.length > 0 ? rows.map((row) => row.g_drive_photo_id) : rows;
 
     return driveIds;
   } catch (error) {

@@ -1,9 +1,7 @@
 const db = require("../../db");
 const { handleDbError } = require("../../utils/db/dbErrorHandler");
 const { getProfilePic } = require("../../utils/users/getUserProfilePic");
-const {
-  getSocialAccounts,
-} = require("../../utils/users/getUserSocialAccounts");
+const { getSocialAccounts } = require("../../utils/users/getUserSocialAccounts");
 
 // return all the post related data for the single post page
 const getPost = async (req, res) => {

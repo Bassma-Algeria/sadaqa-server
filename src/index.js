@@ -24,13 +24,11 @@ socketHandler(io);
 app.use("/api", router);
 
 // for ssl verification
-app.get(
-  "/.well-known/acme-challenge/3oeIEPfdT528H4UKek-oYVeD0aPHzTq3N3-zXc3U7Fk",
-  (req, res) => {
-    res.sendFile(__dirname + "/ssl/sslCode.txt");
-  }
-);
+app.get("/.well-known/acme-challenge/3oeIEPfdT528H4UKek-oYVeD0aPHzTq3N3-zXc3U7Fk", (req, res) => {
+  res.sendFile(__dirname + "/ssl/sslCode.txt");
+});
 
-httpServer.listen(process.env.PORT || 5000, () => {
-  console.log(`server listening on port ${process.env.PORT}`);
+const PORT = process.env.PORT || 5000;
+httpServer.listen(PORT, () => {
+  console.log(`server listening on port ${PORT}`);
 });

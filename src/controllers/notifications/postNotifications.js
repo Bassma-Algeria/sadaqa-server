@@ -1,9 +1,5 @@
 const db = require("../../db");
-const {
-  getPostWilaya,
-  getPostTypeId,
-  getPostTitle,
-} = require("../../utils/posts/getPostProperties");
+const { getPostWilaya, getPostTypeId, getPostTitle } = require("../../utils/posts/getPostProperties");
 
 const DONATION_ID = 1;
 const DONATION_REQUEST_ID = 2;
@@ -53,19 +49,14 @@ const createPostNotifications = async (postId, currentUserId) => {
 };
 
 const getReceiversIds = async (postId, currentUserId, client) => {
-  const targetAssociationsIds = await getUsersIdsInSameWilayaAsPost(
-    postId,
-    ASSOCIATION_ROLE_ID,
-    client
-  );
+  const targetAssociationsIds = await getUsersIdsInSameWilayaAsPost(postId, ASSOCIATION_ROLE_ID, client);
 
   const targetNormalUsersIds = await getTargetNormalUserIds(postId, client);
 
   // remove the duplicates and the current user
   let receiversIds = targetAssociationsIds.concat(targetNormalUsersIds);
   receiversIds = receiversIds.filter(
-    (receiverId, index) =>
-      receiverId !== currentUserId && receiversIds.indexOf(receiverId) === index
+    (receiverId, index) => receiverId !== currentUserId && receiversIds.indexOf(receiverId) === index
   );
 
   return receiversIds;
@@ -76,10 +67,7 @@ const getTargetNormalUserIds = async (postId, client) => {
 
   let targetUsers;
   if (postTypeId === DONATION_ID) {
-    targetUsers = await getUsersIdsHasDonationRequestSimilarToThePost(
-      postId,
-      client
-    );
+    targetUsers = await getUsersIdsHasDonationRequestSimilarToThePost(postId, client);
   } else if (postTypeId === DONATION_REQUEST_ID) {
     targetUsers = await getUsersIdsHasDonationsSimilarToPost(postId, client);
     const normalUserInSameWilayaOfPost = await getUsersIdsInSameWilayaAsPost(
@@ -89,11 +77,7 @@ const getTargetNormalUserIds = async (postId, client) => {
     );
     targetUsers = targetUsers.concat(normalUserInSameWilayaOfPost);
   } else {
-    targetUsers = getUsersIdsInSameWilayaAsPost(
-      postId,
-      NORMAL_USER_ROLE_ID,
-      client
-    );
+    targetUsers = getUsersIdsInSameWilayaAsPost(postId, NORMAL_USER_ROLE_ID, client);
   }
 
   return targetUsers;
@@ -102,11 +86,7 @@ const getTargetNormalUserIds = async (postId, client) => {
 const getUsersIdsInSameWilayaAsPost = async (postId, roleId, client) => {
   try {
     const postWilaya = await getPostWilaya(postId, client);
-    const associationInSameWilaya = await getUsersIdsInSameWilayaAndHasSameRole(
-      postWilaya,
-      roleId,
-      client
-    );
+    const associationInSameWilaya = await getUsersIdsInSameWilayaAndHasSameRole(postWilaya, roleId, client);
 
     return associationInSameWilaya;
   } catch (error) {
@@ -115,11 +95,7 @@ const getUsersIdsInSameWilayaAsPost = async (postId, roleId, client) => {
   }
 };
 
-const getUsersIdsInSameWilayaAndHasSameRole = async (
-  postWilaya,
-  userRoleId,
-  client
-) => {
+const getUsersIdsInSameWilayaAndHasSameRole = async (postWilaya, userRoleId, client) => {
   try {
     const query = `
       SELECT user_id
@@ -142,10 +118,7 @@ const getUsersIdsInSameWilayaAndHasSameRole = async (
   }
 };
 
-const getUsersIdsHasDonationRequestSimilarToThePost = async (
-  postId,
-  client
-) => {
+const getUsersIdsHasDonationRequestSimilarToThePost = async (postId, client) => {
   try {
     let targetUsersIds = await getTargetPublishers(postId, 2, client);
 
