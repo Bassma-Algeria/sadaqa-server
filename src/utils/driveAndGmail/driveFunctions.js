@@ -9,23 +9,18 @@ const uploadImageAndShareIt = async (image, idOfFileToUploadedIn) => {
 };
 
 async function uploadImg(image, idOfFileToUploadedIn) {
-  const imageExtenstion =
-    image.originalname.split(".")[image.originalname.split(".").length - 1];
+  const imageExtenstion = image.originalname.split(".")[image.originalname.split(".").length - 1];
 
   try {
-    var fileMetadata = {
-      name:
-        Math.floor(Math.random() * 1000000000000000) + "." + imageExtenstion,
+    const resource = {
+      name: Math.floor(Math.random() * 1000000000000000) + "." + imageExtenstion,
       parents: [idOfFileToUploadedIn],
     };
-    var media = {
+    const media = {
       mimeType: image.mimeType,
       body: fs.createReadStream(image.path),
     };
-    const response = await drive.files.create({
-      resource: fileMetadata,
-      media: media,
-    });
+    const response = await drive.files.create({ resource, media });
 
     return response.data.id;
   } catch (error) {

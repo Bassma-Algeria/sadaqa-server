@@ -16,9 +16,7 @@ const { makePostInactive } = require("../controllers/posts/makePostInactive");
 const { sharePost } = require("../controllers/posts/sharePost");
 const { searchForPosts } = require("../controllers/posts/searchForPost");
 const { getNumOfPosts } = require("../controllers/posts/getNumOfPosts");
-const {
-  getNumOfPostsOfAuthUser,
-} = require("../controllers/posts/getNumOfPostOfAuthUser");
+const { getNumOfPostsOfAuthUser } = require("../controllers/posts/getNumOfPostOfAuthUser");
 
 router.get("/", getPosts);
 router.get("/getPost/:postId", getPost);

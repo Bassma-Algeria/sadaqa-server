@@ -11,7 +11,7 @@ RUN npm install -g pm2
 
 COPY src ./src
 
-ENV PORT=80 NODE_ENV=PROD
+ENV PORT=80 NODE_ENV=production
 
 # Set the privileges for our built app executable to run on privileged ports
 RUN setcap 'cap_net_bind_service=+ep' /usr/local/bin/node
