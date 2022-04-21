@@ -2,7 +2,10 @@ const db = require("../../db/index");
 const { addImagePostToDB } = require("../../utils/db/addImageToDB");
 const { handleDbError } = require("../../utils/db/dbErrorHandler");
 const { getAuthUserId } = require("../../utils/users/getAuthUserId");
-const { uploadImageAndShareIt, removeImageFromLocal } = require("../../utils/driveAndGmail/driveFunctions");
+const {
+  uploadImageAndShareIt,
+  removeImageFromLocal,
+} = require("../../utils/driveAndGmail/driveFunctions");
 const { validatePostCreationInputs } = require("../../utils/users/validations");
 const { getUserRoleId } = require("../../utils/users/getUserRoleId");
 const { POSTS_PICS_FILE_ID } = require("../../utils/driveAndGmail/driveFilesIds");
@@ -49,6 +52,7 @@ const createPost = async (req, res) => {
       client,
       res,
     });
+
     await uploadImagesAndSetPostThumbnail(req.files, postId, client, res);
 
     await client.query("COMMIT");
@@ -77,7 +81,8 @@ const isUserAuhtorizeToPostThisType = async (typeId, userId, client, res) => {
 
 const userNotAuthorize = (typeId, roleId, active) => {
   return (
-    ((typeId === FAMILY_IN_NEED_ID || typeId === CALL_FOR_HELP_ID) && roleId !== ASSOCIATION_ROLE_ID) ||
+    ((typeId === FAMILY_IN_NEED_ID || typeId === CALL_FOR_HELP_ID) &&
+      roleId !== ASSOCIATION_ROLE_ID) ||
     !active
   );
 };
@@ -149,8 +154,8 @@ const uploadImagesAndSetPostThumbnail = async (images, postId, client, res) => {
 
       await client.query(
         `
-          UPDATE posts 
-          SET thumbnail_link = $1 
+          UPDATE posts
+          SET thumbnail_link = $1
           WHERE post_id = $2
         `,
         [postThumbnailLink, postId]

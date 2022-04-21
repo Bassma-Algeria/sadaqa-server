@@ -1,14 +1,14 @@
 {
-  "name": "server",
+  "name": "sadaqa-server",
   "version": "1.0.0",
   "description": "charity website server",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
     "start": "node src/index.js",
     "dev": "nodemon -L src/index.js"
   },
-  "author": "",
+  "author": "Bassma Team",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
