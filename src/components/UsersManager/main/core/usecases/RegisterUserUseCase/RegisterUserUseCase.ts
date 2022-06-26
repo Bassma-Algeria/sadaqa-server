@@ -14,9 +14,9 @@ import { UsersRepository } from '../../domain/UsersRepository';
 import { UserIdGenerator } from '../../domain/UserIdGenerator';
 import { PasswordEncryptor } from '../../domain/PasswordEncryptor';
 
-import { ConfirmPasswordMissMatchException } from './exeptions/ConfirmPasswordMissMatchException';
 import { EmailAlreadyUsedException } from './exeptions/EmailAlreadyUsedException';
 import { PhoneNumberAlreadyUsedException } from './exeptions/PhoneNumberAlreadyUsedException';
+import { ConfirmPasswordMissMatchException } from './exeptions/ConfirmPasswordMissMatchException';
 
 class RegisterUserUseCase
   implements UseCase<RegisterUserUseCaseRequest, RegisterUserUseCaseResponse>
