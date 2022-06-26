@@ -38,7 +38,7 @@
 
 ### 4. Notifications end points
 
-- `/api/notifications/getAuthUserNotifications` get request to get the notification of the auth user
+- `/api/notifications/getAuthUserNotifications` get request to get the notification of the auth user, should pass numOfGroupe & numOfElementsPerGroupe as query strings
 - `/api/notifications/makeNotificationsRead` put request to make the post notifications of the auth user read
 
 ### 5. visits end points
