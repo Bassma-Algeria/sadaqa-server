@@ -6,18 +6,20 @@ import { getUserRegistrationInfo } from '../base/data/user';
 import { UsersManagerFacade } from '../../main/UsersManagerFacade';
 
 import { FakeUserIdGenerator } from '../../main/infra/fake/FakeUserIdGenerator';
+import { FakePasswordEncryptor } from '../../main/infra/fake/FakePasswordEncryptor';
 import { InMemoryUsersRepository } from '../../main/infra/fake/InMemoryUsersRepository';
+
+import { Email } from '../../main/core/domain/Email';
+import { Password } from '../../main/core/domain/Password';
 
 import { ShortNameException } from '../../main/core/domain/exceptions/ShortNameException';
 import { InvalidEmailException } from '../../main/core/domain/exceptions/InvalidEmailException';
 import { ShortPasswordException } from '../../main/core/domain/exceptions/ShortPasswordException';
 import { InvalidPhoneNumberException } from '../../main/core/domain/exceptions/InvalidPhoneNumberException';
-import { ConfirmPasswordMissMatchException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/ConfirmPasswordMissMatchException';
-import { Email } from '../../main/core/domain/Email';
-import { Password } from '../../main/core/domain/Password';
-import { FakePasswordEncryptor } from '../../main/infra/fake/FakePasswordEncryptor';
+
 import { EmailAlreadyUsedException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/EmailAlreadyUsedException';
 import { PhoneNumberAlreadyUsedException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/PhoneNumberAlreadyUsedException';
+import { ConfirmPasswordMissMatchException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/ConfirmPasswordMissMatchException';
 
 describe('Register user Use case', () => {
   const usersRepository = new InMemoryUsersRepository();
@@ -102,5 +104,15 @@ describe('Register user Use case', () => {
     await expect(usersManager.register(anotherUser)).to.eventually.be.rejectedWith(
       PhoneNumberAlreadyUsedException,
     );
+  });
+
+  it('each user should have a unique id', async () => {
+    const user = getUserRegistrationInfo();
+    const anotherUser = getUserRegistrationInfo();
+
+    const { userId: firstId } = await usersManager.register(user);
+    const { userId: secondId } = await usersManager.register(anotherUser);
+
+    expect(firstId).to.not.equal(secondId);
   });
 });

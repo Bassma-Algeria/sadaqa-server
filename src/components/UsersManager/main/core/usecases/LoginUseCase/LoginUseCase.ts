@@ -19,16 +19,24 @@ class LoginUseCase implements UseCase<LoginUseCaseRequest, LoginUseCaseResponse>
   async handle(request: LoginUseCaseRequest): Promise<LoginUseCaseResponse> {
     const email = new Email(request.email);
 
-    const user = await this.usersRepository.findByEmail(email);
+    const user = await this.findUserByEmail(email);
     if (!user) throw new WrongCredentialsException();
 
-    const plainPassword = new Password(request.password);
-    const encrypedPassword = user.password;
-
-    const isCorrectPassword = await this.passwordEncryptor.compare(plainPassword, encrypedPassword);
+    const isCorrectPassword = await this.checkPasswordCorrecteness(request.password, user.password);
     if (!isCorrectPassword) throw new WrongCredentialsException();
 
     return { userId: user.userId.value() };
+  }
+
+  private async checkPasswordCorrecteness(plain: string, encrypted: Password) {
+    const plainPassword = new Password(plain);
+    const isCorrectPassword = await this.passwordEncryptor.compare(plainPassword, encrypted);
+
+    return isCorrectPassword;
+  }
+
+  private findUserByEmail(email: Email) {
+    return this.usersRepository.findByEmail(email);
   }
 }
 

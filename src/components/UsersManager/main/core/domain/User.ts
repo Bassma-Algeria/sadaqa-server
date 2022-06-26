@@ -1,11 +1,11 @@
 import { Email } from './Email';
 import { UserId } from './UserId';
 import { Password } from './Password';
-import { PhoneNumber } from './PhoneNumber';
-import { WilayaNumber } from './WilayaNumber';
-import { UserBuilder } from './UserBuilder';
-import { FirstName } from './FirstName';
 import { LastName } from './LastName';
+import { FirstName } from './FirstName';
+import { PhoneNumber } from './PhoneNumber';
+import { UserBuilder } from './UserBuilder';
+import { WilayaNumber } from './WilayaNumber';
 
 class User {
   constructor(

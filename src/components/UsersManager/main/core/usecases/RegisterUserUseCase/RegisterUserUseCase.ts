@@ -33,18 +33,31 @@ class RegisterUserUseCase
 
     if (!user.password.equals(confirmPassword)) throw new ConfirmPasswordMissMatchException();
 
-    const userWithSameEmail = await this.usersRepository.findByEmail(user.email);
+    const userWithSameEmail = await this.findUserByEmail(user.email);
     if (userWithSameEmail) throw new EmailAlreadyUsedException();
 
-    const userWithSamePhone = await this.usersRepository.findByPhoneNumber(user.phone);
+    const userWithSamePhone = await this.findUserByPhone(user.phone);
     if (userWithSamePhone) throw new PhoneNumberAlreadyUsedException();
 
-    const encryptedPassword = await this.passwordEncryptor.encrypt(user.password);
-    const userWithEncrypedPassword = User.builder(user).password(encryptedPassword).build();
+    const userWithEncrypedPassword = await this.getUserWithEncryptedPasswordFrom(user);
 
     await this.usersRepository.add(userWithEncrypedPassword);
 
     return { userId: user.userId.value() };
+  }
+
+  private async getUserWithEncryptedPasswordFrom(user: User) {
+    const encryptedPassword = await this.passwordEncryptor.encrypt(user.password);
+
+    return User.builder(user).password(encryptedPassword).build();
+  }
+
+  private findUserByPhone(phone: PhoneNumber) {
+    return this.usersRepository.findByPhoneNumber(phone);
+  }
+
+  private findUserByEmail(email: Email) {
+    return this.usersRepository.findByEmail(email);
   }
 
   private getUserFrom(request: RegisterUserUseCaseRequest) {

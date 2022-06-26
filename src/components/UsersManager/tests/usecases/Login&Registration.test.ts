@@ -40,14 +40,4 @@ describe('Login & Registration', () => {
       usersManager.login({ email: user.email, password: anotherUser.password }),
     ).to.be.rejectedWith(WrongCredentialsException);
   });
-
-  it('each user should have a unique id', async () => {
-    const user = getUserRegistrationInfo();
-    const anotherUser = getUserRegistrationInfo();
-
-    const { userId: firstId } = await usersManager.register(user);
-    const { userId: secondId } = await usersManager.register(anotherUser);
-
-    expect(firstId).to.not.equal(secondId);
-  });
 });
