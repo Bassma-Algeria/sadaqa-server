@@ -2,7 +2,7 @@ import { UseCase } from '../UseCase';
 import { RegisterUserUseCaseRequest } from './RegisterUserUseCaseRequest';
 import { RegisterUserUseCaseResponse } from './RegisterUserUseCaseResponse';
 
-import { User } from '../../domain/User';
+import { UserAccount } from '../../domain/UserAccount';
 import { Email } from '../../domain/Email';
 import { Password } from '../../domain/Password';
 import { LastName } from '../../domain/LastName';
@@ -10,11 +10,13 @@ import { FirstName } from '../../domain/FirstName';
 import { PhoneNumber } from '../../domain/PhoneNumber';
 import { WilayaNumber } from '../../domain/WilayaNumber';
 
-import { UsersRepository } from '../../domain/UsersRepository';
-import { UserIdGenerator } from '../../domain/UserIdGenerator';
-import { PasswordEncryptor } from '../../domain/PasswordEncryptor';
+import { WilayasService } from '../../domain/services/WilayasService';
+import { UserAccountRepository } from '../../domain/services/UserAccountRepository';
+import { UserIdGenerator } from '../../domain/services/UserIdGenerator';
+import { PasswordEncryptor } from '../../domain/services/PasswordEncryptor';
 
 import { EmailAlreadyUsedException } from './exeptions/EmailAlreadyUsedException';
+import { InvalidWilayaNumberException } from './exeptions/InvalidWilayaNumberException';
 import { PhoneNumberAlreadyUsedException } from './exeptions/PhoneNumberAlreadyUsedException';
 import { ConfirmPasswordMissMatchException } from './exeptions/ConfirmPasswordMissMatchException';
 
@@ -22,54 +24,72 @@ class RegisterUserUseCase
   implements UseCase<RegisterUserUseCaseRequest, RegisterUserUseCaseResponse>
 {
   constructor(
-    private readonly usersRepository: UsersRepository,
+    private readonly userAccountRepository: UserAccountRepository,
     private readonly userIdGenerator: UserIdGenerator,
     private readonly passwordEncryptor: PasswordEncryptor,
+    private readonly wilayasService: WilayasService,
   ) {}
 
   async handle(request: RegisterUserUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
-    const user = this.getUserFrom(request);
-    const confirmPassword = new Password(request.confirmPassword);
+    const { firstName, lastName, email, wilaya, phone, password, confirmPassword } =
+      this.getFrom(request);
 
-    if (!user.password.equals(confirmPassword)) throw new ConfirmPasswordMissMatchException();
+    if (!password.equals(confirmPassword)) throw new ConfirmPasswordMissMatchException();
 
-    const userWithSameEmail = await this.findUserByEmail(user.email);
-    if (userWithSameEmail) throw new EmailAlreadyUsedException();
+    const accountWithSameEmail = await this.findUserByEmail(email);
+    if (accountWithSameEmail) throw new EmailAlreadyUsedException();
 
-    const userWithSamePhone = await this.findUserByPhone(user.phone);
-    if (userWithSamePhone) throw new PhoneNumberAlreadyUsedException();
+    const accountWithSamePhone = await this.findUserByPhone(phone);
+    if (accountWithSamePhone) throw new PhoneNumberAlreadyUsedException();
 
-    const userWithEncrypedPassword = await this.getUserWithEncryptedPasswordFrom(user);
+    const isWilayaExist = await this.wilayasService.isExist(wilaya);
+    if (!isWilayaExist) throw new InvalidWilayaNumberException();
 
-    await this.usersRepository.add(userWithEncrypedPassword);
+    const userId = this.getNextUserId();
+    const encryptedPassword = await this.encrypt(password);
 
-    return { userId: user.userId.value() };
+    const user: UserAccount = UserAccount.builder()
+      .userId(userId)
+      .firstName(firstName)
+      .lastName(lastName)
+      .wilayaNumber(wilaya)
+      .phoneNumber(phone)
+      .email(email)
+      .password(encryptedPassword)
+      .createdAt(new Date())
+      .build();
+
+    await this.userAccountRepository.add(user);
+
+    return { userId: userId.value() };
   }
 
-  private async getUserWithEncryptedPasswordFrom(user: User) {
-    const encryptedPassword = await this.passwordEncryptor.encrypt(user.password);
+  private encrypt(password: Password) {
+    return this.passwordEncryptor.encrypt(password);
+  }
 
-    return User.builder(user).password(encryptedPassword).build();
+  private getNextUserId() {
+    return this.userIdGenerator.nextId();
+  }
+
+  private getFrom(request: RegisterUserUseCaseRequest) {
+    return {
+      firstName: new FirstName(request.firstName),
+      lastName: new LastName(request.lastName),
+      wilaya: new WilayaNumber(request.wilayaNumber),
+      phone: new PhoneNumber(request.phoneNumber),
+      email: new Email(request.email),
+      password: new Password(request.password),
+      confirmPassword: new Password(request.confirmPassword),
+    };
   }
 
   private findUserByPhone(phone: PhoneNumber) {
-    return this.usersRepository.findByPhoneNumber(phone);
+    return this.userAccountRepository.findByPhoneNumber(phone);
   }
 
   private findUserByEmail(email: Email) {
-    return this.usersRepository.findByEmail(email);
-  }
-
-  private getUserFrom(request: RegisterUserUseCaseRequest) {
-    return new User(
-      this.userIdGenerator.nextId(),
-      new FirstName(request.firstName),
-      new LastName(request.lastName),
-      new WilayaNumber(request.wilayaNumber),
-      new PhoneNumber(request.phoneNumber),
-      new Email(request.email),
-      new Password(request.password),
-    );
+    return this.userAccountRepository.findByEmail(email);
   }
 }
 

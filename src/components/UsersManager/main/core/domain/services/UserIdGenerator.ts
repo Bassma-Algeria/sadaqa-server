@@ -1,4 +1,4 @@
-import { UserId } from './UserId';
+import { UserId } from '../UserId';
 
 interface UserIdGenerator {
   nextId(): UserId;

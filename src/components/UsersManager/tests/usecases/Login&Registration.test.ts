@@ -3,20 +3,17 @@ import { expect } from 'chai';
 
 import { getUserRegistrationInfo } from '../base/data/user';
 
-import { UsersManagerFacade } from '../../main/UsersManagerFacade';
-
 import { WrongCredentialsException } from '../../main/core/domain/exceptions/WrongCredentialsException';
 
-import { FakeUserIdGenerator } from '../../main/infra/fake/FakeUserIdGenerator';
-import { FakePasswordEncryptor } from '../../main/infra/fake/FakePasswordEncryptor';
-import { InMemoryUsersRepository } from '../../main/infra/fake/InMemoryUsersRepository';
+import { UsersManagerFacade } from '../../main/UsersManagerFacade';
+import { UsersManagerConfiguration } from '../../main/UsersManagerConfiguration';
 
 describe('Login & Registration', () => {
-  const usersManager = new UsersManagerFacade(
-    new InMemoryUsersRepository(),
-    new FakeUserIdGenerator(),
-    new FakePasswordEncryptor(),
-  );
+  let usersManager: UsersManagerFacade;
+
+  beforeEach(() => {
+    usersManager = new UsersManagerConfiguration().aUsersManagerFacade();
+  });
 
   it('should be able to create a normal account, and login with the same credentials', async () => {
     const user = getUserRegistrationInfo();
@@ -39,5 +36,25 @@ describe('Login & Registration', () => {
     await expect(
       usersManager.login({ email: user.email, password: anotherUser.password }),
     ).to.be.rejectedWith(WrongCredentialsException);
+  });
+
+  it('should be able to login with the email uppercased and have some white spaces in left and right', async () => {
+    const user = getUserRegistrationInfo();
+
+    const { userId } = await usersManager.register(user);
+
+    await expect(
+      usersManager.login({ email: `  ${user.email.toUpperCase()}`, password: user.password }),
+    ).to.eventually.deep.equal({ userId });
+  });
+
+  it('should be able to login with the password have some white spaces in left and right', async () => {
+    const user = getUserRegistrationInfo();
+
+    const { userId } = await usersManager.register(user);
+
+    await expect(
+      usersManager.login({ email: user.email, password: ` ${user.password}  ` }),
+    ).to.eventually.deep.equal({ userId });
   });
 });

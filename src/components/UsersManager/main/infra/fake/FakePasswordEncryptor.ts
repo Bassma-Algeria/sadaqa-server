@@ -1,5 +1,5 @@
 import { Password } from '../../core/domain/Password';
-import { PasswordEncryptor } from '../../core/domain/PasswordEncryptor';
+import { PasswordEncryptor } from '../../core/domain/services/PasswordEncryptor';
 
 class FakePasswordEncryptor implements PasswordEncryptor {
   private readonly HASH = `${Math.random() * 10}`;

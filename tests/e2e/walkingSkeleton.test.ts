@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { getDonationCreationInfo } from './base/data/post';
 import { getUserRegistrationInfo } from './base/data/user';
-import { EndPoints } from './base/helpers/Endpoints';
 
+import { EndPoints } from './base/helpers/Endpoints';
 import { HttpRequester } from './base/helpers/HttpRequester';
 
 describe.skip('Walking Skeleton', () => {

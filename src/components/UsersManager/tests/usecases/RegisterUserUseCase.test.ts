@@ -4,10 +4,10 @@ import { spy } from 'sinon';
 import { getUserRegistrationInfo } from '../base/data/user';
 
 import { UsersManagerFacade } from '../../main/UsersManagerFacade';
+import { UsersManagerConfiguration } from '../../main/UsersManagerConfiguration';
 
-import { FakeUserIdGenerator } from '../../main/infra/fake/FakeUserIdGenerator';
 import { FakePasswordEncryptor } from '../../main/infra/fake/FakePasswordEncryptor';
-import { InMemoryUsersRepository } from '../../main/infra/fake/InMemoryUsersRepository';
+import { InMemoryUserAccountRepository } from '../../main/infra/fake/InMemoryUserAccountRepository';
 
 import { Email } from '../../main/core/domain/Email';
 import { Password } from '../../main/core/domain/Password';
@@ -18,15 +18,22 @@ import { ShortPasswordException } from '../../main/core/domain/exceptions/ShortP
 import { InvalidPhoneNumberException } from '../../main/core/domain/exceptions/InvalidPhoneNumberException';
 
 import { EmailAlreadyUsedException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/EmailAlreadyUsedException';
+import { InvalidWilayaNumberException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/InvalidWilayaNumberException';
 import { PhoneNumberAlreadyUsedException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/PhoneNumberAlreadyUsedException';
 import { ConfirmPasswordMissMatchException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/ConfirmPasswordMissMatchException';
 
 describe('Register user Use case', () => {
-  const usersRepository = new InMemoryUsersRepository();
-  const userIdGenerator = new FakeUserIdGenerator();
+  const userAccountRepository = new InMemoryUserAccountRepository();
   const passwordEncryptor = new FakePasswordEncryptor();
 
-  const usersManager = new UsersManagerFacade(usersRepository, userIdGenerator, passwordEncryptor);
+  let usersManager: UsersManagerFacade;
+
+  beforeEach(() => {
+    usersManager = new UsersManagerConfiguration(
+      userAccountRepository,
+      passwordEncryptor,
+    ).aUsersManagerFacade();
+  });
 
   it('email should be valid', async () => {
     const user = getUserRegistrationInfo({ email: 'invalid email!' });
@@ -46,12 +53,12 @@ describe('Register user Use case', () => {
     await expect(usersManager.register(user)).to.eventually.be.rejectedWith(ShortNameException);
   });
 
-  it.skip('wilaya number should be valid', async () => {
+  it('wilaya number should be valid', async () => {
     const user = getUserRegistrationInfo({ wilayaNumber: 100 });
 
-    // await expect(usersManager.register(user)).to.eventually.be.rejectedWith(
-    //   InvalidWilayaNumberException,
-    // );
+    await expect(usersManager.register(user)).to.eventually.be.rejectedWith(
+      InvalidWilayaNumberException,
+    );
   });
 
   it('phone number should be valid', async () => {
@@ -80,7 +87,7 @@ describe('Register user Use case', () => {
 
     await usersManager.register(user);
 
-    const savedUser = await usersRepository.findByEmail(new Email(user.email));
+    const savedUser = await userAccountRepository.findByEmail(new Email(user.email));
 
     expect(savedUser?.password.equals(new Password(user.password))).to.equal(false);
     expect(encryptMethod.calledOnce).to.equal(true);

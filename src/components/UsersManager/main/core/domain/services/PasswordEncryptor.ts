@@ -1,4 +1,4 @@
-import { Password } from './Password';
+import { Password } from '../Password';
 
 export interface PasswordEncryptor {
   encrypt(password: Password): Promise<Password>;

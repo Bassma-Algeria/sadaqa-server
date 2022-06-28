@@ -4,10 +4,10 @@ import { Password } from './Password';
 import { LastName } from './LastName';
 import { FirstName } from './FirstName';
 import { PhoneNumber } from './PhoneNumber';
-import { UserBuilder } from './UserBuilder';
 import { WilayaNumber } from './WilayaNumber';
+import { UserAccountBuilder } from './UserAccountBuilder';
 
-class User {
+class UserAccount {
   constructor(
     readonly userId: UserId,
     readonly firstName: FirstName,
@@ -16,11 +16,12 @@ class User {
     readonly phone: PhoneNumber,
     readonly email: Email,
     readonly password: Password,
+    readonly createdAt: Date,
   ) {}
 
-  static builder(user?: User): UserBuilder {
-    return new UserBuilder(user);
+  static builder(user?: UserAccount): UserAccountBuilder {
+    return new UserAccountBuilder(user);
   }
 }
 
-export { User };
+export { UserAccount };

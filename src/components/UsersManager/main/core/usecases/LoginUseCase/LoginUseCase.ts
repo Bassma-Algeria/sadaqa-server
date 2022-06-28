@@ -5,30 +5,30 @@ import { LoginUseCaseResponse } from './LoginUseCaseResponse';
 import { Email } from '../../domain/Email';
 import { Password } from '../../domain/Password';
 
-import { UsersRepository } from '../../domain/UsersRepository';
-import { PasswordEncryptor } from '../../domain/PasswordEncryptor';
+import { PasswordEncryptor } from '../../domain/services/PasswordEncryptor';
+import { UserAccountRepository } from '../../domain/services/UserAccountRepository';
 
 import { WrongCredentialsException } from '../../domain/exceptions/WrongCredentialsException';
 
 class LoginUseCase implements UseCase<LoginUseCaseRequest, LoginUseCaseResponse> {
   constructor(
-    private readonly usersRepository: UsersRepository,
+    private readonly userAccountRepository: UserAccountRepository,
     private readonly passwordEncryptor: PasswordEncryptor,
   ) {}
 
   async handle(request: LoginUseCaseRequest): Promise<LoginUseCaseResponse> {
     const email = new Email(request.email);
 
-    const user = await this.findUserByEmail(email);
-    if (!user) throw new WrongCredentialsException();
+    const account = await this.findUserByEmail(email);
+    if (!account) throw new WrongCredentialsException();
 
-    const isCorrectPassword = await this.checkPasswordCorrecteness(request.password, user.password);
-    if (!isCorrectPassword) throw new WrongCredentialsException();
+    const isMatch = await this.checkPassword(request.password, account.password);
+    if (!isMatch) throw new WrongCredentialsException();
 
-    return { userId: user.userId.value() };
+    return { userId: account.userId.value() };
   }
 
-  private async checkPasswordCorrecteness(plain: string, encrypted: Password) {
+  private async checkPassword(plain: string, encrypted: Password) {
     const plainPassword = new Password(plain);
     const isCorrectPassword = await this.passwordEncryptor.compare(plainPassword, encrypted);
 
@@ -36,7 +36,7 @@ class LoginUseCase implements UseCase<LoginUseCaseRequest, LoginUseCaseResponse>
   }
 
   private findUserByEmail(email: Email) {
-    return this.usersRepository.findByEmail(email);
+    return this.userAccountRepository.findByEmail(email);
   }
 }
 

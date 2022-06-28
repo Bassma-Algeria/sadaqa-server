@@ -1,4 +1,4 @@
-import { User } from './User';
+import { UserAccount } from './UserAccount';
 import { Email } from './Email';
 import { UserId } from './UserId';
 import { Password } from './Password';
@@ -7,7 +7,7 @@ import { FirstName } from './FirstName';
 import { PhoneNumber } from './PhoneNumber';
 import { WilayaNumber } from './WilayaNumber';
 
-class UserBuilder {
+class UserAccountBuilder {
   private _userId!: UserId;
   private _firstName!: FirstName;
   private _lastName!: LastName;
@@ -15,17 +15,19 @@ class UserBuilder {
   private _phone!: PhoneNumber;
   private _email!: Email;
   private _password!: Password;
+  private _createdAt!: Date;
 
-  constructor(user?: User) {
-    if (!user) return;
+  constructor(account?: UserAccount) {
+    if (!account) return;
 
-    this._userId = user.userId;
-    this._firstName = user.firstName;
-    this._lastName = user.lastName;
-    this._wilayaNumber = user.wilayaNumber;
-    this._phone = user.phone;
-    this._email = user.email;
-    this._password = user.password;
+    this._userId = account.userId;
+    this._firstName = account.firstName;
+    this._lastName = account.lastName;
+    this._wilayaNumber = account.wilayaNumber;
+    this._phone = account.phone;
+    this._email = account.email;
+    this._password = account.password;
+    this._createdAt = account.createdAt;
   }
 
   userId(userId: UserId) {
@@ -63,8 +65,13 @@ class UserBuilder {
     return this;
   }
 
-  build(): User {
-    return new User(
+  createdAt(createdAt: Date) {
+    this._createdAt = createdAt;
+    return this;
+  }
+
+  build(): UserAccount {
+    return new UserAccount(
       this._userId,
       this._firstName,
       this._lastName,
@@ -72,8 +79,9 @@ class UserBuilder {
       this._phone,
       this._email,
       this._password,
+      this._createdAt,
     );
   }
 }
 
-export { UserBuilder };
+export { UserAccountBuilder };
