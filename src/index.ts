@@ -1,3 +1,5 @@
-import { startRestServer } from './web/rest/main';
+import { bootstrapNestApp } from './web/rest/main';
 
-startRestServer();
+const PORT = process.env.PORT || 5001;
+
+bootstrapNestApp().then(app => app.listen(PORT));

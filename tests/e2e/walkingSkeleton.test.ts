@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { bootstrapNestApp } from '../../src/web/rest/main';
 import { getDonationCreationInfo } from './base/data/post';
 import { getUserRegistrationInfo } from './base/data/user';
 
@@ -8,12 +9,9 @@ import { HttpRequester } from './base/helpers/HttpRequester';
 describe.skip('Walking Skeleton', () => {
   let requester: HttpRequester;
 
-  before(() => {
-    requester = new HttpRequester({} as any);
-  });
-
-  after(() => {
-    requester.close();
+  before(async () => {
+    const app = await bootstrapNestApp();
+    requester = new HttpRequester(app.getHttpServer());
   });
 
   it('user create an account, publish a donation, another user came in and found the post in the donations section, and get more infomation about it', async () => {

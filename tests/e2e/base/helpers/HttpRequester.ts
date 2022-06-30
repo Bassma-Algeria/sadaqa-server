@@ -1,6 +1,7 @@
 import 'chai-http';
 import chai from 'chai';
-import { Server } from 'https';
+
+import { Server } from 'http';
 
 interface Headers {
   Authorisation: string;
@@ -45,10 +46,6 @@ class HttpRequester {
           resolve(res);
         });
     });
-  }
-
-  async close() {
-    this.server.close();
   }
 }
 

@@ -1,18 +1,18 @@
 import 'chai-as-promised';
 import { expect } from 'chai';
 
-import { getUserRegistrationInfo } from '../base/data/user';
+import { getUserRegistrationInfo } from './base/user';
+import { getUsersManagerFacade } from './base/getUsersManagerFacade';
 
 import { WrongCredentialsException } from '../../main/core/domain/exceptions/WrongCredentialsException';
 
 import { UsersManagerFacade } from '../../main/UsersManagerFacade';
-import { UsersManagerConfiguration } from '../../main/UsersManagerConfiguration';
 
 describe('Login & Registration', () => {
   let usersManager: UsersManagerFacade;
 
   beforeEach(() => {
-    usersManager = new UsersManagerConfiguration().aUsersManagerFacade();
+    usersManager = getUsersManagerFacade();
   });
 
   it('should be able to create a normal account, and login with the same credentials', async () => {

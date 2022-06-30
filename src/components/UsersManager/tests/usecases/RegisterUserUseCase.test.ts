@@ -1,11 +1,12 @@
 import { expect } from 'chai';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 
-import { getUserRegistrationInfo } from '../base/data/user';
+import { getUserRegistrationInfo } from './base/user';
+import { getUsersManagerFacade } from './base/getUsersManagerFacade';
 
 import { UsersManagerFacade } from '../../main/UsersManagerFacade';
-import { UsersManagerConfiguration } from '../../main/UsersManagerConfiguration';
 
+import { FakeWilayasService } from '../../main/infra/fake/FakeWilayasService';
 import { FakePasswordEncryptor } from '../../main/infra/fake/FakePasswordEncryptor';
 import { InMemoryUserAccountRepository } from '../../main/infra/fake/InMemoryUserAccountRepository';
 
@@ -15,6 +16,7 @@ import { Password } from '../../main/core/domain/Password';
 import { ShortNameException } from '../../main/core/domain/exceptions/ShortNameException';
 import { InvalidEmailException } from '../../main/core/domain/exceptions/InvalidEmailException';
 import { ShortPasswordException } from '../../main/core/domain/exceptions/ShortPasswordException';
+import { MultiLanguagesException } from '../../main/core/domain/exceptions/MultiLanguagesException';
 import { InvalidPhoneNumberException } from '../../main/core/domain/exceptions/InvalidPhoneNumberException';
 
 import { EmailAlreadyUsedException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/EmailAlreadyUsedException';
@@ -23,42 +25,54 @@ import { PhoneNumberAlreadyUsedException } from '../../main/core/usecases/Regist
 import { ConfirmPasswordMissMatchException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/ConfirmPasswordMissMatchException';
 
 describe('Register user Use case', () => {
-  const userAccountRepository = new InMemoryUserAccountRepository();
+  const wilayasService = new FakeWilayasService();
   const passwordEncryptor = new FakePasswordEncryptor();
+  const userAccountRepository = new InMemoryUserAccountRepository();
 
   let usersManager: UsersManagerFacade;
 
   beforeEach(() => {
-    usersManager = new UsersManagerConfiguration(
+    usersManager = getUsersManagerFacade({
+      wilayasService,
       userAccountRepository,
       passwordEncryptor,
-    ).aUsersManagerFacade();
+    });
   });
 
   it('email should be valid', async () => {
     const user = getUserRegistrationInfo({ email: 'invalid email!' });
 
-    await expect(usersManager.register(user)).to.eventually.be.rejectedWith(InvalidEmailException);
+    await expect(usersManager.register(user))
+      .to.eventually.be.rejectedWith(InvalidEmailException)
+      .instanceOf(MultiLanguagesException);
   });
 
   it('password should be more than 6 characters', async () => {
     const user = getUserRegistrationInfo({ password: 'short' });
 
-    await expect(usersManager.register(user)).to.eventually.be.rejectedWith(ShortPasswordException);
+    await expect(usersManager.register(user))
+      .to.eventually.be.rejectedWith(ShortPasswordException)
+      .instanceOf(MultiLanguagesException);
   });
 
   it('first name and last name should have more than 3 characters', async () => {
     const user = getUserRegistrationInfo({ firstName: 'sh', lastName: 'sdf' });
 
-    await expect(usersManager.register(user)).to.eventually.be.rejectedWith(ShortNameException);
+    await expect(usersManager.register(user))
+      .to.eventually.be.rejectedWith(ShortNameException)
+      .instanceOf(MultiLanguagesException);
   });
 
   it('wilaya number should be valid', async () => {
+    const isExistMock = stub(wilayasService, 'isExist').callsFake(() => Promise.resolve(false));
+
     const user = getUserRegistrationInfo({ wilayaNumber: 100 });
 
     await expect(usersManager.register(user)).to.eventually.be.rejectedWith(
       InvalidWilayaNumberException,
     );
+
+    isExistMock.restore();
   });
 
   it('phone number should be valid', async () => {
@@ -68,17 +82,17 @@ describe('Register user Use case', () => {
     await expect(usersManager.register(user)).to.eventually.be.rejectedWith(
       InvalidPhoneNumberException,
     );
-    await expect(usersManager.register(anotherUser)).to.eventually.be.rejectedWith(
-      InvalidPhoneNumberException,
-    );
+    await expect(usersManager.register(anotherUser))
+      .to.eventually.be.rejectedWith(InvalidPhoneNumberException)
+      .instanceOf(MultiLanguagesException);
   });
 
   it('confirm password should equal the password', async () => {
     const user = getUserRegistrationInfo({ confirmPassword: 'some other password' });
 
-    await expect(usersManager.register(user)).to.eventually.be.rejectedWith(
-      ConfirmPasswordMissMatchException,
-    );
+    await expect(usersManager.register(user))
+      .to.eventually.be.rejectedWith(ConfirmPasswordMissMatchException)
+      .instanceOf(MultiLanguagesException);
   });
 
   it('should hash the password before saving it', async () => {
@@ -98,9 +112,9 @@ describe('Register user Use case', () => {
     const anotherUser = getUserRegistrationInfo({ email: user.email });
 
     await usersManager.register(user);
-    await expect(usersManager.register(anotherUser)).to.eventually.be.rejectedWith(
-      EmailAlreadyUsedException,
-    );
+    await expect(usersManager.register(anotherUser))
+      .to.eventually.be.rejectedWith(EmailAlreadyUsedException)
+      .instanceOf(MultiLanguagesException);
   });
 
   it('should not have two users with the same phone number', async () => {
@@ -108,9 +122,9 @@ describe('Register user Use case', () => {
     const anotherUser = getUserRegistrationInfo({ phoneNumber: user.phoneNumber });
 
     await usersManager.register(user);
-    await expect(usersManager.register(anotherUser)).to.eventually.be.rejectedWith(
-      PhoneNumberAlreadyUsedException,
-    );
+    await expect(usersManager.register(anotherUser))
+      .to.eventually.be.rejectedWith(PhoneNumberAlreadyUsedException)
+      .instanceOf(MultiLanguagesException);
   });
 
   it('each user should have a unique id', async () => {
