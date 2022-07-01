@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Email } from '../../main/core/domain/Email';
+import { Email } from '../../../main/core/domain/Email';
 
 describe('Email value object', () => {
   it('should trim and lower case the Email', () => {

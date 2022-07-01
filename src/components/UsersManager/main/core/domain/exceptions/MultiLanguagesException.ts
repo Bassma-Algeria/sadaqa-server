@@ -1,7 +1,8 @@
-export interface ErrorMessage {
-  en: string;
-  ar: string;
-}
+export type SupportedLangugaes = 'en' | 'ar';
+
+type ErrorMessage = {
+  [key in SupportedLangugaes]: string;
+};
 
 class MultiLanguagesException extends Error {
   readonly errorMessage: ErrorMessage;

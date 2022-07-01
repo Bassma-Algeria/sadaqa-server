@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { PhoneNumber } from '../../main/core/domain/PhoneNumber';
+import { PhoneNumber } from '../../../main/core/domain/PhoneNumber';
 
 describe('PhoneNumber Value Object', () => {
   it('should remove white spaces from the phone number', () => {

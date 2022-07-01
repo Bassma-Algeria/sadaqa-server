@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { RegisterUserUseCaseRequest } from '../../../main/core/usecases/RegisterUserUseCase/RegisterUserUseCaseRequest';
+
+import { RegisterUserUseCaseRequest } from '../../../../main/core/usecases/RegisterUserUseCase/RegisterUserUseCaseRequest';
 
 const getUserRegistrationInfo = (
   info?: Partial<RegisterUserUseCaseRequest>,

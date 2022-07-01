@@ -1,15 +1,16 @@
-import { FakePasswordEncryptor } from './infra/fake/FakePasswordEncryptor';
-import { FakeUserIdGenerator } from './infra/fake/FakeUserIdGenerator';
-import { FakeWilayasService } from './infra/fake/FakeWilayasService';
-import { InMemoryUserAccountRepository } from './infra/fake/InMemoryUserAccountRepository';
 import { UsersManagerFacade } from './UsersManagerFacade';
+
+import { FakeWilayasService } from './infra/fake/FakeWilayasService';
+import { UuidUserIdGenerator } from './infra/real/UuidUserIdGenerator';
+import { BcryptPasswordEncryptor } from './infra/real/BcryptPasswordEncryptor';
+import { InMemoryUserAccountRepository } from './infra/fake/InMemoryUserAccountRepository';
 
 class UsersManagerConfiguration {
   static aUsersManagerFacade(): UsersManagerFacade {
     return new UsersManagerFacade(
       new InMemoryUserAccountRepository(),
-      new FakeUserIdGenerator(),
-      new FakePasswordEncryptor(),
+      new UuidUserIdGenerator(),
+      new BcryptPasswordEncryptor(),
       new FakeWilayasService(),
     );
   }

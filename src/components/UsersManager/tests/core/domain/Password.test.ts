@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Password } from '../../main/core/domain/Password';
+import { Password } from '../../../main/core/domain/Password';
 
 describe('Password value object', () => {
   it('should trim the password', () => {

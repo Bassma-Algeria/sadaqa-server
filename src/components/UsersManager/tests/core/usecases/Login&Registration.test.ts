@@ -4,9 +4,9 @@ import { expect } from 'chai';
 import { getUserRegistrationInfo } from './base/user';
 import { getUsersManagerFacade } from './base/getUsersManagerFacade';
 
-import { WrongCredentialsException } from '../../main/core/domain/exceptions/WrongCredentialsException';
+import { UsersManagerFacade } from '../../../main/UsersManagerFacade';
 
-import { UsersManagerFacade } from '../../main/UsersManagerFacade';
+import { WrongCredentialsException } from '../../../main/core/domain/exceptions/WrongCredentialsException';
 
 describe('Login & Registration', () => {
   let usersManager: UsersManagerFacade;

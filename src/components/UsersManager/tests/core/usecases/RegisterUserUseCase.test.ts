@@ -4,25 +4,25 @@ import { spy, stub } from 'sinon';
 import { getUserRegistrationInfo } from './base/user';
 import { getUsersManagerFacade } from './base/getUsersManagerFacade';
 
-import { UsersManagerFacade } from '../../main/UsersManagerFacade';
+import { UsersManagerFacade } from '../../../main/UsersManagerFacade';
 
-import { FakeWilayasService } from '../../main/infra/fake/FakeWilayasService';
-import { FakePasswordEncryptor } from '../../main/infra/fake/FakePasswordEncryptor';
-import { InMemoryUserAccountRepository } from '../../main/infra/fake/InMemoryUserAccountRepository';
+import { FakeWilayasService } from '../../../main/infra/fake/FakeWilayasService';
+import { FakePasswordEncryptor } from '../../../main/infra/fake/FakePasswordEncryptor';
+import { InMemoryUserAccountRepository } from '../../../main/infra/fake/InMemoryUserAccountRepository';
 
-import { Email } from '../../main/core/domain/Email';
-import { Password } from '../../main/core/domain/Password';
+import { Email } from '../../../main/core/domain/Email';
+import { Password } from '../../../main/core/domain/Password';
 
-import { ShortNameException } from '../../main/core/domain/exceptions/ShortNameException';
-import { InvalidEmailException } from '../../main/core/domain/exceptions/InvalidEmailException';
-import { ShortPasswordException } from '../../main/core/domain/exceptions/ShortPasswordException';
-import { MultiLanguagesException } from '../../main/core/domain/exceptions/MultiLanguagesException';
-import { InvalidPhoneNumberException } from '../../main/core/domain/exceptions/InvalidPhoneNumberException';
+import { ShortNameException } from '../../../main/core/domain/exceptions/ShortNameException';
+import { InvalidEmailException } from '../../../main/core/domain/exceptions/InvalidEmailException';
+import { ShortPasswordException } from '../../../main/core/domain/exceptions/ShortPasswordException';
+import { MultiLanguagesException } from '../../../main/core/domain/exceptions/MultiLanguagesException';
+import { InvalidPhoneNumberException } from '../../../main/core/domain/exceptions/InvalidPhoneNumberException';
 
-import { EmailAlreadyUsedException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/EmailAlreadyUsedException';
-import { InvalidWilayaNumberException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/InvalidWilayaNumberException';
-import { PhoneNumberAlreadyUsedException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/PhoneNumberAlreadyUsedException';
-import { ConfirmPasswordMissMatchException } from '../../main/core/usecases/RegisterUserUseCase/exeptions/ConfirmPasswordMissMatchException';
+import { EmailAlreadyUsedException } from '../../../main/core/usecases/RegisterUserUseCase/exeptions/EmailAlreadyUsedException';
+import { InvalidWilayaNumberException } from '../../../main/core/usecases/RegisterUserUseCase/exeptions/InvalidWilayaNumberException';
+import { PhoneNumberAlreadyUsedException } from '../../../main/core/usecases/RegisterUserUseCase/exeptions/PhoneNumberAlreadyUsedException';
+import { ConfirmPasswordMissMatchException } from '../../../main/core/usecases/RegisterUserUseCase/exeptions/ConfirmPasswordMissMatchException';
 
 describe('Register user Use case', () => {
   const wilayasService = new FakeWilayasService();

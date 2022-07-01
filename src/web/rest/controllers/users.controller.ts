@@ -1,13 +1,15 @@
 import { Body, Controller, Headers, HttpException, HttpStatus, Post } from '@nestjs/common';
 
-import { SupportedLangugaes } from '../../../components/UsersManager/main/core/domain/exceptions/SupportedLanguages';
+import {
+  MultiLanguagesException,
+  SupportedLangugaes,
+} from '../../../components/UsersManager/main/core/domain/exceptions/MultiLanguagesException';
 import { LoginUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/LoginUseCase/LoginUseCaseRequest';
-import { MultiLanguagesException } from '../../../components/UsersManager/main/core/domain/exceptions/MultiLanguagesException';
 import { RegisterUserUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/RegisterUserUseCase/RegisterUserUseCaseRequest';
 
 import { UsersService } from '../services/users.service';
 
-@Controller('api/users')
+@Controller('/api/users')
 class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

@@ -1,5 +1,3 @@
-export type SupportedLangugaes = 'en' | 'ar';
-
 const ExceptionsMessages = {
   WRONG_CREDENTIALS: {
     en: 'wrong credentials, please try again',
