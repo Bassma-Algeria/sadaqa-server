@@ -26,12 +26,3 @@ model User {
   password     String
   createdAt    DateTime
 }
-
-// readonly userId: UserId,
-// readonly firstName: FirstName,
-// readonly lastName: LastName,
-// readonly wilayaNumber: WilayaNumber,
-// readonly phone: PhoneNumber,
-// readonly email: Email,
-// readonly password: Password,
-// readonly createdAt: Date,

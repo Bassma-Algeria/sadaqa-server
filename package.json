@@ -13,6 +13,7 @@
     "test:authentication": "mocha 'src/components/AuthenticationManager/**/*.test.ts' -r ts-node/register",
     "test:regions": "mocha 'src/components/RegionsManager/**/*.test.ts' -r ts-node/register",
     "test:users": "mocha 'src/components/UsersManager/**/*.test.ts' -r ts-node/register",
+    "test:posts": "mocha 'src/components/PostsManager/**/*.test.ts' -r ts-node/register",
     "test:e2e": "mocha 'tests/**/*.test.ts' -r ts-node/register",
     "test": "npm run test:authentication && npm run test:users && npm run test:e2e"
   },

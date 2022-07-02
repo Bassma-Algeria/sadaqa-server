@@ -1,14 +1,15 @@
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
 
 import { Email } from '../../core/domain/Email';
+import { UserId } from '../../core/domain/UserId';
+import { LastName } from '../../core/domain/LastName';
+import { Password } from '../../core/domain/Password';
+import { FirstName } from '../../core/domain/FirstName';
 import { UserAccount } from '../../core/domain/UserAccount';
 import { PhoneNumber } from '../../core/domain/PhoneNumber';
-import { UserAccountRepository } from '../../core/domain/services/UserAccountRepository';
-import { UserId } from '../../core/domain/UserId';
-import { FirstName } from '../../core/domain/FirstName';
-import { LastName } from '../../core/domain/LastName';
 import { WilayaNumber } from '../../core/domain/WilayaNumber';
-import { Password } from '../../core/domain/Password';
+
+import { UserAccountRepository } from '../../core/domain/services/UserAccountRepository';
 
 interface AccountDBModel {
   userId: string;
