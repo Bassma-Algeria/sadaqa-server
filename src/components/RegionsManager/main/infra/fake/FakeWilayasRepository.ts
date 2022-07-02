@@ -1,6 +1,5 @@
-import { WilayasRepository } from '../../core/domain/services/WilayasRepository';
 import { Wilaya } from '../../core/domain/Wilaya';
-import { WilayaNumber } from '../../core/domain/WilayaNumber';
+import { WilayasRepository } from '../../core/domain/services/WilayasRepository';
 
 class FakeWilayasRepository implements WilayasRepository {
   getByNumber(): Promise<Wilaya | undefined> {

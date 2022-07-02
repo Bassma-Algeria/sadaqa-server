@@ -1,5 +1,5 @@
 import { RegionsManagerFacade } from './RegionsManagerFacade';
-import { PostgresWilayasRepository } from '../infra/real/PostgresWilayasRepository';
+import { PostgresWilayasRepository } from './infra/real/PostgresWilayasRepository';
 
 class RegionsManagerConfiguration {
   static aRegionsManagerFacade() {

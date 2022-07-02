@@ -25,10 +25,12 @@
     "rules": {
         "no-useless-constructor": "off",
         "mocha/no-mocha-arrows": "off",
+        "mocha/no-setup-in-describe": "off",
         "prettier/prettier": "error",
         "security/detect-object-injection": "off",
+        "@typescript-eslint/no-explicit-any": "off",
         "node/no-unsupported-features/es-syntax": "off",
-        "node/no-unpublished-import": ["error", { "allowModules": ["chai", "@faker-js/faker", "chai-http", "chai-as-promised", "sinon"] }],
+        "node/no-unpublished-import": ["error", { "allowModules": ["chai", "@faker-js/faker", "chai-http", "chai-as-promised", "sinon", "ts-mockito"] }],
         "node/no-missing-import": ["error", { "tryExtensions": [".js", ".json", ".node", ".ts"] }]
     }
 }

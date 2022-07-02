@@ -1,9 +1,11 @@
 import { UsersManagerFacade } from './UsersManagerFacade';
 
-import { FakeWilayasService } from './infra/fake/FakeWilayasService';
 import { UuidUserIdGenerator } from './infra/real/UuidUserIdGenerator';
 import { BcryptPasswordEncryptor } from './infra/real/BcryptPasswordEncryptor';
+import { RegionsManagerWilayasService } from './infra/real/RegionsManagerWilayasService';
 import { InMemoryUserAccountRepository } from './infra/fake/InMemoryUserAccountRepository';
+
+import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsManagerConfiguration';
 
 class UsersManagerConfiguration {
   static aUsersManagerFacade(): UsersManagerFacade {
@@ -11,7 +13,7 @@ class UsersManagerConfiguration {
       new InMemoryUserAccountRepository(),
       new UuidUserIdGenerator(),
       new BcryptPasswordEncryptor(),
-      new FakeWilayasService(),
+      new RegionsManagerWilayasService(RegionsManagerConfiguration.aRegionsManagerFacade()),
     );
   }
 }

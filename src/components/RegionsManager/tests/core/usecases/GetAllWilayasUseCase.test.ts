@@ -1,7 +1,7 @@
 import { stub } from 'sinon';
 import { expect } from 'chai';
 
-import { RegionsManagerFacade } from '../../../main/core/RegionsManagerFacade';
+import { RegionsManagerFacade } from '../../../main/RegionsManagerFacade';
 import { FakeWilayasRepository } from '../../../main/infra/fake/FakeWilayasRepository';
 
 describe('GetAllWilayasUseCase', () => {

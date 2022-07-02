@@ -6,7 +6,7 @@ import { FakeWilayasRepository } from '../../../main/infra/fake/FakeWilayasRepos
 
 import { WilayaName } from '../../../main/core/domain/WilayaName';
 import { WilayaNumber } from '../../../main/core/domain/WilayaNumber';
-import { RegionsManagerFacade } from '../../../main/core/RegionsManagerFacade';
+import { RegionsManagerFacade } from '../../../main/RegionsManagerFacade';
 import { WilayaNotExistException } from '../../../main/core/domain/exceptions/WilayaNotExistException';
 
 describe('GetWilayaUseCase', () => {
