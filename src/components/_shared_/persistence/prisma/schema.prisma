@@ -11,7 +11,27 @@ datasource db {
 }
 
 model Wilaya {
-  wilayaNumber Int    @id @unique
+  wilayaNumber Int    @id
   arabicName   String
   englishName  String
 }
+
+model User {
+  userId       String   @id
+  firstName    String
+  lastName     String
+  wilayaNumber Int
+  phone        String   @unique
+  email        String   @unique
+  password     String
+  createdAt    DateTime
+}
+
+// readonly userId: UserId,
+// readonly firstName: FirstName,
+// readonly lastName: LastName,
+// readonly wilayaNumber: WilayaNumber,
+// readonly phone: PhoneNumber,
+// readonly email: Email,
+// readonly password: Password,
+// readonly createdAt: Date,

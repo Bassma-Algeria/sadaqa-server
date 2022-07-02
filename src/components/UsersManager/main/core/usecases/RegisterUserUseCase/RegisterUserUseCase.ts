@@ -2,12 +2,12 @@ import { UseCase } from '../UseCase';
 import { RegisterUserUseCaseRequest } from './RegisterUserUseCaseRequest';
 import { RegisterUserUseCaseResponse } from './RegisterUserUseCaseResponse';
 
-import { UserAccount } from '../../domain/UserAccount';
 import { Email } from '../../domain/Email';
 import { Password } from '../../domain/Password';
 import { LastName } from '../../domain/LastName';
 import { FirstName } from '../../domain/FirstName';
 import { PhoneNumber } from '../../domain/PhoneNumber';
+import { UserAccount } from '../../domain/UserAccount';
 import { WilayaNumber } from '../../domain/WilayaNumber';
 
 import { WilayasService } from '../../domain/services/WilayasService';
