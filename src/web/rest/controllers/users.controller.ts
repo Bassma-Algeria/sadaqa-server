@@ -39,12 +39,12 @@ class UsersController {
 
   private handleError(e: unknown, lang: SupportedLangugaes): never {
     if (e instanceof MultiLanguagesException) {
-      throw new HttpException(e.errorMessage[lang], HttpStatus.BAD_REQUEST);
+      throw new HttpException({ error: e.errorMessage[lang] }, HttpStatus.BAD_REQUEST);
     } else if (e instanceof Error) {
-      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException({ error: e.message }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    throw new HttpException('Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+    throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
