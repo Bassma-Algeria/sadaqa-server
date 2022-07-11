@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { WilayaNumber } from '../../main/core/domain/WilayaNumber';
 import { PostgresWilayasRepository } from '../../main/infra/real/PostgresWilayasRepository';
 
-describe('PostgresWilayasRepostory', () => {
+describe('PostgresWilayasRepository', () => {
   const wilayasRepository = new PostgresWilayasRepository();
 
   it('should get the wilaya by its number', async () => {

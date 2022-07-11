@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { spy, stub } from 'sinon';
 
-import { getUserRegistrationInfo } from './base/user';
-import { getUsersManagerFacade } from './base/getUsersManagerFacade';
+import { aUserRegistrationRequest } from './base/aUserRegistrationRequest';
+import { aUsersManagerFacade } from './base/aUsersManagerFacade';
 
 import { UsersManagerFacade } from '../../../main/UsersManagerFacade';
 
@@ -32,7 +32,7 @@ describe('Register user Use case', () => {
   let usersManager: UsersManagerFacade;
 
   beforeEach(() => {
-    usersManager = getUsersManagerFacade({
+    usersManager = aUsersManagerFacade({
       wilayasService,
       userAccountRepository,
       passwordEncryptor,
@@ -40,7 +40,7 @@ describe('Register user Use case', () => {
   });
 
   it('email should be valid', async () => {
-    const user = getUserRegistrationInfo({ email: 'invalid email!' });
+    const user = aUserRegistrationRequest({ email: 'invalid email!' });
 
     await expect(usersManager.register(user))
       .to.eventually.be.rejectedWith(InvalidEmailException)
@@ -48,7 +48,7 @@ describe('Register user Use case', () => {
   });
 
   it('password should be more than 6 characters', async () => {
-    const user = getUserRegistrationInfo({ password: 'short' });
+    const user = aUserRegistrationRequest({ password: 'short' });
 
     await expect(usersManager.register(user))
       .to.eventually.be.rejectedWith(ShortPasswordException)
@@ -56,7 +56,7 @@ describe('Register user Use case', () => {
   });
 
   it('first name and last name should have more than 3 characters', async () => {
-    const user = getUserRegistrationInfo({ firstName: 'sh', lastName: 'sdf' });
+    const user = aUserRegistrationRequest({ firstName: 'sh', lastName: 'sdf' });
 
     await expect(usersManager.register(user))
       .to.eventually.be.rejectedWith(ShortNameException)
@@ -66,7 +66,7 @@ describe('Register user Use case', () => {
   it('wilaya number should be valid', async () => {
     const isExistMock = stub(wilayasService, 'isExist').callsFake(() => Promise.resolve(false));
 
-    const user = getUserRegistrationInfo({ wilayaNumber: 100 });
+    const user = aUserRegistrationRequest({ wilayaNumber: 100 });
 
     await expect(usersManager.register(user)).to.eventually.be.rejectedWith(
       InvalidWilayaNumberException,
@@ -76,8 +76,8 @@ describe('Register user Use case', () => {
   });
 
   it('phone number should be valid', async () => {
-    const user = getUserRegistrationInfo({ phoneNumber: '05 182 1' });
-    const anotherUser = getUserRegistrationInfo({ phoneNumber: '03 99 83 12 38' });
+    const user = aUserRegistrationRequest({ phoneNumber: '05 182 1' });
+    const anotherUser = aUserRegistrationRequest({ phoneNumber: '03 99 83 12 38' });
 
     await expect(usersManager.register(user)).to.eventually.be.rejectedWith(
       InvalidPhoneNumberException,
@@ -88,7 +88,7 @@ describe('Register user Use case', () => {
   });
 
   it('confirm password should equal the password', async () => {
-    const user = getUserRegistrationInfo({ confirmPassword: 'some other password' });
+    const user = aUserRegistrationRequest({ confirmPassword: 'some other password' });
 
     await expect(usersManager.register(user))
       .to.eventually.be.rejectedWith(ConfirmPasswordMissMatchException)
@@ -97,7 +97,7 @@ describe('Register user Use case', () => {
 
   it('should hash the password before saving it', async () => {
     const encryptMethod = spy(passwordEncryptor, 'encrypt');
-    const user = getUserRegistrationInfo();
+    const user = aUserRegistrationRequest();
 
     await usersManager.register(user);
 
@@ -108,8 +108,8 @@ describe('Register user Use case', () => {
   });
 
   it('should not have two users with the same email', async () => {
-    const user = getUserRegistrationInfo();
-    const anotherUser = getUserRegistrationInfo({ email: user.email });
+    const user = aUserRegistrationRequest();
+    const anotherUser = aUserRegistrationRequest({ email: user.email });
 
     await usersManager.register(user);
     await expect(usersManager.register(anotherUser))
@@ -118,8 +118,8 @@ describe('Register user Use case', () => {
   });
 
   it('should not have two users with the same phone number', async () => {
-    const user = getUserRegistrationInfo();
-    const anotherUser = getUserRegistrationInfo({ phoneNumber: user.phoneNumber });
+    const user = aUserRegistrationRequest();
+    const anotherUser = aUserRegistrationRequest({ phoneNumber: user.phoneNumber });
 
     await usersManager.register(user);
     await expect(usersManager.register(anotherUser))
@@ -128,8 +128,8 @@ describe('Register user Use case', () => {
   });
 
   it('each user should have a unique id', async () => {
-    const user = getUserRegistrationInfo();
-    const anotherUser = getUserRegistrationInfo();
+    const user = aUserRegistrationRequest();
+    const anotherUser = aUserRegistrationRequest();
 
     const { userId: firstId } = await usersManager.register(user);
     const { userId: secondId } = await usersManager.register(anotherUser);

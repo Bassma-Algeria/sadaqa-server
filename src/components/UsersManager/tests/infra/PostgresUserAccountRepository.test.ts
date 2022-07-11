@@ -33,15 +33,27 @@ describe('PostgresUserAccountRepository', () => {
     expect(userAccount.userId.value()).to.equal(accountByPhone?.userId.value());
   });
 
-  it('should return undefined when no user found by email or phone', async () => {
+  it('should add a user be able to retrieve it by id', async () => {
+    const userAccount = aUserAccount();
+
+    await userAccountRepository.add(userAccount);
+    const accountByPhone = await userAccountRepository.findById(userAccount.userId);
+
+    expect(userAccount.userId.value()).to.equal(accountByPhone?.userId.value());
+  });
+
+  it('should return undefined when no user found by email, phone or id', async () => {
     const NOT_EXISTING_PHONE = new PhoneNumber(faker.phone.number('06 ## ## ## ##'));
     const NOT_EXISTING_EMAIL = new Email(faker.internet.email());
+    const NOT_EXISTING_ID = new UserId(faker.datatype.uuid());
 
     const userByPhone = await userAccountRepository.findByPhoneNumber(NOT_EXISTING_PHONE);
     const userByEmail = await userAccountRepository.findByEmail(NOT_EXISTING_EMAIL);
+    const userById = await userAccountRepository.findById(NOT_EXISTING_ID);
 
     expect(userByPhone).to.equal(undefined);
     expect(userByEmail).to.equal(undefined);
+    expect(userById).to.equal(undefined);
   });
 
   const aUserAccount = () => {

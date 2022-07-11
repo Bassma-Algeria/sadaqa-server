@@ -20,6 +20,7 @@ const ExceptionsMessages = {
     ar: 'رقم الهاتف غير صحيح ، يرجى المحاولة مرة أخرى',
   },
   INVALID_USER_ID: 'user id cannot be falsy',
+  USER_NOT_FOUND: 'user not found',
 };
 
 export { ExceptionsMessages };

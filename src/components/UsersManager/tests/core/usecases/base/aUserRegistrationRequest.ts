@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 
 import { RegisterUserUseCaseRequest } from '../../../../main/core/usecases/RegisterUserUseCase/RegisterUserUseCaseRequest';
 
-const getUserRegistrationInfo = (
+const aUserRegistrationRequest = (
   info?: Partial<RegisterUserUseCaseRequest>,
 ): RegisterUserUseCaseRequest => {
   const password = faker.internet.password(10);
@@ -19,4 +19,4 @@ const getUserRegistrationInfo = (
   };
 };
 
-export { getUserRegistrationInfo };
+export { aUserRegistrationRequest };

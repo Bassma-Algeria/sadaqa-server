@@ -17,7 +17,7 @@ interface Dependencies {
   readonly wilayasService?: WilayasService;
 }
 
-const getUsersManagerFacade = (dependencies?: Dependencies) => {
+const aUsersManagerFacade = (dependencies?: Dependencies) => {
   return new UsersManagerFacade(
     dependencies?.userAccountRepository || new InMemoryUserAccountRepository(),
     dependencies?.userIdGenerator || new FakeUserIdGenerator(),
@@ -26,4 +26,4 @@ const getUsersManagerFacade = (dependencies?: Dependencies) => {
   );
 };
 
-export { getUsersManagerFacade };
+export { aUsersManagerFacade };

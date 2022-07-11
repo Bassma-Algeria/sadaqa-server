@@ -15,7 +15,7 @@
     "test:users": "mocha 'src/components/UsersManager/**/*.test.ts' -r ts-node/register",
     "test:posts": "mocha 'src/components/PostsManager/**/*.test.ts' -r ts-node/register",
     "test:e2e": "mocha 'tests/**/*.test.ts' -r ts-node/register",
-    "test": "npm run test:authentication && npm run test:users && npm run test:e2e"
+    "test": "npm run test:authentication && npm run test:users && npm run test:regions && npm run test:posts && npm run test:e2e"
   },
   "mocha": {
     "env": "dotenv_config_path=./.env.test"

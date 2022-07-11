@@ -5,10 +5,10 @@ import { UserAccount } from '../../core/domain/UserAccount';
 import { UserAccountRepository } from '../../core/domain/services/UserAccountRepository';
 
 class InMemoryUserAccountRepository implements UserAccountRepository {
-  private readonly store = new Map<UserId, UserAccount>();
+  private readonly store = new Map<string, UserAccount>();
 
   async add(account: UserAccount): Promise<void> {
-    this.store.set(account.userId, account);
+    this.store.set(account.userId.value(), account);
   }
 
   async findByEmail(email: Email): Promise<UserAccount | undefined> {
@@ -29,6 +29,10 @@ class InMemoryUserAccountRepository implements UserAccountRepository {
     }
 
     return target;
+  }
+
+  async findById(userId: UserId): Promise<UserAccount | undefined> {
+    return this.store.get(userId.value());
   }
 }
 

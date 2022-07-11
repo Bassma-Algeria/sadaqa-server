@@ -31,6 +31,6 @@ describe('Create & Get posts', () => {
     expect(postInfo.category).to.equal(postCreationBody.category);
     expect(postInfo.publisherId).to.equal(postCreationBody.publisherId);
     expect(postInfo.wilayaNumber).to.equal(postCreationBody.wilayaNumber);
-    expect(postInfo.createdAt).to.equal(creationTime.toISOString());
+    expect(postInfo.createdAt.toISOString()).to.equal(creationTime.toISOString());
   });
 });

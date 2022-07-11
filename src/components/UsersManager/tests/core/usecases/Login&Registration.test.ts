@@ -1,8 +1,8 @@
 import 'chai-as-promised';
 import { expect } from 'chai';
 
-import { getUserRegistrationInfo } from './base/user';
-import { getUsersManagerFacade } from './base/getUsersManagerFacade';
+import { aUserRegistrationRequest } from './base/aUserRegistrationRequest';
+import { aUsersManagerFacade } from './base/aUsersManagerFacade';
 
 import { UsersManagerFacade } from '../../../main/UsersManagerFacade';
 
@@ -12,11 +12,11 @@ describe('Login & Registration', () => {
   let usersManager: UsersManagerFacade;
 
   beforeEach(() => {
-    usersManager = getUsersManagerFacade();
+    usersManager = aUsersManagerFacade();
   });
 
   it('should be able to create a normal account, and login with the same credentials', async () => {
-    const user = getUserRegistrationInfo();
+    const user = aUserRegistrationRequest();
 
     const { userId: idFromSignup } = await usersManager.register(user);
     const { userId: idFromLogin } = await usersManager.login({
@@ -28,8 +28,8 @@ describe('Login & Registration', () => {
   });
 
   it('should not be able to login with wrong credentials', async () => {
-    const user = getUserRegistrationInfo();
-    const anotherUser = getUserRegistrationInfo();
+    const user = aUserRegistrationRequest();
+    const anotherUser = aUserRegistrationRequest();
 
     await usersManager.register(user);
 
@@ -39,7 +39,7 @@ describe('Login & Registration', () => {
   });
 
   it('should be able to login with the email uppercased and have some white spaces in left and right', async () => {
-    const user = getUserRegistrationInfo();
+    const user = aUserRegistrationRequest();
 
     const { userId } = await usersManager.register(user);
 
@@ -49,7 +49,7 @@ describe('Login & Registration', () => {
   });
 
   it('should be able to login with the password have some white spaces in left and right', async () => {
-    const user = getUserRegistrationInfo();
+    const user = aUserRegistrationRequest();
 
     const { userId } = await usersManager.register(user);
 

@@ -41,6 +41,13 @@ class PostgresUserAccountRepository implements UserAccountRepository {
     else return undefined;
   }
 
+  async findById(userId: UserId): Promise<UserAccount | undefined> {
+    const account = await prisma.user.findUnique({ where: { userId: userId.value() } });
+
+    if (account) return this.toDomainEntity(account);
+    else return undefined;
+  }
+
   private toDBModel(user: UserAccount): AccountDBModel {
     return {
       userId: user.userId.value(),

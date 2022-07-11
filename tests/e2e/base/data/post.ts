@@ -1,11 +1,5 @@
 import { faker } from '@faker-js/faker';
 
-const POST_TYPES = [
-  'donations',
-  'donation-requests',
-  'families-in-need',
-  'calls-for-help',
-] as const;
 const DONATION_CATEGORIES = [
   'clothes-accessories',
   'food',
@@ -24,36 +18,25 @@ const DONATION_CATEGORIES = [
 ] as const;
 
 interface DonationCreationbody {
-  type: Exclude<typeof POST_TYPES[number], 'families-in-need' | 'calls-for-help'>;
-  title: string;
-  description: string;
-  wilaya: number;
-  category: typeof DONATION_CATEGORIES[number];
-  pictures: File[];
+  readonly title: string;
+  readonly description: string;
+  readonly wilayaNumber: number;
+  readonly publisherId: string;
+  readonly category: typeof DONATION_CATEGORIES[number];
+  readonly pictures: any[];
 }
 
-interface NeedHelpPostCreationBody {
-  type: Exclude<typeof POST_TYPES[number], 'donations' | 'donation-requests'>;
-  title: string;
-  description: string;
-  wilaya: number;
-  ccp: string;
-  ccpKey: string;
-  rib: string;
-  pictures: File[];
-}
-
-const getDonationCreationInfo = (info?: Partial<DonationCreationbody>): DonationCreationbody => {
+const aDonationCreationBody = (info?: Partial<DonationCreationbody>): DonationCreationbody => {
   return {
-    type: 'donation-requests',
     title: faker.definitions.title,
     category:
       DONATION_CATEGORIES[faker.datatype.number({ min: 0, max: DONATION_CATEGORIES.length - 1 })],
     description: faker.datatype.string(40),
+    wilayaNumber: faker.datatype.number({ min: 1, max: 58 }),
     pictures: [],
-    wilaya: faker.datatype.number({ min: 1, max: 58 }),
+    publisherId: faker.datatype.uuid(),
     ...info,
   };
 };
 
-export { getDonationCreationInfo };
+export { aDonationCreationBody };

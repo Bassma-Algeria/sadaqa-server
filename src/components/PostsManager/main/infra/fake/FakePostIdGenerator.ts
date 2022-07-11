@@ -4,7 +4,7 @@ import { PostId } from '../../core/domain/PostId';
 import { PostIdGenerator } from '../../core/domain/services/PostIdGenerator';
 
 class FakePostIdGenerator implements PostIdGenerator {
-  async nextId(): Promise<PostId> {
+  nextId(): PostId {
     return new PostId(faker.datatype.uuid());
   }
 }

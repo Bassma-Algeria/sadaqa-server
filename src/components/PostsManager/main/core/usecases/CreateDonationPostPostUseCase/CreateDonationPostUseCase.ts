@@ -41,8 +41,8 @@ class CreateDonationPostUseCase
     const { wilayaNumber } = await this.validateAndGetWilayaNumberFrom(request);
     const { publisherId } = await this.validateAndGetPublisherIdFrom(request);
     const { pictures } = await this.uploadPicturesFrom(request);
-    const { postId } = await this.generatePostId();
     const { createdAt } = this.getCreatedAt();
+    const { postId } = this.generatePostId();
 
     const donationPost: DonationPost = DonationPost.aBuilder()
       .withPostId(postId)
@@ -92,8 +92,8 @@ class CreateDonationPostUseCase
     return { pictures: await this.mediaService.uploadPictures(request.pictures) };
   }
 
-  private async generatePostId() {
-    return { postId: await this.postIdGenerator.nextId() };
+  private generatePostId() {
+    return { postId: this.postIdGenerator.nextId() };
   }
 
   private getCreatedAt() {

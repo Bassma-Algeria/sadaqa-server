@@ -6,5 +6,5 @@ export interface GetDonationPostUseCaseResponse {
   readonly publisherId: string;
   readonly category: string;
   readonly pictures: string[];
-  readonly createdAt: string;
+  readonly createdAt: Date;
 }

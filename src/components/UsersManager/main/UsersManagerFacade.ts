@@ -1,6 +1,9 @@
 import { LoginUseCase } from './core/usecases/LoginUseCase/LoginUseCase';
 import { LoginUseCaseRequest } from './core/usecases/LoginUseCase/LoginUseCaseRequest';
 
+import { GetUserByIdUseCase } from './core/usecases/GetUserByIdUseCase/GetUserByIdUseCase';
+import { GetUserByIdUseCaseRequest } from './core/usecases/GetUserByIdUseCase/GetUserByIdUseCaseRequest';
+
 import { RegisterUserUseCase } from './core/usecases/RegisterUserUseCase/RegisterUserUseCase';
 import { RegisterUserUseCaseRequest } from './core/usecases/RegisterUserUseCase/RegisterUserUseCaseRequest';
 
@@ -17,17 +20,21 @@ class UsersManagerFacade {
     private readonly wilayasService: WilayasService,
   ) {}
 
-  async login(request: LoginUseCaseRequest) {
+  login(request: LoginUseCaseRequest) {
     return new LoginUseCase(this.userAccountRepository, this.passwordEncryptor).handle(request);
   }
 
-  async register(request: RegisterUserUseCaseRequest) {
+  register(request: RegisterUserUseCaseRequest) {
     return new RegisterUserUseCase(
       this.userAccountRepository,
       this.userIdGenerator,
       this.passwordEncryptor,
       this.wilayasService,
     ).handle(request);
+  }
+
+  getUserById(request: GetUserByIdUseCaseRequest) {
+    return new GetUserByIdUseCase(this.userAccountRepository).handle(request);
   }
 }
 

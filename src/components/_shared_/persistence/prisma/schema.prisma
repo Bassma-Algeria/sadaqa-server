@@ -26,3 +26,14 @@ model User {
   password     String
   createdAt    DateTime
 }
+
+model DonationPost {
+  postId       String   @id
+  title        String
+  description  String
+  category     String
+  wilayaNumber Int
+  pictures     String[]
+  publisherId  String
+  createdAt    DateTime
+}

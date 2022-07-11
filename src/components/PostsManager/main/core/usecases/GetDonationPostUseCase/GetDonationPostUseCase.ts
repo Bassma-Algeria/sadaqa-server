@@ -30,9 +30,9 @@ class GetDonationPostUseCase
       category: donationPost.category.value(),
       description: donationPost.description.value(),
       publisherId: donationPost.publisherId.value(),
-      createdAt: donationPost.createdAt.toISOString(),
       wilayaNumber: donationPost.wilayaNumber.value(),
       pictures: donationPost.pictures.map(pic => pic.value()),
+      createdAt: donationPost.createdAt,
     };
   }
 }
