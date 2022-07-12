@@ -4,5 +4,5 @@ export interface CreateDonationPostUseCaseRequest {
   readonly wilayaNumber: number;
   readonly publisherId: string;
   readonly category: string;
-  readonly pictures: any[];
+  readonly pictures: string[];
 }
