@@ -10,8 +10,6 @@ import { Picture } from '../../domain/Picture';
 import { FileSize } from '../../domain/FileSize';
 import { LocalPath } from '../../domain/LocalPath';
 
-import { CannotUploadNonImageFilesException } from './exception/CannotUploadNonImageFilesException';
-
 class UploadPictureUseCase
   implements UseCase<UploadPictureUseCaseRequest, UploadPictureUseCaseResponse>
 {
@@ -22,33 +20,23 @@ class UploadPictureUseCase
   ) {}
 
   async handle(request: UploadPictureUseCaseRequest): Promise<UploadPictureUseCaseResponse> {
-    const picturePath = new LocalPath(request.picturePath);
-
-    await this.checkIfTheProvidedPathIsAnImageAndThrowOtherwise(picturePath);
-
-    let picture = new Picture(picturePath);
+    let picture = new Picture(new LocalPath(request.picturePath));
 
     const size = await this.sizeof(picture);
 
-    if (this.isBiggerThanOneMegaByte(size)) picture = await this.compress(picture);
+    if (this.isBiggerOrEqualToHalfOneMegaByte(size)) picture = await this.compress(picture);
 
     const url = await this.upload(picture);
 
     return { url: url.value() };
   }
 
-  private async checkIfTheProvidedPathIsAnImageAndThrowOtherwise(picturePath: LocalPath) {
-    const isImage = await this.fileSystemService.isImage(picturePath);
-
-    if (!isImage) throw new CannotUploadNonImageFilesException();
-  }
-
   private sizeof(picture: Picture) {
     return this.fileSystemService.sizeof(picture.path);
   }
 
-  private isBiggerThanOneMegaByte(size: FileSize) {
-    return size.inMegaBytes() >= 1;
+  private isBiggerOrEqualToHalfOneMegaByte(size: FileSize) {
+    return size.inMegaBytes() >= 0.5;
   }
 
   private compress(picture: Picture): Picture | PromiseLike<Picture> {

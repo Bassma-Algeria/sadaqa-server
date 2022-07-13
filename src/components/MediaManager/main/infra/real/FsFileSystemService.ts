@@ -1,14 +1,16 @@
+/* eslint-disable security/detect-non-literal-fs-filename */
+
+import fs from 'fs';
+
 import { FileSize } from '../../core/domain/FileSize';
 import { LocalPath } from '../../core/domain/LocalPath';
 import { FileSystemService } from '../../core/domain/services/FilesSystemService';
 
 class FsFileSystemService implements FileSystemService {
-  isImage(picturePath: LocalPath): Promise<boolean> {
-    throw new Error('Method not implemented.');
-  }
+  async sizeof(picturePath: LocalPath): Promise<FileSize> {
+    const { size } = await fs.promises.stat(picturePath.value());
 
-  sizeof(picturePath: LocalPath): Promise<FileSize> {
-    throw new Error('Method not implemented.');
+    return new FileSize(size);
   }
 }
 

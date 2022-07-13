@@ -11,7 +11,7 @@ import { ImageCompressor } from '../../../../main/core/domain/services/ImageComp
 import { FakeCloudService } from '../../../../main/infra/fake/FakeCloudService';
 import { FakeImageCompressor } from '../../../../main/infra/fake/FakeImageCompressor';
 
-const LESS_THEN_ONE_MEGA_BYTE = new FileSize(2 ** 10);
+const LESS_THAN_HALF_MEGA_BYTE = new FileSize(1 ** 20 / 2);
 
 interface Dependencies {
   cloudService?: CloudService;
@@ -22,8 +22,7 @@ interface Dependencies {
 const aMediaManagerFacade = (dependecies?: Dependencies) => {
   const fileSystemServiceMock = mock<FileSystemService>();
 
-  when(fileSystemServiceMock.isImage(anything())).thenResolve(true);
-  when(fileSystemServiceMock.sizeof(anything())).thenResolve(LESS_THEN_ONE_MEGA_BYTE);
+  when(fileSystemServiceMock.sizeof(anything())).thenResolve(LESS_THAN_HALF_MEGA_BYTE);
 
   return new MediaManagerFacade(
     dependecies?.cloudService || new FakeCloudService(),
