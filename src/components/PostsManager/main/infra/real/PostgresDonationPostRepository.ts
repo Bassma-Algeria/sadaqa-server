@@ -8,7 +8,10 @@ import { PublisherId } from '../../core/domain/PublisherId';
 import { WilayaNumber } from '../../core/domain/WilayaNumber';
 import { DonationCategory } from '../../core/domain/DonationCategory';
 
-import { DonationPostRepository } from '../../core/domain/services/DonationPostRepository';
+import {
+  DonationPostRepository,
+  FindManyFilters,
+} from '../../core/domain/services/DonationPostRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
 
@@ -35,6 +38,22 @@ class PostgresDonationPostRepository implements DonationPostRepository {
     else return this.toEntity(dbModel);
   }
 
+  async findMany(filters: FindManyFilters): Promise<DonationPost[]> {
+    const numOfPostsToSkip = (filters.page - 1) * filters.pageLimit;
+
+    const dbModels = await prisma.donationPost.findMany({
+      where: { category: filters.category.value(), wilayaNumber: filters.wilayaNumber?.value() },
+      skip: numOfPostsToSkip,
+      take: filters.pageLimit,
+    });
+
+    return dbModels.map(model => this.toEntity(model));
+  }
+
+  async deleteAll() {
+    await prisma.donationPost.deleteMany();
+  }
+
   private toDBModel(donationPost: DonationPost): DonationPostDBModel {
     return {
       postId: donationPost.postId.value(),
@@ -42,7 +61,7 @@ class PostgresDonationPostRepository implements DonationPostRepository {
       description: donationPost.description.value(),
       category: donationPost.category.value(),
       wilayaNumber: donationPost.wilayaNumber.value(),
-      pictures: donationPost.pictures.map(pic => pic.value()),
+      pictures: donationPost.pictures.map(pic => pic.url()),
       publisherId: donationPost.publisherId.value(),
       createdAt: donationPost.createdAt,
     };
@@ -55,7 +74,7 @@ class PostgresDonationPostRepository implements DonationPostRepository {
       .withDescription(new Description(dbModel.description))
       .withCategory(new DonationCategory(dbModel.category))
       .withWilayaNumber(new WilayaNumber(dbModel.wilayaNumber))
-      .withPictures(dbModel.pictures.map(pic => new Picture(pic)))
+      .withPictures(dbModel.pictures.map(url => new Picture(url)))
       .withPublisherId(new PublisherId(dbModel.publisherId))
       .withCreatedAt(dbModel.createdAt)
       .build();

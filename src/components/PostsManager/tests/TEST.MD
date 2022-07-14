@@ -1,3 +1,3 @@
 # Tests List
 
-- media service should resize the images if they are large, and upload them
+- should be able to get the donation posts filtred by category and posts

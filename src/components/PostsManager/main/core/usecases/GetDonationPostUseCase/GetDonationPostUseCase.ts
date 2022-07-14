@@ -2,8 +2,9 @@ import { UseCase } from '../UseCase';
 import { GetDonationPostUseCaseRequest } from './GetDonationPostUseCaseRequest';
 import { GetDonationPostUseCaseResponse } from './GetDonationPostUseCaseResponse';
 
+import { DonationPostDtoMapper } from '../DonationPostDtoMapper';
+
 import { PostId } from '../../domain/PostId';
-import { DonationPost } from '../../domain/DonationPost';
 
 import { DonationPostRepository } from '../../domain/services/DonationPostRepository';
 
@@ -20,20 +21,7 @@ class GetDonationPostUseCase
 
     if (!donationPost) throw new DonationPostNotFoundException();
 
-    return this.getResponse(donationPost);
-  }
-
-  private getResponse(donationPost: DonationPost): GetDonationPostUseCaseResponse {
-    return {
-      title: donationPost.title.value(),
-      postId: donationPost.postId.value(),
-      category: donationPost.category.value(),
-      description: donationPost.description.value(),
-      publisherId: donationPost.publisherId.value(),
-      wilayaNumber: donationPost.wilayaNumber.value(),
-      pictures: donationPost.pictures.map(pic => pic.value()),
-      createdAt: donationPost.createdAt,
-    };
+    return DonationPostDtoMapper.toDto(donationPost);
   }
 }
 

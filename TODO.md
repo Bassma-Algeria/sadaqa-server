@@ -1,0 +1,2 @@
+- add swagger docs
+- add the files uploading to donation creation

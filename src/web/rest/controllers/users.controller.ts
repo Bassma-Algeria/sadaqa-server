@@ -1,14 +1,17 @@
 import { Body, Controller, Headers, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import {
   MultiLanguagesException,
-  SupportedLangugaes,
+  SupportedLanguages,
 } from '../../../components/UsersManager/main/core/domain/exceptions/MultiLanguagesException';
+
 import { LoginUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/LoginUseCase/LoginUseCaseRequest';
 import { RegisterUserUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/RegisterUserUseCase/RegisterUserUseCaseRequest';
 
 import { UsersService } from '../services/users.service';
 
+@ApiTags('users')
 @Controller('/api/users')
 class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -16,7 +19,7 @@ class UsersController {
   @Post('login')
   async login(
     @Body() body: LoginUseCaseRequest,
-    @Headers('Accept-Language') language: SupportedLangugaes,
+    @Headers('Accept-Language') language: SupportedLanguages,
   ) {
     try {
       return await this.usersService.login(body);
@@ -28,7 +31,7 @@ class UsersController {
   @Post('register')
   async register(
     @Body() signupBody: RegisterUserUseCaseRequest,
-    @Headers('Accept-Language') language: SupportedLangugaes,
+    @Headers('Accept-Language') language: SupportedLanguages,
   ) {
     try {
       return await this.usersService.register(signupBody);
@@ -37,7 +40,7 @@ class UsersController {
     }
   }
 
-  private handleError(e: unknown, lang: SupportedLangugaes): never {
+  private handleError(e: unknown, lang: SupportedLanguages): never {
     if (e instanceof MultiLanguagesException) {
       throw new HttpException({ error: e.errorMessage[lang] }, HttpStatus.BAD_REQUEST);
     } else if (e instanceof Error) {

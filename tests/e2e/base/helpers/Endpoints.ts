@@ -1,8 +1,9 @@
 const EndPoints = {
   REGISTER: '/api/users/register',
-  NEW_DONATION: '/api/posts/donation',
-  GET_DONATIONS: '/api/posts/donation',
-  GET_DONATION: (id: string) => `/api/posts/donation/${id}`,
+  NEW_DONATION: '/api/posts/donations',
+  GET_DONATION: (id: string) => `/api/posts/donations/${id}`,
+  GET_DONATIONS: ({ category }: { category: string }) =>
+    `/api/posts/donations?category=${category}`,
 };
 
 export { EndPoints };

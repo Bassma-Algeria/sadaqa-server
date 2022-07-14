@@ -1,7 +1,7 @@
-export type SupportedLangugaes = 'en' | 'ar';
+export type SupportedLanguages = 'en' | 'ar';
 
 type ErrorMessage = {
-  [key in SupportedLangugaes]: string;
+  [key in SupportedLanguages]: string;
 };
 
 class MultiLanguagesException extends Error {

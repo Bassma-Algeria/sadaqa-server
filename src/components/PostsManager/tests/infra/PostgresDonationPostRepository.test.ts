@@ -1,21 +1,21 @@
 import { expect } from 'chai';
 
-import { faker } from '@faker-js/faker';
-
-import { Title } from '../../main/core/domain/Title';
 import { PostId } from '../../main/core/domain/PostId';
-import { Picture } from '../../main/core/domain/Picture';
-import { PublisherId } from '../../main/core/domain/PublisherId';
-import { Description } from '../../main/core/domain/Description';
-import { WilayaNumber } from '../../main/core/domain/WilayaNumber';
-import { DonationPost } from '../../main/core/domain/DonationPost';
 
+import { aDonationPost } from './base/aDonationPost';
+
+import { WilayaNumber } from '../../main/core/domain/WilayaNumber';
 import { DonationCategory } from '../../main/core/domain/DonationCategory';
 
 import { PostgresDonationPostRepository } from '../../main/infra/real/PostgresDonationPostRepository';
+import { DonationPost } from '../../main/core/domain/DonationPost';
 
 describe('PostgresDonationPostRepository', () => {
   const donationPostRepository = new PostgresDonationPostRepository();
+
+  beforeEach(async () => {
+    await donationPostRepository.deleteAll();
+  });
 
   it('should save a post and get it by id', async () => {
     const donationPost = aDonationPost();
@@ -36,16 +36,51 @@ describe('PostgresDonationPostRepository', () => {
     await expect(donationPostRepository.findById(NOT_EXISTING_ID)).to.eventually.equal(undefined);
   });
 
-  const aDonationPost = () => {
-    return DonationPost.aBuilder()
-      .withPostId(new PostId(faker.datatype.uuid()))
-      .withTitle(new Title(faker.lorem.words(3)))
-      .withDescription(new Description(faker.lorem.words(10)))
-      .withCategory(new DonationCategory('food'))
-      .withWilayaNumber(new WilayaNumber(faker.datatype.number({ min: 1, max: 30 })))
-      .withPictures([new Picture(faker.image.imageUrl())])
-      .withPublisherId(new PublisherId(faker.datatype.uuid()))
-      .withCreatedAt(faker.date.recent())
-      .build();
-  };
+  it('should get the posts page per page, filtered by category and wilaya number', async () => {
+    const { wilayaNumber, category } = await save5PostsOfSameWilayaAndCategory();
+    await save5RandomPostsNotHave(wilayaNumber, category);
+
+    const donationsPosts = await donationPostRepository.findMany({
+      pageLimit: 2,
+      page: 3,
+      wilayaNumber,
+      category,
+    });
+
+    expect(donationsPosts).to.have.lengthOf(1);
+    expect(donationsPosts[0].category.value()).to.equal(category.value());
+    expect(donationsPosts[0].wilayaNumber.value()).to.equal(wilayaNumber.value());
+  });
+
+  async function save5PostsOfSameWilayaAndCategory() {
+    const wilayaNumber = new WilayaNumber(10);
+    const category = new DonationCategory('food');
+
+    for (const _ of Array.from({ length: 5 })) {
+      await donationPostRepository.save(aDonationPost({ wilayaNumber, category }));
+    }
+
+    return { wilayaNumber, category };
+  }
+
+  async function save5RandomPostsNotHave(wilayaNumber: WilayaNumber, category: DonationCategory) {
+    let counter = 0;
+    const donationPosts: DonationPost[] = [];
+
+    do {
+      const post = aDonationPost();
+
+      if (
+        post.category.value() !== category.value() &&
+        post.wilayaNumber.value() !== wilayaNumber.value()
+      ) {
+        donationPosts.push(post);
+        counter++;
+      }
+    } while (counter !== 5);
+
+    for (const donationPost of donationPosts) {
+      await donationPostRepository.save(donationPost);
+    }
+  }
 });

@@ -1,10 +1,14 @@
 import { expect } from 'chai';
-import { bootstrapNestApp } from '../../src/web/rest/main';
+
 import { aDonationCreationBody } from './base/data/post';
 import { aUserRegistrationBody } from './base/data/user';
 
 import { EndPoints } from './base/helpers/Endpoints';
 import { HttpRequester } from './base/helpers/HttpRequester';
+
+import { bootstrapNestApp } from '../../src/web/rest/main';
+
+import { prisma } from '../../src/components/_shared_/persistence/prisma/PrismaClient';
 
 describe('Walking Skeleton', () => {
   let requester: HttpRequester;
@@ -16,19 +20,24 @@ describe('Walking Skeleton', () => {
     requester = new HttpRequester(app.getHttpServer());
   });
 
-  it.skip('user create an account, publish a donation, another user came in and found the post in the donations section, and get more infomation about it', async () => {
-    const { accessToken } = await registerRandomUser();
-    const { postId } = await postNewDonationByUserWithToken(accessToken);
-    const { donations } = await getAllDonations();
+  beforeEach(async () => {
+    await prisma.donationPost.deleteMany();
+    await prisma.user.deleteMany();
+  });
 
-    expect(donations).to.have.lengthOf(1);
-    expect(donations[0]).to.have.property('postId', postId);
+  it('user create an account, publish a donation, another user came in and found the post in the donations section, and get more infomation about it', async () => {
+    const { accessToken } = await registerRandomUser();
+    const { postId, category } = await postNewDonationByUserWithToken(accessToken);
+    const { donationsPosts } = await getAllDonationsOfCategory(category);
+
+    expect(donationsPosts).to.have.lengthOf(1);
+    expect(donationsPosts[0]).to.have.property('postId', postId);
 
     const { post } = await getDonationWithId(postId);
 
     expect(post).to.have.property('postId');
     expect(post).to.have.property('title');
-    expect(post).to.have.property('wilaya');
+    expect(post).to.have.property('wilayaNumber');
     expect(post).to.have.property('description');
   });
 
@@ -41,19 +50,23 @@ describe('Walking Skeleton', () => {
   };
 
   const postNewDonationByUserWithToken = async (accessToken: string) => {
+    const body = aDonationCreationBody();
+
     const {
       body: { postId },
-    } = await requester.post(EndPoints.NEW_DONATION, aDonationCreationBody(), {
+    } = await requester.post(EndPoints.NEW_DONATION, body, {
       Authorisation: accessToken,
     });
 
-    return { postId };
+    return { postId, category: body.category };
   };
 
-  const getAllDonations = async () => {
-    const { body: donations } = await requester.get(EndPoints.GET_DONATIONS);
+  const getAllDonationsOfCategory = async (category: string) => {
+    const {
+      body: { donationsPosts },
+    } = await requester.get(EndPoints.GET_DONATIONS({ category }));
 
-    return { donations };
+    return { donationsPosts };
   };
 
   const getDonationWithId = async (postId: string) => {

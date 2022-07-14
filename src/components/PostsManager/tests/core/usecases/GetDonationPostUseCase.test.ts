@@ -8,7 +8,7 @@ describe('GetDonationPostUseCase', () => {
   const postsManagerFacade = aPostsManagerFacade();
 
   it('given a non existing id, should throw a not found exception', async () => {
-    const NOT_EXISING_POST = 'some renadom';
+    const NOT_EXISING_POST = 'some random';
 
     await expect(
       postsManagerFacade.getDonationPost({ postId: NOT_EXISING_POST }),
