@@ -21,7 +21,6 @@ interface DonationCreationbody {
   readonly title: string;
   readonly description: string;
   readonly wilayaNumber: number;
-  readonly publisherId: string;
   readonly category: typeof DONATION_CATEGORIES[number];
   readonly pictures: any[];
 }
@@ -34,7 +33,6 @@ const aDonationCreationBody = (info?: Partial<DonationCreationbody>): DonationCr
     description: faker.datatype.string(40),
     wilayaNumber: faker.datatype.number({ min: 1, max: 58 }),
     pictures: [],
-    publisherId: faker.datatype.uuid(),
     ...info,
   };
 };

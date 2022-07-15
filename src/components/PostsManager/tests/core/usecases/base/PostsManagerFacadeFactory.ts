@@ -1,12 +1,12 @@
 import { anything, instance, mock, when } from 'ts-mockito';
 
-import { MediaService } from '../../../../main/core/domain/services/MediaService';
+import { PicturesUploader } from '../../../../main/core/domain/services/PicturesUploader';
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';
 import { PostIdGenerator } from '../../../../main/core/domain/services/PostIdGenerator';
 import { DonationPostRepository } from '../../../../main/core/domain/services/DonationPostRepository';
 
-import { FakeMediaService } from '../../../../main/infra/fake/FakeMediaService';
+import { FakePicturesUploader } from '../../../../main/infra/fake/FakePicturesUploader';
 import { FakePostIdGenerator } from '../../../../main/infra/fake/FakePostIdGenerator';
 import { InMemoryDonationPostRepository } from '../../../../main/infra/fake/InMemoryDonationPostRespository';
 
@@ -19,7 +19,7 @@ import { FakePostsEventBus } from '../../../../main/infra/fake/FakePostsEventBus
 interface Dependencies {
   usersService: UsersService;
   wilayasService: WilayasService;
-  mediaService: MediaService;
+  picturesUploader: PicturesUploader;
   postIdGenerator: PostIdGenerator;
   donationPostRepository: DonationPostRepository;
   dateTimeService: DateTimeService;
@@ -36,7 +36,7 @@ const aPostsManagerFacade = (dependencies?: Partial<Dependencies>) => {
   return new PostsManagerFacade(
     dependencies?.usersService || instance(mockUsersService),
     dependencies?.wilayasService || instance(mockWilayasService),
-    dependencies?.mediaService || new FakeMediaService(),
+    dependencies?.picturesUploader || new FakePicturesUploader(),
     dependencies?.postIdGenerator || new FakePostIdGenerator(),
     dependencies?.donationPostRepository || new InMemoryDonationPostRepository(),
     dependencies?.dateTimeService || new FakeDateTimeService(),

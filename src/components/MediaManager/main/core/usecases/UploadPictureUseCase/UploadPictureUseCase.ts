@@ -4,23 +4,20 @@ import { UploadPictureUseCaseResponse } from './UploadPictureUseCaseResponse';
 
 import { CloudService } from '../../domain/services/CloudService';
 import { ImageCompressor } from '../../domain/services/ImageCompressor';
-import { FileSystemService } from '../../domain/services/FilesSystemService';
 
-import { Picture } from '../../domain/Picture';
 import { FileSize } from '../../domain/FileSize';
-import { LocalPath } from '../../domain/LocalPath';
+import { PictureToUpload } from '../../domain/PictureToUpload';
 
 class UploadPictureUseCase
   implements UseCase<UploadPictureUseCaseRequest, UploadPictureUseCaseResponse>
 {
   constructor(
     private readonly cloudService: CloudService,
-    private readonly fileSystemService: FileSystemService,
     private readonly imageCompressor: ImageCompressor,
   ) {}
 
   async handle(request: UploadPictureUseCaseRequest): Promise<UploadPictureUseCaseResponse> {
-    let picture = new Picture(new LocalPath(request.picturePath));
+    let picture = new PictureToUpload(request.picture);
 
     const size = await this.sizeof(picture);
 
@@ -31,19 +28,19 @@ class UploadPictureUseCase
     return { url: url.value() };
   }
 
-  private sizeof(picture: Picture) {
-    return this.fileSystemService.sizeof(picture.path);
+  private sizeof(picture: PictureToUpload) {
+    return new FileSize(Buffer.byteLength(picture.buffer));
   }
 
   private isBiggerOrEqualToHalfOneMegaByte(size: FileSize) {
     return size.inMegaBytes() >= 0.5;
   }
 
-  private compress(picture: Picture): Picture | PromiseLike<Picture> {
+  private compress(picture: PictureToUpload): PictureToUpload | PromiseLike<PictureToUpload> {
     return this.imageCompressor.minify(picture);
   }
 
-  private upload(picture: Picture) {
+  private upload(picture: PictureToUpload) {
     return this.cloudService.upload(picture);
   }
 }

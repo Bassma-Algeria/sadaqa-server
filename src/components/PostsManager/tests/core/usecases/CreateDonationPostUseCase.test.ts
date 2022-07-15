@@ -1,6 +1,6 @@
 import { spy } from 'sinon';
 import { expect } from 'chai';
-import { mock, instance, when, anything } from 'ts-mockito';
+import { anything, instance, mock, when } from 'ts-mockito';
 
 import { UsersService } from '../../../main/core/domain/services/UsersService';
 import { WilayasService } from '../../../main/core/domain/services/WilayasService';
@@ -11,22 +11,22 @@ import { InvalidPublisherIdException } from '../../../main/core/domain/exception
 import { InvalidWilayaNumberException } from '../../../main/core/domain/exceptions/InvalidWilayaNumberException';
 import { CategoryNotSupportedException } from '../../../main/core/domain/exceptions/CategoryNotSupportedException';
 
-import { FakeMediaService } from '../../../main/infra/fake/FakeMediaService';
+import { FakePostsEventBus } from '../../../main/infra/fake/FakePostsEventBus';
+import { FakePicturesUploader } from '../../../main/infra/fake/FakePicturesUploader';
 
 import { aPostsManagerFacade } from './base/PostsManagerFacadeFactory';
-import { FakePostsEventBus } from '../../../main/infra/fake/FakePostsEventBus';
 import { aDonationPostCreationRequest } from './base/CreateDonationRequestFactory';
 
 describe('CreateDonationPostUseCase', () => {
   const mockUsersService = mock<UsersService>();
   const mockWilayasService = mock<WilayasService>();
-  const mediaService = new FakeMediaService();
+  const picturesUploader = new FakePicturesUploader();
   const postsEventBus = new FakePostsEventBus();
 
   const postsManagerFacade = aPostsManagerFacade({
     usersService: instance(mockUsersService),
     wilayasService: instance(mockWilayasService),
-    mediaService,
+    picturesUploader,
     postsEventBus,
   });
 
@@ -77,7 +77,7 @@ describe('CreateDonationPostUseCase', () => {
   });
 
   it('should upload pictures before saving them', async () => {
-    const uploadPicturesSpy = spy(mediaService, 'uploadPictures');
+    const uploadPicturesSpy = spy(picturesUploader, 'upload');
 
     const postCreationBody = aDonationPostCreationRequest();
     await postsManagerFacade.createDonationPost(postCreationBody);

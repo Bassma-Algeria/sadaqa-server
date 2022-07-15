@@ -1,28 +1,36 @@
 import { expect } from 'chai';
+import request from 'supertest';
+import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
 
 import { aDonationCreationBody } from './base/data/post';
-import { aUserRegistrationBody } from './base/data/user';
 
 import { EndPoints } from './base/helpers/Endpoints';
-import { HttpRequester } from './base/helpers/HttpRequester';
 
-import { bootstrapNestApp } from '../../src/web/rest/main';
+import { AppModule } from '../../src/web/rest/app.module';
 
 import { prisma } from '../../src/components/_shared_/persistence/prisma/PrismaClient';
+import { aUserRegistrationBody } from './base/data/user';
 
 describe('Walking Skeleton', () => {
-  let requester: HttpRequester;
+  let app: INestApplication;
 
   before(async () => {
-    const app = await bootstrapNestApp();
-    await app.init();
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
 
-    requester = new HttpRequester(app.getHttpServer());
+    app = moduleRef.createNestApplication();
+    await app.init();
   });
 
   beforeEach(async () => {
     await prisma.donationPost.deleteMany();
     await prisma.user.deleteMany();
+  });
+
+  after(async () => {
+    await app.close();
   });
 
   it('user create an account, publish a donation, another user came in and found the post in the donations section, and get more infomation about it', async () => {
@@ -44,19 +52,20 @@ describe('Walking Skeleton', () => {
   const registerRandomUser = async () => {
     const {
       body: { accessToken },
-    } = await requester.post(EndPoints.REGISTER, aUserRegistrationBody());
+    } = await request(app.getHttpServer()).post(EndPoints.REGISTER).send(aUserRegistrationBody());
 
     return { accessToken };
   };
 
   const postNewDonationByUserWithToken = async (accessToken: string) => {
-    const body = aDonationCreationBody();
+    const body: any = aDonationCreationBody();
 
     const {
       body: { postId },
-    } = await requester.post(EndPoints.NEW_DONATION, body, {
-      Authorisation: accessToken,
-    });
+    } = await request(app.getHttpServer())
+      .post(EndPoints.NEW_DONATION)
+      .field(body)
+      .set('Authorisation', accessToken);
 
     return { postId, category: body.category };
   };
@@ -64,13 +73,13 @@ describe('Walking Skeleton', () => {
   const getAllDonationsOfCategory = async (category: string) => {
     const {
       body: { donationsPosts },
-    } = await requester.get(EndPoints.GET_DONATIONS({ category }));
+    } = await request(app.getHttpServer()).get(EndPoints.GET_DONATIONS({ category }));
 
     return { donationsPosts };
   };
 
   const getDonationWithId = async (postId: string) => {
-    const { body } = await requester.get(EndPoints.GET_DONATION(postId));
+    const { body } = await request(app.getHttpServer()).get(EndPoints.GET_DONATION(postId));
 
     return { post: body };
   };

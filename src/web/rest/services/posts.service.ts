@@ -11,6 +11,7 @@ import { AuthenticationManagerConfiguration } from '../../../components/Authenti
 class PostsService {
   private readonly authenticationManager =
     AuthenticationManagerConfiguration.anAuthenticationManagerFacade();
+
   private readonly postsManager = PostsManagerConfiguration.aPostsManagerFacade();
 
   getDonationById(request: GetDonationPostUseCaseRequest) {
@@ -23,7 +24,7 @@ class PostsService {
 
   async createNewDonation(
     accessToken: string,
-    body: Exclude<CreateDonationPostUseCaseRequest, 'publisherId'>,
+    body: Omit<CreateDonationPostUseCaseRequest, 'publisherId'>,
   ) {
     const { userId: publisherId } = await this.authenticationManager.decodeAccessToken({
       accessToken,

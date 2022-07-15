@@ -3,9 +3,9 @@ import { PostsManagerFacade } from './PostsManagerFacade';
 import { PostsEventBusImpli } from './infra/real/PostsEventBusImpli';
 import { UuidPostIdGenerator } from './infra/real/UuidPostIdGenerator';
 import { UsersManagerUsersService } from './infra/real/UsersManagerUsersService';
-import { MediaManagerMediaService } from './infra/real/MediaManagerMediaService';
 import { SystemClockDateTimeService } from './infra/real/SystemClockDateTimeService';
 import { RegionsManagerWilayasService } from './infra/real/RegionsManagerWilayasService';
+import { MediaManagerPicturesUploader } from './infra/real/MediaManagerPicturesUploader';
 import { PostgresDonationPostRepository } from './infra/real/PostgresDonationPostRepository';
 
 import { MediaManagerConfiguration } from '../../MediaManager/main/MediaManagerConfiguration';
@@ -19,7 +19,7 @@ class PostsManagerConfiguration {
     return new PostsManagerFacade(
       new UsersManagerUsersService(UsersManagerConfiguration.aUsersManagerFacade()),
       new RegionsManagerWilayasService(RegionsManagerConfiguration.aRegionsManagerFacade()),
-      new MediaManagerMediaService(MediaManagerConfiguration.aMediaManagerFacade()),
+      new MediaManagerPicturesUploader(MediaManagerConfiguration.aMediaManagerFacade()),
       new UuidPostIdGenerator(),
       new PostgresDonationPostRepository(),
       new SystemClockDateTimeService(),

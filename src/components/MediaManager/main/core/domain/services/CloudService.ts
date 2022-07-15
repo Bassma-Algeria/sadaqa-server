@@ -1,6 +1,6 @@
 import { URL } from '../URL';
-import { Picture } from '../Picture';
+import { PictureToUpload } from '../PictureToUpload';
 
 export interface CloudService {
-  upload(picture: Picture): Promise<URL>;
+  upload(picture: PictureToUpload): Promise<URL>;
 }

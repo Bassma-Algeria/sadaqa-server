@@ -1,13 +1,12 @@
 import { faker } from '@faker-js/faker';
 
-import { Picture } from '../../core/domain/Picture';
-import { LocalPath } from '../../core/domain/LocalPath';
+import { PictureToUpload } from '../../core/domain/PictureToUpload';
 
 import { ImageCompressor } from '../../core/domain/services/ImageCompressor';
 
 class FakeImageCompressor implements ImageCompressor {
-  async minify(): Promise<Picture> {
-    return new Picture(new LocalPath(faker.system.filePath()));
+  async minify(): Promise<PictureToUpload> {
+    return new PictureToUpload(Buffer.from(faker.image.image()));
   }
 }
 

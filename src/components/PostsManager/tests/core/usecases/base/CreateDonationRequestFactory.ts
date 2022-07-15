@@ -28,7 +28,7 @@ const aDonationPostCreationRequest = (
     publisherId: faker.datatype.uuid(),
     wilayaNumber: faker.datatype.number({ min: 1, max: 40 }),
     category: CATEGORIES[faker.datatype.number({ min: 0, max: CATEGORIES.length - 1 })],
-    pictures: Array.from({ length: 4 }).map(() => faker.image.abstract()),
+    pictures: Array.from({ length: 4 }).map(() => Buffer.from(faker.image.image())),
     ...request,
   };
 };

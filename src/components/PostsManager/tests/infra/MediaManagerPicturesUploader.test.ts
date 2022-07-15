@@ -4,21 +4,21 @@ import { anything, instance, mock, verify, when } from 'ts-mockito';
 
 import { MediaManagerFacade } from '../../../MediaManager/main/MediaManagerFacade';
 
-import { MediaManagerMediaService } from '../../main/infra/real/MediaManagerMediaService';
+import { MediaManagerPicturesUploader } from '../../main/infra/real/MediaManagerPicturesUploader';
 
-describe('MediaManagerMediaService', () => {
+describe('MediaManagerPictureUploader', () => {
   const mediaManagerMock = mock<MediaManagerFacade>();
-  const mediaService = new MediaManagerMediaService(instance(mediaManagerMock));
+  const mediaService = new MediaManagerPicturesUploader(instance(mediaManagerMock));
 
   it('should upload all the images using the MediaManager', async () => {
     const urlToReturn = faker.image.imageUrl();
     when(mediaManagerMock.uploadPicture(anything())).thenResolve({ url: urlToReturn });
 
     const picturesToUpload = Array.from({ length: faker.datatype.number({ min: 1, max: 8 }) }).map(
-      () => faker.system.filePath(),
+      () => Buffer.from('some random value'),
     );
 
-    const result = await mediaService.uploadPictures(picturesToUpload);
+    const result = await mediaService.upload(picturesToUpload);
 
     verify(mediaManagerMock.uploadPicture(anything())).times(picturesToUpload.length);
     expect(result.length).to.equal(picturesToUpload.length);

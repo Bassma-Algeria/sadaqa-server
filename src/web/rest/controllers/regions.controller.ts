@@ -1,8 +1,14 @@
-import { RegionsService } from '../services/regions.service';
+import {
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Controller, Get, HttpException, HttpStatus, Param } from '@nestjs/common';
 
 import { WilayaNotExistException } from '../../../components/RegionsManager/main/core/domain/exceptions/WilayaNotExistException';
-import { ApiTags } from '@nestjs/swagger';
+
+import { RegionsService } from '../services/regions.service';
 
 @ApiTags('regions')
 @Controller('/api/regions')
@@ -10,11 +16,16 @@ class RegionsController {
   constructor(private readonly regionsService: RegionsService) {}
 
   @Get('wilayas')
+  @ApiOkResponse({ description: 'Wilayas Found' })
+  @ApiInternalServerErrorResponse({ description: 'Server Error' })
   getAllWilayas() {
     return this.regionsService.getAllWilayas();
   }
 
   @Get('wilayas/:wilayaNumber')
+  @ApiOkResponse({ description: 'Wilaya Found' })
+  @ApiNotFoundResponse({ description: 'Wilaya Not Found' })
+  @ApiInternalServerErrorResponse({ description: 'Server Error' })
   async getWilaya(@Param('wilayaNumber') wilayaNumber: string) {
     try {
       return await this.regionsService.getWilaya({ wilayaNumber: Number(wilayaNumber) });

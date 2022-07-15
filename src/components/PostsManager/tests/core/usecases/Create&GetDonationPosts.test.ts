@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { faker } from '@faker-js/faker';
 import { instance, mock, when } from 'ts-mockito';
 
 import { aPostsManagerFacade } from './base/PostsManagerFacadeFactory';
@@ -7,7 +8,6 @@ import { aDonationPostCreationRequest } from './base/CreateDonationRequestFactor
 import { DateTimeService } from '../../../main/core/domain/services/DateTimeService';
 
 import { PostsManagerFacade } from '../../../main/PostsManagerFacade';
-import { faker } from '@faker-js/faker';
 import { CategoryNotSupportedException } from '../../../main/core/domain/exceptions/CategoryNotSupportedException';
 
 describe('Create & Get Donations Posts', () => {

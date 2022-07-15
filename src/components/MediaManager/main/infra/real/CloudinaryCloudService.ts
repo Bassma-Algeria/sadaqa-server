@@ -3,19 +3,25 @@ import { v2 as cloudinary } from 'cloudinary';
 import { CloudService } from '../../core/domain/services/CloudService';
 
 import { URL } from '../../core/domain/URL';
-import { Picture } from '../../core/domain/Picture';
+import { PictureToUpload } from '../../core/domain/PictureToUpload';
 
 class CloudinaryCloudService implements CloudService {
   constructor() {
     if (!process.env.CLOUDINARY_URL) throw new NoCloudinaryUrlInEnvException();
   }
 
-  async upload(picture: Picture): Promise<URL> {
-    const { secure_url: url } = await cloudinary.uploader.upload(picture.path.value(), {
+  async upload(picture: PictureToUpload): Promise<URL> {
+    const image = this.formatBase64ImageDataIntoUploadableString(picture.buffer.toString('base64'));
+
+    const { secure_url } = await cloudinary.uploader.upload(image, {
       recource_type: 'image',
     });
 
-    return new URL(url);
+    return new URL(secure_url);
+  }
+
+  private formatBase64ImageDataIntoUploadableString(base64: string) {
+    return `data:image/png;base64,${base64}`;
   }
 }
 

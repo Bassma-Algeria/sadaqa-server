@@ -1,6 +1,6 @@
 import { FileSize } from '../FileSize';
-import { LocalPath } from '../LocalPath';
+import { PictureToUpload } from '../PictureToUpload';
 
 export interface FileSystemService {
-  sizeof(picturePath: LocalPath): Promise<FileSize>;
+  sizeof(picture: PictureToUpload): Promise<FileSize>;
 }

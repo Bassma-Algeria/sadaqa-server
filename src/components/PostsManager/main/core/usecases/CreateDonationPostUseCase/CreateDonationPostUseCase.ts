@@ -11,11 +11,11 @@ import { WilayaNumber } from '../../domain/WilayaNumber';
 import { DonationCategory } from '../../domain/DonationCategory';
 
 import { UsersService } from '../../domain/services/UsersService';
-import { MediaService } from '../../domain/services/MediaService';
 import { PostsEventBus } from '../../domain/services/PostsEventBus';
 import { WilayasService } from '../../domain/services/WilayasService';
 import { DateTimeService } from '../../domain/services/DateTimeService';
 import { PostIdGenerator } from '../../domain/services/PostIdGenerator';
+import { PicturesUploader } from '../../domain/services/PicturesUploader';
 import { DonationPostRepository } from '../../domain/services/DonationPostRepository';
 
 import { InvalidPublisherIdException } from '../../domain/exceptions/InvalidPublisherIdException';
@@ -27,7 +27,7 @@ class CreateDonationPostUseCase
   constructor(
     private readonly usersService: UsersService,
     private readonly wilayasService: WilayasService,
-    private readonly mediaService: MediaService,
+    private readonly picturesUploader: PicturesUploader,
     private readonly postIdGenerator: PostIdGenerator,
     private readonly donationPostRepository: DonationPostRepository,
     private readonly dateTimeService: DateTimeService,
@@ -89,7 +89,7 @@ class CreateDonationPostUseCase
   }
 
   private async uploadPicturesFrom(request: CreateDonationPostUseCaseRequest) {
-    return { pictures: await this.mediaService.uploadPictures(request.pictures) };
+    return { pictures: await this.picturesUploader.upload(request.pictures) };
   }
 
   private generatePostId() {
