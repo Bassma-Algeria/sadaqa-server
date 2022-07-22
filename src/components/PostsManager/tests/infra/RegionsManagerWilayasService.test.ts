@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { mock, when, anything, instance } from 'ts-mockito';
+import { anything, instance, mock, when } from 'ts-mockito';
 
 import { WilayaNumber } from '../../main/core/domain/WilayaNumber';
 import { RegionsManagerFacade } from '../../../RegionsManager/main/RegionsManagerFacade';

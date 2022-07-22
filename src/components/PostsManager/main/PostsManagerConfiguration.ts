@@ -1,18 +1,20 @@
 import { PostsManagerFacade } from './PostsManagerFacade';
 
-import { PostsEventBusImpli } from './infra/real/PostsEventBusImpli';
+import { PostsEventBusImpl } from './infra/real/PostsEventBusImpl';
 import { UuidPostIdGenerator } from './infra/real/UuidPostIdGenerator';
 import { UsersManagerUsersService } from './infra/real/UsersManagerUsersService';
-import { SystemClockDateTimeService } from './infra/real/SystemClockDateTimeService';
 import { RegionsManagerWilayasService } from './infra/real/RegionsManagerWilayasService';
 import { MediaManagerPicturesUploader } from './infra/real/MediaManagerPicturesUploader';
 import { PostgresDonationPostRepository } from './infra/real/PostgresDonationPostRepository';
+import { PostgresCallForHelpPostRepository } from './infra/real/PostgresCallForHelpPostRepository';
+import { PostgresFamilyInNeedPostRepository } from './infra/real/PostgresFamilyInNeedPostRepository';
+import { PostgresDonationRequestPostRepository } from './infra/real/PostgresDonationRequestRepository';
 
 import { MediaManagerConfiguration } from '../../MediaManager/main/MediaManagerConfiguration';
 import { UsersManagerConfiguration } from '../../UsersManager/main/UsersManagerConfiguration';
 import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsManagerConfiguration';
 
-import { eventBus } from '../../_shared_/event-bus/EventBus';
+import { EventBus } from '../../_shared_/event-bus/EventBus';
 
 class PostsManagerConfiguration {
   static aPostsManagerFacade() {
@@ -22,8 +24,10 @@ class PostsManagerConfiguration {
       new MediaManagerPicturesUploader(MediaManagerConfiguration.aMediaManagerFacade()),
       new UuidPostIdGenerator(),
       new PostgresDonationPostRepository(),
-      new SystemClockDateTimeService(),
-      new PostsEventBusImpli(eventBus),
+      new PostsEventBusImpl(EventBus.getInstance()),
+      new PostgresFamilyInNeedPostRepository(),
+      new PostgresDonationRequestPostRepository(),
+      new PostgresCallForHelpPostRepository(),
     );
   }
 }

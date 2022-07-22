@@ -10,10 +10,10 @@ const bootstrapNestApp = async () => {
     .setVersion('1.0.0')
     .addTag('users')
     .addTag('posts')
-    .addTag('notifications')
-    .addTag('messages')
     .addTag('admin')
     .addTag('regions')
+    .addTag('messages')
+    .addTag('notifications')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

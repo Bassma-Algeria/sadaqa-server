@@ -7,6 +7,7 @@ import {
 import { Controller, Get, HttpException, HttpStatus, Param } from '@nestjs/common';
 
 import { WilayaNotExistException } from '../../../components/RegionsManager/main/core/domain/exceptions/WilayaNotExistException';
+import { InvalidWilayaNumberException } from '../../../components/RegionsManager/main/core/domain/exceptions/InvalidWilayaNumberException';
 
 import { RegionsService } from '../services/regions.service';
 
@@ -30,7 +31,7 @@ class RegionsController {
     try {
       return await this.regionsService.getWilaya({ wilayaNumber: Number(wilayaNumber) });
     } catch (e) {
-      if (e instanceof WilayaNotExistException)
+      if (e instanceof WilayaNotExistException || e instanceof InvalidWilayaNumberException)
         throw new HttpException({ error: 'not found' }, HttpStatus.NOT_FOUND);
 
       throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);

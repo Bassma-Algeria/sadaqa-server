@@ -15,6 +15,7 @@ class CloudinaryCloudService implements CloudService {
 
     const { secure_url } = await cloudinary.uploader.upload(image, {
       recource_type: 'image',
+      folder: 'sadaqa',
     });
 
     return new URL(secure_url);

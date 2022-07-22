@@ -1,12 +1,26 @@
 import { Events } from './Events';
 
-type Subscribers<E extends keyof Events> = {
-  [Key in E]: Array<(payload: Events[Key]) => void>;
+type Subscribers = {
+  [Key in keyof Events]: Array<(payload: Events[Key]) => void>;
 };
 
 class EventBus {
-  private readonly subscribers: Subscribers<keyof Events> = {
-    NEW_DONATION_CREATED: [],
+  private static readonly eventBus = new EventBus();
+
+  static getInstance() {
+    return EventBus.eventBus;
+  }
+
+  private constructor() {}
+
+  private readonly subscribers: Subscribers = {
+    USER_LOGIN: [],
+    NEW_REGULAR_USER_REGISTERED: [],
+    NEW_ASSOCIATION_REGISTERED: [],
+    NEW_DONATION_POST_CREATED: [],
+    NEW_CALL_FOR_HELP_POST_CREATED: [],
+    NEW_FAMILY_IN_NEED_POST_CREATED: [],
+    NEW_DONATION_REQUEST_POST_CREATED: [],
   };
 
   subscribeTo<E extends keyof Events>(event: E) {
@@ -22,7 +36,7 @@ class EventBus {
       by: (unsubscriber: (payload: Events[E]) => void) => {
         this.subscribers[event] = this.subscribers[event].filter(
           subscriber => subscriber !== unsubscriber,
-        );
+        ) as Subscribers[E];
       },
     };
   }
@@ -36,6 +50,4 @@ class EventBus {
   }
 }
 
-const eventBus = new EventBus();
-
-export { EventBus, eventBus };
+export { EventBus };

@@ -1,14 +1,11 @@
-import { faker } from '@faker-js/faker';
 import { expect } from 'chai';
+import { faker } from '@faker-js/faker';
 
 import { Email } from '../../main/core/domain/Email';
 import { UserId } from '../../main/core/domain/UserId';
-import { LastName } from '../../main/core/domain/LastName';
-import { Password } from '../../main/core/domain/Password';
-import { FirstName } from '../../main/core/domain/FirstName';
 import { PhoneNumber } from '../../main/core/domain/PhoneNumber';
-import { UserAccount } from '../../main/core/domain/UserAccount';
-import { WilayaNumber } from '../../main/core/domain/WilayaNumber';
+
+import { aRegularUserAccount } from './base/aRegularUserAccount';
 
 import { PostgresUserAccountRepository } from '../../main/infra/real/PostgresUserAccountRepository';
 
@@ -16,27 +13,27 @@ describe('PostgresUserAccountRepository', () => {
   const userAccountRepository = new PostgresUserAccountRepository();
 
   it('should add a user be able to retrieve it by email', async () => {
-    const userAccount = aUserAccount();
+    const userAccount = aRegularUserAccount();
 
-    await userAccountRepository.add(userAccount);
+    await userAccountRepository.save(userAccount);
     const accountByEmail = await userAccountRepository.findByEmail(userAccount.email);
 
     expect(userAccount.userId.value()).to.equal(accountByEmail?.userId.value());
   });
 
   it('should add a user be able to retrieve it by phone', async () => {
-    const userAccount = aUserAccount();
+    const userAccount = aRegularUserAccount();
 
-    await userAccountRepository.add(userAccount);
+    await userAccountRepository.save(userAccount);
     const accountByPhone = await userAccountRepository.findByPhoneNumber(userAccount.phone);
 
     expect(userAccount.userId.value()).to.equal(accountByPhone?.userId.value());
   });
 
   it('should add a user be able to retrieve it by id', async () => {
-    const userAccount = aUserAccount();
+    const userAccount = aRegularUserAccount();
 
-    await userAccountRepository.add(userAccount);
+    await userAccountRepository.save(userAccount);
     const accountByPhone = await userAccountRepository.findById(userAccount.userId);
 
     expect(userAccount.userId.value()).to.equal(accountByPhone?.userId.value());
@@ -55,19 +52,4 @@ describe('PostgresUserAccountRepository', () => {
     expect(userByEmail).to.equal(undefined);
     expect(userById).to.equal(undefined);
   });
-
-  const aUserAccount = () => {
-    const ALGERIAN_PHONE = faker.phone.number('05 ## ## ## ##');
-
-    return new UserAccount(
-      new UserId(faker.datatype.uuid()),
-      new FirstName(faker.name.firstName()),
-      new LastName(faker.name.lastName()),
-      new WilayaNumber(faker.datatype.number({ min: 1, max: 20 })),
-      new PhoneNumber(ALGERIAN_PHONE),
-      new Email(faker.internet.email()),
-      new Password(faker.internet.password()),
-      new Date(faker.date.past()),
-    );
-  };
 });

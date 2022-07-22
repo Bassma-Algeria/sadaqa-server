@@ -3,7 +3,7 @@ import { MultiLanguagesException } from './MultiLanguagesException';
 
 class InvalidDahabiaRIBException extends MultiLanguagesException {
   constructor() {
-    super(ExceptionsMessages.INVALID_RIB);
+    super(ExceptionsMessages.INVALID_BARIDI_MOB_NUMBER);
   }
 }
 

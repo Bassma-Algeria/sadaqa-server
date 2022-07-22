@@ -27,6 +27,17 @@ model User {
   createdAt    DateTime
 }
 
+model Association {
+  associationId   String   @id
+  associationName String
+  wilayaNumber    Int
+  phone           String   @unique
+  email           String   @unique
+  password        String
+  active          Boolean
+  createdAt       DateTime
+}
+
 model DonationPost {
   postId       String   @id
   title        String
@@ -36,4 +47,41 @@ model DonationPost {
   pictures     String[]
   publisherId  String
   createdAt    DateTime
+}
+
+model DonationRequestPost {
+  postId       String   @id
+  title        String
+  description  String
+  category     String
+  wilayaNumber Int
+  pictures     String[]
+  publisherId  String
+  createdAt    DateTime
+}
+
+model FamilyInNeedPost {
+  postId          String   @id
+  title           String
+  description     String
+  wilayaNumber    Int
+  publisherId     String
+  pictures        String[]
+  ccp             String?
+  ccpKey          String?
+  baridiMobNumber String?
+  createdAt       DateTime
+}
+
+model CallForHelpPost {
+  postId          String   @id
+  title           String
+  description     String
+  wilayaNumber    Int
+  publisherId     String
+  pictures        String[]
+  ccp             String?
+  ccpKey          String?
+  baridiMobNumber String?
+  createdAt       DateTime
 }

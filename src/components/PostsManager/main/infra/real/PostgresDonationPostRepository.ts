@@ -9,6 +9,7 @@ import { WilayaNumber } from '../../core/domain/WilayaNumber';
 import { DonationCategory } from '../../core/domain/DonationCategory';
 
 import {
+  CountFilters,
   DonationPostRepository,
   FindManyFilters,
 } from '../../core/domain/services/DonationPostRepository';
@@ -43,11 +44,23 @@ class PostgresDonationPostRepository implements DonationPostRepository {
 
     const dbModels = await prisma.donationPost.findMany({
       where: { category: filters.category.value(), wilayaNumber: filters.wilayaNumber?.value() },
+      orderBy: { createdAt: 'desc' },
       skip: numOfPostsToSkip,
       take: filters.pageLimit,
     });
 
     return dbModels.map(model => this.toEntity(model));
+  }
+
+  async count(filters: CountFilters): Promise<number> {
+    const total = await prisma.donationPost.count({
+      where: {
+        category: filters.category.value(),
+        wilayaNumber: filters.wilayaNumber?.value(),
+      },
+    });
+
+    return total;
   }
 
   async deleteAll() {

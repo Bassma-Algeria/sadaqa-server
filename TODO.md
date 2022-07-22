@@ -1,2 +1,1 @@
-- add swagger docs
-- add the files uploading to donation creation
+- create an index.ts in the core and initialize all the singletons there, and use them in the rest services

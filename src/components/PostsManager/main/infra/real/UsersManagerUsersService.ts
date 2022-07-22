@@ -8,9 +8,21 @@ class UsersManagerUsersService implements UsersService {
 
   async isExist(publisherId: PublisherId): Promise<boolean> {
     try {
-      await this.usersManagerFacade.getUserById({ userId: publisherId.value() });
+      await this.usersManagerFacade.getRegularUserById({ regularUserId: publisherId.value() });
 
       return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async isActiveAssociation(publisherId: PublisherId): Promise<boolean> {
+    try {
+      const { active } = await this.usersManagerFacade.getAssociationById({
+        associationId: publisherId.value(),
+      });
+
+      return active;
     } catch {
       return false;
     }

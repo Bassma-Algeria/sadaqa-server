@@ -19,6 +19,18 @@ const ExceptionsMessages = {
     en: 'invlid phone number format, please try again',
     ar: 'رقم الهاتف غير صحيح ، يرجى المحاولة مرة أخرى',
   },
+  EMAIL_ALREADY_USED: {
+    en: 'this email is used by another user, please try to register with another email',
+    ar: 'هذا البريد الإلكتروني مستخدم من قبل مستعمل آخر ، يرجى محاولة التسجيل باستخدام بريد إلكتروني آخر',
+  },
+  NO_ASSOCIATION_DOCS: {
+    en: 'should provide at least one legal document of your association',
+    ar: 'يجب أن تقدم وثيقة قانونية واحدة على الأقل',
+  },
+  PHONE_NUMBER_ALREADY_USED: {
+    en: 'this phone number is used by another association, please try to register with another one',
+    ar: 'رقم الهاتف مستخدم من قبل جمعية أخرى ، يرجى محاولة التسجيل برقم آخر',
+  },
   INVALID_USER_ID: 'user id cannot be falsy',
   USER_NOT_FOUND: 'user not found',
 };

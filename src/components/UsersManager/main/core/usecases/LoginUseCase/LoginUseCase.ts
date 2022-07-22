@@ -3,40 +3,68 @@ import { LoginUseCaseRequest } from './LoginUseCaseRequest';
 import { LoginUseCaseResponse } from './LoginUseCaseResponse';
 
 import { Email } from '../../domain/Email';
+import { UserId } from '../../domain/UserId';
 import { Password } from '../../domain/Password';
 
+import { UsersEventBus } from '../../domain/services/UsersEventBus';
 import { PasswordEncryptor } from '../../domain/services/PasswordEncryptor';
-import { UserAccountRepository } from '../../domain/services/UserAccountRepository';
+import { RegularUserAccountRepository } from '../../domain/services/RegularUserAccountRepository';
+import { AssociationAccountRepository } from '../../domain/services/AssociationAccountRepository';
 
 import { WrongCredentialsException } from '../../domain/exceptions/WrongCredentialsException';
 
 class LoginUseCase implements UseCase<LoginUseCaseRequest, LoginUseCaseResponse> {
   constructor(
-    private readonly userAccountRepository: UserAccountRepository,
+    private readonly regularUserAccountRepository: RegularUserAccountRepository,
     private readonly passwordEncryptor: PasswordEncryptor,
+    private readonly associationAccountRepository: AssociationAccountRepository,
+    private readonly usersEventBus: UsersEventBus,
   ) {}
 
   async handle(request: LoginUseCaseRequest): Promise<LoginUseCaseResponse> {
-    const email = new Email(request.email);
+    const { password: passwordFromRequest, email } = this.getFrom(request);
 
-    const account = await this.findUserByEmail(email);
-    if (!account) throw new WrongCredentialsException();
+    const { password: realPassword, userId } = await this.findTargetAccountAndThrowIfNotExist(
+      email,
+    );
 
-    const isMatch = await this.checkPassword(request.password, account.password);
+    await this.checkIfPasswordsMatchAndThrowIfNot(passwordFromRequest, realPassword);
+
+    this.usersEventBus.publishUserLoginEvent(userId);
+
+    return { userId: userId.value() };
+  }
+
+  private getFrom(request: LoginUseCaseRequest) {
+    return { email: new Email(request.email), password: new Password(request.password) };
+  }
+
+  private async findTargetAccountAndThrowIfNotExist(email: Email) {
+    let userId: UserId;
+    let password: Password;
+
+    const regularUser = await this.regularUserAccountRepository.findByEmail(email);
+
+    if (regularUser) {
+      userId = regularUser.userId;
+      password = regularUser.password;
+    } else {
+      const association = await this.associationAccountRepository.findByEmail(email);
+      if (!association) throw new WrongCredentialsException();
+
+      userId = association.associationId;
+      password = association.password;
+    }
+
+    return { password, userId };
+  }
+
+  private async checkIfPasswordsMatchAndThrowIfNot(
+    passwordFromRequest: Password,
+    realPassword: Password,
+  ) {
+    const isMatch = await this.passwordEncryptor.compare(passwordFromRequest, realPassword);
     if (!isMatch) throw new WrongCredentialsException();
-
-    return { userId: account.userId.value() };
-  }
-
-  private async checkPassword(plain: string, encrypted: Password) {
-    const plainPassword = new Password(plain);
-    const isCorrectPassword = await this.passwordEncryptor.compare(plainPassword, encrypted);
-
-    return isCorrectPassword;
-  }
-
-  private findUserByEmail(email: Email) {
-    return this.userAccountRepository.findByEmail(email);
   }
 }
 

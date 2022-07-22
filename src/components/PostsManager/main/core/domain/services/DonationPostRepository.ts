@@ -11,10 +11,17 @@ export interface FindManyFilters {
   wilayaNumber?: WilayaNumber;
 }
 
+export interface CountFilters {
+  category: DonationCategory;
+  wilayaNumber?: WilayaNumber;
+}
+
 export interface DonationPostRepository {
   save(donationPost: DonationPost): Promise<void>;
 
   findById(postId: PostId): Promise<DonationPost | undefined>;
 
   findMany(filters: FindManyFilters): Promise<DonationPost[]>;
+
+  count(filters: CountFilters): Promise<number>;
 }

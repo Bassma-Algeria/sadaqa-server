@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import { EventBus } from '../../src/components/_shared_/event-bus/EventBus';
 
 describe('EventBus', () => {
-  const eventBus = new EventBus();
+  const eventBus = EventBus.getInstance();
 
   it('given some subscribers to an event, when that event published, then notify all of them', () => {
     const subscriber = Sinon.spy();
@@ -12,10 +12,10 @@ describe('EventBus', () => {
 
     const payload: any = {};
 
-    eventBus.subscribeTo('NEW_DONATION_CREATED').by(subscriber);
-    eventBus.subscribeTo('NEW_DONATION_CREATED').by(subscriber2);
+    eventBus.subscribeTo('NEW_DONATION_POST_CREATED').by(subscriber);
+    eventBus.subscribeTo('NEW_DONATION_POST_CREATED').by(subscriber2);
 
-    eventBus.publish('NEW_DONATION_CREATED').withPayload(payload);
+    eventBus.publish('NEW_DONATION_POST_CREATED').withPayload(payload);
 
     expect(subscriber.calledOnce).to.equal(true);
     expect(subscriber2.calledOnce).to.equal(true);
@@ -28,11 +28,11 @@ describe('EventBus', () => {
 
     const payload: any = {};
 
-    eventBus.subscribeTo('NEW_DONATION_CREATED').by(subscriber);
+    eventBus.subscribeTo('NEW_DONATION_POST_CREATED').by(subscriber);
 
-    eventBus.unsubscribeFrom('NEW_DONATION_CREATED').by(subscriber);
+    eventBus.unsubscribeFrom('NEW_DONATION_POST_CREATED').by(subscriber);
 
-    eventBus.publish('NEW_DONATION_CREATED').withPayload(payload);
+    eventBus.publish('NEW_DONATION_POST_CREATED').withPayload(payload);
 
     expect(subscriber.calledOnce).to.equal(false);
   });
