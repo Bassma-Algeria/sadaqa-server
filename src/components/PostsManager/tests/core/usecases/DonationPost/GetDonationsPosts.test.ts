@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 import { cleanData } from './base/cleanData';
 import { aPostsManagerFacade } from '../base/aPostsManagerFacade';
-import { aDonationPostCreationRequest } from './base/aDonationPostCreationRequest';
+import { aDonationPostCreationRequest } from '../base/requests/aDonationPostCreationRequest';
 
 import { CategoryNotSupportedException } from '../../../../main/core/domain/exceptions/CategoryNotSupportedException';
 

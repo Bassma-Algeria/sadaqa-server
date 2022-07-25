@@ -1,7 +1,9 @@
 import { GetDonationPostUseCase } from './core/usecases/DonationPost/GetDonationPostUseCase/GetDonationPostUseCase';
 import { GetDonationsPostsUseCase } from './core/usecases/DonationPost/GetDonationsPostsUseCase/GetDonationsPostsUseCase';
+import { GetFavouritePostsUseCase } from './core/usecases/FavouritePosts/GetFavouritePostsUseCase/GetFavouritePostsUseCase';
 import { CreateDonationPostUseCase } from './core/usecases/DonationPost/CreateDonationPostUseCase/CreateDonationPostUseCase';
 import { GetCallForHelpPostUseCase } from './core/usecases/CallForHelpPost/GetCallForHelpPostUseCase/GetCallForHelpPostUseCase';
+import { AddToFavouritePostsUseCase } from './core/usecases/FavouritePosts/AddToFavouritePostsUseCase/AddToFavouritePostsUseCase';
 import { GetCallForHelpPostsUseCase } from './core/usecases/CallForHelpPost/GetCallForHelpPostsUseCase/GetCallForHelpPostsUseCase';
 import { GetFamilyInNeedPostUseCase } from './core/usecases/FamilyInNeedPost/GetFamilyInNeedPostUseCase/GetFamilyInNeedPostUseCase';
 import { CreateCallForHelpPostUseCase } from './core/usecases/CallForHelpPost/CreateCallForHelpPostUseCase/CreateCallForHelpPostUseCase';
@@ -12,9 +14,11 @@ import { CreateDonationRequestPostUseCase } from './core/usecases/DonationReques
 
 import { GetDonationPostUseCaseRequest } from './core/usecases/DonationPost/GetDonationPostUseCase/GetDonationPostUseCaseRequest';
 import { GetDonationsPostsUseCaseRequest } from './core/usecases/DonationPost/GetDonationsPostsUseCase/GetDonationsPostsUseCaseRequest';
+import { GetFavouritePostsUseCaseRequest } from './core/usecases/FavouritePosts/GetFavouritePostsUseCase/GetFavouritePostsUseCaseRequest';
 import { CreateDonationPostUseCaseRequest } from './core/usecases/DonationPost/CreateDonationPostUseCase/CreateDonationPostUseCaseRequest';
 import { GetFamiliesInNeedPostsUseCase } from './core/usecases/FamilyInNeedPost/GetFamiliesInNeedPostsUseCase/GetFamiliesInNeedPostsUseCase';
 import { GetCallForHelpPostUseCaseRequest } from './core/usecases/CallForHelpPost/GetCallForHelpPostUseCase/GetCallForHelpPostUseCaseRequest';
+import { AddToFavouritePostsUseCaseRequest } from './core/usecases/FavouritePosts/AddToFavouritePostsUseCase/AddToFavouritePostsUseCaseRequest';
 import { GetCallForHelpPostsUseCaseRequest } from './core/usecases/CallForHelpPost/GetCallForHelpPostsUseCase/GetCallForHelpPostsUseCaseRequest';
 import { GetFamilyInNeedPostUseCaseRequest } from './core/usecases/FamilyInNeedPost/GetFamilyInNeedPostUseCase/GetFamilyInNeedPostUseCaseRequest';
 import { CreateCallForHelpPostUseCaseRequest } from './core/usecases/CallForHelpPost/CreateCallForHelpPostUseCase/CreateCallForHelpPostUseCaseRequest';
@@ -25,14 +29,17 @@ import { GetDonationRequestsPostsUseCaseRequest } from './core/usecases/Donation
 import { CreateDonationRequestPostUseCaseRequest } from './core/usecases/DonationRequestPost/CreateDonationRequestPostUseCase/CreateDonationRequestPostUseCaseRequest';
 
 import { UsersService } from './core/domain/services/UsersService';
-import { PostsEventPublisher } from './core/domain/services/PostsEventPublisher';
 import { WilayasService } from './core/domain/services/WilayasService';
 import { PostIdGenerator } from './core/domain/services/PostIdGenerator';
 import { PicturesUploader } from './core/domain/services/PicturesUploader';
+import { PostsEventPublisher } from './core/domain/services/PostsEventPublisher';
 import { DonationPostRepository } from './core/domain/services/DonationPostRepository';
 import { CallForHelpPostRepository } from './core/domain/services/CallForHelpPostRepository';
 import { FamilyInNeedPostRepository } from './core/domain/services/FamilyInNeedPostRepository';
 import { DonationRequestPostRepository } from './core/domain/services/DonationRequestPostRepository';
+import { FavouritePostRepository } from './core/domain/services/FavouritePostRepository';
+import { DeleteFavouritePostUseCaseRequest } from './core/usecases/FavouritePosts/DeleteFavouritePostUseCase/DeleteFavouritePostUseCaseRequest';
+import { DeleteFavouritePostUseCase } from './core/usecases/FavouritePosts/DeleteFavouritePostUseCase/DeleteFavouritePostUseCase';
 
 class PostsManagerFacade {
   constructor(
@@ -41,10 +48,11 @@ class PostsManagerFacade {
     private readonly picturesUploader: PicturesUploader,
     private readonly postIdGenerator: PostIdGenerator,
     private readonly donationPostRepository: DonationPostRepository,
-    private readonly postsEventBus: PostsEventPublisher,
+    private readonly postsEventPublisher: PostsEventPublisher,
     private readonly familyInNeedPostRepository: FamilyInNeedPostRepository,
     private readonly donationRequestPostRepository: DonationRequestPostRepository,
     private readonly callForHelpPostRepository: CallForHelpPostRepository,
+    private readonly favouritePostRepository: FavouritePostRepository,
   ) {}
 
   createDonationPost(request: CreateDonationPostUseCaseRequest) {
@@ -54,7 +62,7 @@ class PostsManagerFacade {
       this.picturesUploader,
       this.postIdGenerator,
       this.donationPostRepository,
-      this.postsEventBus,
+      this.postsEventPublisher,
     ).handle(request);
   }
 
@@ -73,7 +81,7 @@ class PostsManagerFacade {
       this.picturesUploader,
       this.postIdGenerator,
       this.donationRequestPostRepository,
-      this.postsEventBus,
+      this.postsEventPublisher,
     ).handle(request);
   }
 
@@ -92,7 +100,7 @@ class PostsManagerFacade {
       this.picturesUploader,
       this.postIdGenerator,
       this.familyInNeedPostRepository,
-      this.postsEventBus,
+      this.postsEventPublisher,
     ).handle(request);
   }
 
@@ -111,7 +119,7 @@ class PostsManagerFacade {
       this.picturesUploader,
       this.postIdGenerator,
       this.callForHelpPostRepository,
-      this.postsEventBus,
+      this.postsEventPublisher,
     ).handle(request);
   }
 
@@ -121,6 +129,32 @@ class PostsManagerFacade {
 
   getCallForHelpPosts(request?: GetCallForHelpPostsUseCaseRequest) {
     return new GetCallForHelpPostsUseCase(this.callForHelpPostRepository).handle(request);
+  }
+
+  addToFavouritePosts(request: AddToFavouritePostsUseCaseRequest) {
+    return new AddToFavouritePostsUseCase(
+      this.usersService,
+      this.donationPostRepository,
+      this.donationRequestPostRepository,
+      this.familyInNeedPostRepository,
+      this.callForHelpPostRepository,
+      this.favouritePostRepository,
+    ).handle(request);
+  }
+
+  getFavouritePosts(request: GetFavouritePostsUseCaseRequest) {
+    return new GetFavouritePostsUseCase(
+      this.usersService,
+      this.donationPostRepository,
+      this.donationRequestPostRepository,
+      this.familyInNeedPostRepository,
+      this.callForHelpPostRepository,
+      this.favouritePostRepository,
+    ).handle(request);
+  }
+
+  deleteFavouritePost(request: DeleteFavouritePostUseCaseRequest) {
+    return new DeleteFavouritePostUseCase(this.favouritePostRepository).handle(request);
   }
 }
 

@@ -5,7 +5,7 @@ import { anything, instance, mock, when } from 'ts-mockito';
 
 import { cleanData } from './base/cleanData';
 import { aPostsManagerFacade } from '../base/aPostsManagerFacade';
-import { aFamilyInNeedPostCreationRequest } from './base/aFamilyInNeedPostCreationRequest';
+import { aFamilyInNeedPostCreationRequest } from '../base/requests/aFamilyInNeedPostCreationRequest';
 
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';

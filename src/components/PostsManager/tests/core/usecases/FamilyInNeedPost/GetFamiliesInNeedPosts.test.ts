@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { cleanData } from './base/cleanData';
 import { aPostsManagerFacade } from '../base/aPostsManagerFacade';
-import { aFamilyInNeedPostCreationRequest } from './base/aFamilyInNeedPostCreationRequest';
+import { aFamilyInNeedPostCreationRequest } from '../base/requests/aFamilyInNeedPostCreationRequest';
 
 describe('Get Families In Need Posts', function () {
   const postsManager = aPostsManagerFacade();

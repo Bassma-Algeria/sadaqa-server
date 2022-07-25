@@ -1,4 +1,5 @@
-import { InvalidPostTypeException } from './exceptions/InvalidPostTypeException';
+import { ValidationException } from './exceptions/ValidationException';
+import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
 
 class PostType {
   static readonly POST_TYPES = [
@@ -11,7 +12,8 @@ class PostType {
   private readonly postType: string;
 
   constructor(type: string) {
-    if (!PostType.POST_TYPES.includes(type as any)) throw new InvalidPostTypeException();
+    if (!PostType.POST_TYPES.includes(type as any))
+      throw new ValidationException(ExceptionsMessages.INVALID_POST_TYPE);
 
     this.postType = type;
   }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Headers,
   HttpException,
@@ -17,6 +18,7 @@ import {
   ApiBadRequestResponse,
   ApiConsumes,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiHeader,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
@@ -32,6 +34,7 @@ import {
   CreateDonationDto,
   CreateDonationRequestDto,
   CreateFamilyInNeedDto,
+  FavouritePostDto,
 } from './dtos/posts.dtos';
 import { PostsService } from '../services/posts.service';
 
@@ -50,6 +53,8 @@ import { PostNotFoundException } from '../../../components/PostsManager/main/cor
 import { InvalidTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidTokenException';
 import { InvalidUserIdException } from '../../../components/PostsManager/main/core/domain/exceptions/InvalidUserIdException';
 import { NotAuthorizedToPublishThisPostException } from '../../../components/PostsManager/main/core/domain/exceptions/NotAuthorizedToPublishThisPostException';
+import { ValidationException } from '../../../components/PostsManager/main/core/domain/exceptions/ValidationException';
+import { InvalidAccessTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidAccessTokenException';
 
 @ApiTags('posts')
 @Controller('/api/posts')
@@ -113,7 +118,11 @@ class PostsController {
     } catch (e) {
       if (e instanceof MultiLanguagesException)
         throw new HttpException({ error: e.errorMessage[language] }, HttpStatus.BAD_REQUEST);
-      if (e instanceof InvalidTokenException || e instanceof InvalidUserIdException)
+      if (
+        e instanceof InvalidTokenException ||
+        e instanceof InvalidAccessTokenException ||
+        e instanceof InvalidUserIdException
+      )
         throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
 
       throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -176,7 +185,11 @@ class PostsController {
     } catch (e) {
       if (e instanceof MultiLanguagesException)
         throw new HttpException({ error: e.errorMessage[language] }, HttpStatus.BAD_REQUEST);
-      if (e instanceof InvalidTokenException || e instanceof InvalidUserIdException)
+      if (
+        e instanceof InvalidTokenException ||
+        e instanceof InvalidAccessTokenException ||
+        e instanceof InvalidUserIdException
+      )
         throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
 
       throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -221,6 +234,7 @@ class PostsController {
   @ApiCreatedResponse({ description: 'family in need post created successfully' })
   @ApiBadRequestResponse({ description: 'error in the form body data' })
   @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiForbiddenResponse({ description: 'a regular user try to add a family in need' })
   @ApiInternalServerErrorResponse({ description: 'server error' })
   @UseInterceptors(FilesInterceptor('pictures'))
   async createFamilyInNeedPost(
@@ -238,11 +252,13 @@ class PostsController {
     } catch (e) {
       if (e instanceof MultiLanguagesException)
         throw new HttpException({ error: e.errorMessage[language] }, HttpStatus.BAD_REQUEST);
-      if (
-        e instanceof InvalidTokenException ||
-        e instanceof NotAuthorizedToPublishThisPostException
-      )
+      if (e instanceof InvalidTokenException || e instanceof InvalidAccessTokenException)
         throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+      if (e instanceof NotAuthorizedToPublishThisPostException)
+        throw new HttpException(
+          { error: 'Only Association can publish this post' },
+          HttpStatus.FORBIDDEN,
+        );
 
       throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -285,6 +301,7 @@ class PostsController {
   @ApiHeader({ name: 'Authorisation', description: 'the access token' })
   @ApiCreatedResponse({ description: 'family in need post created successfully' })
   @ApiBadRequestResponse({ description: 'error in the form body data' })
+  @ApiForbiddenResponse({ description: 'a regular user try to add a call for help' })
   @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
   @ApiInternalServerErrorResponse({ description: 'server error' })
   @UseInterceptors(FilesInterceptor('pictures'))
@@ -303,11 +320,73 @@ class PostsController {
     } catch (e) {
       if (e instanceof MultiLanguagesException)
         throw new HttpException({ error: e.errorMessage[language] }, HttpStatus.BAD_REQUEST);
-      if (
-        e instanceof InvalidTokenException ||
-        e instanceof NotAuthorizedToPublishThisPostException
-      )
+      if (e instanceof InvalidTokenException || e instanceof InvalidAccessTokenException)
         throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+      if (e instanceof NotAuthorizedToPublishThisPostException)
+        throw new HttpException(
+          { error: 'Only Association can publish this post' },
+          HttpStatus.FORBIDDEN,
+        );
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Post('favourite')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiCreatedResponse({ description: 'post added to favourite successfully' })
+  @ApiBadRequestResponse({ description: 'error in the form body data' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async addToFavourite(
+    @Body() body: FavouritePostDto,
+    @Headers('Authorisation') accessToken: string,
+  ) {
+    try {
+      return await this.postsService.addToFavourite(accessToken, body);
+    } catch (e) {
+      if (e instanceof InvalidTokenException || e instanceof InvalidAccessTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+      if (e instanceof ValidationException)
+        throw new HttpException({ error: e.message }, HttpStatus.BAD_REQUEST);
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('favourite')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiOkResponse({ description: 'favourite posts found' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async getFavourite(@Headers('Authorisation') accessToken: string) {
+    try {
+      return await this.postsService.getFavouritePosts(accessToken);
+    } catch (e) {
+      if (e instanceof InvalidTokenException || e instanceof InvalidAccessTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Delete('favourite')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiOkResponse({ description: 'favourite post deleted successfully' })
+  @ApiBadRequestResponse({ description: 'error in the form body data' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async deleteFavourite(
+    @Headers('Authorisation') accessToken: string,
+    @Body() body: FavouritePostDto,
+  ) {
+    try {
+      return await this.postsService.deleteFavouritePost(accessToken, body);
+    } catch (e) {
+      if (e instanceof InvalidTokenException || e instanceof InvalidAccessTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+      if (e instanceof ValidationException)
+        throw new HttpException({ error: e.message }, HttpStatus.BAD_REQUEST);
 
       throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -1,6 +1,6 @@
 import { FamilyInNeedPostDto } from './FamilyInNeedPostDto';
 
-import { FamilyInNeedPost } from '../../domain/FamilyInNeedPost';
+import { FamilyInNeedPost } from '../../../domain/FamilyInNeedPost';
 
 class FamilyInNeedPostDtoMapper {
   static toDto(post: FamilyInNeedPost): FamilyInNeedPostDto {

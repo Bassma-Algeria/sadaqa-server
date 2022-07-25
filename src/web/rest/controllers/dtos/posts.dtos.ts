@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { PostType } from '../../../../components/PostsManager/main/core/domain/PostType';
 import { DonationCategory } from '../../../../components/PostsManager/main/core/domain/DonationCategory';
 
 class CreateDonationDto {
@@ -88,4 +89,18 @@ class CreateCallForHelpDto {
   readonly baridiMobNumber?: string;
 }
 
-export { CreateDonationDto, CreateFamilyInNeedDto, CreateCallForHelpDto, CreateDonationRequestDto };
+class FavouritePostDto {
+  @ApiProperty()
+  readonly postId!: string;
+
+  @ApiProperty({ enum: PostType.POST_TYPES })
+  readonly postType!: string;
+}
+
+export {
+  CreateDonationDto,
+  CreateFamilyInNeedDto,
+  CreateCallForHelpDto,
+  CreateDonationRequestDto,
+  FavouritePostDto,
+};

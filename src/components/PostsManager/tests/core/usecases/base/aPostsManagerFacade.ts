@@ -15,6 +15,7 @@ import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 
 import { PostsManagerFacade } from '../../../../main/PostsManagerFacade';
 import { PostgresCallForHelpPostRepository } from '../../../../main/infra/real/PostgresCallForHelpPostRepository';
+import { PostgresFavouritePostRepository } from '../../../../main/infra/real/PostgresFavouritePostRepository';
 
 interface Dependencies {
   usersService: UsersService;
@@ -40,6 +41,7 @@ const aPostsManagerFacade = (dependencies?: Partial<Dependencies>) => {
     new PostgresFamilyInNeedPostRepository(),
     new PostgresDonationRequestPostRepository(),
     new PostgresCallForHelpPostRepository(),
+    new PostgresFavouritePostRepository(),
   );
 };
 

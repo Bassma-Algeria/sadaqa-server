@@ -8,7 +8,7 @@ import { FamilyInNeedPostRepository } from '../../../domain/services/FamilyInNee
 
 import { PostNotFoundException } from '../../../domain/exceptions/PostNotFoundException';
 
-import { FamilyInNeedPostDtoMapper } from '../FamilyInNeedPostDtoMapper';
+import { FamilyInNeedPostDtoMapper } from '../../_common_/dtos/FamilyInNeedPostDtoMapper';
 
 class GetFamilyInNeedPostUseCase
   implements UseCase<GetFamilyInNeedPostUseCaseRequest, GetFamilyInNeedPostUseCaseResponse>

@@ -7,7 +7,7 @@ import { CallForHelpPostRepository } from '../../../domain/services/CallForHelpP
 
 import { PostNotFoundException } from '../../../domain/exceptions/PostNotFoundException';
 
-import { CallForHelpPostDtoMapper } from '../CallForHelpPostDtoMapper';
+import { CallForHelpPostDtoMapper } from '../../_common_/dtos/CallForHelpPostDtoMapper';
 
 class GetCallForHelpPostUseCase
   implements UseCase<GetCallForHelpPostUseCaseRequest, GetCallForHelpPostUseCaseResponse>

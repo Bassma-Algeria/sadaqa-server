@@ -1,12 +1,3 @@
-export interface GetCallForHelpPostUseCaseResponse {
-  readonly postId: string;
-  readonly title: string;
-  readonly description: string;
-  readonly wilayaNumber: number;
-  readonly publisherId: string;
-  readonly pictures: string[];
-  readonly ccp?: string;
-  readonly ccpKey?: string;
-  readonly baridiMobNumber?: string;
-  readonly createdAt: Date;
-}
+import { CallForHelpPostDto } from '../../_common_/dtos/CallForHelpPostDto';
+
+export type GetCallForHelpPostUseCaseResponse = CallForHelpPostDto;

@@ -1,6 +1,6 @@
 import { CallForHelpPostDto } from './CallForHelpPostDto';
 
-import { CallForHelpPost } from '../../domain/CallForHelpPost';
+import { CallForHelpPost } from '../../../domain/CallForHelpPost';
 
 class CallForHelpPostDtoMapper {
   static toDto(post: CallForHelpPost): CallForHelpPostDto {

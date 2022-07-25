@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 import { cleanData } from './base/cleanData';
 import { aPostsManagerFacade } from '../base/aPostsManagerFacade';
-import { aCallForHelpPostCreationRequest } from './base/aCallForHelpPostCreationRequest';
+import { aCallForHelpPostCreationRequest } from '../base/requests/aCallForHelpPostCreationRequest';
 
 import { PostNotFoundException } from '../../../../main/core/domain/exceptions/PostNotFoundException';
 

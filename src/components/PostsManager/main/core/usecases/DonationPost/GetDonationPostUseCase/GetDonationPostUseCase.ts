@@ -2,7 +2,7 @@ import { UseCase } from '../../UseCase';
 import { GetDonationPostUseCaseRequest } from './GetDonationPostUseCaseRequest';
 import { GetDonationPostUseCaseResponse } from './GetDonationPostUseCaseResponse';
 
-import { DonationPostDtoMapper } from '../DonationPostDtoMapper';
+import { DonationPostDtoMapper } from '../../_common_/dtos/DonationPostDtoMapper';
 
 import { PostId } from '../../../domain/PostId';
 

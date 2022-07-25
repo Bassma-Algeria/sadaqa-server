@@ -4,7 +4,7 @@ import { cleanData } from './base/cleanData';
 import { aPostsManagerFacade } from '../base/aPostsManagerFacade';
 
 import { PostNotFoundException } from '../../../../main/core/domain/exceptions/PostNotFoundException';
-import { aDonationRequestPostCreationRequest } from './base/aDonationRequestPostCreationRequest';
+import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
 
 describe('Get Donation Request Post', () => {
   const postsManager = aPostsManagerFacade();

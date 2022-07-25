@@ -6,7 +6,7 @@ import { WilayaNumber } from '../../../domain/WilayaNumber';
 
 import { FindManyFilters } from '../../../domain/services/FamilyInNeedPostRepository';
 
-import { CallForHelpPostDtoMapper } from '../CallForHelpPostDtoMapper';
+import { CallForHelpPostDtoMapper } from '../../_common_/dtos/CallForHelpPostDtoMapper';
 import { CallForHelpPostRepository } from '../../../domain/services/CallForHelpPostRepository';
 
 class GetCallForHelpPostsUseCase

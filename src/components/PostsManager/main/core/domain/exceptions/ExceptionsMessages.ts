@@ -27,10 +27,12 @@ const ExceptionsMessages = {
   INVALID_PICTURE_URL: 'invalid picture url',
   INVALID_POST_ID: 'invalid post id',
   POST_NOT_FOUND: 'no post found',
+  POST_NOT_EXIST: 'post not exist',
   NEGATIVE_LIKES_COUNT: 'likes count cannot be negative',
   POST_ALREADY_LIKED: 'you already liked this post',
   USER_NOT_EXIST: 'user not exist',
   POST_NOT_LIKED: "you didn' like this post yet",
+  FAVOURITE_POST_NOT_EXIST: 'favourite post not exist',
 };
 
 export { ExceptionsMessages };

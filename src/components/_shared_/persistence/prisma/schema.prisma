@@ -85,3 +85,11 @@ model CallForHelpPost {
   baridiMobNumber String?
   createdAt       DateTime
 }
+
+model FavouritePost {
+  userId   String
+  postId   String
+  postType String
+
+  @@id([userId, postId, postType])
+}

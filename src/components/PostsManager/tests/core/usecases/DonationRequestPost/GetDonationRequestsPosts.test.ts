@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { cleanData } from './base/cleanData';
 import { aPostsManagerFacade } from '../base/aPostsManagerFacade';
-import { aDonationRequestPostCreationRequest } from './base/aDonationRequestPostCreationRequest';
+import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
 
 describe('Get Donation Requests Posts', () => {
   const postsManager = aPostsManagerFacade();

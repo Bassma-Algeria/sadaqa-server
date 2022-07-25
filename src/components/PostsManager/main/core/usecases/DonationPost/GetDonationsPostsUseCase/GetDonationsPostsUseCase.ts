@@ -2,7 +2,7 @@ import { UseCase } from '../../UseCase';
 import { GetDonationsPostsUseCaseRequest } from './GetDonationsPostsUseCaseRequest';
 import { GetDonationsPostsUseCaseResponse } from './GetDonationsPostsUseCaseResponse';
 
-import { DonationPostDtoMapper } from '../DonationPostDtoMapper';
+import { DonationPostDtoMapper } from '../../_common_/dtos/DonationPostDtoMapper';
 
 import { WilayaNumber } from '../../../domain/WilayaNumber';
 import { DonationCategory } from '../../../domain/DonationCategory';

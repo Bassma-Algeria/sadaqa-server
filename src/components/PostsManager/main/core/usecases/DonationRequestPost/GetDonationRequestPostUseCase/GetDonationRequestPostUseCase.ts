@@ -8,7 +8,7 @@ import { DonationRequestPostRepository } from '../../../domain/services/Donation
 
 import { PostNotFoundException } from '../../../domain/exceptions/PostNotFoundException';
 
-import { DonationRequestPostDtoMapper } from '../DonationRequestPostDtoMapper';
+import { DonationRequestPostDtoMapper } from '../../_common_/dtos/DonationRequestPostDtoMapper';
 
 class GetDonationRequestPostUseCase
   implements UseCase<GetDonationRequestPostUseCaseRequest, GetDonationRequestPostUseCaseResponse>

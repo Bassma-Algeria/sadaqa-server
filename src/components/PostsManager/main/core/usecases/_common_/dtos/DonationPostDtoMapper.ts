@@ -1,6 +1,6 @@
 import { DonationPostDto } from './DonationPostDto';
 
-import { DonationPost } from '../../domain/DonationPost';
+import { DonationPost } from '../../../domain/DonationPost';
 
 class DonationPostDtoMapper {
   static toDto(donationPost: DonationPost): DonationPostDto {

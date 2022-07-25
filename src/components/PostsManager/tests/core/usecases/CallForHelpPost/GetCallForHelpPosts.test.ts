@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { cleanData } from './base/cleanData';
 import { aPostsManagerFacade } from '../base/aPostsManagerFacade';
-import { aCallForHelpPostCreationRequest } from './base/aCallForHelpPostCreationRequest';
+import { aCallForHelpPostCreationRequest } from '../base/requests/aCallForHelpPostCreationRequest';
 
 describe('Get Call For Help Posts', function () {
   const postsManager = aPostsManagerFacade();

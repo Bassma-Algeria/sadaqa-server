@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { cleanData } from './base/cleanData';
 import { aPostsManagerFacade } from '../base/aPostsManagerFacade';
-import { aDonationPostCreationRequest } from './base/aDonationPostCreationRequest';
+import { aDonationPostCreationRequest } from '../base/requests/aDonationPostCreationRequest';
 
 import { PostNotFoundException } from '../../../../main/core/domain/exceptions/PostNotFoundException';
 

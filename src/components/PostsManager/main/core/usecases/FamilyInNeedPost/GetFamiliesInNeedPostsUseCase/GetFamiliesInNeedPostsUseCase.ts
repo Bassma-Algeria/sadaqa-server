@@ -9,7 +9,7 @@ import {
   FindManyFilters,
 } from '../../../domain/services/FamilyInNeedPostRepository';
 
-import { FamilyInNeedPostDtoMapper } from '../FamilyInNeedPostDtoMapper';
+import { FamilyInNeedPostDtoMapper } from '../../_common_/dtos/FamilyInNeedPostDtoMapper';
 
 class GetFamiliesInNeedPostsUseCase
   implements UseCase<GetFamiliesInNeedPostsUseCaseRequest, GetFamiliesInNeedPostsUseCaseResponse>

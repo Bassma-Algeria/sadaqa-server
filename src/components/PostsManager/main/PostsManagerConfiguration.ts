@@ -6,6 +6,7 @@ import { UsersManagerUsersService } from './infra/real/UsersManagerUsersService'
 import { RegionsManagerWilayasService } from './infra/real/RegionsManagerWilayasService';
 import { MediaManagerPicturesUploader } from './infra/real/MediaManagerPicturesUploader';
 import { PostgresDonationPostRepository } from './infra/real/PostgresDonationPostRepository';
+import { PostgresFavouritePostRepository } from './infra/real/PostgresFavouritePostRepository';
 import { PostgresCallForHelpPostRepository } from './infra/real/PostgresCallForHelpPostRepository';
 import { PostgresFamilyInNeedPostRepository } from './infra/real/PostgresFamilyInNeedPostRepository';
 import { PostgresDonationRequestPostRepository } from './infra/real/PostgresDonationRequestRepository';
@@ -28,6 +29,7 @@ class PostsManagerConfiguration {
       new PostgresFamilyInNeedPostRepository(),
       new PostgresDonationRequestPostRepository(),
       new PostgresCallForHelpPostRepository(),
+      new PostgresFavouritePostRepository(),
     );
   }
 }

@@ -15,6 +15,8 @@ import { GetDonationRequestsPostsUseCaseRequest } from '../../../components/Post
 import { GetCallForHelpPostUseCaseRequest } from '../../../components/PostsManager/main/core/usecases/CallForHelpPost/GetCallForHelpPostUseCase/GetCallForHelpPostUseCaseRequest';
 import { GetCallForHelpPostsUseCaseRequest } from '../../../components/PostsManager/main/core/usecases/CallForHelpPost/GetCallForHelpPostsUseCase/GetCallForHelpPostsUseCaseRequest';
 import { CreateCallForHelpPostUseCaseRequest } from '../../../components/PostsManager/main/core/usecases/CallForHelpPost/CreateCallForHelpPostUseCase/CreateCallForHelpPostUseCaseRequest';
+import { AddToFavouritePostsUseCaseRequest } from '../../../components/PostsManager/main/core/usecases/FavouritePosts/AddToFavouritePostsUseCase/AddToFavouritePostsUseCaseRequest';
+import { DeleteFavouritePostUseCaseRequest } from '../../../components/PostsManager/main/core/usecases/FavouritePosts/DeleteFavouritePostUseCase/DeleteFavouritePostUseCaseRequest';
 
 @Injectable()
 class PostsService {
@@ -97,6 +99,30 @@ class PostsService {
 
   getDonationRequests(request: GetDonationRequestsPostsUseCaseRequest) {
     return this.postsManager.getDonationRequestPosts(request);
+  }
+
+  async addToFavourite(
+    accessToken: string,
+    request: Omit<AddToFavouritePostsUseCaseRequest, 'userId'>,
+  ) {
+    const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+
+    return this.postsManager.addToFavouritePosts({ ...request, userId });
+  }
+
+  async deleteFavouritePost(
+    accessToken: string,
+    request: Omit<DeleteFavouritePostUseCaseRequest, 'userId'>,
+  ) {
+    const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+
+    return this.postsManager.deleteFavouritePost({ ...request, userId });
+  }
+
+  async getFavouritePosts(accessToken: string) {
+    const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+
+    return this.postsManager.getFavouritePosts({ userId });
   }
 }
 

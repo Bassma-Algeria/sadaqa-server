@@ -13,7 +13,7 @@ import { CategoryNotSupportedException } from '../../../../main/core/domain/exce
 
 import { cleanData } from './base/cleanData';
 import { aPostsManagerFacade } from '../base/aPostsManagerFacade';
-import { aDonationRequestPostCreationRequest } from './base/aDonationRequestPostCreationRequest';
+import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
 
 import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 
