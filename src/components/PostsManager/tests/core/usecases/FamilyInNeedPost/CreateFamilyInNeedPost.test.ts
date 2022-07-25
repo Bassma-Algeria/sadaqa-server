@@ -71,7 +71,7 @@ describe('Create Family In Need Post', () => {
     ).to.eventually.be.rejectedWith(NotAuthorizedToPublishThisPostException);
   });
 
-  it('given a family in need creation request,  if ccp and ccp key exist, the ccp should be valid', async () => {
+  it('given a family in need creation request, if ccp and ccp key exist, the ccp should be valid', async () => {
     const INVALID_CCP = faker.datatype.number().toString();
 
     await expect(
@@ -81,7 +81,7 @@ describe('Create Family In Need Post', () => {
       .and.be.be.an.instanceOf(MultiLanguagesException);
   });
 
-  it('given a family in need creation request,  if ccp and ccp key exist, the ccp key should be valid', async () => {
+  it('given a family in need creation request, if ccp and ccp key exist, the ccp key should be valid', async () => {
     const INVALID_CCP_KEY = faker.datatype.number({ min: 1000 }).toString();
 
     await expect(
@@ -93,7 +93,7 @@ describe('Create Family In Need Post', () => {
       .and.be.be.an.instanceOf(MultiLanguagesException);
   });
 
-  it('given a family in need creation request,  if there is a ccp there should be a ccp key', async () => {
+  it('given a family in need creation request, if there is a ccp there should be a ccp key', async () => {
     await expect(
       postsManager.createFamilyInNeedPost(aFamilyInNeedPostCreationRequest({ ccpKey: undefined })),
     )
@@ -101,7 +101,7 @@ describe('Create Family In Need Post', () => {
       .and.be.be.an.instanceOf(MultiLanguagesException);
   });
 
-  it('given a family in need creation request,  if there is a ccp key there should be a ccp', async () => {
+  it('given a family in need creation request, if there is a ccp key there should be a ccp', async () => {
     await expect(
       postsManager.createFamilyInNeedPost(aFamilyInNeedPostCreationRequest({ ccp: undefined })),
     )
@@ -109,7 +109,7 @@ describe('Create Family In Need Post', () => {
       .and.be.be.an.instanceOf(MultiLanguagesException);
   });
 
-  it('given a family in need creation request,  should be able to create a post without the ccp and ccp key', async () => {
+  it('given a family in need creation request, should be able to create a post without the ccp and ccp key', async () => {
     await expect(
       postsManager.createFamilyInNeedPost(
         aFamilyInNeedPostCreationRequest({ ccp: undefined, ccpKey: undefined }),
@@ -117,7 +117,7 @@ describe('Create Family In Need Post', () => {
     ).to.eventually.fulfilled;
   });
 
-  it('given a family in need creation request,  baridiMobNumber if exist, should be valid', async () => {
+  it('given a family in need creation request, baridiMobNumber if exist, should be valid', async () => {
     const INVALID_BARIDI_MOB_NUMBER = '0918283091802938';
 
     await expect(
@@ -129,7 +129,7 @@ describe('Create Family In Need Post', () => {
       .and.to.be.an.instanceOf(MultiLanguagesException);
   });
 
-  it('given a family in need creation request,  should be able to create a post without the baridiMobNumber', async () => {
+  it('given a family in need creation request, should be able to create a post without the baridiMobNumber', async () => {
     await expect(
       postsManager.createFamilyInNeedPost(
         aFamilyInNeedPostCreationRequest({ baridiMobNumber: undefined }),
@@ -147,7 +147,7 @@ describe('Create Family In Need Post', () => {
     expect(new Date().getTime() - createdAt.getTime()).to.be.lessThan(ONE_SECOND);
   });
 
-  it('given a family in need creation request,  should upload the pictures before saving them', async () => {
+  it('given a family in need creation request, should upload the pictures before saving them', async () => {
     const request = aFamilyInNeedPostCreationRequest();
     const { postId } = await postsManager.createFamilyInNeedPost(request);
 
@@ -156,7 +156,7 @@ describe('Create Family In Need Post', () => {
     expect(pictures.length).to.equal(request.pictures.length);
   });
 
-  it('given a family in need creation request,  should return a unique post id for every request', async () => {
+  it('given a family in need creation request, should return a unique post id for every request', async () => {
     const { postId: id1 } = await postsManager.createFamilyInNeedPost(
       aFamilyInNeedPostCreationRequest(),
     );
@@ -173,7 +173,7 @@ describe('Create Family In Need Post', () => {
   it('given a family in need creation request,  should publish a new family in need post created event', async () => {
     const mockFun = spy();
 
-    EventBus.getInstance().subscribeTo('NEW_FAMILY_IN_NEED_POST_CREATED').by(mockFun);
+    EventBus.getInstance().subscribeTo('FAMILY_IN_NEED_POST_CREATED').by(mockFun);
 
     const request = aFamilyInNeedPostCreationRequest();
     await postsManager.createFamilyInNeedPost(request);

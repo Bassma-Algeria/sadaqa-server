@@ -7,8 +7,8 @@ import {
 import { CCP } from '../../core/domain/CCP';
 import { Title } from '../../core/domain/Title';
 import { PostId } from '../../core/domain/PostId';
+import { UserId } from '../../core/domain/UserId';
 import { Picture } from '../../core/domain/Picture';
-import { PublisherId } from '../../core/domain/PublisherId';
 import { Description } from '../../core/domain/Description';
 import { WilayaNumber } from '../../core/domain/WilayaNumber';
 import { BaridiMobNumber } from '../../core/domain/BaridiMobNumber';
@@ -42,6 +42,13 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
     await prisma.familyInNeedPost.create({ data: this.toDBModel(familyInNeedPost) });
   }
 
+  async update(post: FamilyInNeedPost): Promise<void> {
+    await prisma.familyInNeedPost.update({
+      where: { postId: post.postId.value() },
+      data: this.toDBModel(post),
+    });
+  }
+
   async findMany({ wilayaNumber, pageLimit, page }: FindManyFilters): Promise<FamilyInNeedPost[]> {
     const numOfPostsToSkip = (page - 1) * pageLimit;
 
@@ -73,7 +80,7 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
       .withTitle(new Title(model.title))
       .withDescription(new Description(model.description))
       .withWilayaNumber(new WilayaNumber(model.wilayaNumber))
-      .withPublisherId(new PublisherId(model.publisherId))
+      .withPublisherId(new UserId(model.publisherId))
       .withPictures(model.pictures.map(pic => new Picture(pic)))
       .withCCP(model.ccp ? new CCP(model.ccp, model.ccpKey!) : undefined)
       .withBaridiMobNumber(

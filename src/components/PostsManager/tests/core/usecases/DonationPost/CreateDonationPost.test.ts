@@ -5,9 +5,9 @@ import { anything, instance, mock, when } from 'ts-mockito';
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';
 
+import { UserNotExistException } from '../../../../main/core/domain/exceptions/UserNotExistException';
 import { MultiLanguagesException } from '../../../../main/core/domain/exceptions/MultiLanguagesException';
 import { ShortPostTitleException } from '../../../../main/core/domain/exceptions/ShortPostTitleException';
-import { InvalidPublisherIdException } from '../../../../main/core/domain/exceptions/InvalidPublisherIdException';
 import { InvalidWilayaNumberException } from '../../../../main/core/domain/exceptions/InvalidWilayaNumberException';
 import { CategoryNotSupportedException } from '../../../../main/core/domain/exceptions/CategoryNotSupportedException';
 
@@ -70,7 +70,7 @@ describe('Create Donation Post', () => {
     const postCreationBody = aDonationPostCreationRequest({ publisherId: INVALID_ID });
 
     await expect(postsManager.createDonationPost(postCreationBody)).to.eventually.be.rejectedWith(
-      InvalidPublisherIdException,
+      UserNotExistException,
     );
   });
 
@@ -101,7 +101,7 @@ describe('Create Donation Post', () => {
 
   it('should publish a NEW_DONATION_POST_CREATED event when everything complete correctly', async () => {
     const mockFunction = spy();
-    EventBus.getInstance().subscribeTo('NEW_DONATION_POST_CREATED').by(mockFunction);
+    EventBus.getInstance().subscribeTo('DONATION_POST_CREATED').by(mockFunction);
 
     const donationPost = aDonationPostCreationRequest();
     await postsManager.createDonationPost(donationPost);

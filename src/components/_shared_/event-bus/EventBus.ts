@@ -15,12 +15,12 @@ class EventBus {
 
   private readonly subscribers: Subscribers = {
     USER_LOGIN: [],
-    NEW_REGULAR_USER_REGISTERED: [],
-    NEW_ASSOCIATION_REGISTERED: [],
-    NEW_DONATION_POST_CREATED: [],
-    NEW_CALL_FOR_HELP_POST_CREATED: [],
-    NEW_FAMILY_IN_NEED_POST_CREATED: [],
-    NEW_DONATION_REQUEST_POST_CREATED: [],
+    REGULAR_USER_REGISTERED: [],
+    ASSOCIATION_REGISTERED: [],
+    DONATION_POST_CREATED: [],
+    CALL_FOR_HELP_POST_CREATED: [],
+    FAMILY_IN_NEED_POST_CREATED: [],
+    DONATION_REQUEST_POST_CREATED: [],
   };
 
   subscribeTo<E extends keyof Events>(event: E) {

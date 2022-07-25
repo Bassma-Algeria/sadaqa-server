@@ -1,8 +1,8 @@
 import { Title } from './Title';
 import { PostId } from './PostId';
+import { UserId } from './UserId';
 import { Picture } from './Picture';
 import { Description } from './Description';
-import { PublisherId } from './PublisherId';
 import { WilayaNumber } from './WilayaNumber';
 import { DonationCategory } from './DonationCategory';
 
@@ -16,12 +16,16 @@ class DonationRequestPost {
     readonly category: DonationCategory,
     readonly wilayaNumber: WilayaNumber,
     readonly pictures: Picture[],
-    readonly publisherId: PublisherId,
+    readonly publisherId: UserId,
     readonly createdAt: Date,
   ) {}
 
   static aBuilder() {
     return new DonationRequestPostBuilder();
+  }
+
+  static aBuilderFrom(post: DonationRequestPost) {
+    return new DonationRequestPostBuilder(post);
   }
 }
 

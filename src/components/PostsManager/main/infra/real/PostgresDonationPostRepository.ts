@@ -4,7 +4,7 @@ import { DonationPost } from '../../core/domain/DonationPost';
 import { Title } from '../../core/domain/Title';
 import { Picture } from '../../core/domain/Picture';
 import { Description } from '../../core/domain/Description';
-import { PublisherId } from '../../core/domain/PublisherId';
+import { UserId } from '../../core/domain/UserId';
 import { WilayaNumber } from '../../core/domain/WilayaNumber';
 import { DonationCategory } from '../../core/domain/DonationCategory';
 
@@ -30,6 +30,13 @@ interface DonationPostDBModel {
 class PostgresDonationPostRepository implements DonationPostRepository {
   async save(donationPost: DonationPost): Promise<void> {
     await prisma.donationPost.create({ data: this.toDBModel(donationPost) });
+  }
+
+  async update(donationPost: DonationPost): Promise<void> {
+    await prisma.donationPost.update({
+      data: this.toDBModel(donationPost),
+      where: { postId: donationPost.postId.value() },
+    });
   }
 
   async findById(postId: PostId): Promise<DonationPost | undefined> {
@@ -88,7 +95,7 @@ class PostgresDonationPostRepository implements DonationPostRepository {
       .withCategory(new DonationCategory(dbModel.category))
       .withWilayaNumber(new WilayaNumber(dbModel.wilayaNumber))
       .withPictures(dbModel.pictures.map(url => new Picture(url)))
-      .withPublisherId(new PublisherId(dbModel.publisherId))
+      .withPublisherId(new UserId(dbModel.publisherId))
       .withCreatedAt(dbModel.createdAt)
       .build();
   }

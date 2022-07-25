@@ -8,7 +8,7 @@ import { CCP } from '../../core/domain/CCP';
 import { Title } from '../../core/domain/Title';
 import { PostId } from '../../core/domain/PostId';
 import { Picture } from '../../core/domain/Picture';
-import { PublisherId } from '../../core/domain/PublisherId';
+import { UserId } from '../../core/domain/UserId';
 import { Description } from '../../core/domain/Description';
 import { WilayaNumber } from '../../core/domain/WilayaNumber';
 import { BaridiMobNumber } from '../../core/domain/BaridiMobNumber';
@@ -38,8 +38,15 @@ class PostgresCallForHelpPostRepository implements CallForHelpPostRepository {
     return this.toEntity(post);
   }
 
-  async save(familyInNeedPost: CallForHelpPost): Promise<void> {
-    await prisma.callForHelpPost.create({ data: this.toDBModel(familyInNeedPost) });
+  async save(post: CallForHelpPost): Promise<void> {
+    await prisma.callForHelpPost.create({ data: this.toDBModel(post) });
+  }
+
+  async update(post: CallForHelpPost): Promise<void> {
+    await prisma.callForHelpPost.update({
+      where: { postId: post.postId.value() },
+      data: this.toDBModel(post),
+    });
   }
 
   async findMany({ wilayaNumber, pageLimit, page }: FindManyFilters): Promise<CallForHelpPost[]> {
@@ -73,7 +80,7 @@ class PostgresCallForHelpPostRepository implements CallForHelpPostRepository {
       .withTitle(new Title(model.title))
       .withDescription(new Description(model.description))
       .withWilayaNumber(new WilayaNumber(model.wilayaNumber))
-      .withPublisherId(new PublisherId(model.publisherId))
+      .withPublisherId(new UserId(model.publisherId))
       .withPictures(model.pictures.map(pic => new Picture(pic)))
       .withCCP(model.ccp ? new CCP(model.ccp, model.ccpKey!) : undefined)
       .withBaridiMobNumber(

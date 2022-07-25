@@ -1,24 +1,23 @@
-import { PostTypeNotSupportedException } from './exceptions/PostTypeNotSupportedException';
+import { InvalidPostTypeException } from './exceptions/InvalidPostTypeException';
 
 class PostType {
-  public static readonly SUPPORTED_POST_TYPES = [
+  static readonly POST_TYPES = [
     'donation',
     'donation-request',
     'family-in-need',
     'call-for-help',
   ] as const;
 
-  private readonly type: string;
+  private readonly postType: string;
 
   constructor(type: string) {
-    if (!PostType.SUPPORTED_POST_TYPES.includes(type as any))
-      throw new PostTypeNotSupportedException();
+    if (!PostType.POST_TYPES.includes(type as any)) throw new InvalidPostTypeException();
 
-    this.type = type;
+    this.postType = type;
   }
 
   value() {
-    return this.type as typeof PostType.SUPPORTED_POST_TYPES[number];
+    return this.postType as typeof PostType.POST_TYPES[number];
   }
 }
 

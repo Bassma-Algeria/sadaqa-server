@@ -25,7 +25,7 @@ import { GetDonationRequestsPostsUseCaseRequest } from './core/usecases/Donation
 import { CreateDonationRequestPostUseCaseRequest } from './core/usecases/DonationRequestPost/CreateDonationRequestPostUseCase/CreateDonationRequestPostUseCaseRequest';
 
 import { UsersService } from './core/domain/services/UsersService';
-import { PostsEventBus } from './core/domain/services/PostsEventBus';
+import { PostsEventPublisher } from './core/domain/services/PostsEventPublisher';
 import { WilayasService } from './core/domain/services/WilayasService';
 import { PostIdGenerator } from './core/domain/services/PostIdGenerator';
 import { PicturesUploader } from './core/domain/services/PicturesUploader';
@@ -41,7 +41,7 @@ class PostsManagerFacade {
     private readonly picturesUploader: PicturesUploader,
     private readonly postIdGenerator: PostIdGenerator,
     private readonly donationPostRepository: DonationPostRepository,
-    private readonly postsEventBus: PostsEventBus,
+    private readonly postsEventBus: PostsEventPublisher,
     private readonly familyInNeedPostRepository: FamilyInNeedPostRepository,
     private readonly donationRequestPostRepository: DonationRequestPostRepository,
     private readonly callForHelpPostRepository: CallForHelpPostRepository,

@@ -15,6 +15,8 @@ export interface CountFilters {
 export interface FamilyInNeedPostRepository {
   save(familyInNeedPost: FamilyInNeedPost): Promise<void>;
 
+  update(familyInNeedPost: FamilyInNeedPost): Promise<void>;
+
   findById(id: PostId): Promise<FamilyInNeedPost | undefined>;
 
   findMany(filters: FindManyFilters): Promise<FamilyInNeedPost[]>;

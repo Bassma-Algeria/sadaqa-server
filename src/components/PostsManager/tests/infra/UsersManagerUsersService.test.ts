@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { anything, instance, mock, when } from 'ts-mockito';
 
-import { PublisherId } from '../../main/core/domain/PublisherId';
+import { UserId } from '../../main/core/domain/UserId';
 import { UsersManagerUsersService } from '../../main/infra/real/UsersManagerUsersService';
 
 import { UsersManagerFacade } from '../../../UsersManager/main/UsersManagerFacade';
@@ -15,23 +15,30 @@ describe('UsersManagerUsersService', () => {
 
   it('should return true when the user found', async () => {
     when(usersManagerMock.getRegularUserById(anything())).thenResolve();
+    when(usersManagerMock.getAssociationById(anything())).thenReject();
 
-    await expect(usersService.isExist(new PublisherId(EXISTING_USER_ID))).to.eventually.equal(true);
+    await expect(usersService.isExist(new UserId(EXISTING_USER_ID))).to.eventually.equal(true);
   });
 
-  it('should return false when the user not found', async () => {
+  it('should return true when the association found', async () => {
     when(usersManagerMock.getRegularUserById(anything())).thenReject();
+    when(usersManagerMock.getAssociationById(anything())).thenResolve();
 
-    await expect(usersService.isExist(new PublisherId(NON_EXISTING_USER_ID))).to.eventually.equal(
-      false,
-    );
+    await expect(usersService.isExist(new UserId(EXISTING_USER_ID))).to.eventually.equal(true);
+  });
+
+  it('should return false when no user or association found', async () => {
+    when(usersManagerMock.getRegularUserById(anything())).thenReject();
+    when(usersManagerMock.getAssociationById(anything())).thenReject();
+
+    await expect(usersService.isExist(new UserId(NON_EXISTING_USER_ID))).to.eventually.equal(false);
   });
 
   it('should return false when the association is not found', async () => {
     when(usersManagerMock.getAssociationById(anything())).thenReject();
 
     await expect(
-      usersService.isActiveAssociation(new PublisherId(NON_EXISTING_USER_ID)),
+      usersService.isActiveAssociation(new UserId(NON_EXISTING_USER_ID)),
     ).to.eventually.equal(false);
   });
 
@@ -39,7 +46,7 @@ describe('UsersManagerUsersService', () => {
     when(usersManagerMock.getAssociationById(anything())).thenResolve({ active: false } as any);
 
     await expect(
-      usersService.isActiveAssociation(new PublisherId(NON_EXISTING_USER_ID)),
+      usersService.isActiveAssociation(new UserId(NON_EXISTING_USER_ID)),
     ).to.eventually.equal(false);
   });
 
@@ -47,7 +54,7 @@ describe('UsersManagerUsersService', () => {
     when(usersManagerMock.getAssociationById(anything())).thenResolve({ active: true } as any);
 
     await expect(
-      usersService.isActiveAssociation(new PublisherId(NON_EXISTING_USER_ID)),
+      usersService.isActiveAssociation(new UserId(NON_EXISTING_USER_ID)),
     ).to.eventually.equal(true);
   });
 });

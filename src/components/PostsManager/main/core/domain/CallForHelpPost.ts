@@ -3,7 +3,7 @@ import { Title } from './Title';
 import { PostId } from './PostId';
 import { Picture } from './Picture';
 import { Description } from './Description';
-import { PublisherId } from './PublisherId';
+import { UserId } from './UserId';
 import { WilayaNumber } from './WilayaNumber';
 import { BaridiMobNumber } from './BaridiMobNumber';
 
@@ -15,7 +15,7 @@ class CallForHelpPost {
     readonly title: Title,
     readonly description: Description,
     readonly wilayaNumber: WilayaNumber,
-    readonly publisherId: PublisherId,
+    readonly publisherId: UserId,
     readonly pictures: Picture[],
     readonly createdAt: Date,
     readonly ccp?: CCP,
@@ -24,6 +24,10 @@ class CallForHelpPost {
 
   static aBuilder() {
     return new CallForHelpPostBuilder();
+  }
+
+  static aBuilderFrom(post: CallForHelpPost) {
+    return new CallForHelpPostBuilder(post);
   }
 }
 

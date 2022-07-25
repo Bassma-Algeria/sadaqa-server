@@ -5,9 +5,9 @@ import { anything, instance, mock, when } from 'ts-mockito';
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';
 
+import { UserNotExistException } from '../../../../main/core/domain/exceptions/UserNotExistException';
 import { MultiLanguagesException } from '../../../../main/core/domain/exceptions/MultiLanguagesException';
 import { ShortPostTitleException } from '../../../../main/core/domain/exceptions/ShortPostTitleException';
-import { InvalidPublisherIdException } from '../../../../main/core/domain/exceptions/InvalidPublisherIdException';
 import { InvalidWilayaNumberException } from '../../../../main/core/domain/exceptions/InvalidWilayaNumberException';
 import { CategoryNotSupportedException } from '../../../../main/core/domain/exceptions/CategoryNotSupportedException';
 
@@ -73,7 +73,7 @@ describe('Create Donation Request Post', () => {
 
     await expect(
       postsManager.createDonationRequestPost(postCreationBody),
-    ).to.eventually.be.rejectedWith(InvalidPublisherIdException);
+    ).to.eventually.be.rejectedWith(UserNotExistException);
   });
 
   it('should register the creation time when creating a new donation request post', async () => {
@@ -111,7 +111,7 @@ describe('Create Donation Request Post', () => {
 
   it('should publish the donation request created event when everything complete correctly', async () => {
     const mockFunction = spy();
-    EventBus.getInstance().subscribeTo('NEW_DONATION_REQUEST_POST_CREATED').by(mockFunction);
+    EventBus.getInstance().subscribeTo('DONATION_REQUEST_POST_CREATED').by(mockFunction);
 
     const donationPost = aDonationRequestPostCreationRequest();
     await postsManager.createDonationRequestPost(donationPost);

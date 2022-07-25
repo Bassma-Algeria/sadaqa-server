@@ -18,6 +18,8 @@ export interface CountFilters {
 
 export interface DonationPostRepository {
   save(donationPost: DonationPost): Promise<void>;
+  
+  update(donationPost: DonationPost): Promise<void>;
 
   findById(postId: PostId): Promise<DonationPost | undefined>;
 

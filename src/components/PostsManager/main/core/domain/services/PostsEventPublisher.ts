@@ -3,7 +3,7 @@ import { CallForHelpPost } from '../CallForHelpPost';
 import { FamilyInNeedPost } from '../FamilyInNeedPost';
 import { DonationRequestPost } from '../DonationRequestPost';
 
-export interface PostsEventBus {
+export interface PostsEventPublisher {
   publishDonationPostCreated(donationPost: DonationPost): void;
 
   publishFamilyInNeedPostCreated(familyInNeedPost: FamilyInNeedPost): void;

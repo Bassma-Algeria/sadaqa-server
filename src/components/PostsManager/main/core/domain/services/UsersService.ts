@@ -1,7 +1,7 @@
-import { PublisherId } from '../PublisherId';
+import { UserId } from '../UserId';
 
 export interface UsersService {
-  isExist(publisherId: PublisherId): Promise<boolean>;
+  isExist(id: UserId): Promise<boolean>;
 
-  isActiveAssociation(publisherId: PublisherId): Promise<boolean>;
+  isActiveAssociation(id: UserId): Promise<boolean>;
 }

@@ -15,6 +15,8 @@ export interface CountFilters {
 export interface CallForHelpPostRepository {
   save(post: CallForHelpPost): Promise<void>;
 
+  update(post: CallForHelpPost): Promise<void>;
+
   findById(id: PostId): Promise<CallForHelpPost | undefined>;
 
   findMany(filters: FindManyFilters): Promise<CallForHelpPost[]>;

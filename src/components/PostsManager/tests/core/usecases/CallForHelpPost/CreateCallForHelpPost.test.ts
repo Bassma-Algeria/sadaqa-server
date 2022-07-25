@@ -129,7 +129,7 @@ describe('Create Call For Help Post', () => {
       .and.to.be.an.instanceOf(MultiLanguagesException);
   });
 
-  it('given a call for help creation request,  should be able to create a post without the baridiMobNumber', async () => {
+  it('given a call for help creation request, should be able to create a post without the baridiMobNumber', async () => {
     await expect(
       postsManager.createCallForHelpPost(
         aCallForHelpPostCreationRequest({ baridiMobNumber: undefined }),
@@ -145,7 +145,7 @@ describe('Create Call For Help Post', () => {
     expect(new Date().getTime() - createdAt.getTime()).to.be.lessThan(ONE_SECOND);
   });
 
-  it('given a call for help creation request,  should upload the pictures before saving them', async () => {
+  it('given a call for help creation request, should upload the pictures before saving them', async () => {
     const request = aCallForHelpPostCreationRequest();
     const { postId } = await postsManager.createCallForHelpPost(request);
 
@@ -154,7 +154,7 @@ describe('Create Call For Help Post', () => {
     expect(pictures.length).to.equal(request.pictures.length);
   });
 
-  it('given a call for help creation request,  should return a unique post id for every request', async () => {
+  it('given a call for help creation request, should return a unique post id for every request', async () => {
     const { postId: id1 } = await postsManager.createCallForHelpPost(
       aCallForHelpPostCreationRequest(),
     );
@@ -168,10 +168,10 @@ describe('Create Call For Help Post', () => {
     expect(id1).to.not.equal(id2).and.to.not.equal(id3);
   });
 
-  it('given a call for help creation request,  should publish a new call for help post created event', async () => {
+  it('given a call for help creation request, should publish a new call for help post created event', async () => {
     const mockFun = spy();
 
-    EventBus.getInstance().subscribeTo('NEW_CALL_FOR_HELP_POST_CREATED').by(mockFun);
+    EventBus.getInstance().subscribeTo('CALL_FOR_HELP_POST_CREATED').by(mockFun);
 
     const request = aCallForHelpPostCreationRequest();
     await postsManager.createCallForHelpPost(request);

@@ -48,7 +48,7 @@ import {
 } from '../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesException';
 import { PostNotFoundException } from '../../../components/PostsManager/main/core/domain/exceptions/PostNotFoundException';
 import { InvalidTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidTokenException';
-import { InvalidPublisherIdException } from '../../../components/PostsManager/main/core/domain/exceptions/InvalidPublisherIdException';
+import { InvalidUserIdException } from '../../../components/PostsManager/main/core/domain/exceptions/InvalidUserIdException';
 import { NotAuthorizedToPublishThisPostException } from '../../../components/PostsManager/main/core/domain/exceptions/NotAuthorizedToPublishThisPostException';
 
 @ApiTags('posts')
@@ -113,7 +113,7 @@ class PostsController {
     } catch (e) {
       if (e instanceof MultiLanguagesException)
         throw new HttpException({ error: e.errorMessage[language] }, HttpStatus.BAD_REQUEST);
-      if (e instanceof InvalidTokenException || e instanceof InvalidPublisherIdException)
+      if (e instanceof InvalidTokenException || e instanceof InvalidUserIdException)
         throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
 
       throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -176,7 +176,7 @@ class PostsController {
     } catch (e) {
       if (e instanceof MultiLanguagesException)
         throw new HttpException({ error: e.errorMessage[language] }, HttpStatus.BAD_REQUEST);
-      if (e instanceof InvalidTokenException || e instanceof InvalidPublisherIdException)
+      if (e instanceof InvalidTokenException || e instanceof InvalidUserIdException)
         throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
 
       throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);

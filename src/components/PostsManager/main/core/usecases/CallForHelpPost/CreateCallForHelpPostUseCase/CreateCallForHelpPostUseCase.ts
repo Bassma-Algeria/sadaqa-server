@@ -4,15 +4,15 @@ import { CreateCallForHelpPostUseCaseResponse } from './CreateCallForHelpPostUse
 
 import { CCP } from '../../../domain/CCP';
 import { Title } from '../../../domain/Title';
+import { UserId } from '../../../domain/UserId';
 import { Description } from '../../../domain/Description';
-import { PublisherId } from '../../../domain/PublisherId';
 import { WilayaNumber } from '../../../domain/WilayaNumber';
 import { BaridiMobNumber } from '../../../domain/BaridiMobNumber';
 
 import { CallForHelpPost } from '../../../domain/CallForHelpPost';
 
 import { UsersService } from '../../../domain/services/UsersService';
-import { PostsEventBus } from '../../../domain/services/PostsEventBus';
+import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { WilayasService } from '../../../domain/services/WilayasService';
 import { PostIdGenerator } from '../../../domain/services/PostIdGenerator';
 import { PicturesUploader } from '../../../domain/services/PicturesUploader';
@@ -30,7 +30,7 @@ class CreateCallForHelpPostUseCase
     private readonly picturesUploader: PicturesUploader,
     private readonly postIdGenerator: PostIdGenerator,
     private readonly callForHelpPostRepository: CallForHelpPostRepository,
-    private readonly postsEventBus: PostsEventBus,
+    private readonly postsEventBus: PostsEventPublisher,
   ) {}
 
   async handle(
@@ -84,7 +84,7 @@ class CreateCallForHelpPostUseCase
   }
 
   private async validateAndGetPublisherIdFrom(request: CreateCallForHelpPostUseCaseRequest) {
-    const publisherId = new PublisherId(request.publisherId);
+    const publisherId = new UserId(request.publisherId);
 
     const isActiveAssociation = await this.usersService.isActiveAssociation(publisherId);
     if (!isActiveAssociation) throw new NotAuthorizedToPublishThisPostException();

@@ -73,12 +73,19 @@ interface UserLoginPayload {
   readonly userId: string;
 }
 
+interface PostLikedPayload {
+  likerId: string;
+  postId: string;
+  postType: string;
+  createdAt: Date;
+}
+
 export interface Events {
-  NEW_DONATION_POST_CREATED: DonationCreatedPayload;
-  NEW_FAMILY_IN_NEED_POST_CREATED: FamilyInNeedPostCreatedPayload;
-  NEW_CALL_FOR_HELP_POST_CREATED: CallForHelpPostCreatedPayload;
-  NEW_ASSOCIATION_REGISTERED: AssociationRegisteredPayload;
-  NEW_REGULAR_USER_REGISTERED: RegularUserRegisteredPayload;
+  DONATION_POST_CREATED: DonationCreatedPayload;
+  FAMILY_IN_NEED_POST_CREATED: FamilyInNeedPostCreatedPayload;
+  CALL_FOR_HELP_POST_CREATED: CallForHelpPostCreatedPayload;
+  ASSOCIATION_REGISTERED: AssociationRegisteredPayload;
+  REGULAR_USER_REGISTERED: RegularUserRegisteredPayload;
   USER_LOGIN: UserLoginPayload;
-  NEW_DONATION_REQUEST_POST_CREATED: DonationRequestCreatedPayload;
+  DONATION_REQUEST_POST_CREATED: DonationRequestCreatedPayload;
 }

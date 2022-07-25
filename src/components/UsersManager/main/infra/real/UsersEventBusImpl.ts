@@ -14,7 +14,7 @@ class UsersEventBusImpl implements UsersEventBus {
     associationAccount: AssociationAccount;
     associationDocs: AssociationDocs;
   }): void {
-    this.eventBus.publish('NEW_ASSOCIATION_REGISTERED').withPayload({
+    this.eventBus.publish('ASSOCIATION_REGISTERED').withPayload({
       associationId: payload.associationAccount.associationId.value(),
       wilayaNumber: payload.associationAccount.wilayaNumber.value(),
       associationName: payload.associationAccount.associationName.value(),
@@ -28,7 +28,7 @@ class UsersEventBusImpl implements UsersEventBus {
   }
 
   publishRegularUserRegisteredEvent(regularUser: RegularUserAccount): void {
-    this.eventBus.publish('NEW_REGULAR_USER_REGISTERED').withPayload({
+    this.eventBus.publish('REGULAR_USER_REGISTERED').withPayload({
       userId: regularUser.userId.value(),
       firstName: regularUser.firstName.value(),
       lastName: regularUser.lastName.value(),

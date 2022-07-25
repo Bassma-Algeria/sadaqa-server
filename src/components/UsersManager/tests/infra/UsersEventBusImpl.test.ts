@@ -16,8 +16,7 @@ describe('UsersEventBusImpl', () => {
 
   before(() => {
     when(eventBusMock.publish(anything())).thenReturn({
-      withPayload: (data: any) => {
-      },
+      withPayload: (data: any) => {},
     });
   });
 
@@ -27,13 +26,13 @@ describe('UsersEventBusImpl', () => {
       associationDocs: new AssociationDocs([Buffer.alloc(10)]),
     });
 
-    verify(eventBusMock.publish('NEW_ASSOCIATION_REGISTERED')).called();
+    verify(eventBusMock.publish('ASSOCIATION_REGISTERED')).called();
   });
 
   it('should publish a NEW_REGULAR_USER_REGISTERED event', () => {
     usersEventBus.publishRegularUserRegisteredEvent(aRegularUserAccount());
 
-    verify(eventBusMock.publish('NEW_REGULAR_USER_REGISTERED')).called();
+    verify(eventBusMock.publish('REGULAR_USER_REGISTERED')).called();
   });
 
   it('should publish a NEW_USER_LOGIN event', () => {

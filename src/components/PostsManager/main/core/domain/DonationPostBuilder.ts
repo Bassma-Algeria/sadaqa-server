@@ -1,11 +1,11 @@
-import { Description } from './Description';
-import { DonationCategory } from './DonationCategory';
-import { DonationPost } from './DonationPost';
-import { Picture } from './Picture';
-import { PostId } from './PostId';
-import { PublisherId } from './PublisherId';
 import { Title } from './Title';
+import { PostId } from './PostId';
+import { Picture } from './Picture';
+import { Description } from './Description';
+import { UserId } from './UserId';
 import { WilayaNumber } from './WilayaNumber';
+import { DonationPost } from './DonationPost';
+import { DonationCategory } from './DonationCategory';
 
 class DonationPostBuilder {
   private postId!: PostId;
@@ -14,8 +14,21 @@ class DonationPostBuilder {
   private category!: DonationCategory;
   private wilayaNumber!: WilayaNumber;
   private pictures!: Picture[];
-  private publisherId!: PublisherId;
+  private publisherId!: UserId;
   private createdAt!: Date;
+
+  constructor(post?: DonationPost) {
+    if (!post) return;
+
+    this.postId = post.postId;
+    this.title = post.title;
+    this.description = post.description;
+    this.wilayaNumber = post.wilayaNumber;
+    this.category = post.category;
+    this.publisherId = post.publisherId;
+    this.pictures = post.pictures;
+    this.createdAt = post.createdAt;
+  }
 
   withPostId(id: PostId) {
     this.postId = id;
@@ -47,7 +60,7 @@ class DonationPostBuilder {
     return this;
   }
 
-  withPublisherId(publisherId: PublisherId) {
+  withPublisherId(publisherId: UserId) {
     this.publisherId = publisherId;
     return this;
   }

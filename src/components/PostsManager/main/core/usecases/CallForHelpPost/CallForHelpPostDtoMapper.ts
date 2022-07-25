@@ -1,9 +1,9 @@
 import { CallForHelpPostDto } from './CallForHelpPostDto';
 
-import { FamilyInNeedPost } from '../../domain/FamilyInNeedPost';
+import { CallForHelpPost } from '../../domain/CallForHelpPost';
 
 class CallForHelpPostDtoMapper {
-  static toDto(post: FamilyInNeedPost): CallForHelpPostDto {
+  static toDto(post: CallForHelpPost): CallForHelpPostDto {
     return {
       postId: post.postId.value(),
       title: post.title.value(),

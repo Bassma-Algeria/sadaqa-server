@@ -5,7 +5,7 @@ import { WilayasService } from '../../../../main/core/domain/services/WilayasSer
 
 import { FakePicturesUploader } from '../../../../main/infra/fake/FakePicturesUploader';
 
-import { PostsEventBusImpl } from '../../../../main/infra/real/PostsEventBusImpl';
+import { PostsEventPublisherImpl } from '../../../../main/infra/real/PostsEventPublisherImpl';
 import { UuidPostIdGenerator } from '../../../../main/infra/real/UuidPostIdGenerator';
 import { PostgresDonationPostRepository } from '../../../../main/infra/real/PostgresDonationPostRepository';
 import { PostgresFamilyInNeedPostRepository } from '../../../../main/infra/real/PostgresFamilyInNeedPostRepository';
@@ -36,7 +36,7 @@ const aPostsManagerFacade = (dependencies?: Partial<Dependencies>) => {
     new FakePicturesUploader(),
     new UuidPostIdGenerator(),
     new PostgresDonationPostRepository(),
-    new PostsEventBusImpl(EventBus.getInstance()),
+    new PostsEventPublisherImpl(EventBus.getInstance()),
     new PostgresFamilyInNeedPostRepository(),
     new PostgresDonationRequestPostRepository(),
     new PostgresCallForHelpPostRepository(),

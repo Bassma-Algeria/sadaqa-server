@@ -6,18 +6,17 @@ import { DonationPost } from '../../../domain/DonationPost';
 
 import { Title } from '../../../domain/Title';
 import { Description } from '../../../domain/Description';
-import { PublisherId } from '../../../domain/PublisherId';
+import { UserId } from '../../../domain/UserId';
 import { WilayaNumber } from '../../../domain/WilayaNumber';
 import { DonationCategory } from '../../../domain/DonationCategory';
 
 import { UsersService } from '../../../domain/services/UsersService';
-import { PostsEventBus } from '../../../domain/services/PostsEventBus';
+import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { WilayasService } from '../../../domain/services/WilayasService';
 import { PostIdGenerator } from '../../../domain/services/PostIdGenerator';
 import { PicturesUploader } from '../../../domain/services/PicturesUploader';
 import { DonationPostRepository } from '../../../domain/services/DonationPostRepository';
-
-import { InvalidPublisherIdException } from '../../../domain/exceptions/InvalidPublisherIdException';
+import { UserNotExistException } from '../../../domain/exceptions/UserNotExistException';
 import { InvalidWilayaNumberException } from '../../../domain/exceptions/InvalidWilayaNumberException';
 
 class CreateDonationPostUseCase
@@ -29,7 +28,7 @@ class CreateDonationPostUseCase
     private readonly picturesUploader: PicturesUploader,
     private readonly postIdGenerator: PostIdGenerator,
     private readonly donationPostRepository: DonationPostRepository,
-    private readonly postsEventBus: PostsEventBus,
+    private readonly postsEventBus: PostsEventPublisher,
   ) {}
 
   async handle(
@@ -61,10 +60,10 @@ class CreateDonationPostUseCase
   }
 
   private async validateAndGetPublisherIdFrom(request: CreateDonationPostUseCaseRequest) {
-    const publisherId = new PublisherId(request.publisherId);
+    const publisherId = new UserId(request.publisherId);
 
     const isPublisherExist = await this.usersService.isExist(publisherId);
-    if (!isPublisherExist) throw new InvalidPublisherIdException();
+    if (!isPublisherExist) throw new UserNotExistException();
 
     return { publisherId };
   }

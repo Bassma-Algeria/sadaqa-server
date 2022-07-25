@@ -12,10 +12,10 @@ describe('EventBus', () => {
 
     const payload: any = {};
 
-    eventBus.subscribeTo('NEW_DONATION_POST_CREATED').by(subscriber);
-    eventBus.subscribeTo('NEW_DONATION_POST_CREATED').by(subscriber2);
+    eventBus.subscribeTo('DONATION_POST_CREATED').by(subscriber);
+    eventBus.subscribeTo('DONATION_POST_CREATED').by(subscriber2);
 
-    eventBus.publish('NEW_DONATION_POST_CREATED').withPayload(payload);
+    eventBus.publish('DONATION_POST_CREATED').withPayload(payload);
 
     expect(subscriber.calledOnce).to.equal(true);
     expect(subscriber2.calledOnce).to.equal(true);
@@ -28,11 +28,11 @@ describe('EventBus', () => {
 
     const payload: any = {};
 
-    eventBus.subscribeTo('NEW_DONATION_POST_CREATED').by(subscriber);
+    eventBus.subscribeTo('DONATION_POST_CREATED').by(subscriber);
 
-    eventBus.unsubscribeFrom('NEW_DONATION_POST_CREATED').by(subscriber);
+    eventBus.unsubscribeFrom('DONATION_POST_CREATED').by(subscriber);
 
-    eventBus.publish('NEW_DONATION_POST_CREATED').withPayload(payload);
+    eventBus.publish('DONATION_POST_CREATED').withPayload(payload);
 
     expect(subscriber.calledOnce).to.equal(false);
   });

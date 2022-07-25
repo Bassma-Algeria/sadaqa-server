@@ -3,7 +3,7 @@ import { Title } from './Title';
 import { PostId } from './PostId';
 import { Picture } from './Picture';
 import { Description } from './Description';
-import { PublisherId } from './PublisherId';
+import { UserId } from './UserId';
 import { WilayaNumber } from './WilayaNumber';
 import { BaridiMobNumber } from './BaridiMobNumber';
 
@@ -14,11 +14,25 @@ class FamilyInNeedPostBuilder {
   private _title!: Title;
   private _description!: Description;
   private _wilayaNumber!: WilayaNumber;
-  private _publisherId!: PublisherId;
+  private _publisherId!: UserId;
   private _pictures!: Picture[];
   private _createdAt!: Date;
   private _ccp: CCP | undefined;
   private _baridiMobNumber: BaridiMobNumber | undefined;
+
+  constructor(post?: FamilyInNeedPost) {
+    if (!post) return;
+
+    this._postId = post.postId;
+    this._title = post.title;
+    this._description = post.description;
+    this._wilayaNumber = post.wilayaNumber;
+    this._publisherId = post.publisherId;
+    this._pictures = post.pictures;
+    this._createdAt = post.createdAt;
+    this._ccp = post.ccp;
+    this._baridiMobNumber = post.baridiMobNumber;
+  }
 
   withPostId(postId: PostId) {
     this._postId = postId;
@@ -40,7 +54,7 @@ class FamilyInNeedPostBuilder {
     return this;
   }
 
-  withPublisherId(publisherId: PublisherId) {
+  withPublisherId(publisherId: UserId) {
     this._publisherId = publisherId;
     return this;
   }

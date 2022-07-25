@@ -1,6 +1,6 @@
 import { PostsManagerFacade } from './PostsManagerFacade';
 
-import { PostsEventBusImpl } from './infra/real/PostsEventBusImpl';
+import { PostsEventPublisherImpl } from './infra/real/PostsEventPublisherImpl';
 import { UuidPostIdGenerator } from './infra/real/UuidPostIdGenerator';
 import { UsersManagerUsersService } from './infra/real/UsersManagerUsersService';
 import { RegionsManagerWilayasService } from './infra/real/RegionsManagerWilayasService';
@@ -24,7 +24,7 @@ class PostsManagerConfiguration {
       new MediaManagerPicturesUploader(MediaManagerConfiguration.aMediaManagerFacade()),
       new UuidPostIdGenerator(),
       new PostgresDonationPostRepository(),
-      new PostsEventBusImpl(EventBus.getInstance()),
+      new PostsEventPublisherImpl(EventBus.getInstance()),
       new PostgresFamilyInNeedPostRepository(),
       new PostgresDonationRequestPostRepository(),
       new PostgresCallForHelpPostRepository(),

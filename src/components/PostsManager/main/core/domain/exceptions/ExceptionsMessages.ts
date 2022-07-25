@@ -14,9 +14,8 @@ const ExceptionsMessages = {
     ar: 'رقم بريدي موب غير صالح ، يرجى المحاولة مرة أخرى',
   },
 
-  POST_TYPE_NOT_SUPPORTED:
-    'the post type is not supported, check the docs to see the supported types',
-  PUBLISHER_ID_NOT_VALID: 'publisher id not valid',
+  INVALID_POST_TYPE: 'the post type is not valid, check the docs to see the valid types',
+  USER_ID_NOT_VALID: 'publisher id not valid',
   INVALID_WILAYA_NUMBER: {
     en: 'this wilaya number is not valid, please try another one',
     ar: 'رقم الولاية غير صالح ، يرجى تجربة رقم آخر',
@@ -28,6 +27,10 @@ const ExceptionsMessages = {
   INVALID_PICTURE_URL: 'invalid picture url',
   INVALID_POST_ID: 'invalid post id',
   POST_NOT_FOUND: 'no post found',
+  NEGATIVE_LIKES_COUNT: 'likes count cannot be negative',
+  POST_ALREADY_LIKED: 'you already liked this post',
+  USER_NOT_EXIST: 'user not exist',
+  POST_NOT_LIKED: "you didn' like this post yet",
 };
 
 export { ExceptionsMessages };

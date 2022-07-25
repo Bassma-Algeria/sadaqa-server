@@ -3,21 +3,21 @@ import { CreateDonationRequestPostUseCaseRequest } from './CreateDonationRequest
 import { CreateDonationRequestPostUseCaseResponse } from './CreateDonationRequestPostUseCaseResponse';
 
 import { Title } from '../../../domain/Title';
+import { UserId } from '../../../domain/UserId';
 import { Description } from '../../../domain/Description';
-import { PublisherId } from '../../../domain/PublisherId';
 import { WilayaNumber } from '../../../domain/WilayaNumber';
 import { DonationCategory } from '../../../domain/DonationCategory';
 
 import { DonationRequestPost } from '../../../domain/DonationRequestPost';
 
 import { UsersService } from '../../../domain/services/UsersService';
-import { PostsEventBus } from '../../../domain/services/PostsEventBus';
+import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { WilayasService } from '../../../domain/services/WilayasService';
 import { PostIdGenerator } from '../../../domain/services/PostIdGenerator';
 import { PicturesUploader } from '../../../domain/services/PicturesUploader';
 import { DonationRequestPostRepository } from '../../../domain/services/DonationRequestPostRepository';
 
-import { InvalidPublisherIdException } from '../../../domain/exceptions/InvalidPublisherIdException';
+import { UserNotExistException } from '../../../domain/exceptions/UserNotExistException';
 import { InvalidWilayaNumberException } from '../../../domain/exceptions/InvalidWilayaNumberException';
 
 class CreateDonationRequestPostUseCase
@@ -30,7 +30,7 @@ class CreateDonationRequestPostUseCase
     private readonly picturesUploader: PicturesUploader,
     private readonly postIdGenerator: PostIdGenerator,
     private readonly donationRequestPostRepository: DonationRequestPostRepository,
-    private readonly postsEventBus: PostsEventBus,
+    private readonly postsEventBus: PostsEventPublisher,
   ) {}
 
   async handle(
@@ -62,10 +62,10 @@ class CreateDonationRequestPostUseCase
   }
 
   private async validateAndGetPublisherIdFrom(request: CreateDonationRequestPostUseCaseRequest) {
-    const publisherId = new PublisherId(request.publisherId);
+    const publisherId = new UserId(request.publisherId);
 
     const isPublisherExist = await this.usersService.isExist(publisherId);
-    if (!isPublisherExist) throw new InvalidPublisherIdException();
+    if (!isPublisherExist) throw new UserNotExistException();
 
     return { publisherId };
   }

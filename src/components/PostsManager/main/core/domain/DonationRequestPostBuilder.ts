@@ -1,11 +1,12 @@
 import { Title } from './Title';
 import { PostId } from './PostId';
 import { Picture } from './Picture';
-import { PublisherId } from './PublisherId';
+import { UserId } from './UserId';
 import { Description } from './Description';
 import { DonationPost } from './DonationPost';
 import { WilayaNumber } from './WilayaNumber';
 import { DonationCategory } from './DonationCategory';
+import { DonationRequestPost } from './DonationRequestPost';
 
 class DonationRequestPostBuilder {
   private postId!: PostId;
@@ -14,8 +15,21 @@ class DonationRequestPostBuilder {
   private category!: DonationCategory;
   private wilayaNumber!: WilayaNumber;
   private pictures!: Picture[];
-  private publisherId!: PublisherId;
+  private publisherId!: UserId;
   private createdAt!: Date;
+
+  constructor(post?: DonationRequestPost) {
+    if (!post) return;
+
+    this.postId = post.postId;
+    this.title = post.title;
+    this.description = post.description;
+    this.wilayaNumber = post.wilayaNumber;
+    this.category = post.category;
+    this.publisherId = post.publisherId;
+    this.pictures = post.pictures;
+    this.createdAt = post.createdAt;
+  }
 
   withPostId(id: PostId) {
     this.postId = id;
@@ -47,7 +61,7 @@ class DonationRequestPostBuilder {
     return this;
   }
 
-  withPublisherId(publisherId: PublisherId) {
+  withPublisherId(publisherId: UserId) {
     this.publisherId = publisherId;
     return this;
   }
