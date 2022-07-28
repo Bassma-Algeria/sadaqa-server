@@ -12,6 +12,7 @@ class DonationRequestPostDtoMapper {
       publisherId: post.publisherId.value(),
       wilayaNumber: post.wilayaNumber.value(),
       pictures: post.pictures.map(pic => pic.url()),
+      status: post.status,
       createdAt: post.createdAt,
     };
   }

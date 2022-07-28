@@ -1,9 +1,10 @@
 import { CCP } from './CCP';
 import { Title } from './Title';
 import { PostId } from './PostId';
-import { Picture } from './Picture';
-import { Description } from './Description';
 import { UserId } from './UserId';
+import { Picture } from './Picture';
+import { PostStatus } from './PostStatus';
+import { Description } from './Description';
 import { WilayaNumber } from './WilayaNumber';
 import { BaridiMobNumber } from './BaridiMobNumber';
 
@@ -17,6 +18,7 @@ class CallForHelpPostBuilder {
   private _publisherId!: UserId;
   private _pictures!: Picture[];
   private _createdAt!: Date;
+  private _status!: PostStatus;
   private _ccp: CCP | undefined;
   private _baridiMobNumber: BaridiMobNumber | undefined;
 
@@ -31,6 +33,7 @@ class CallForHelpPostBuilder {
     this._pictures = post.pictures;
     this._createdAt = post.createdAt;
     this._ccp = post.ccp;
+    this._status = post.status;
     this._baridiMobNumber = post.baridiMobNumber;
   }
 
@@ -56,6 +59,11 @@ class CallForHelpPostBuilder {
 
   withPublisherId(publisherId: UserId) {
     this._publisherId = publisherId;
+    return this;
+  }
+
+  withStatus(status: PostStatus) {
+    this._status = status;
     return this;
   }
 
@@ -87,6 +95,7 @@ class CallForHelpPostBuilder {
       this._wilayaNumber,
       this._publisherId,
       this._pictures,
+      this._status,
       this._createdAt,
       this._ccp,
       this._baridiMobNumber,

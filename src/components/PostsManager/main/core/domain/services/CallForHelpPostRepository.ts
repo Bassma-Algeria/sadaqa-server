@@ -22,4 +22,6 @@ export interface CallForHelpPostRepository {
   findMany(filters: FindManyFilters): Promise<CallForHelpPost[]>;
 
   count(filters?: CountFilters): Promise<number>;
+
+  delete(id: PostId): Promise<void>;
 }

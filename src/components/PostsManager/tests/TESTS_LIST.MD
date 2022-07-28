@@ -1,0 +1,1 @@
+- inactive/active a post

@@ -8,6 +8,7 @@ import { WilayaNumber } from './WilayaNumber';
 import { BaridiMobNumber } from './BaridiMobNumber';
 
 import { FamilyInNeedPost } from './FamilyInNeedPost';
+import { PostStatus } from './PostStatus';
 
 class FamilyInNeedPostBuilder {
   private _postId!: PostId;
@@ -18,6 +19,7 @@ class FamilyInNeedPostBuilder {
   private _pictures!: Picture[];
   private _createdAt!: Date;
   private _ccp: CCP | undefined;
+  private _status!: PostStatus;
   private _baridiMobNumber: BaridiMobNumber | undefined;
 
   constructor(post?: FamilyInNeedPost) {
@@ -30,6 +32,7 @@ class FamilyInNeedPostBuilder {
     this._publisherId = post.publisherId;
     this._pictures = post.pictures;
     this._createdAt = post.createdAt;
+    this._status = post.status;
     this._ccp = post.ccp;
     this._baridiMobNumber = post.baridiMobNumber;
   }
@@ -64,6 +67,11 @@ class FamilyInNeedPostBuilder {
     return this;
   }
 
+  withStatus(status: PostStatus) {
+    this._status = status;
+    return this;
+  }
+
   withCreatedAt(creationTime: Date) {
     this._createdAt = creationTime;
     return this;
@@ -88,6 +96,7 @@ class FamilyInNeedPostBuilder {
       this._publisherId,
       this._pictures,
       this._createdAt,
+      this._status,
       this._ccp,
       this._baridiMobNumber,
     );

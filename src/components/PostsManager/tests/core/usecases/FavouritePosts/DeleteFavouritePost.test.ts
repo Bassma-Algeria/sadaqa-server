@@ -18,7 +18,7 @@ describe('Delete Favourite Post', () => {
       .and.be.and.instanceOf(ValidationException);
   });
 
-  it('given a delete favourite post request, when the favourite post exist, then should be delteted', async () => {
+  it('given a delete favourite post request, when the favourite post exist, then should be deleted', async () => {
     const { postId } = await postsManager.createDonationPost(aDonationPostCreationRequest());
     const favouritePost = anAddToFavouriteRequest({ postId, postType: 'donation' });
     await postsManager.addToFavouritePosts(favouritePost);

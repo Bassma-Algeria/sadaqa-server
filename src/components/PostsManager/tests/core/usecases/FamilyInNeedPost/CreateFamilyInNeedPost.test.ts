@@ -182,4 +182,14 @@ describe('Create Family In Need Post', () => {
     expect(mockFun.args[0][0]).to.have.property('publisherId', request.publisherId);
     expect(mockFun.args[0][0]).to.have.property('wilayaNumber', request.wilayaNumber);
   });
+
+  it('given a family in need post creation request, when every think is ok, then the status of the post should be ENABLED', async () => {
+    const { postId } = await postsManager.createFamilyInNeedPost(
+      aFamilyInNeedPostCreationRequest(),
+    );
+
+    const { status } = await postsManager.getFamilyInNeedPost({ postId });
+
+    expect(status).to.equal('ENABLED');
+  });
 });

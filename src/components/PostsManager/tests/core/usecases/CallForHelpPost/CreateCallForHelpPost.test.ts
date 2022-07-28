@@ -180,4 +180,12 @@ describe('Create Call For Help Post', () => {
     expect(mockFun.args[0][0]).to.have.property('publisherId', request.publisherId);
     expect(mockFun.args[0][0]).to.have.property('wilayaNumber', request.wilayaNumber);
   });
+
+  it('given a call for help creation request, when every think is ok, then the status of the post should be ENABLED', async () => {
+    const { postId } = await postsManager.createCallForHelpPost(aCallForHelpPostCreationRequest());
+
+    const { status } = await postsManager.getCallForHelpPost({ postId });
+
+    expect(status).to.equal('ENABLED');
+  });
 });

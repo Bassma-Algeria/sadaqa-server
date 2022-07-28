@@ -11,6 +11,7 @@ class CallForHelpPostDtoMapper {
       publisherId: post.publisherId.value(),
       wilayaNumber: post.wilayaNumber.value(),
       pictures: post.pictures.map(pic => pic.url()),
+      status: post.status,
       ccp: post.ccp?.number(),
       ccpKey: post.ccp?.key(),
       baridiMobNumber: post.baridiMobNumber?.value(),

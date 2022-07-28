@@ -12,14 +12,15 @@ import { BaridiMobNumber } from '../../../domain/BaridiMobNumber';
 import { CallForHelpPost } from '../../../domain/CallForHelpPost';
 
 import { UsersService } from '../../../domain/services/UsersService';
-import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { WilayasService } from '../../../domain/services/WilayasService';
 import { PostIdGenerator } from '../../../domain/services/PostIdGenerator';
 import { PicturesUploader } from '../../../domain/services/PicturesUploader';
+import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { CallForHelpPostRepository } from '../../../domain/services/CallForHelpPostRepository';
 
 import { InvalidWilayaNumberException } from '../../../domain/exceptions/InvalidWilayaNumberException';
 import { NotAuthorizedToPublishThisPostException } from '../../../domain/exceptions/NotAuthorizedToPublishThisPostException';
+import { PostStatus } from '../../../domain/PostStatus';
 
 class CreateCallForHelpPostUseCase
   implements UseCase<CreateCallForHelpPostUseCaseRequest, CreateCallForHelpPostUseCaseResponse>
@@ -54,6 +55,7 @@ class CreateCallForHelpPostUseCase
       .withCCP(ccp)
       .withBaridiMobNumber(baridiMobNumber)
       .withCreatedAt(this.now())
+      .withStatus(PostStatus.ENABLED)
       .build();
 
     await this.save(post);

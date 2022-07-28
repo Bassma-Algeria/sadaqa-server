@@ -14,6 +14,7 @@ class FamilyInNeedPostDtoMapper {
       ccp: post.ccp?.number(),
       ccpKey: post.ccp?.key(),
       baridiMobNumber: post.baridiMobNumber?.value(),
+      status: post.status,
       createdAt: post.createdAt,
     };
   }

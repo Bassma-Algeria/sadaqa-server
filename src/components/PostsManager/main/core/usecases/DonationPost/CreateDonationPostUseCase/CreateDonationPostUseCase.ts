@@ -5,17 +5,19 @@ import { CreateDonationPostUseCaseResponse } from './CreateDonationPostUseCaseRe
 import { DonationPost } from '../../../domain/DonationPost';
 
 import { Title } from '../../../domain/Title';
-import { Description } from '../../../domain/Description';
 import { UserId } from '../../../domain/UserId';
+import { PostStatus } from '../../../domain/PostStatus';
+import { Description } from '../../../domain/Description';
 import { WilayaNumber } from '../../../domain/WilayaNumber';
 import { DonationCategory } from '../../../domain/DonationCategory';
 
 import { UsersService } from '../../../domain/services/UsersService';
-import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { WilayasService } from '../../../domain/services/WilayasService';
 import { PostIdGenerator } from '../../../domain/services/PostIdGenerator';
 import { PicturesUploader } from '../../../domain/services/PicturesUploader';
+import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { DonationPostRepository } from '../../../domain/services/DonationPostRepository';
+
 import { UserNotExistException } from '../../../domain/exceptions/UserNotExistException';
 import { InvalidWilayaNumberException } from '../../../domain/exceptions/InvalidWilayaNumberException';
 
@@ -49,6 +51,7 @@ class CreateDonationPostUseCase
       .withWilayaNumber(wilayaNumber)
       .withPublisherId(publisherId)
       .withPictures(pictures)
+      .withStatus(PostStatus.ENABLED)
       .withCreatedAt(createdAt)
       .build();
 

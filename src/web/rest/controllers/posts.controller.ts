@@ -49,12 +49,12 @@ import {
   MultiLanguagesException,
   SupportedLangugaes,
 } from '../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesException';
-import { PostNotFoundException } from '../../../components/PostsManager/main/core/domain/exceptions/PostNotFoundException';
-import { InvalidTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidTokenException';
-import { InvalidUserIdException } from '../../../components/PostsManager/main/core/domain/exceptions/InvalidUserIdException';
-import { NotAuthorizedToPublishThisPostException } from '../../../components/PostsManager/main/core/domain/exceptions/NotAuthorizedToPublishThisPostException';
 import { ValidationException } from '../../../components/PostsManager/main/core/domain/exceptions/ValidationException';
+import { PostNotFoundException } from '../../../components/PostsManager/main/core/domain/exceptions/PostNotFoundException';
+import { InvalidUserIdException } from '../../../components/PostsManager/main/core/domain/exceptions/InvalidUserIdException';
+import { InvalidTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidTokenException';
 import { InvalidAccessTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidAccessTokenException';
+import { NotAuthorizedToPublishThisPostException } from '../../../components/PostsManager/main/core/domain/exceptions/NotAuthorizedToPublishThisPostException';
 
 @ApiTags('posts')
 @Controller('/api/posts')

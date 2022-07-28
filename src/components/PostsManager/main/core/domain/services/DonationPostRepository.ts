@@ -18,7 +18,7 @@ export interface CountFilters {
 
 export interface DonationPostRepository {
   save(donationPost: DonationPost): Promise<void>;
-  
+
   update(donationPost: DonationPost): Promise<void>;
 
   findById(postId: PostId): Promise<DonationPost | undefined>;
@@ -26,4 +26,6 @@ export interface DonationPostRepository {
   findMany(filters: FindManyFilters): Promise<DonationPost[]>;
 
   count(filters: CountFilters): Promise<number>;
+
+  delete(id: PostId): Promise<void>;
 }

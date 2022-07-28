@@ -4,6 +4,7 @@ import { Title } from '../../core/domain/Title';
 import { PostId } from '../../core/domain/PostId';
 import { UserId } from '../../core/domain/UserId';
 import { Picture } from '../../core/domain/Picture';
+import { PostStatus } from '../../core/domain/PostStatus';
 import { Description } from '../../core/domain/Description';
 import { WilayaNumber } from '../../core/domain/WilayaNumber';
 import { DonationCategory } from '../../core/domain/DonationCategory';
@@ -24,6 +25,7 @@ interface DBModel {
   wilayaNumber: number;
   pictures: string[];
   publisherId: string;
+  status: string;
   createdAt: Date;
 }
 
@@ -71,6 +73,10 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
     return total;
   }
 
+  async delete(id: PostId): Promise<void> {
+    await prisma.donationRequestPost.delete({ where: { postId: id.value() } });
+  }
+
   async deleteAll() {
     await prisma.donationRequestPost.deleteMany();
   }
@@ -84,6 +90,7 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
       wilayaNumber: post.wilayaNumber.value(),
       pictures: post.pictures.map(pic => pic.url()),
       publisherId: post.publisherId.value(),
+      status: post.status,
       createdAt: post.createdAt,
     };
   }
@@ -98,6 +105,7 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
       .withPictures(dbModel.pictures.map(url => new Picture(url)))
       .withPublisherId(new UserId(dbModel.publisherId))
       .withCreatedAt(dbModel.createdAt)
+      .withStatus(dbModel.status as PostStatus)
       .build();
   }
 }

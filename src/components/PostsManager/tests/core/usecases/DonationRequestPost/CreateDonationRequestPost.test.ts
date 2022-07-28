@@ -121,4 +121,14 @@ describe('Create Donation Request Post', () => {
     expect(mockFunction.args[0][0]).to.have.property('publisherId', donationPost.publisherId);
     expect(mockFunction.args[0][0]).to.have.property('wilayaNumber', donationPost.wilayaNumber);
   });
+
+  it('given a donation request post creation request, when every think is ok, then the status of the post should be ENABLED', async () => {
+    const { postId } = await postsManager.createDonationRequestPost(
+      aDonationRequestPostCreationRequest(),
+    );
+
+    const { status } = await postsManager.getDonationRequestPost({ postId });
+
+    expect(status).to.equal('ENABLED');
+  });
 });

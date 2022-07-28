@@ -7,8 +7,9 @@ import {
 import { CCP } from '../../core/domain/CCP';
 import { Title } from '../../core/domain/Title';
 import { PostId } from '../../core/domain/PostId';
-import { Picture } from '../../core/domain/Picture';
 import { UserId } from '../../core/domain/UserId';
+import { Picture } from '../../core/domain/Picture';
+import { PostStatus } from '../../core/domain/PostStatus';
 import { Description } from '../../core/domain/Description';
 import { WilayaNumber } from '../../core/domain/WilayaNumber';
 import { BaridiMobNumber } from '../../core/domain/BaridiMobNumber';
@@ -24,6 +25,7 @@ interface DBModel {
   wilayaNumber: number;
   publisherId: string;
   pictures: string[];
+  status: string;
   ccp: string | null;
   ccpKey: string | null;
   baridiMobNumber: string | null;
@@ -70,6 +72,10 @@ class PostgresCallForHelpPostRepository implements CallForHelpPostRepository {
     return total;
   }
 
+  async delete(id: PostId): Promise<void> {
+    await prisma.callForHelpPost.delete({ where: { postId: id.value() } });
+  }
+
   async deleteAll() {
     await prisma.callForHelpPost.deleteMany();
   }
@@ -83,6 +89,7 @@ class PostgresCallForHelpPostRepository implements CallForHelpPostRepository {
       .withPublisherId(new UserId(model.publisherId))
       .withPictures(model.pictures.map(pic => new Picture(pic)))
       .withCCP(model.ccp ? new CCP(model.ccp, model.ccpKey!) : undefined)
+      .withStatus(model.status as PostStatus)
       .withBaridiMobNumber(
         model.baridiMobNumber ? new BaridiMobNumber(model.baridiMobNumber) : undefined,
       )
@@ -100,6 +107,7 @@ class PostgresCallForHelpPostRepository implements CallForHelpPostRepository {
       pictures: post.pictures.map(pic => pic.url()),
       ccp: post.ccp?.number() || null,
       ccpKey: post.ccp?.key() || null,
+      status: post.status,
       baridiMobNumber: post.baridiMobNumber?.value() || null,
       createdAt: post.createdAt,
     };

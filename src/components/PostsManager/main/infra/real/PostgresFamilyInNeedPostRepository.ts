@@ -9,6 +9,7 @@ import { Title } from '../../core/domain/Title';
 import { PostId } from '../../core/domain/PostId';
 import { UserId } from '../../core/domain/UserId';
 import { Picture } from '../../core/domain/Picture';
+import { PostStatus } from '../../core/domain/PostStatus';
 import { Description } from '../../core/domain/Description';
 import { WilayaNumber } from '../../core/domain/WilayaNumber';
 import { BaridiMobNumber } from '../../core/domain/BaridiMobNumber';
@@ -27,6 +28,7 @@ interface DBModel {
   ccp: string | null;
   ccpKey: string | null;
   baridiMobNumber: string | null;
+  status: string;
   createdAt: Date;
 }
 
@@ -70,6 +72,10 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
     return total;
   }
 
+  async delete(id: PostId): Promise<void> {
+    await prisma.familyInNeedPost.delete({ where: { postId: id.value() } });
+  }
+
   async deleteAll() {
     await prisma.familyInNeedPost.deleteMany();
   }
@@ -83,6 +89,7 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
       .withPublisherId(new UserId(model.publisherId))
       .withPictures(model.pictures.map(pic => new Picture(pic)))
       .withCCP(model.ccp ? new CCP(model.ccp, model.ccpKey!) : undefined)
+      .withStatus(model.status as PostStatus)
       .withBaridiMobNumber(
         model.baridiMobNumber ? new BaridiMobNumber(model.baridiMobNumber) : undefined,
       )
@@ -101,6 +108,7 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
       ccp: post.ccp?.number() || null,
       ccpKey: post.ccp?.key() || null,
       baridiMobNumber: post.baridiMobNumber?.value() || null,
+      status: post.status,
       createdAt: post.createdAt,
     };
   }

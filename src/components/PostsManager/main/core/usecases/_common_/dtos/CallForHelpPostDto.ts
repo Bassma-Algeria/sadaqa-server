@@ -5,6 +5,7 @@ export interface CallForHelpPostDto {
   readonly wilayaNumber: number;
   readonly publisherId: string;
   readonly pictures: string[];
+  readonly status: string;
   readonly ccp?: string;
   readonly ccpKey?: string;
   readonly baridiMobNumber?: string;

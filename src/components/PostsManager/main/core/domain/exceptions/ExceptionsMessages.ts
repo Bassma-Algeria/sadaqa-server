@@ -33,6 +33,8 @@ const ExceptionsMessages = {
   USER_NOT_EXIST: 'user not exist',
   POST_NOT_LIKED: "you didn' like this post yet",
   FAVOURITE_POST_NOT_EXIST: 'favourite post not exist',
+  NOT_AUTHORIZED_TO_DELETE: 'not authorized to delete this post',
+  NOT_AUTHORIZED_TO_EDIT: 'not authorized to edit this post',
 };
 
 export { ExceptionsMessages };

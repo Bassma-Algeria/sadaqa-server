@@ -1,9 +1,9 @@
 import { Title } from './Title';
 import { PostId } from './PostId';
-import { Picture } from './Picture';
 import { UserId } from './UserId';
+import { Picture } from './Picture';
+import { PostStatus } from './PostStatus';
 import { Description } from './Description';
-import { DonationPost } from './DonationPost';
 import { WilayaNumber } from './WilayaNumber';
 import { DonationCategory } from './DonationCategory';
 import { DonationRequestPost } from './DonationRequestPost';
@@ -16,6 +16,7 @@ class DonationRequestPostBuilder {
   private wilayaNumber!: WilayaNumber;
   private pictures!: Picture[];
   private publisherId!: UserId;
+  private status!: PostStatus;
   private createdAt!: Date;
 
   constructor(post?: DonationRequestPost) {
@@ -27,6 +28,7 @@ class DonationRequestPostBuilder {
     this.wilayaNumber = post.wilayaNumber;
     this.category = post.category;
     this.publisherId = post.publisherId;
+    this.status = post.status;
     this.pictures = post.pictures;
     this.createdAt = post.createdAt;
   }
@@ -66,19 +68,25 @@ class DonationRequestPostBuilder {
     return this;
   }
 
+  withStatus(status: PostStatus) {
+    this.status = status;
+    return this;
+  }
+
   withCreatedAt(createdAt: Date) {
     this.createdAt = createdAt;
     return this;
   }
 
   build() {
-    return new DonationPost(
+    return new DonationRequestPost(
       this.postId,
       this.title,
       this.description,
       this.category,
       this.wilayaNumber,
       this.pictures,
+      this.status,
       this.publisherId,
       this.createdAt,
     );

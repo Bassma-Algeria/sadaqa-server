@@ -22,4 +22,6 @@ export interface FamilyInNeedPostRepository {
   findMany(filters: FindManyFilters): Promise<FamilyInNeedPost[]>;
 
   count(filters?: CountFilters): Promise<number>;
+
+  delete(id: PostId): Promise<void>;
 }

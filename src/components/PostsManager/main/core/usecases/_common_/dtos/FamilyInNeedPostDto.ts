@@ -8,5 +8,6 @@ export interface FamilyInNeedPostDto {
   readonly ccp?: string;
   readonly ccpKey?: string;
   readonly baridiMobNumber?: string;
+  readonly status: string;
   readonly createdAt: Date;
 }

@@ -22,4 +22,6 @@ export interface DonationRequestPostRepository {
   findMany(filters: FindManyFilters): Promise<DonationRequestPost[]>;
 
   count(filters: CountFilters): Promise<number>;
+
+  delete(id: PostId): Promise<void>;
 }

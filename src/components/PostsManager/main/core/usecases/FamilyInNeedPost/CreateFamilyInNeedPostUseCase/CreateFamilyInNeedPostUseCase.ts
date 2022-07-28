@@ -4,18 +4,19 @@ import { CreateFamilyInNeedPostUseCaseResponse } from './CreateFamilyInNeedPostU
 
 import { CCP } from '../../../domain/CCP';
 import { Title } from '../../../domain/Title';
-import { Description } from '../../../domain/Description';
 import { UserId } from '../../../domain/UserId';
+import { PostStatus } from '../../../domain/PostStatus';
+import { Description } from '../../../domain/Description';
 import { WilayaNumber } from '../../../domain/WilayaNumber';
 import { BaridiMobNumber } from '../../../domain/BaridiMobNumber';
 
 import { FamilyInNeedPost } from '../../../domain/FamilyInNeedPost';
 
 import { UsersService } from '../../../domain/services/UsersService';
-import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { WilayasService } from '../../../domain/services/WilayasService';
 import { PostIdGenerator } from '../../../domain/services/PostIdGenerator';
 import { PicturesUploader } from '../../../domain/services/PicturesUploader';
+import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { FamilyInNeedPostRepository } from '../../../domain/services/FamilyInNeedPostRepository';
 
 import { InvalidWilayaNumberException } from '../../../domain/exceptions/InvalidWilayaNumberException';
@@ -54,6 +55,7 @@ class CreateFamilyInNeedPostUseCase
       .withCCP(ccp)
       .withBaridiMobNumber(baridiMobNumber)
       .withCreatedAt(this.now())
+      .withStatus(PostStatus.ENABLED)
       .build();
 
     await this.save(post);

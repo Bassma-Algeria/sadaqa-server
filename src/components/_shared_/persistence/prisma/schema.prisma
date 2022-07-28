@@ -46,6 +46,7 @@ model DonationPost {
   wilayaNumber Int
   pictures     String[]
   publisherId  String
+  status       String
   createdAt    DateTime
 }
 
@@ -57,6 +58,7 @@ model DonationRequestPost {
   wilayaNumber Int
   pictures     String[]
   publisherId  String
+  status       String
   createdAt    DateTime
 }
 
@@ -70,6 +72,7 @@ model FamilyInNeedPost {
   ccp             String?
   ccpKey          String?
   baridiMobNumber String?
+  status          String
   createdAt       DateTime
 }
 
@@ -83,6 +86,7 @@ model CallForHelpPost {
   ccp             String?
   ccpKey          String?
   baridiMobNumber String?
+  status          String
   createdAt       DateTime
 }
 

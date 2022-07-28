@@ -5,6 +5,7 @@ export interface DonationPostDto {
   readonly wilayaNumber: number;
   readonly publisherId: string;
   readonly category: string;
+  readonly status: string;
   readonly pictures: string[];
   readonly createdAt: Date;
 }

@@ -4,6 +4,7 @@ import { CreateDonationRequestPostUseCaseResponse } from './CreateDonationReques
 
 import { Title } from '../../../domain/Title';
 import { UserId } from '../../../domain/UserId';
+import { PostStatus } from '../../../domain/PostStatus';
 import { Description } from '../../../domain/Description';
 import { WilayaNumber } from '../../../domain/WilayaNumber';
 import { DonationCategory } from '../../../domain/DonationCategory';
@@ -11,10 +12,10 @@ import { DonationCategory } from '../../../domain/DonationCategory';
 import { DonationRequestPost } from '../../../domain/DonationRequestPost';
 
 import { UsersService } from '../../../domain/services/UsersService';
-import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { WilayasService } from '../../../domain/services/WilayasService';
 import { PostIdGenerator } from '../../../domain/services/PostIdGenerator';
 import { PicturesUploader } from '../../../domain/services/PicturesUploader';
+import { PostsEventPublisher } from '../../../domain/services/PostsEventPublisher';
 import { DonationRequestPostRepository } from '../../../domain/services/DonationRequestPostRepository';
 
 import { UserNotExistException } from '../../../domain/exceptions/UserNotExistException';
@@ -51,6 +52,7 @@ class CreateDonationRequestPostUseCase
       .withWilayaNumber(wilayaNumber)
       .withPublisherId(publisherId)
       .withPictures(pictures)
+      .withStatus(PostStatus.ENABLED)
       .withCreatedAt(createdAt)
       .build();
 

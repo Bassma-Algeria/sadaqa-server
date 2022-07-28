@@ -6,5 +6,6 @@ export interface DonationRequestPostDto {
   readonly publisherId: string;
   readonly category: string;
   readonly pictures: string[];
+  readonly status: string;
   readonly createdAt: Date;
 }

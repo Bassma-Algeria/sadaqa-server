@@ -12,6 +12,10 @@ class UserId {
   value() {
     return this.id;
   }
+
+  equals(userId: UserId) {
+    return userId.value() === this.id;
+  }
 }
 
 export { UserId };

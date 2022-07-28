@@ -15,6 +15,7 @@ import {
 } from '../../core/domain/services/DonationPostRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
+import { PostStatus } from '../../core/domain/PostStatus';
 
 interface DonationPostDBModel {
   postId: string;
@@ -23,6 +24,7 @@ interface DonationPostDBModel {
   category: string;
   wilayaNumber: number;
   pictures: string[];
+  status: string;
   publisherId: string;
   createdAt: Date;
 }
@@ -70,6 +72,10 @@ class PostgresDonationPostRepository implements DonationPostRepository {
     return total;
   }
 
+  async delete(id: PostId): Promise<void> {
+    await prisma.donationPost.delete({ where: { postId: id.value() } });
+  }
+
   async deleteAll() {
     await prisma.donationPost.deleteMany();
   }
@@ -83,6 +89,7 @@ class PostgresDonationPostRepository implements DonationPostRepository {
       wilayaNumber: donationPost.wilayaNumber.value(),
       pictures: donationPost.pictures.map(pic => pic.url()),
       publisherId: donationPost.publisherId.value(),
+      status: donationPost.status,
       createdAt: donationPost.createdAt,
     };
   }
@@ -96,6 +103,7 @@ class PostgresDonationPostRepository implements DonationPostRepository {
       .withWilayaNumber(new WilayaNumber(dbModel.wilayaNumber))
       .withPictures(dbModel.pictures.map(url => new Picture(url)))
       .withPublisherId(new UserId(dbModel.publisherId))
+      .withStatus(dbModel.status as PostStatus)
       .withCreatedAt(dbModel.createdAt)
       .build();
   }
