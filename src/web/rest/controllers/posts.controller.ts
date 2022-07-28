@@ -8,6 +8,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
   UploadedFiles,
   UseInterceptors,
@@ -55,6 +56,8 @@ import { InvalidUserIdException } from '../../../components/PostsManager/main/co
 import { InvalidTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidTokenException';
 import { InvalidAccessTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidAccessTokenException';
 import { NotAuthorizedToPublishThisPostException } from '../../../components/PostsManager/main/core/domain/exceptions/NotAuthorizedToPublishThisPostException';
+import { NotFoundException } from '../../../components/PostsManager/main/core/domain/exceptions/NotFoundException';
+import { NotAuthorizedException } from '../../../components/PostsManager/main/core/domain/exceptions/NotAuthorizedException';
 
 @ApiTags('posts')
 @Controller('/api/posts')
@@ -129,6 +132,54 @@ class PostsController {
     }
   }
 
+  @Put('donations/:donationId/toggle-enabled')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiCreatedResponse({ description: 'enabling status toggled successfully' })
+  @ApiForbiddenResponse({ description: 'not the publisher of the post' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async toggleDonationEnablingStatus(
+    @Param('donationId') postId: string,
+    @Headers('Authorisation') accessToken: string,
+  ) {
+    try {
+      return await this.postsService.toggleDonationEnablingStatus(accessToken, { postId });
+    } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new HttpException({ error: error.message }, HttpStatus.NOT_FOUND);
+      if (error instanceof NotAuthorizedException)
+        throw new HttpException({ error: error.message }, HttpStatus.FORBIDDEN);
+      if (error instanceof InvalidTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Delete('donations/:donationId')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiOkResponse({ description: 'post deleted successfully' })
+  @ApiForbiddenResponse({ description: 'not the publisher of the post' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async deleteDonation(
+    @Param('donationId') postId: string,
+    @Headers('Authorisation') accessToken: string,
+  ) {
+    try {
+      return await this.postsService.deleteDonation(accessToken, { postId });
+    } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new HttpException({ error: error.message }, HttpStatus.NOT_FOUND);
+      if (error instanceof NotAuthorizedException)
+        throw new HttpException({ error: error.message }, HttpStatus.FORBIDDEN);
+      if (error instanceof InvalidTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @Get('donation-requests/:donationRequestId')
   @ApiOkResponse({ description: 'DonationPost Found' })
   @ApiNotFoundResponse({ description: 'DonationPost Not Found' })
@@ -190,6 +241,54 @@ class PostsController {
         e instanceof InvalidAccessTokenException ||
         e instanceof InvalidUserIdException
       )
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Put('donations-request/:donationRequestId/toggle-enabled')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiCreatedResponse({ description: 'enabling status toggled successfully' })
+  @ApiForbiddenResponse({ description: 'not the publisher of the post' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async toggleDonationRequestEnablingStatus(
+    @Param('donationRequestId') postId: string,
+    @Headers('Authorisation') accessToken: string,
+  ) {
+    try {
+      return await this.postsService.toggleDonationRequestEnablingStatus(accessToken, { postId });
+    } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new HttpException({ error: error.message }, HttpStatus.NOT_FOUND);
+      if (error instanceof NotAuthorizedException)
+        throw new HttpException({ error: error.message }, HttpStatus.FORBIDDEN);
+      if (error instanceof InvalidTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Delete('donations-request/:donationRequestId')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiOkResponse({ description: 'post deleted successfully' })
+  @ApiForbiddenResponse({ description: 'not the publisher of the post' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async deleteDonationRequest(
+    @Param('donationRequestId') postId: string,
+    @Headers('Authorisation') accessToken: string,
+  ) {
+    try {
+      return await this.postsService.deleteDonationRequest(accessToken, { postId });
+    } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new HttpException({ error: error.message }, HttpStatus.NOT_FOUND);
+      if (error instanceof NotAuthorizedException)
+        throw new HttpException({ error: error.message }, HttpStatus.FORBIDDEN);
+      if (error instanceof InvalidTokenException)
         throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
 
       throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -264,6 +363,54 @@ class PostsController {
     }
   }
 
+  @Put('families-in-need/:familyInNeedId/toggle-enabled')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiCreatedResponse({ description: 'enabling status toggled successfully' })
+  @ApiForbiddenResponse({ description: 'not the publisher of the post' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async toggleFamilyInNeedEnablingStatus(
+    @Param('familyInNeedId') postId: string,
+    @Headers('Authorisation') accessToken: string,
+  ) {
+    try {
+      return await this.postsService.toggleFamilyInNeedEnablingStatus(accessToken, { postId });
+    } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new HttpException({ error: error.message }, HttpStatus.NOT_FOUND);
+      if (error instanceof NotAuthorizedException)
+        throw new HttpException({ error: error.message }, HttpStatus.FORBIDDEN);
+      if (error instanceof InvalidTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Delete('families-in-need/:familyInNeedId')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiOkResponse({ description: 'post deleted successfully' })
+  @ApiForbiddenResponse({ description: 'not the publisher of the post' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async deleteFamilyInNeed(
+    @Param('familyInNeedId') postId: string,
+    @Headers('Authorisation') accessToken: string,
+  ) {
+    try {
+      return await this.postsService.deleteFamilyInNeed(accessToken, { postId });
+    } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new HttpException({ error: error.message }, HttpStatus.NOT_FOUND);
+      if (error instanceof NotAuthorizedException)
+        throw new HttpException({ error: error.message }, HttpStatus.FORBIDDEN);
+      if (error instanceof InvalidTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @Get('calls-for-help/:callForHelpId')
   @ApiOkResponse({ description: 'Family In Need Found' })
   @ApiNotFoundResponse({ description: 'Family In Need Not Found' })
@@ -327,6 +474,54 @@ class PostsController {
           { error: 'Only Association can publish this post' },
           HttpStatus.FORBIDDEN,
         );
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Put('calls-for-help/:callForHelpId/toggle-enabled')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiCreatedResponse({ description: 'enabling status toggled successfully' })
+  @ApiForbiddenResponse({ description: 'not the publisher of the post' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async toggleCallForHelpEnablingStatus(
+    @Param('callForHelpId') postId: string,
+    @Headers('Authorisation') accessToken: string,
+  ) {
+    try {
+      return await this.postsService.toggleCallForHelpEnablingStatus(accessToken, { postId });
+    } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new HttpException({ error: error.message }, HttpStatus.NOT_FOUND);
+      if (error instanceof NotAuthorizedException)
+        throw new HttpException({ error: error.message }, HttpStatus.FORBIDDEN);
+      if (error instanceof InvalidTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+
+      throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Delete('calls-for-help/:callForHelpId')
+  @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+  @ApiOkResponse({ description: 'post deleted successfully' })
+  @ApiForbiddenResponse({ description: 'not the publisher of the post' })
+  @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+  @ApiInternalServerErrorResponse({ description: 'server error' })
+  async deleteCallForHelp(
+    @Param('callForHelpId') postId: string,
+    @Headers('Authorisation') accessToken: string,
+  ) {
+    try {
+      return await this.postsService.deleteCallForHelp(accessToken, { postId });
+    } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new HttpException({ error: error.message }, HttpStatus.NOT_FOUND);
+      if (error instanceof NotAuthorizedException)
+        throw new HttpException({ error: error.message }, HttpStatus.FORBIDDEN);
+      if (error instanceof InvalidTokenException)
+        throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
 
       throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
