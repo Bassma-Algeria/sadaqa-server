@@ -1,3 +1,3 @@
 export interface DecodeAccessTokenUseCaseResponse {
-  userId: string;
+    userId: string;
 }

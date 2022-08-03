@@ -6,30 +6,30 @@ import { aRegularUserRegistrationRequest } from './base/aRegularUserRegistration
 import { aUsersManagerFacade } from './base/aUsersManagerFacade';
 
 describe('GetRegularUserByIdUseCase', () => {
-  let usersManager: UsersManagerFacade;
+    let usersManager: UsersManagerFacade;
 
-  beforeEach(() => {
-    usersManager = aUsersManagerFacade();
-  });
-
-  it('should get a user by his id after registration', async () => {
-    const registrationInfo = aRegularUserRegistrationRequest();
-
-    const { regularUserId } = await usersManager.registerRegularUser(registrationInfo);
-    const { firstName, lastName, wilayaNumber } = await usersManager.getRegularUserById({
-      regularUserId,
+    beforeEach(() => {
+        usersManager = aUsersManagerFacade();
     });
 
-    expect(firstName).to.equal(registrationInfo.firstName.toLowerCase());
-    expect(lastName).to.equal(registrationInfo.lastName.toLowerCase());
-    expect(wilayaNumber).to.equal(registrationInfo.wilayaNumber);
-  });
+    it('should get a user by his id after registration', async () => {
+        const registrationInfo = aRegularUserRegistrationRequest();
 
-  it('should throw a not found exception when no user found with the provided id', async () => {
-    const ID_NOT_EXIST = 'some random id';
+        const { regularUserId } = await usersManager.registerRegularUser(registrationInfo);
+        const { firstName, lastName, wilayaNumber } = await usersManager.getRegularUserById({
+            regularUserId,
+        });
 
-    await expect(
-      usersManager.getRegularUserById({ regularUserId: ID_NOT_EXIST }),
-    ).to.eventually.be.rejectedWith(UserNotFoundException);
-  });
+        expect(firstName).to.equal(registrationInfo.firstName.toLowerCase());
+        expect(lastName).to.equal(registrationInfo.lastName.toLowerCase());
+        expect(wilayaNumber).to.equal(registrationInfo.wilayaNumber);
+    });
+
+    it('should throw a not found exception when no user found with the provided id', async () => {
+        const ID_NOT_EXIST = 'some random id';
+
+        await expect(
+            usersManager.getRegularUserById({ regularUserId: ID_NOT_EXIST }),
+        ).to.eventually.be.rejectedWith(UserNotFoundException);
+    });
 });

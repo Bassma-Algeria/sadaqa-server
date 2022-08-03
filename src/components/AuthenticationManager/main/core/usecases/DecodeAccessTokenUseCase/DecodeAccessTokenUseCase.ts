@@ -6,19 +6,19 @@ import { AccessToken } from '../../domain/AccessToken';
 import { TokenizationService } from '../../domain/services/TokenizationService';
 
 class DecodeAccessTokenUseCase
-  implements UseCase<DecodeAccessTokenUseCaseRequest, DecodeAccessTokenUseCaseResponse>
+    implements UseCase<DecodeAccessTokenUseCaseRequest, DecodeAccessTokenUseCaseResponse>
 {
-  constructor(private readonly tokenizationService: TokenizationService) {}
+    constructor(private readonly tokenizationService: TokenizationService) {}
 
-  async handle({
-    accessToken: tokenFromRequest,
-  }: DecodeAccessTokenUseCaseRequest): Promise<DecodeAccessTokenUseCaseResponse> {
-    const accessToken = AccessToken.from(tokenFromRequest);
+    async handle({
+        accessToken: tokenFromRequest,
+    }: DecodeAccessTokenUseCaseRequest): Promise<DecodeAccessTokenUseCaseResponse> {
+        const accessToken = AccessToken.from(tokenFromRequest);
 
-    const userId = await this.tokenizationService.decodeToken(accessToken.getToken());
+        const userId = await this.tokenizationService.decodeToken(accessToken.getToken());
 
-    return { userId: userId.value() };
-  }
+        return { userId: userId.value() };
+    }
 }
 
 export { DecodeAccessTokenUseCase };

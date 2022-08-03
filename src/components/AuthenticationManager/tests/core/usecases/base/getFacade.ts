@@ -2,7 +2,7 @@ import { FakeTokenizationService } from '../../../../main/infra/fake/FakeTokeniz
 import { AuthenticationManagerFacade } from '../../../../main/AuthenticationManagerFacade';
 
 const createAuthenticationManagerFacade = () => {
-  return new AuthenticationManagerFacade(new FakeTokenizationService());
+    return new AuthenticationManagerFacade(new FakeTokenizationService());
 };
 
 export { createAuthenticationManagerFacade };

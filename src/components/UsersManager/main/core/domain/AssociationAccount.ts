@@ -7,24 +7,24 @@ import { AssociationName } from './AssociationName';
 import { AssociationAccountBuilder } from './AssociationAccountBuilder';
 
 class AssociationAccount {
-  constructor(
-    readonly associationId: UserId,
-    readonly associationName: AssociationName,
-    readonly phone: PhoneNumber,
-    readonly wilayaNumber: WilayaNumber,
-    readonly email: Email,
-    readonly password: Password,
-    readonly active: boolean,
-    readonly createdAt: Date,
-  ) {}
+    constructor(
+        readonly associationId: UserId,
+        readonly associationName: AssociationName,
+        readonly phone: PhoneNumber,
+        readonly wilayaNumber: WilayaNumber,
+        readonly email: Email,
+        readonly password: Password,
+        readonly active: boolean,
+        readonly createdAt: Date,
+    ) {}
 
-  public activate(): AssociationAccount {
-    return AssociationAccount.aBuilder(this).withActiveStatus(true).build();
-  }
+    public activate(): AssociationAccount {
+        return AssociationAccount.aBuilder(this).withActiveStatus(true).build();
+    }
 
-  static aBuilder(from?: AssociationAccount) {
-    return new AssociationAccountBuilder(from);
-  }
+    static aBuilder(from?: AssociationAccount) {
+        return new AssociationAccountBuilder(from);
+    }
 }
 
 export { AssociationAccount };

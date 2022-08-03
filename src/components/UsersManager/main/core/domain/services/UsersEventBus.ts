@@ -4,12 +4,12 @@ import { AssociationAccount } from '../AssociationAccount';
 import { RegularUserAccount } from '../RegularUserAccount';
 
 export interface UsersEventBus {
-  publishUserLoginEvent(userId: UserId): void;
+    publishUserLoginEvent(userId: UserId): void;
 
-  publishRegularUserRegisteredEvent(regularUser: RegularUserAccount): void;
+    publishRegularUserRegisteredEvent(regularUser: RegularUserAccount): void;
 
-  publishAssociationRegisteredEvent(payload: {
-    associationAccount: AssociationAccount;
-    associationDocs: AssociationDocs;
-  }): void;
+    publishAssociationRegisteredEvent(payload: {
+        associationAccount: AssociationAccount;
+        associationDocs: AssociationDocs;
+    }): void;
 }

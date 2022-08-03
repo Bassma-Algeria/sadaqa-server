@@ -1,3 +1,3 @@
 export interface UploadPictureUseCaseResponse {
-  url: string;
+    url: string;
 }

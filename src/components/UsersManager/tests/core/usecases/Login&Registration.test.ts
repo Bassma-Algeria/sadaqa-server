@@ -14,118 +14,118 @@ import { WrongCredentialsException } from '../../../main/core/domain/exceptions/
 import { EmailAlreadyUsedException } from '../../../main/core/domain/exceptions/EmailAlreadyUsedException';
 
 describe('Login & Registration', () => {
-  const usersEventBusMock = mock<UsersEventBus>();
+    const usersEventBusMock = mock<UsersEventBus>();
 
-  let usersManager: UsersManagerFacade;
+    let usersManager: UsersManagerFacade;
 
-  beforeEach(() => {
-    usersManager = aUsersManagerFacade({ usersEventBus: instance(usersEventBusMock) });
-  });
-
-  it('should be able to create a regular user account, and login with the same credentials', async () => {
-    const user = aRegularUserRegistrationRequest();
-
-    const { regularUserId: idFromSignup } = await usersManager.registerRegularUser(user);
-    const { userId: idFromLogin } = await usersManager.login({
-      email: user.email,
-      password: user.password,
+    beforeEach(() => {
+        usersManager = aUsersManagerFacade({ usersEventBus: instance(usersEventBusMock) });
     });
 
-    expect(idFromLogin).to.equal(idFromSignup);
-  });
+    it('should be able to create a regular user account, and login with the same credentials', async () => {
+        const user = aRegularUserRegistrationRequest();
 
-  it('should be able to create an association account, and login with the same credentials', async () => {
-    const association = anAssociationRegistrationRequest();
+        const { regularUserId: idFromSignup } = await usersManager.registerRegularUser(user);
+        const { userId: idFromLogin } = await usersManager.login({
+            email: user.email,
+            password: user.password,
+        });
 
-    const { associationId: idFromRegistration } = await usersManager.registerAssociation(
-      association,
-    );
-    const { userId: idFromLogin } = await usersManager.login({
-      email: association.email,
-      password: association.password,
+        expect(idFromLogin).to.equal(idFromSignup);
     });
 
-    expect(idFromRegistration).to.equal(idFromLogin);
-  });
+    it('should be able to create an association account, and login with the same credentials', async () => {
+        const association = anAssociationRegistrationRequest();
 
-  it('should not have an association account with the same email as a user account', async () => {
-    const association = anAssociationRegistrationRequest();
-    await usersManager.registerAssociation(association);
+        const { associationId: idFromRegistration } = await usersManager.registerAssociation(
+            association,
+        );
+        const { userId: idFromLogin } = await usersManager.login({
+            email: association.email,
+            password: association.password,
+        });
 
-    const regularUser = aRegularUserRegistrationRequest({ email: association.email });
+        expect(idFromRegistration).to.equal(idFromLogin);
+    });
 
-    await expect(usersManager.registerRegularUser(regularUser))
-      .to.eventually.be.rejectedWith(EmailAlreadyUsedException)
-      .and.be.an.instanceOf(MultiLanguagesException);
-  });
+    it('should not have an association account with the same email as a user account', async () => {
+        const association = anAssociationRegistrationRequest();
+        await usersManager.registerAssociation(association);
 
-  it('should not have a user account with the same email as an association account', async () => {
-    const regularUser = aRegularUserRegistrationRequest();
-    await usersManager.registerRegularUser(regularUser);
+        const regularUser = aRegularUserRegistrationRequest({ email: association.email });
 
-    const association = anAssociationRegistrationRequest({ email: regularUser.email });
+        await expect(usersManager.registerRegularUser(regularUser))
+            .to.eventually.be.rejectedWith(EmailAlreadyUsedException)
+            .and.be.an.instanceOf(MultiLanguagesException);
+    });
 
-    await expect(usersManager.registerAssociation(association))
-      .to.eventually.be.rejectedWith(EmailAlreadyUsedException)
-      .and.be.an.instanceOf(MultiLanguagesException);
-  });
+    it('should not have a user account with the same email as an association account', async () => {
+        const regularUser = aRegularUserRegistrationRequest();
+        await usersManager.registerRegularUser(regularUser);
 
-  it('should not be able to login with wrong credentials', async () => {
-    const user = await registerRandomUser();
-    const anotherUser = await registerRandomUser();
+        const association = anAssociationRegistrationRequest({ email: regularUser.email });
 
-    await expect(usersManager.login({ email: user.email, password: anotherUser.password }))
-      .to.eventually.be.rejectedWith(WrongCredentialsException)
-      .and.to.be.an.instanceOf(MultiLanguagesException);
-  });
+        await expect(usersManager.registerAssociation(association))
+            .to.eventually.be.rejectedWith(EmailAlreadyUsedException)
+            .and.be.an.instanceOf(MultiLanguagesException);
+    });
 
-  it('should be able to login with the email uppercased and have some white spaces in left and right', async () => {
-    const { userId, email, password } = await registerRandomUser();
+    it('should not be able to login with wrong credentials', async () => {
+        const user = await registerRandomUser();
+        const anotherUser = await registerRandomUser();
 
-    await expect(
-      usersManager.login({ email: `  ${email.toUpperCase()}`, password }),
-    ).to.eventually.deep.equal({ userId });
-  });
+        await expect(usersManager.login({ email: user.email, password: anotherUser.password }))
+            .to.eventually.be.rejectedWith(WrongCredentialsException)
+            .and.to.be.an.instanceOf(MultiLanguagesException);
+    });
 
-  it('should be able to login with the password have some white spaces in left and right', async () => {
-    const { userId, email, password } = await registerRandomUser();
+    it('should be able to login with the email uppercased and have some white spaces in left and right', async () => {
+        const { userId, email, password } = await registerRandomUser();
 
-    await expect(
-      usersManager.login({ email, password: ` ${password}  ` }),
-    ).to.eventually.deep.equal({ userId });
-  });
+        await expect(
+            usersManager.login({ email: `  ${email.toUpperCase()}`, password }),
+        ).to.eventually.deep.equal({ userId });
+    });
 
-  it('should publish a user login event when login successfully', async () => {
-    const { email, password } = await registerRandomUser();
-    await usersManager.login({ email, password });
+    it('should be able to login with the password have some white spaces in left and right', async () => {
+        const { userId, email, password } = await registerRandomUser();
 
-    verify(usersEventBusMock.publishUserLoginEvent(anything())).called();
-  });
+        await expect(
+            usersManager.login({ email, password: ` ${password}  ` }),
+        ).to.eventually.deep.equal({ userId });
+    });
 
-  const registerRandomUser = async () => {
-    const regularUser = await registerRandomRegularUser();
-    const association = await registerRandomAssociation();
+    it('should publish a user login event when login successfully', async () => {
+        const { email, password } = await registerRandomUser();
+        await usersManager.login({ email, password });
 
-    const randomNumber = Math.random();
+        verify(usersEventBusMock.publishUserLoginEvent(anything())).called();
+    });
 
-    const userId = randomNumber > 0.5 ? regularUser.regularUserId : association.associationId;
-    const email = randomNumber > 0.5 ? regularUser.email : association.email;
-    const password = randomNumber > 0.5 ? regularUser.password : association.password;
+    const registerRandomUser = async () => {
+        const regularUser = await registerRandomRegularUser();
+        const association = await registerRandomAssociation();
 
-    return { userId, email, password };
-  };
+        const randomNumber = Math.random();
 
-  const registerRandomAssociation = async () => {
-    const association = anAssociationRegistrationRequest();
-    const { associationId } = await usersManager.registerAssociation(association);
+        const userId = randomNumber > 0.5 ? regularUser.regularUserId : association.associationId;
+        const email = randomNumber > 0.5 ? regularUser.email : association.email;
+        const password = randomNumber > 0.5 ? regularUser.password : association.password;
 
-    return { associationId, email: association.email, password: association.password };
-  };
+        return { userId, email, password };
+    };
 
-  const registerRandomRegularUser = async () => {
-    const user = aRegularUserRegistrationRequest();
-    const { regularUserId } = await usersManager.registerRegularUser(user);
+    const registerRandomAssociation = async () => {
+        const association = anAssociationRegistrationRequest();
+        const { associationId } = await usersManager.registerAssociation(association);
 
-    return { regularUserId, email: user.email, password: user.password };
-  };
+        return { associationId, email: association.email, password: association.password };
+    };
+
+    const registerRandomRegularUser = async () => {
+        const user = aRegularUserRegistrationRequest();
+        const { regularUserId } = await usersManager.registerRegularUser(user);
+
+        return { regularUserId, email: user.email, password: user.password };
+    };
 });

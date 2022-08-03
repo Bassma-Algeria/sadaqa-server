@@ -10,32 +10,32 @@ import { UserNotFoundException } from '../../domain/exceptions/UserNotFoundExcep
 import { RegularUserAccount } from '../../domain/RegularUserAccount';
 
 class GetRegularUserByIdUseCase
-  implements UseCase<GetRegularUserByIdUseCaseRequest, GetRegularUserByIdUseCaseResponse>
+    implements UseCase<GetRegularUserByIdUseCaseRequest, GetRegularUserByIdUseCaseResponse>
 {
-  constructor(private readonly userAccountRepository: RegularUserAccountRepository) {}
+    constructor(private readonly userAccountRepository: RegularUserAccountRepository) {}
 
-  async handle(
-    request: GetRegularUserByIdUseCaseRequest,
-  ): Promise<GetRegularUserByIdUseCaseResponse> {
-    const userId = new UserId(request.regularUserId);
+    async handle(
+        request: GetRegularUserByIdUseCaseRequest,
+    ): Promise<GetRegularUserByIdUseCaseResponse> {
+        const userId = new UserId(request.regularUserId);
 
-    const userAccount = await this.userAccountRepository.findById(userId);
-    if (!userAccount) throw new UserNotFoundException();
+        const userAccount = await this.userAccountRepository.findById(userId);
+        if (!userAccount) throw new UserNotFoundException();
 
-    return this.getResponse(userAccount);
-  }
+        return this.getResponse(userAccount);
+    }
 
-  private getResponse(userAccount: RegularUserAccount): GetRegularUserByIdUseCaseResponse {
-    return {
-      userId: userAccount.userId.value(),
-      firstName: userAccount.firstName.value(),
-      lastName: userAccount.lastName.value(),
-      wilayaNumber: userAccount.wilayaNumber.value(),
-      phoneNumber: userAccount.phone.value(),
-      email: userAccount.email.value(),
-      createdAt: userAccount.createdAt,
-    };
-  }
+    private getResponse(userAccount: RegularUserAccount): GetRegularUserByIdUseCaseResponse {
+        return {
+            userId: userAccount.userId.value(),
+            firstName: userAccount.firstName.value(),
+            lastName: userAccount.lastName.value(),
+            wilayaNumber: userAccount.wilayaNumber.value(),
+            phoneNumber: userAccount.phone.value(),
+            email: userAccount.email.value(),
+            createdAt: userAccount.createdAt,
+        };
+    }
 }
 
 export { GetRegularUserByIdUseCase };

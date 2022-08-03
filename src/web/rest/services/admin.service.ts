@@ -6,22 +6,22 @@ import { UsersManagerConfiguration } from '../../../components/UsersManager/main
 
 @Injectable()
 class AdminService {
-  private readonly usersManager = UsersManagerConfiguration.aUsersManagerFacade();
+    private readonly usersManager = UsersManagerConfiguration.aUsersManagerFacade();
 
-  async activateAssociation(
-    adminPassword: string,
-    request: ActivateAssociationAccountUseCaseRequest,
-  ) {
-    if (adminPassword !== process.env.ADMIN_PASSWORD) throw new InvalidAdminPasswordException();
+    async activateAssociation(
+        adminPassword: string,
+        request: ActivateAssociationAccountUseCaseRequest,
+    ) {
+        if (adminPassword !== process.env.ADMIN_PASSWORD) throw new InvalidAdminPasswordException();
 
-    return this.usersManager.activateAssociationAccount(request);
-  }
+        return this.usersManager.activateAssociationAccount(request);
+    }
 }
 
 class InvalidAdminPasswordException extends Error {
-  constructor() {
-    super('invalid admin password');
-  }
+    constructor() {
+        super('invalid admin password');
+    }
 }
 
 export { AdminService, InvalidAdminPasswordException };

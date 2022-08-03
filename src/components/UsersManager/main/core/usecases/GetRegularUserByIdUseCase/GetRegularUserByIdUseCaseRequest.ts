@@ -1,3 +1,3 @@
 export interface GetRegularUserByIdUseCaseRequest {
-  readonly regularUserId: string;
+    readonly regularUserId: string;
 }

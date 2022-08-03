@@ -1,3 +1,3 @@
 export interface GenerateAccessTokenUseCaseRequest {
-  userId: string;
+    userId: string;
 }

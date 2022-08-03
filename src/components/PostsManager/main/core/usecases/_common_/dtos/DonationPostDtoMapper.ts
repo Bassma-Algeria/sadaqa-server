@@ -1,21 +1,26 @@
 import { DonationPostDto } from './DonationPostDto';
 
 import { DonationPost } from '../../../domain/DonationPost';
+import { PostDtoMapper } from './base/PostDtoMapper';
 
-class DonationPostDtoMapper {
-  static toDto(donationPost: DonationPost): DonationPostDto {
-    return {
-      title: donationPost.title.value(),
-      postId: donationPost.postId.value(),
-      category: donationPost.category.value(),
-      description: donationPost.description.value(),
-      publisherId: donationPost.publisherId.value(),
-      wilayaNumber: donationPost.wilayaNumber.value(),
-      pictures: donationPost.pictures.map(pic => pic.url()),
-      status: donationPost.status,
-      createdAt: donationPost.createdAt,
-    };
-  }
+class DonationPostDtoMapper extends PostDtoMapper<DonationPost> {
+    private static readonly instance = new DonationPostDtoMapper();
+
+    private constructor() {
+        super();
+    }
+
+    static getInstance() {
+        return this.instance;
+    }
+
+    toDto(post: DonationPost): DonationPostDto {
+        return {
+            ...super.toDto(post),
+
+            category: post.category.value(),
+        };
+    }
 }
 
 export { DonationPostDtoMapper };

@@ -1,17 +1,17 @@
 export type SupportedLanguages = 'en' | 'ar';
 
 type ErrorMessage = {
-  [key in SupportedLanguages]: string;
+    [key in SupportedLanguages]: string;
 };
 
 class MultiLanguagesException extends Error {
-  readonly errorMessage: ErrorMessage;
+    readonly errorMessage: ErrorMessage;
 
-  constructor(error: ErrorMessage) {
-    super(error.en);
+    constructor(error: ErrorMessage) {
+        super(error.en);
 
-    this.errorMessage = error;
-  }
+        this.errorMessage = error;
+    }
 }
 
 export { MultiLanguagesException };

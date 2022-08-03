@@ -1,23 +1,29 @@
 import { CallForHelpPostDto } from './CallForHelpPostDto';
 
+import { PostDtoMapper } from './base/PostDtoMapper';
+
 import { CallForHelpPost } from '../../../domain/CallForHelpPost';
 
-class CallForHelpPostDtoMapper {
-  static toDto(post: CallForHelpPost): CallForHelpPostDto {
-    return {
-      postId: post.postId.value(),
-      title: post.title.value(),
-      description: post.description.value(),
-      publisherId: post.publisherId.value(),
-      wilayaNumber: post.wilayaNumber.value(),
-      pictures: post.pictures.map(pic => pic.url()),
-      status: post.status,
-      ccp: post.ccp?.number(),
-      ccpKey: post.ccp?.key(),
-      baridiMobNumber: post.baridiMobNumber?.value(),
-      createdAt: post.createdAt,
-    };
-  }
+class CallForHelpPostDtoMapper extends PostDtoMapper<CallForHelpPost> {
+    private static readonly instance = new CallForHelpPostDtoMapper();
+
+    private constructor() {
+        super();
+    }
+
+    static getInstance() {
+        return this.instance;
+    }
+
+    toDto(post: CallForHelpPost): CallForHelpPostDto {
+        return {
+            ...super.toDto(post),
+
+            ccp: post.ccp?.number(),
+            ccpKey: post.ccp?.key(),
+            baridiMobNumber: post.baridiMobNumber?.value(),
+        };
+    }
 }
 
 export { CallForHelpPostDtoMapper };

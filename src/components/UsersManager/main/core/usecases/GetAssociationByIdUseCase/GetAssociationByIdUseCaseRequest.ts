@@ -1,3 +1,3 @@
 export interface GetAssociationByIdUseCaseRequest {
-  readonly associationId: string;
+    readonly associationId: string;
 }

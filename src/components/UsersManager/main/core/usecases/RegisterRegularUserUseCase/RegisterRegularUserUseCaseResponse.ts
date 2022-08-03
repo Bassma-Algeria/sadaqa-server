@@ -1,5 +1,5 @@
 interface RegisterRegularUserUseCaseResponse {
-  readonly regularUserId: string;
+    readonly regularUserId: string;
 }
 
 export { RegisterRegularUserUseCaseResponse };

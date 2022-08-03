@@ -10,35 +10,35 @@ import { BaridiMobNumber } from './BaridiMobNumber';
 
 import { CallForHelpPostBuilder } from './CallForHelpPostBuilder';
 
-class CallForHelpPost {
-  static aBuilder() {
-    return new CallForHelpPostBuilder();
-  }
+import { Post } from './Post';
 
-  static aBuilderFrom(post: CallForHelpPost) {
-    return new CallForHelpPostBuilder(post);
-  }
+class CallForHelpPost extends Post {
+    static aBuilder() {
+        return new CallForHelpPostBuilder();
+    }
 
-  constructor(
-    readonly postId: PostId,
-    readonly title: Title,
-    readonly description: Description,
-    readonly wilayaNumber: WilayaNumber,
-    readonly publisherId: UserId,
-    readonly pictures: Picture[],
-    readonly status: PostStatus,
-    readonly createdAt: Date,
-    readonly ccp?: CCP,
-    readonly baridiMobNumber?: BaridiMobNumber,
-  ) {
-  }
+    static aBuilderFrom(post: CallForHelpPost) {
+        return new CallForHelpPostBuilder(post);
+    }
 
+    constructor(
+        readonly postId: PostId,
+        readonly title: Title,
+        readonly description: Description,
+        readonly wilayaNumber: WilayaNumber,
+        readonly publisherId: UserId,
+        readonly pictures: Picture[],
+        readonly status: PostStatus,
+        readonly createdAt: Date,
+        readonly ccp?: CCP,
+        readonly baridiMobNumber?: BaridiMobNumber,
+    ) {
+        super(postId, title, description, wilayaNumber, publisherId, pictures, status, createdAt);
+    }
 
-  toggleEnableStatus() {
-    return CallForHelpPost.aBuilderFrom(this)
-      .withStatus(this.status === 'ENABLED' ? PostStatus.DISABLED : PostStatus.ENABLED)
-      .build();
-  }
+    protected aBuilderFromThis() {
+        return CallForHelpPost.aBuilderFrom(this);
+    }
 }
 
 export { CallForHelpPost };

@@ -1,19 +1,21 @@
-import { ShortPostTitleException } from './exceptions/ShortPostTitleException';
+import { MultiLanguagesValidationException } from './exceptions/MultiLanguagesValidationException';
+import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
 
 class Title {
-  private readonly title: string;
+    private readonly title: string;
 
-  constructor(title: string) {
-    title = title?.trim().toLowerCase();
+    constructor(title: string) {
+        title = title?.trim().toLowerCase();
 
-    if (title?.length < 3) throw new ShortPostTitleException();
+        if (title?.length < 3)
+            throw new MultiLanguagesValidationException(ExceptionsMessages.SHORT_TITLE);
 
-    this.title = title;
-  }
+        this.title = title;
+    }
 
-  value() {
-    return this.title;
-  }
+    value() {
+        return this.title;
+    }
 }
 
 export { Title };

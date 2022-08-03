@@ -10,33 +10,35 @@ import { BaridiMobNumber } from './BaridiMobNumber';
 
 import { FamilyInNeedPostBuilder } from './FamilyInNeedPostBuilder';
 
-class FamilyInNeedPost {
-  static aBuilder() {
-    return new FamilyInNeedPostBuilder();
-  }
+import { Post } from './Post';
 
-  static aBuilderFrom(post: FamilyInNeedPost) {
-    return new FamilyInNeedPostBuilder(post);
-  }
+class FamilyInNeedPost extends Post {
+    static aBuilder() {
+        return new FamilyInNeedPostBuilder();
+    }
 
-  constructor(
-    readonly postId: PostId,
-    readonly title: Title,
-    readonly description: Description,
-    readonly wilayaNumber: WilayaNumber,
-    readonly publisherId: UserId,
-    readonly pictures: Picture[],
-    readonly createdAt: Date,
-    readonly status: PostStatus,
-    readonly ccp?: CCP,
-    readonly baridiMobNumber?: BaridiMobNumber,
-  ) {}
+    static aBuilderFrom(post: FamilyInNeedPost) {
+        return new FamilyInNeedPostBuilder(post);
+    }
 
-  toggleEnableStatus() {
-    return FamilyInNeedPost.aBuilderFrom(this)
-      .withStatus(this.status === 'ENABLED' ? PostStatus.DISABLED : PostStatus.ENABLED)
-      .build();
-  }
+    constructor(
+        readonly postId: PostId,
+        readonly title: Title,
+        readonly description: Description,
+        readonly wilayaNumber: WilayaNumber,
+        readonly publisherId: UserId,
+        readonly pictures: Picture[],
+        readonly createdAt: Date,
+        readonly status: PostStatus,
+        readonly ccp?: CCP,
+        readonly baridiMobNumber?: BaridiMobNumber,
+    ) {
+        super(postId, title, description, wilayaNumber, publisherId, pictures, status, createdAt);
+    }
+
+    protected aBuilderFromThis() {
+        return FamilyInNeedPost.aBuilderFrom(this);
+    }
 }
 
 export { FamilyInNeedPost };

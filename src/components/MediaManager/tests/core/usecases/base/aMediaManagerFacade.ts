@@ -7,15 +7,15 @@ import { FakeCloudService } from '../../../../main/infra/fake/FakeCloudService';
 import { FakeImageCompressor } from '../../../../main/infra/fake/FakeImageCompressor';
 
 interface Dependencies {
-  cloudService?: CloudService;
-  imageCompressor?: ImageCompressor;
+    cloudService?: CloudService;
+    imageCompressor?: ImageCompressor;
 }
 
 const aMediaManagerFacade = (dependencies?: Dependencies) => {
-  return new MediaManagerFacade(
-    dependencies?.cloudService || new FakeCloudService(),
-    dependencies?.imageCompressor || new FakeImageCompressor(),
-  );
+    return new MediaManagerFacade(
+        dependencies?.cloudService || new FakeCloudService(),
+        dependencies?.imageCompressor || new FakeImageCompressor(),
+    );
 };
 
 export { aMediaManagerFacade };

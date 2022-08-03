@@ -7,19 +7,19 @@ import { AccessToken } from '../../domain/AccessToken';
 import { TokenizationService } from '../../domain/services/TokenizationService';
 
 class GenerateAccessTokenUseCase
-  implements UseCase<GenerateAccessTokenUseCaseRequest, GenerateAccessTokenUseCaseResponse>
+    implements UseCase<GenerateAccessTokenUseCaseRequest, GenerateAccessTokenUseCaseResponse>
 {
-  constructor(private readonly tokenizationService: TokenizationService) {}
+    constructor(private readonly tokenizationService: TokenizationService) {}
 
-  async handle({
-    userId,
-  }: GenerateAccessTokenUseCaseRequest): Promise<GenerateAccessTokenUseCaseResponse> {
-    const token = await this.tokenizationService.generateTokenFrom(new UserId(userId));
+    async handle({
+        userId,
+    }: GenerateAccessTokenUseCaseRequest): Promise<GenerateAccessTokenUseCaseResponse> {
+        const token = await this.tokenizationService.generateTokenFrom(new UserId(userId));
 
-    const accessToken = new AccessToken(token);
+        const accessToken = new AccessToken(token);
 
-    return { accessToken: accessToken.value() };
-  }
+        return { accessToken: accessToken.value() };
+    }
 }
 
 export { GenerateAccessTokenUseCase };

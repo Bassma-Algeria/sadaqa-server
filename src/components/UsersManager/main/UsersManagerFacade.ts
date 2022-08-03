@@ -23,57 +23,59 @@ import { ActivateAssociationAccountUseCaseRequest } from './core/usecases/Activa
 import { ActivateAssociationAccountUseCase } from './core/usecases/ActivateAssociationAccountUseCase/ActivateAssociationAccountUseCase';
 
 class UsersManagerFacade {
-  constructor(
-    private readonly regularUserAccountRepository: RegularUserAccountRepository,
-    private readonly userIdGenerator: UserIdGenerator,
-    private readonly passwordEncryptor: PasswordEncryptor,
-    private readonly wilayasService: WilayasService,
-    private readonly associationAccountRepository: AssociationAccountRepository,
-    private readonly usersEventBus: UsersEventBus,
-  ) {}
+    constructor(
+        private readonly regularUserAccountRepository: RegularUserAccountRepository,
+        private readonly userIdGenerator: UserIdGenerator,
+        private readonly passwordEncryptor: PasswordEncryptor,
+        private readonly wilayasService: WilayasService,
+        private readonly associationAccountRepository: AssociationAccountRepository,
+        private readonly usersEventBus: UsersEventBus,
+    ) {}
 
-  login(request: LoginUseCaseRequest) {
-    return new LoginUseCase(
-      this.regularUserAccountRepository,
-      this.passwordEncryptor,
-      this.associationAccountRepository,
-      this.usersEventBus,
-    ).handle(request);
-  }
+    login(request: LoginUseCaseRequest) {
+        return new LoginUseCase(
+            this.regularUserAccountRepository,
+            this.passwordEncryptor,
+            this.associationAccountRepository,
+            this.usersEventBus,
+        ).handle(request);
+    }
 
-  registerRegularUser(request: RegisterRegularUserUseCaseRequest) {
-    return new RegisterRegularUserUseCase(
-      this.regularUserAccountRepository,
-      this.userIdGenerator,
-      this.passwordEncryptor,
-      this.wilayasService,
-      this.associationAccountRepository,
-      this.usersEventBus,
-    ).handle(request);
-  }
+    registerRegularUser(request: RegisterRegularUserUseCaseRequest) {
+        return new RegisterRegularUserUseCase(
+            this.regularUserAccountRepository,
+            this.userIdGenerator,
+            this.passwordEncryptor,
+            this.wilayasService,
+            this.associationAccountRepository,
+            this.usersEventBus,
+        ).handle(request);
+    }
 
-  getRegularUserById(request: GetRegularUserByIdUseCaseRequest) {
-    return new GetRegularUserByIdUseCase(this.regularUserAccountRepository).handle(request);
-  }
+    getRegularUserById(request: GetRegularUserByIdUseCaseRequest) {
+        return new GetRegularUserByIdUseCase(this.regularUserAccountRepository).handle(request);
+    }
 
-  registerAssociation(request: RegisterAssociationUseCaseRequest) {
-    return new RegisterAssociationUseCase(
-      this.wilayasService,
-      this.passwordEncryptor,
-      this.userIdGenerator,
-      this.associationAccountRepository,
-      this.regularUserAccountRepository,
-      this.usersEventBus,
-    ).handle(request);
-  }
+    registerAssociation(request: RegisterAssociationUseCaseRequest) {
+        return new RegisterAssociationUseCase(
+            this.wilayasService,
+            this.passwordEncryptor,
+            this.userIdGenerator,
+            this.associationAccountRepository,
+            this.regularUserAccountRepository,
+            this.usersEventBus,
+        ).handle(request);
+    }
 
-  getAssociationById(request: GetAssociationByIdUseCaseRequest) {
-    return new GetAssociationByIdUseCase(this.associationAccountRepository).handle(request);
-  }
+    getAssociationById(request: GetAssociationByIdUseCaseRequest) {
+        return new GetAssociationByIdUseCase(this.associationAccountRepository).handle(request);
+    }
 
-  activateAssociationAccount(request: ActivateAssociationAccountUseCaseRequest) {
-    return new ActivateAssociationAccountUseCase(this.associationAccountRepository).handle(request);
-  }
+    activateAssociationAccount(request: ActivateAssociationAccountUseCaseRequest) {
+        return new ActivateAssociationAccountUseCase(this.associationAccountRepository).handle(
+            request,
+        );
+    }
 }
 
 export { UsersManagerFacade };

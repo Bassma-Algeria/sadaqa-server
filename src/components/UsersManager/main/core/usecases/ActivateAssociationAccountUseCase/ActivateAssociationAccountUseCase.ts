@@ -7,21 +7,21 @@ import { AssociationAccountRepository } from '../../domain/services/AssociationA
 import { UserNotFoundException } from '../../domain/exceptions/UserNotFoundException';
 
 class ActivateAssociationAccountUseCase
-  implements UseCase<ActivateAssociationAccountUseCaseRequest, void>
+    implements UseCase<ActivateAssociationAccountUseCaseRequest, void>
 {
-  constructor(private readonly associationAccountRepository: AssociationAccountRepository) {}
+    constructor(private readonly associationAccountRepository: AssociationAccountRepository) {}
 
-  async handle(request: ActivateAssociationAccountUseCaseRequest): Promise<void> {
-    const associationAccount = await this.associationAccountRepository.findById(
-      new UserId(request.associationId),
-    );
+    async handle(request: ActivateAssociationAccountUseCaseRequest): Promise<void> {
+        const associationAccount = await this.associationAccountRepository.findById(
+            new UserId(request.associationId),
+        );
 
-    if (!associationAccount) throw new UserNotFoundException();
+        if (!associationAccount) throw new UserNotFoundException();
 
-    const activatedAccount = associationAccount.activate();
+        const activatedAccount = associationAccount.activate();
 
-    await this.associationAccountRepository.update(activatedAccount);
-  }
+        await this.associationAccountRepository.update(activatedAccount);
+    }
 }
 
 export { ActivateAssociationAccountUseCase };

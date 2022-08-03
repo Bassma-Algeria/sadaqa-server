@@ -1,7 +1,7 @@
 import { UserId } from '../UserId';
 
 interface UserIdGenerator {
-  nextId(): UserId;
+    nextId(): UserId;
 }
 
 export { UserIdGenerator };

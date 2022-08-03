@@ -1,3 +1,3 @@
 export interface RegisterAssociationUseCaseResponse {
-  associationId: string;
+    associationId: string;
 }

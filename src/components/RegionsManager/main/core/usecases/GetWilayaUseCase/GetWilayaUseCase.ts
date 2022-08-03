@@ -7,20 +7,20 @@ import { WilayasRepository } from '../../domain/services/WilayasRepository';
 import { WilayaNotExistException } from '../../domain/exceptions/WilayaNotExistException';
 
 class GetWilayaUseCase implements UseCase<GetWilayaUseCaseRequest, GetWilayaUseCaseResponse> {
-  constructor(private readonly wilayasRepository: WilayasRepository) {}
+    constructor(private readonly wilayasRepository: WilayasRepository) {}
 
-  async handle(request: GetWilayaUseCaseRequest): Promise<GetWilayaUseCaseResponse> {
-    const wilayaNumber = new WilayaNumber(request.wilayaNumber);
+    async handle(request: GetWilayaUseCaseRequest): Promise<GetWilayaUseCaseResponse> {
+        const wilayaNumber = new WilayaNumber(request.wilayaNumber);
 
-    const wilaya = await this.getWilayaWithThis(wilayaNumber);
-    if (!wilaya) throw new WilayaNotExistException();
+        const wilaya = await this.getWilayaWithThis(wilayaNumber);
+        if (!wilaya) throw new WilayaNotExistException();
 
-    return { name: wilaya.wilayaName.value() };
-  }
+        return { name: wilaya.wilayaName.value() };
+    }
 
-  private getWilayaWithThis(wilayaNumber: WilayaNumber) {
-    return this.wilayasRepository.getByNumber(wilayaNumber);
-  }
+    private getWilayaWithThis(wilayaNumber: WilayaNumber) {
+        return this.wilayasRepository.getByNumber(wilayaNumber);
+    }
 }
 
 export { GetWilayaUseCase };

@@ -3,25 +3,30 @@ name: CI
 on:
   push:
     branches:
-      - "develop"
+      - 'develop'
 
 jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
-      -
-        name: Setup Node
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16.14.0'
+          node-version: '16.*'
           cache: npm
-      -
-        name: Install Dependencies
+      - name: Install Dependencies
         run: npm install
-      -
-        name: Run Tests
+      - name: Run Tests
         run: npm test

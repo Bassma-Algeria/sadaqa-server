@@ -9,16 +9,16 @@ import { AssociationName } from '../../../main/core/domain/AssociationName';
 import { AssociationAccount } from '../../../main/core/domain/AssociationAccount';
 
 const anAssociationAccount = () => {
-  return new AssociationAccount(
-    new UserId(faker.datatype.uuid()),
-    new AssociationName(faker.lorem.word(7)),
-    new PhoneNumber(faker.phone.number('06 ## ## ## ##')),
-    new WilayaNumber(faker.datatype.number({ min: 1 })),
-    new Email(faker.internet.email()),
-    new Password(faker.internet.password(10)),
-    faker.datatype.boolean(),
-    faker.date.soon(),
-  );
+    return new AssociationAccount(
+        new UserId(faker.datatype.uuid()),
+        new AssociationName(faker.lorem.word(7)),
+        new PhoneNumber(faker.phone.number('06 ## ## ## ##')),
+        new WilayaNumber(faker.datatype.number({ min: 1 })),
+        new Email(faker.internet.email()),
+        new Password(faker.internet.password(10)),
+        faker.datatype.boolean(),
+        faker.date.soon(),
+    );
 };
 
 export { anAssociationAccount };

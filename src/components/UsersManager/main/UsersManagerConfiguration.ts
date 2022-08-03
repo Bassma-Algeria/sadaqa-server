@@ -12,16 +12,16 @@ import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsMa
 import { EventBus } from '../../_shared_/event-bus/EventBus';
 
 class UsersManagerConfiguration {
-  static aUsersManagerFacade(): UsersManagerFacade {
-    return new UsersManagerFacade(
-      new PostgresUserAccountRepository(),
-      new UuidUserIdGenerator(),
-      new BcryptPasswordEncryptor(),
-      new RegionsManagerWilayasService(RegionsManagerConfiguration.aRegionsManagerFacade()),
-      new PostgresAssociationAccountRespository(),
-      new UsersEventBusImpl(EventBus.getInstance()),
-    );
-  }
+    static aUsersManagerFacade(): UsersManagerFacade {
+        return new UsersManagerFacade(
+            new PostgresUserAccountRepository(),
+            new UuidUserIdGenerator(),
+            new BcryptPasswordEncryptor(),
+            new RegionsManagerWilayasService(RegionsManagerConfiguration.aRegionsManagerFacade()),
+            new PostgresAssociationAccountRespository(),
+            new UsersEventBusImpl(EventBus.getInstance()),
+        );
+    }
 }
 
 export { UsersManagerConfiguration };

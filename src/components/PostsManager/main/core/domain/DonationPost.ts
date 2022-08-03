@@ -8,32 +8,34 @@ import { WilayaNumber } from './WilayaNumber';
 import { DonationCategory } from './DonationCategory';
 import { DonationPostBuilder } from './DonationPostBuilder';
 
-class DonationPost {
-  static aBuilder() {
-    return new DonationPostBuilder();
-  }
+import { Post } from './Post';
 
-  static aBuilderFrom(post: DonationPost) {
-    return new DonationPostBuilder(post);
-  }
+class DonationPost extends Post {
+    static aBuilder() {
+        return new DonationPostBuilder();
+    }
 
-  constructor(
-    readonly postId: PostId,
-    readonly title: Title,
-    readonly description: Description,
-    readonly category: DonationCategory,
-    readonly wilayaNumber: WilayaNumber,
-    readonly pictures: Picture[],
-    readonly publisherId: UserId,
-    readonly status: PostStatus,
-    readonly createdAt: Date,
-  ) {}
+    static aBuilderFrom(post: DonationPost) {
+        return new DonationPostBuilder(post);
+    }
 
-  toggleEnableStatus() {
-    return DonationPost.aBuilderFrom(this)
-      .withStatus(this.status === 'ENABLED' ? PostStatus.DISABLED : PostStatus.ENABLED)
-      .build();
-  }
+    constructor(
+        readonly postId: PostId,
+        readonly title: Title,
+        readonly description: Description,
+        readonly category: DonationCategory,
+        readonly wilayaNumber: WilayaNumber,
+        readonly pictures: Picture[],
+        readonly publisherId: UserId,
+        readonly status: PostStatus,
+        readonly createdAt: Date,
+    ) {
+        super(postId, title, description, wilayaNumber, publisherId, pictures, status, createdAt);
+    }
+
+    protected aBuilderFromThis() {
+        return DonationPost.aBuilderFrom(this);
+    }
 }
 
 export { DonationPost };

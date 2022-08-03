@@ -11,33 +11,33 @@ import { UserId } from '../../main/core/domain/UserId';
 import { faker } from '@faker-js/faker';
 
 describe('UsersEventBusImpl', () => {
-  const eventBusMock = mock<EventBus>();
-  const usersEventBus = new UsersEventBusImpl(instance(eventBusMock));
+    const eventBusMock = mock<EventBus>();
+    const usersEventBus = new UsersEventBusImpl(instance(eventBusMock));
 
-  before(() => {
-    when(eventBusMock.publish(anything())).thenReturn({
-      withPayload: (data: any) => {},
-    });
-  });
-
-  it('should publish a NEW_ASSOCIATION_REGISTERED event', () => {
-    usersEventBus.publishAssociationRegisteredEvent({
-      associationAccount: anAssociationAccount(),
-      associationDocs: new AssociationDocs([Buffer.alloc(10)]),
+    before(() => {
+        when(eventBusMock.publish(anything())).thenReturn({
+            withPayload: (data: any) => {},
+        });
     });
 
-    verify(eventBusMock.publish('ASSOCIATION_REGISTERED')).called();
-  });
+    it('should publish a NEW_ASSOCIATION_REGISTERED event', () => {
+        usersEventBus.publishAssociationRegisteredEvent({
+            associationAccount: anAssociationAccount(),
+            associationDocs: new AssociationDocs([Buffer.alloc(10)]),
+        });
 
-  it('should publish a NEW_REGULAR_USER_REGISTERED event', () => {
-    usersEventBus.publishRegularUserRegisteredEvent(aRegularUserAccount());
+        verify(eventBusMock.publish('ASSOCIATION_REGISTERED')).called();
+    });
 
-    verify(eventBusMock.publish('REGULAR_USER_REGISTERED')).called();
-  });
+    it('should publish a NEW_REGULAR_USER_REGISTERED event', () => {
+        usersEventBus.publishRegularUserRegisteredEvent(aRegularUserAccount());
 
-  it('should publish a NEW_USER_LOGIN event', () => {
-    usersEventBus.publishUserLoginEvent(new UserId(faker.datatype.uuid()));
+        verify(eventBusMock.publish('REGULAR_USER_REGISTERED')).called();
+    });
 
-    verify(eventBusMock.publish('USER_LOGIN')).called();
-  });
+    it('should publish a NEW_USER_LOGIN event', () => {
+        usersEventBus.publishUserLoginEvent(new UserId(faker.datatype.uuid()));
+
+        verify(eventBusMock.publish('USER_LOGIN')).called();
+    });
 });

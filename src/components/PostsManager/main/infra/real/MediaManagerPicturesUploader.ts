@@ -1,22 +1,26 @@
 import { Picture } from '../../core/domain/Picture';
-import { PicturesUploader } from '../../core/domain/services/PicturesUploader';
+import { PicturesManager } from '../../core/domain/services/PicturesManager';
 
 import { MediaManagerFacade } from '../../../../MediaManager/main/MediaManagerFacade';
 
-class MediaManagerPicturesUploader implements PicturesUploader {
-  constructor(private readonly mediaManager: MediaManagerFacade) {}
+class MediaManagerPicturesUploader implements PicturesManager {
+    constructor(private readonly mediaManager: MediaManagerFacade) {}
 
-  async upload(picsToUpload: Buffer[]): Promise<Picture[]> {
-    const pictures: Picture[] = [];
+    async upload(picsToUpload: Buffer[]): Promise<Picture[]> {
+        const pictures: Picture[] = [];
 
-    for (const picture of picsToUpload) {
-      const { url } = await this.mediaManager.uploadPicture({ picture });
+        for (const picture of picsToUpload) {
+            const { url } = await this.mediaManager.uploadPicture({ picture });
 
-      pictures.push(new Picture(url));
+            pictures.push(new Picture(url));
+        }
+
+        return pictures;
     }
 
-    return pictures;
-  }
+    delete(picture: Picture): Promise<void> {
+        return Promise.resolve(undefined);
+    }
 }
 
 export { MediaManagerPicturesUploader };

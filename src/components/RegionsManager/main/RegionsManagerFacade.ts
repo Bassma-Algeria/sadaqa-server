@@ -4,15 +4,15 @@ import { GetWilayaUseCase } from './core/usecases/GetWilayaUseCase/GetWilayaUseC
 import { GetWilayaUseCaseRequest } from './core/usecases/GetWilayaUseCase/GetWilayaUseCaseRequest';
 
 class RegionsManagerFacade {
-  constructor(private readonly wilayasRepository: WilayasRepository) {}
+    constructor(private readonly wilayasRepository: WilayasRepository) {}
 
-  getWilaya(request: GetWilayaUseCaseRequest) {
-    return new GetWilayaUseCase(this.wilayasRepository).handle(request);
-  }
+    getWilaya(request: GetWilayaUseCaseRequest) {
+        return new GetWilayaUseCase(this.wilayasRepository).handle(request);
+    }
 
-  getAllWilayas() {
-    return new GetAllWilayasUseCase(this.wilayasRepository).handle();
-  }
+    getAllWilayas() {
+        return new GetAllWilayasUseCase(this.wilayasRepository).handle();
+    }
 }
 
 export { RegionsManagerFacade };

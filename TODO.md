@@ -1,1 +1,2 @@
-- add e2e test to the admin end points (validate the Authorization)
+-   add e2e test to the admin end points (validate the Authorization)
+-   publish domain event every time something happend

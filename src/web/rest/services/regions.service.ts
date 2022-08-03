@@ -4,15 +4,15 @@ import { GetWilayaUseCaseRequest } from '../../../components/RegionsManager/main
 
 @Injectable()
 class RegionsService {
-  private readonly regionsManager = RegionsManagerConfiguration.aRegionsManagerFacade();
+    private readonly regionsManager = RegionsManagerConfiguration.aRegionsManagerFacade();
 
-  getAllWilayas() {
-    return this.regionsManager.getAllWilayas();
-  }
+    getAllWilayas() {
+        return this.regionsManager.getAllWilayas();
+    }
 
-  getWilaya(request: GetWilayaUseCaseRequest) {
-    return this.regionsManager.getWilaya(request);
-  }
+    getWilaya(request: GetWilayaUseCaseRequest) {
+        return this.regionsManager.getWilaya(request);
+    }
 }
 
 export { RegionsService };

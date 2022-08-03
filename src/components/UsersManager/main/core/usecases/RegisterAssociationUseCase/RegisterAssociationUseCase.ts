@@ -24,112 +24,118 @@ import { InvalidWilayaNumberException } from '../../domain/exceptions/InvalidWil
 import { PhoneNumberAlreadyUsedException } from '../../domain/exceptions/PhoneNumberAlreadyUsedException';
 
 class RegisterAssociationUseCase
-  implements UseCase<RegisterAssociationUseCaseRequest, RegisterAssociationUseCaseResponse>
+    implements UseCase<RegisterAssociationUseCaseRequest, RegisterAssociationUseCaseResponse>
 {
-  constructor(
-    private readonly wilayaService: WilayasService,
-    private readonly passwordEncryptor: PasswordEncryptor,
-    private readonly userIdGenerator: UserIdGenerator,
-    private readonly associationAccountRepository: AssociationAccountRepository,
-    private readonly regularUserAccountRepository: RegularUserAccountRepository,
-    private readonly usersEventBus: UsersEventBus,
-  ) {}
+    constructor(
+        private readonly wilayaService: WilayasService,
+        private readonly passwordEncryptor: PasswordEncryptor,
+        private readonly userIdGenerator: UserIdGenerator,
+        private readonly associationAccountRepository: AssociationAccountRepository,
+        private readonly regularUserAccountRepository: RegularUserAccountRepository,
+        private readonly usersEventBus: UsersEventBus,
+    ) {}
 
-  async handle(
-    request: RegisterAssociationUseCaseRequest,
-  ): Promise<RegisterAssociationUseCaseResponse> {
-    const {
-      associationName,
-      email,
-      phoneNumber,
-      wilayaNumber,
-      confirmPassword,
-      password,
-      associationDocs,
-    } = this.getFrom(request);
+    async handle(
+        request: RegisterAssociationUseCaseRequest,
+    ): Promise<RegisterAssociationUseCaseResponse> {
+        const {
+            associationName,
+            email,
+            phoneNumber,
+            wilayaNumber,
+            confirmPassword,
+            password,
+            associationDocs,
+        } = this.getFrom(request);
 
-    this.checkIfPasswordsMatchAndThrowIfNot(password, confirmPassword);
+        this.checkIfPasswordsMatchAndThrowIfNot(password, confirmPassword);
 
-    await this.checkIfWilayaExistAndThrowIfNot(wilayaNumber);
-    await this.checkIfEmailIsUniqueAndThrowIfNot(email);
-    await this.checkIfPhoneIsUniqueAndThrowIfNot(phoneNumber);
+        await this.checkIfWilayaExistAndThrowIfNot(wilayaNumber);
+        await this.checkIfEmailIsUniqueAndThrowIfNot(email);
+        await this.checkIfPhoneIsUniqueAndThrowIfNot(phoneNumber);
 
-    const encryptedPassword = await this.encrypt(password);
+        const encryptedPassword = await this.encrypt(password);
 
-    const associationAccount = AssociationAccount.aBuilder()
-      .withId(this.getRandomAssociationId())
-      .withName(associationName)
-      .withWilayaNumber(wilayaNumber)
-      .withPhone(phoneNumber)
-      .withEmail(email)
-      .withPassword(encryptedPassword)
-      .withCreatedAt(this.now())
-      .withActiveStatus(false)
-      .build();
+        const associationAccount = AssociationAccount.aBuilder()
+            .withId(this.getRandomAssociationId())
+            .withName(associationName)
+            .withWilayaNumber(wilayaNumber)
+            .withPhone(phoneNumber)
+            .withEmail(email)
+            .withPassword(encryptedPassword)
+            .withCreatedAt(this.now())
+            .withActiveStatus(false)
+            .build();
 
-    await this.associationAccountRepository.save(associationAccount);
+        await this.associationAccountRepository.save(associationAccount);
 
-    this.usersEventBus.publishAssociationRegisteredEvent({ associationAccount, associationDocs });
+        this.usersEventBus.publishAssociationRegisteredEvent({
+            associationAccount,
+            associationDocs,
+        });
 
-    return { associationId: associationAccount.associationId.value() };
-  }
+        return { associationId: associationAccount.associationId.value() };
+    }
 
-  private checkIfPasswordsMatchAndThrowIfNot(password: Password, confirmPassword: Password) {
-    if (!password.equals(confirmPassword)) throw new ConfirmPasswordMissMatchException();
-  }
+    private checkIfPasswordsMatchAndThrowIfNot(password: Password, confirmPassword: Password) {
+        if (!password.equals(confirmPassword)) throw new ConfirmPasswordMissMatchException();
+    }
 
-  private getFrom(request: RegisterAssociationUseCaseRequest) {
-    const email = new Email(request.email);
-    const password = new Password(request.password);
-    const phoneNumber = new PhoneNumber(request.phoneNumber);
-    const wilayaNumber = new WilayaNumber(request.wilayaNumber);
-    const confirmPassword = new Password(request.confirmPassword);
-    const associationName = new AssociationName(request.associationName);
-    const associationDocs = new AssociationDocs(request.associationDocs);
+    private getFrom(request: RegisterAssociationUseCaseRequest) {
+        const email = new Email(request.email);
+        const password = new Password(request.password);
+        const phoneNumber = new PhoneNumber(request.phoneNumber);
+        const wilayaNumber = new WilayaNumber(request.wilayaNumber);
+        const confirmPassword = new Password(request.confirmPassword);
+        const associationName = new AssociationName(request.associationName);
+        const associationDocs = new AssociationDocs(request.associationDocs);
 
-    return {
-      associationName,
-      email,
-      phoneNumber,
-      wilayaNumber,
-      password,
-      confirmPassword,
-      associationDocs,
-    };
-  }
+        return {
+            associationName,
+            email,
+            phoneNumber,
+            wilayaNumber,
+            password,
+            confirmPassword,
+            associationDocs,
+        };
+    }
 
-  private isWilayaExist(wilayaNumber: WilayaNumber) {
-    return this.wilayaService.isExist(wilayaNumber);
-  }
+    private isWilayaExist(wilayaNumber: WilayaNumber) {
+        return this.wilayaService.isExist(wilayaNumber);
+    }
 
-  private async checkIfWilayaExistAndThrowIfNot(wilayaNumber: WilayaNumber) {
-    const isWilayaExist = await this.isWilayaExist(wilayaNumber);
-    if (!isWilayaExist) throw new InvalidWilayaNumberException();
-  }
+    private async checkIfWilayaExistAndThrowIfNot(wilayaNumber: WilayaNumber) {
+        const isWilayaExist = await this.isWilayaExist(wilayaNumber);
+        if (!isWilayaExist) throw new InvalidWilayaNumberException();
+    }
 
-  private async checkIfEmailIsUniqueAndThrowIfNot(email: Email) {
-    const associationWithSameEmail = await this.associationAccountRepository.findByEmail(email);
-    const regularUserWithSameEmail = await this.regularUserAccountRepository.findByEmail(email);
+    private async checkIfEmailIsUniqueAndThrowIfNot(email: Email) {
+        const associationWithSameEmail = await this.associationAccountRepository.findByEmail(email);
+        const regularUserWithSameEmail = await this.regularUserAccountRepository.findByEmail(email);
 
-    if (associationWithSameEmail || regularUserWithSameEmail) throw new EmailAlreadyUsedException();
-  }
+        if (associationWithSameEmail || regularUserWithSameEmail)
+            throw new EmailAlreadyUsedException();
+    }
 
-  private async checkIfPhoneIsUniqueAndThrowIfNot(phone: PhoneNumber) {
-    const accountWithSamePhone = await this.associationAccountRepository.findByPhoneNumber(phone);
-    if (accountWithSamePhone) throw new PhoneNumberAlreadyUsedException();
-  }
+    private async checkIfPhoneIsUniqueAndThrowIfNot(phone: PhoneNumber) {
+        const accountWithSamePhone = await this.associationAccountRepository.findByPhoneNumber(
+            phone,
+        );
+        if (accountWithSamePhone) throw new PhoneNumberAlreadyUsedException();
+    }
 
-  private encrypt(password: Password) {
-    return this.passwordEncryptor.encrypt(password);
-  }
+    private encrypt(password: Password) {
+        return this.passwordEncryptor.encrypt(password);
+    }
 
-  private getRandomAssociationId() {
-    return this.userIdGenerator.nextId();
-  }
+    private getRandomAssociationId() {
+        return this.userIdGenerator.nextId();
+    }
 
-  private now() {
-    return new Date();
-  }
+    private now() {
+        return new Date();
+    }
 }
 
 export { RegisterAssociationUseCase };

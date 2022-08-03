@@ -11,55 +11,54 @@ import { AuthenticationManagerConfiguration } from '../../../components/Authenti
 
 @Injectable()
 class UsersService {
-  private readonly usersManager = UsersManagerConfiguration.aUsersManagerFacade();
-  private readonly authenticationManager =
-    AuthenticationManagerConfiguration.anAuthenticationManagerFacade();
+    private readonly usersManager = UsersManagerConfiguration.aUsersManagerFacade();
+    private readonly authenticationManager =
+        AuthenticationManagerConfiguration.anAuthenticationManager();
 
-  async login(loginBody: LoginUseCaseRequest) {
-    const { userId } = await this.usersManager.login(loginBody);
-    const { accessToken } = await this.authenticationManager.generateAccessToken({ userId });
+    async login(loginBody: LoginUseCaseRequest) {
+        const { userId } = await this.usersManager.login(loginBody);
+        const { accessToken } = await this.authenticationManager.generateAccessToken({ userId });
 
-    return { accessToken };
-  }
+        return { accessToken };
+    }
 
-  async registerRegularUser(registrationBody: RegisterRegularUserUseCaseRequest) {
-    const { regularUserId } = await this.usersManager.registerRegularUser(registrationBody);
-    const { accessToken } = await this.authenticationManager.generateAccessToken({
-      userId: regularUserId,
-    });
+    async registerRegularUser(registrationBody: RegisterRegularUserUseCaseRequest) {
+        const { regularUserId } = await this.usersManager.registerRegularUser(registrationBody);
+        const { accessToken } = await this.authenticationManager.generateAccessToken({
+            userId: regularUserId,
+        });
 
-    return { accessToken };
-  }
+        return { accessToken };
+    }
 
-  async getAuthenticatedRegularUser(accessToken: string) {
-    const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+    async getAuthenticatedRegularUser(accessToken: string) {
+        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
 
-    return this.getRegularUserById({ regularUserId: userId });
-  }
+        return this.getRegularUserById({ regularUserId: userId });
+    }
 
-  getRegularUserById(request: GetRegularUserByIdUseCaseRequest) {
-    return this.usersManager.getRegularUserById(request);
-  }
+    getRegularUserById(request: GetRegularUserByIdUseCaseRequest) {
+        return this.usersManager.getRegularUserById(request);
+    }
 
-  async registerAssociation(registrationBody: RegisterAssociationUseCaseRequest) {
-    const { associationId } = await this.usersManager.registerAssociation(registrationBody);
-    const { accessToken } = await this.authenticationManager.generateAccessToken({
-      userId: associationId,
-    });
+    async registerAssociation(registrationBody: RegisterAssociationUseCaseRequest) {
+        const { associationId } = await this.usersManager.registerAssociation(registrationBody);
+        const { accessToken } = await this.authenticationManager.generateAccessToken({
+            userId: associationId,
+        });
 
-    return { accessToken };
-  }
+        return { accessToken };
+    }
 
-  async getAuthenticatedAssociation(accessToken: string) {
-    const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+    async getAuthenticatedAssociation(accessToken: string) {
+        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
 
-    return this.getAssociationById({ associationId: userId });
-  }
+        return this.getAssociationById({ associationId: userId });
+    }
 
-  async getAssociationById(request: GetAssociationByIdUseCaseRequest) {
-    return this.usersManager.getAssociationById(request);
-  }
+    async getAssociationById(request: GetAssociationByIdUseCaseRequest) {
+        return this.usersManager.getAssociationById(request);
+    }
 }
-
 
 export { UsersService };

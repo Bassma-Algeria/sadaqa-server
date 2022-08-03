@@ -7,15 +7,15 @@ import { GenerateAccessTokenUseCase } from './core/usecases/GenerateAccessTokenU
 import { GenerateAccessTokenUseCaseRequest } from './core/usecases/GenerateAccessTokenUseCase/GenerateAccessTokenUseCaseRequest';
 
 class AuthenticationManagerFacade {
-  constructor(private readonly tokenizationService: TokenizationService) {}
+    constructor(private readonly tokenizationService: TokenizationService) {}
 
-  decodeAccessToken(request: DecodeAccessTokenUseCaseRequest) {
-    return new DecodeAccessTokenUseCase(this.tokenizationService).handle(request);
-  }
+    decodeAccessToken(request: DecodeAccessTokenUseCaseRequest) {
+        return new DecodeAccessTokenUseCase(this.tokenizationService).handle(request);
+    }
 
-  generateAccessToken(request: GenerateAccessTokenUseCaseRequest) {
-    return new GenerateAccessTokenUseCase(this.tokenizationService).handle(request);
-  }
+    generateAccessToken(request: GenerateAccessTokenUseCaseRequest) {
+        return new GenerateAccessTokenUseCase(this.tokenizationService).handle(request);
+    }
 }
 
 export { AuthenticationManagerFacade };

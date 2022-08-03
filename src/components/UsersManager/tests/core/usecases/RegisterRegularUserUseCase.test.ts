@@ -24,118 +24,118 @@ import { PhoneNumberAlreadyUsedException } from '../../../main/core/domain/excep
 import { ConfirmPasswordMissMatchException } from '../../../main/core/usecases/RegisterRegularUserUseCase/exeptions/ConfirmPasswordMissMatchException';
 
 describe('RegisterRegularUserUseCase', () => {
-  const usersEventBusMock = mock<UsersEventBus>();
-  const wilayasService = new FakeWilayasService();
-  const passwordEncryptor = new FakePasswordEncryptor();
+    const usersEventBusMock = mock<UsersEventBus>();
+    const wilayasService = new FakeWilayasService();
+    const passwordEncryptor = new FakePasswordEncryptor();
 
-  let usersManager: UsersManagerFacade;
+    let usersManager: UsersManagerFacade;
 
-  beforeEach(() => {
-    usersManager = aUsersManagerFacade({
-      wilayasService,
-      passwordEncryptor,
-      usersEventBus: instance(usersEventBusMock),
+    beforeEach(() => {
+        usersManager = aUsersManagerFacade({
+            wilayasService,
+            passwordEncryptor,
+            usersEventBus: instance(usersEventBusMock),
+        });
     });
-  });
 
-  it('email should be valid', async () => {
-    const user = aRegularUserRegistrationRequest({ email: 'invalid email!' });
+    it('email should be valid', async () => {
+        const user = aRegularUserRegistrationRequest({ email: 'invalid email!' });
 
-    await expect(usersManager.registerRegularUser(user))
-      .to.eventually.be.rejectedWith(InvalidEmailException)
-      .instanceOf(MultiLanguagesException);
-  });
+        await expect(usersManager.registerRegularUser(user))
+            .to.eventually.be.rejectedWith(InvalidEmailException)
+            .instanceOf(MultiLanguagesException);
+    });
 
-  it('password should be more than 6 characters', async () => {
-    const user = aRegularUserRegistrationRequest({ password: 'short' });
+    it('password should be more than 6 characters', async () => {
+        const user = aRegularUserRegistrationRequest({ password: 'short' });
 
-    await expect(usersManager.registerRegularUser(user))
-      .to.eventually.be.rejectedWith(ShortPasswordException)
-      .instanceOf(MultiLanguagesException);
-  });
+        await expect(usersManager.registerRegularUser(user))
+            .to.eventually.be.rejectedWith(ShortPasswordException)
+            .instanceOf(MultiLanguagesException);
+    });
 
-  it('first name and last name should have more than 3 characters', async () => {
-    const user = aRegularUserRegistrationRequest({ firstName: 'sh', lastName: 'sdf' });
+    it('first name and last name should have more than 3 characters', async () => {
+        const user = aRegularUserRegistrationRequest({ firstName: 'sh', lastName: 'sdf' });
 
-    await expect(usersManager.registerRegularUser(user))
-      .to.eventually.be.rejectedWith(ShortNameException)
-      .instanceOf(MultiLanguagesException);
-  });
+        await expect(usersManager.registerRegularUser(user))
+            .to.eventually.be.rejectedWith(ShortNameException)
+            .instanceOf(MultiLanguagesException);
+    });
 
-  it('wilaya number should be valid', async () => {
-    const isExistMock = stub(wilayasService, 'isExist').callsFake(() => Promise.resolve(false));
+    it('wilaya number should be valid', async () => {
+        const isExistMock = stub(wilayasService, 'isExist').callsFake(() => Promise.resolve(false));
 
-    const user = aRegularUserRegistrationRequest({ wilayaNumber: 100 });
+        const user = aRegularUserRegistrationRequest({ wilayaNumber: 100 });
 
-    await expect(usersManager.registerRegularUser(user)).to.eventually.be.rejectedWith(
-      InvalidWilayaNumberException,
-    );
+        await expect(usersManager.registerRegularUser(user)).to.eventually.be.rejectedWith(
+            InvalidWilayaNumberException,
+        );
 
-    isExistMock.restore();
-  });
+        isExistMock.restore();
+    });
 
-  it('phone number should be valid', async () => {
-    const user = aRegularUserRegistrationRequest({ phoneNumber: '05 182 1' });
-    const anotherUser = aRegularUserRegistrationRequest({ phoneNumber: '03 99 83 12 38' });
+    it('phone number should be valid', async () => {
+        const user = aRegularUserRegistrationRequest({ phoneNumber: '05 182 1' });
+        const anotherUser = aRegularUserRegistrationRequest({ phoneNumber: '03 99 83 12 38' });
 
-    await expect(usersManager.registerRegularUser(user)).to.eventually.be.rejectedWith(
-      InvalidPhoneNumberException,
-    );
-    await expect(usersManager.registerRegularUser(anotherUser))
-      .to.eventually.be.rejectedWith(InvalidPhoneNumberException)
-      .instanceOf(MultiLanguagesException);
-  });
+        await expect(usersManager.registerRegularUser(user)).to.eventually.be.rejectedWith(
+            InvalidPhoneNumberException,
+        );
+        await expect(usersManager.registerRegularUser(anotherUser))
+            .to.eventually.be.rejectedWith(InvalidPhoneNumberException)
+            .instanceOf(MultiLanguagesException);
+    });
 
-  it('confirm password should equal the password', async () => {
-    const user = aRegularUserRegistrationRequest({ confirmPassword: 'some other password' });
+    it('confirm password should equal the password', async () => {
+        const user = aRegularUserRegistrationRequest({ confirmPassword: 'some other password' });
 
-    await expect(usersManager.registerRegularUser(user))
-      .to.eventually.be.rejectedWith(ConfirmPasswordMissMatchException)
-      .instanceOf(MultiLanguagesException);
-  });
+        await expect(usersManager.registerRegularUser(user))
+            .to.eventually.be.rejectedWith(ConfirmPasswordMissMatchException)
+            .instanceOf(MultiLanguagesException);
+    });
 
-  it('should hash the password before saving it', async () => {
-    const encryptMethod = spy(passwordEncryptor, 'encrypt');
-    const user = aRegularUserRegistrationRequest();
+    it('should hash the password before saving it', async () => {
+        const encryptMethod = spy(passwordEncryptor, 'encrypt');
+        const user = aRegularUserRegistrationRequest();
 
-    await usersManager.registerRegularUser(user);
+        await usersManager.registerRegularUser(user);
 
-    expect(encryptMethod.calledOnce).to.equal(true);
-  });
+        expect(encryptMethod.calledOnce).to.equal(true);
+    });
 
-  it('should not have two users with the same email', async () => {
-    const user = aRegularUserRegistrationRequest();
-    const anotherUser = aRegularUserRegistrationRequest({ email: user.email });
+    it('should not have two users with the same email', async () => {
+        const user = aRegularUserRegistrationRequest();
+        const anotherUser = aRegularUserRegistrationRequest({ email: user.email });
 
-    await usersManager.registerRegularUser(user);
-    await expect(usersManager.registerRegularUser(anotherUser))
-      .to.eventually.be.rejectedWith(EmailAlreadyUsedException)
-      .instanceOf(MultiLanguagesException);
-  });
+        await usersManager.registerRegularUser(user);
+        await expect(usersManager.registerRegularUser(anotherUser))
+            .to.eventually.be.rejectedWith(EmailAlreadyUsedException)
+            .instanceOf(MultiLanguagesException);
+    });
 
-  it('should not have two users with the same phone number', async () => {
-    const user = aRegularUserRegistrationRequest();
-    const anotherUser = aRegularUserRegistrationRequest({ phoneNumber: user.phoneNumber });
+    it('should not have two users with the same phone number', async () => {
+        const user = aRegularUserRegistrationRequest();
+        const anotherUser = aRegularUserRegistrationRequest({ phoneNumber: user.phoneNumber });
 
-    await usersManager.registerRegularUser(user);
-    await expect(usersManager.registerRegularUser(anotherUser))
-      .to.eventually.be.rejectedWith(PhoneNumberAlreadyUsedException)
-      .instanceOf(MultiLanguagesException);
-  });
+        await usersManager.registerRegularUser(user);
+        await expect(usersManager.registerRegularUser(anotherUser))
+            .to.eventually.be.rejectedWith(PhoneNumberAlreadyUsedException)
+            .instanceOf(MultiLanguagesException);
+    });
 
-  it('each user should have a unique id', async () => {
-    const user = aRegularUserRegistrationRequest();
-    const anotherUser = aRegularUserRegistrationRequest();
+    it('each user should have a unique id', async () => {
+        const user = aRegularUserRegistrationRequest();
+        const anotherUser = aRegularUserRegistrationRequest();
 
-    const { regularUserId: firstId } = await usersManager.registerRegularUser(user);
-    const { regularUserId: secondId } = await usersManager.registerRegularUser(anotherUser);
+        const { regularUserId: firstId } = await usersManager.registerRegularUser(user);
+        const { regularUserId: secondId } = await usersManager.registerRegularUser(anotherUser);
 
-    expect(firstId).to.not.equal(secondId);
-  });
+        expect(firstId).to.not.equal(secondId);
+    });
 
-  it('should publish an association registered event when the association is registered', async () => {
-    await usersManager.registerRegularUser(aRegularUserRegistrationRequest());
+    it('should publish an association registered event when the association is registered', async () => {
+        await usersManager.registerRegularUser(aRegularUserRegistrationRequest());
 
-    verify(usersEventBusMock.publishRegularUserRegisteredEvent(anything())).called();
-  });
+        verify(usersEventBusMock.publishRegularUserRegisteredEvent(anything())).called();
+    });
 });

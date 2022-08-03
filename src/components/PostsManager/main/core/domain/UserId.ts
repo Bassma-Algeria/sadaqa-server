@@ -1,21 +1,22 @@
-import { InvalidUserIdException } from './exceptions/InvalidUserIdException';
+import { ValidationException } from './exceptions/ValidationException';
+import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
 
 class UserId {
-  private readonly id: string;
+    private readonly id: string;
 
-  constructor(id: string) {
-    if (!id) throw new InvalidUserIdException();
+    constructor(id: string) {
+        if (!id) throw new ValidationException(ExceptionsMessages.INVALID_USER_ID);
 
-    this.id = id;
-  }
+        this.id = id;
+    }
 
-  value() {
-    return this.id;
-  }
+    value() {
+        return this.id;
+    }
 
-  equals(userId: UserId) {
-    return userId.value() === this.id;
-  }
+    equals(userId: UserId) {
+        return userId.value() === this.id;
+    }
 }
 
 export { UserId };

@@ -2,23 +2,23 @@ import { InvalidAccessTokenException } from './exception/InvalidAccessTokenExcep
 import { Token } from './Token';
 
 class AccessToken {
-  constructor(private readonly token: Token) {}
+    constructor(private readonly token: Token) {}
 
-  getToken() {
-    return this.token;
-  }
+    getToken() {
+        return this.token;
+    }
 
-  value() {
-    return `Bearer ${this.token.value()}`;
-  }
+    value() {
+        return `Bearer ${this.token.value()}`;
+    }
 
-  static from(accessToken: string) {
-    if (!accessToken.startsWith(`Bearer `)) throw new InvalidAccessTokenException();
+    static from(accessToken: string) {
+        if (!accessToken.startsWith(`Bearer `)) throw new InvalidAccessTokenException();
 
-    const token = accessToken.split('Bearer ')[1];
+        const token = accessToken.split('Bearer ')[1];
 
-    return new AccessToken(new Token(token));
-  }
+        return new AccessToken(new Token(token));
+    }
 }
 
 export { AccessToken };

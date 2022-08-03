@@ -1,7 +1,7 @@
-import { PostgresCallForHelpPostRepository } from '../../../../../main/infra/real/PostgresCallForHelpPostRepository';
+import { PostgresCallForHelpPostRepository } from '../../../../../main/infra/real/PostgresPostRepository/PostgresCallForHelpPostRepository';
 
 const cleanData = async () => {
-  await new PostgresCallForHelpPostRepository().deleteAll();
+    await new PostgresCallForHelpPostRepository().deleteAll();
 };
 
 export { cleanData };

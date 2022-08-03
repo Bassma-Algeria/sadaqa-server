@@ -1,106 +1,46 @@
 import { CCP } from './CCP';
-import { Title } from './Title';
-import { PostId } from './PostId';
-import { UserId } from './UserId';
-import { Picture } from './Picture';
-import { PostStatus } from './PostStatus';
-import { Description } from './Description';
-import { WilayaNumber } from './WilayaNumber';
 import { BaridiMobNumber } from './BaridiMobNumber';
 
+import { PostBuilder } from './PostBuilder';
 import { CallForHelpPost } from './CallForHelpPost';
 
-class CallForHelpPostBuilder {
-  private _postId!: PostId;
-  private _title!: Title;
-  private _description!: Description;
-  private _wilayaNumber!: WilayaNumber;
-  private _publisherId!: UserId;
-  private _pictures!: Picture[];
-  private _createdAt!: Date;
-  private _status!: PostStatus;
-  private _ccp: CCP | undefined;
-  private _baridiMobNumber: BaridiMobNumber | undefined;
+class CallForHelpPostBuilder extends PostBuilder {
+    private ccp: CCP | undefined;
+    private baridiMobNumber: BaridiMobNumber | undefined;
 
-  constructor(post?: CallForHelpPost) {
-    if (!post) return;
+    constructor(post?: CallForHelpPost) {
+        super(post);
 
-    this._postId = post.postId;
-    this._title = post.title;
-    this._description = post.description;
-    this._wilayaNumber = post.wilayaNumber;
-    this._publisherId = post.publisherId;
-    this._pictures = post.pictures;
-    this._createdAt = post.createdAt;
-    this._ccp = post.ccp;
-    this._status = post.status;
-    this._baridiMobNumber = post.baridiMobNumber;
-  }
+        if (!post) return;
 
-  withPostId(postId: PostId) {
-    this._postId = postId;
-    return this;
-  }
+        this.ccp = post.ccp;
+        this.baridiMobNumber = post.baridiMobNumber;
+    }
 
-  withTitle(title: Title) {
-    this._title = title;
-    return this;
-  }
+    withCCP(ccp: CCP | undefined) {
+        this.ccp = ccp;
+        return this;
+    }
 
-  withDescription(description: Description) {
-    this._description = description;
-    return this;
-  }
+    withBaridiMobNumber(baridiMobNumber: BaridiMobNumber | undefined) {
+        this.baridiMobNumber = baridiMobNumber;
+        return this;
+    }
 
-  withWilayaNumber(wilayaNumber: WilayaNumber) {
-    this._wilayaNumber = wilayaNumber;
-    return this;
-  }
-
-  withPublisherId(publisherId: UserId) {
-    this._publisherId = publisherId;
-    return this;
-  }
-
-  withStatus(status: PostStatus) {
-    this._status = status;
-    return this;
-  }
-
-  withPictures(pictures: Picture[]) {
-    this._pictures = pictures;
-    return this;
-  }
-
-  withCreatedAt(creationTime: Date) {
-    this._createdAt = creationTime;
-    return this;
-  }
-
-  withCCP(ccp: CCP | undefined) {
-    this._ccp = ccp;
-    return this;
-  }
-
-  withBaridiMobNumber(baridiMobNumber: BaridiMobNumber | undefined) {
-    this._baridiMobNumber = baridiMobNumber;
-    return this;
-  }
-
-  build() {
-    return new CallForHelpPost(
-      this._postId,
-      this._title,
-      this._description,
-      this._wilayaNumber,
-      this._publisherId,
-      this._pictures,
-      this._status,
-      this._createdAt,
-      this._ccp,
-      this._baridiMobNumber,
-    );
-  }
+    build() {
+        return new CallForHelpPost(
+            this.postId,
+            this.title,
+            this.description,
+            this.wilayaNumber,
+            this.publisherId,
+            this.pictures,
+            this.status,
+            this.createdAt,
+            this.ccp,
+            this.baridiMobNumber,
+        );
+    }
 }
 
 export { CallForHelpPostBuilder };

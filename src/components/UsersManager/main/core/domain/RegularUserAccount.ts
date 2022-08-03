@@ -8,20 +8,20 @@ import { WilayaNumber } from './WilayaNumber';
 import { RegularUserAccountBuilder } from './RegularUserAccountBuilder';
 
 class RegularUserAccount {
-  constructor(
-    readonly userId: UserId,
-    readonly firstName: FirstName,
-    readonly lastName: LastName,
-    readonly wilayaNumber: WilayaNumber,
-    readonly phone: PhoneNumber,
-    readonly email: Email,
-    readonly password: Password,
-    readonly createdAt: Date,
-  ) {}
+    constructor(
+        readonly userId: UserId,
+        readonly firstName: FirstName,
+        readonly lastName: LastName,
+        readonly wilayaNumber: WilayaNumber,
+        readonly phone: PhoneNumber,
+        readonly email: Email,
+        readonly password: Password,
+        readonly createdAt: Date,
+    ) {}
 
-  static builder(user?: RegularUserAccount): RegularUserAccountBuilder {
-    return new RegularUserAccountBuilder(user);
-  }
+    static builder(user?: RegularUserAccount): RegularUserAccountBuilder {
+        return new RegularUserAccountBuilder(user);
+    }
 }
 
 export { RegularUserAccount };

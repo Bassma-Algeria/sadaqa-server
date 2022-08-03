@@ -1,3 +1,3 @@
 export interface ActivateAssociationAccountUseCaseRequest {
-  associationId: string;
+    associationId: string;
 }

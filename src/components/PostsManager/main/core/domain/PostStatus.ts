@@ -1,7 +1,7 @@
 enum PostStatus {
-  ENABLED = 'ENABLED',
-  DISABLED = 'DISABLED',
-  BLOCKED = 'BLOCKED',
+    ENABLED = 'ENABLED',
+    DISABLED = 'DISABLED',
+    BLOCKED = 'BLOCKED',
 }
 
 export { PostStatus };

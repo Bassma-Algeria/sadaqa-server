@@ -1,3 +1,3 @@
 export interface GenerateAccessTokenUseCaseResponse {
-  accessToken: string;
+    accessToken: string;
 }

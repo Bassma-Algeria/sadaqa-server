@@ -6,18 +6,20 @@ import { createAuthenticationManagerFacade } from './base/getFacade';
 import { AuthenticationManagerFacade } from '../../../main/AuthenticationManagerFacade';
 
 describe('Generate & Decode Access Tokens', () => {
-  let authenticationManager: AuthenticationManagerFacade;
+    let authenticationManager: AuthenticationManagerFacade;
 
-  before(() => {
-    authenticationManager = createAuthenticationManagerFacade();
-  });
+    before(() => {
+        authenticationManager = createAuthenticationManagerFacade();
+    });
 
-  it('should generate a token from the userId and be able to decode it', async () => {
-    const userId = faker.datatype.uuid();
+    it('should generate a token from the userId and be able to decode it', async () => {
+        const userId = faker.datatype.uuid();
 
-    const { accessToken } = await authenticationManager.generateAccessToken({ userId });
-    const { userId: decodedId } = await authenticationManager.decodeAccessToken({ accessToken });
+        const { accessToken } = await authenticationManager.generateAccessToken({ userId });
+        const { userId: decodedId } = await authenticationManager.decodeAccessToken({
+            accessToken,
+        });
 
-    expect(decodedId).to.equal(userId);
-  });
+        expect(decodedId).to.equal(userId);
+    });
 });

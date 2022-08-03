@@ -1,13 +1,13 @@
 class Description {
-  private readonly description: string;
+    private readonly description: string;
 
-  constructor(desc: string) {
-    this.description = desc?.trim().toLowerCase();
-  }
+    constructor(desc: string) {
+        this.description = desc?.trim().toLowerCase();
+    }
 
-  value() {
-    return this.description;
-  }
+    value() {
+        return this.description;
+    }
 }
 
 export { Description };

@@ -1,3 +1,3 @@
 export interface UploadPictureUseCaseRequest {
-  picture: Buffer;
+    picture: Buffer;
 }

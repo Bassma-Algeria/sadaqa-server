@@ -1,3 +1,3 @@
 export interface GetWilayaUseCaseRequest {
-  readonly wilayaNumber: number;
+    readonly wilayaNumber: number;
 }

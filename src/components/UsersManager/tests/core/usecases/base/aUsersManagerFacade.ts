@@ -15,23 +15,23 @@ import { AssociationAccountRepository } from '../../../../main/core/domain/servi
 import { RegularUserAccountRepository } from '../../../../main/core/domain/services/RegularUserAccountRepository';
 
 interface Dependencies {
-  readonly regularUserAccountRepository?: RegularUserAccountRepository;
-  readonly userIdGenerator?: UserIdGenerator;
-  readonly passwordEncryptor?: PasswordEncryptor;
-  readonly wilayasService?: WilayasService;
-  readonly associationAccountRepository?: AssociationAccountRepository;
-  readonly usersEventBus?: UsersEventBus;
+    readonly regularUserAccountRepository?: RegularUserAccountRepository;
+    readonly userIdGenerator?: UserIdGenerator;
+    readonly passwordEncryptor?: PasswordEncryptor;
+    readonly wilayasService?: WilayasService;
+    readonly associationAccountRepository?: AssociationAccountRepository;
+    readonly usersEventBus?: UsersEventBus;
 }
 
 const aUsersManagerFacade = (dependencies?: Dependencies) => {
-  return new UsersManagerFacade(
-    dependencies?.regularUserAccountRepository || new InMemoryRegularUserAccountRepository(),
-    dependencies?.userIdGenerator || new FakeUserIdGenerator(),
-    dependencies?.passwordEncryptor || new FakePasswordEncryptor(),
-    dependencies?.wilayasService || new FakeWilayasService(),
-    dependencies?.associationAccountRepository || new InMemoryAssociationAccountRepository(),
-    dependencies?.usersEventBus || new FakeUsersEventBus(),
-  );
+    return new UsersManagerFacade(
+        dependencies?.regularUserAccountRepository || new InMemoryRegularUserAccountRepository(),
+        dependencies?.userIdGenerator || new FakeUserIdGenerator(),
+        dependencies?.passwordEncryptor || new FakePasswordEncryptor(),
+        dependencies?.wilayasService || new FakeWilayasService(),
+        dependencies?.associationAccountRepository || new InMemoryAssociationAccountRepository(),
+        dependencies?.usersEventBus || new FakeUsersEventBus(),
+    );
 };
 
 export { aUsersManagerFacade };

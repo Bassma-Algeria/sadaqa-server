@@ -1,17 +1,18 @@
-import { InvalidPostIdException } from './exceptions/InvalidPostIdException';
+import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
+import { ValidationException } from './exceptions/ValidationException';
 
 class PostId {
-  private readonly id: string;
+    private readonly id: string;
 
-  constructor(id: string) {
-    if (!id) throw new InvalidPostIdException();
+    constructor(id: string) {
+        if (!id) throw new ValidationException(ExceptionsMessages.INVALID_POST_ID);
 
-    this.id = id;
-  }
+        this.id = id;
+    }
 
-  value() {
-    return this.id;
-  }
+    value() {
+        return this.id;
+    }
 }
 
 export { PostId };

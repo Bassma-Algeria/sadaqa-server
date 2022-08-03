@@ -1,23 +1,29 @@
+import { PostDtoMapper } from './base/PostDtoMapper';
+
 import { FamilyInNeedPostDto } from './FamilyInNeedPostDto';
 
 import { FamilyInNeedPost } from '../../../domain/FamilyInNeedPost';
 
-class FamilyInNeedPostDtoMapper {
-  static toDto(post: FamilyInNeedPost): FamilyInNeedPostDto {
-    return {
-      postId: post.postId.value(),
-      title: post.title.value(),
-      description: post.description.value(),
-      publisherId: post.publisherId.value(),
-      wilayaNumber: post.wilayaNumber.value(),
-      pictures: post.pictures.map(pic => pic.url()),
-      ccp: post.ccp?.number(),
-      ccpKey: post.ccp?.key(),
-      baridiMobNumber: post.baridiMobNumber?.value(),
-      status: post.status,
-      createdAt: post.createdAt,
-    };
-  }
+class FamilyInNeedPostDtoMapper extends PostDtoMapper<FamilyInNeedPost> {
+    private static readonly instance = new FamilyInNeedPostDtoMapper();
+
+    private constructor() {
+        super();
+    }
+
+    static getInstance() {
+        return this.instance;
+    }
+
+    toDto(post: FamilyInNeedPost): FamilyInNeedPostDto {
+        return {
+            ...super.toDto(post),
+
+            ccp: post.ccp?.number(),
+            ccpKey: post.ccp?.key(),
+            baridiMobNumber: post.baridiMobNumber?.value(),
+        };
+    }
 }
 
 export { FamilyInNeedPostDtoMapper };

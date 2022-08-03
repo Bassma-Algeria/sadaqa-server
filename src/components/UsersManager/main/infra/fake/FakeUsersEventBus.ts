@@ -1,17 +1,17 @@
 import { UsersEventBus } from '../../core/domain/services/UsersEventBus';
 
 class FakeUsersEventBus implements UsersEventBus {
-  publishAssociationRegisteredEvent(): void {
-    // ...
-  }
+    publishAssociationRegisteredEvent(): void {
+        // ...
+    }
 
-  publishRegularUserRegisteredEvent(): void {
-    // ...
-  }
+    publishRegularUserRegisteredEvent(): void {
+        // ...
+    }
 
-  publishUserLoginEvent(): void {
-    // ...
-  }
+    publishUserLoginEvent(): void {
+        // ...
+    }
 }
 
 export { FakeUsersEventBus };

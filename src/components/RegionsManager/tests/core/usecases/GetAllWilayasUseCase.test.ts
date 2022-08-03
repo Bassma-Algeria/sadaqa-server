@@ -5,14 +5,16 @@ import { RegionsManagerFacade } from '../../../main/RegionsManagerFacade';
 import { FakeWilayasRepository } from '../../../main/infra/fake/FakeWilayasRepository';
 
 describe('GetAllWilayasUseCase', () => {
-  const fakeWilayasRepository = new FakeWilayasRepository();
-  const regionsManagerFacade = new RegionsManagerFacade(fakeWilayasRepository);
+    const fakeWilayasRepository = new FakeWilayasRepository();
+    const regionsManagerFacade = new RegionsManagerFacade(fakeWilayasRepository);
 
-  it('should get all the wilayas', async () => {
-    const getAllStub = stub(fakeWilayasRepository, 'getAll').callsFake(() => Promise.resolve([]));
+    it('should get all the wilayas', async () => {
+        const getAllStub = stub(fakeWilayasRepository, 'getAll').callsFake(() =>
+            Promise.resolve([]),
+        );
 
-    await regionsManagerFacade.getAllWilayas();
+        await regionsManagerFacade.getAllWilayas();
 
-    expect(getAllStub.calledOnce).to.equal(true);
-  });
+        expect(getAllStub.calledOnce).to.equal(true);
+    });
 });

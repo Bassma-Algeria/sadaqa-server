@@ -1,7 +1,7 @@
-import { PostgresDonationRequestPostRepository } from '../../../../../main/infra/real/PostgresDonationRequestRepository';
+import { PostgresDonationRequestPostRepository } from '../../../../../main/infra/real/PostgresPostRepository/PostgresDonationRequestRepository';
 
 const cleanData = async () => {
-  await new PostgresDonationRequestPostRepository().deleteAll();
+    await new PostgresDonationRequestPostRepository().deleteAll();
 };
 
 export { cleanData };

@@ -6,36 +6,36 @@ import { aMediaManagerFacade } from './base/aMediaManagerFacade';
 import { FakeImageCompressor } from '../../../main/infra/fake/FakeImageCompressor';
 
 describe('UploadPictureUseCase', () => {
-  const imageCompressor = new FakeImageCompressor();
-  const mediaManager = aMediaManagerFacade({ imageCompressor });
+    const imageCompressor = new FakeImageCompressor();
+    const mediaManager = aMediaManagerFacade({ imageCompressor });
 
-  it('given an image of size >= 0.5mb, it should be resized and then uploaded to the cloud', async () => {
-    const minifyImageSpy = spy(imageCompressor, 'minify');
+    it('given an image of size >= 0.5mb, it should be resized and then uploaded to the cloud', async () => {
+        const minifyImageSpy = spy(imageCompressor, 'minify');
 
-    const MORE_THAN_HALF_MEGA_BYTE = 2 ** 20 / 2 + 2 ** 10;
+        const MORE_THAN_HALF_MEGA_BYTE = 2 ** 20 / 2 + 2 ** 10;
 
-    const { url } = await mediaManager.uploadPicture({
-      picture: Buffer.alloc(MORE_THAN_HALF_MEGA_BYTE),
+        const { url } = await mediaManager.uploadPicture({
+            picture: Buffer.alloc(MORE_THAN_HALF_MEGA_BYTE),
+        });
+
+        expect(url).to.be.a('string');
+        expect(minifyImageSpy.calledOnce).to.equal(true);
+
+        minifyImageSpy.restore();
     });
 
-    expect(url).to.be.a('string');
-    expect(minifyImageSpy.calledOnce).to.equal(true);
+    it('given an image of size < 0.5mb, it should be resized and then uploaded to the cloud', async () => {
+        const minifyImageSpy = spy(imageCompressor, 'minify');
 
-    minifyImageSpy.restore();
-  });
+        const LESS_THAN_HALF_MEGA_BYTE = 1 ** 20 / 2;
 
-  it('given an image of size < 0.5mb, it should be resized and then uploaded to the cloud', async () => {
-    const minifyImageSpy = spy(imageCompressor, 'minify');
+        const { url } = await mediaManager.uploadPicture({
+            picture: Buffer.alloc(LESS_THAN_HALF_MEGA_BYTE),
+        });
 
-    const LESS_THAN_HALF_MEGA_BYTE = 1 ** 20 / 2;
+        expect(url).to.be.a('string');
+        expect(minifyImageSpy.calledOnce).to.equal(false);
 
-    const { url } = await mediaManager.uploadPicture({
-      picture: Buffer.alloc(LESS_THAN_HALF_MEGA_BYTE),
+        minifyImageSpy.restore();
     });
-
-    expect(url).to.be.a('string');
-    expect(minifyImageSpy.calledOnce).to.equal(false);
-
-    minifyImageSpy.restore();
-  });
 });
