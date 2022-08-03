@@ -19,6 +19,9 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: sadaqa_test
 
+    env:
+      DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/sadaqa_test?schema=public'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
