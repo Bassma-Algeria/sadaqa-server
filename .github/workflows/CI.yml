@@ -17,6 +17,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: sadaqa_test
 
     steps:
       - name: Checkout
@@ -28,5 +29,7 @@ jobs:
           cache: npm
       - name: Install Dependencies
         run: npm install
+      - name: Setup the DB
+        run: npx prisma db push
       - name: Run Tests
         run: npm test
