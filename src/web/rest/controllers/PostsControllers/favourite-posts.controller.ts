@@ -10,8 +10,8 @@ import {
 } from '@nestjs/swagger';
 import { Body, Controller, Delete, Get, Headers, Param, Post } from '@nestjs/common';
 
-import { FavouritePostDto } from '../dtos/posts.dtos';
 import { PostsController } from './base/posts.controller';
+import { CreateFavouritePostDto } from '../dtos/PostsDtos/favourite-posts.dtos';
 
 import { PostType } from '../../../../components/PostsManager/main/core/domain/PostType';
 
@@ -28,7 +28,7 @@ class FavouritePostsController {
     @ApiNotFoundResponse({ description: 'target post not found' })
     @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async add(@Body() body: FavouritePostDto, @Headers('Authorisation') accessToken: string) {
+    async add(@Body() body: CreateFavouritePostDto, @Headers('Authorisation') accessToken: string) {
         try {
             return await this.favouritePostsService.add(accessToken, body);
         } catch (e) {

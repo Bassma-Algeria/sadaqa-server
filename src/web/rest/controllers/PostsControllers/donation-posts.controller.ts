@@ -30,7 +30,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 
 import { PostsController } from './base/posts.controller';
-import { CreateDonationDto, UpdateDonationDto } from '../dtos/posts.dtos';
+import { CreateDonationDto, UpdateDonationDto } from '../dtos/PostsDtos/donation-posts.dtos';
 
 import { SupportedLanguages } from '../../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesValidationException';
 

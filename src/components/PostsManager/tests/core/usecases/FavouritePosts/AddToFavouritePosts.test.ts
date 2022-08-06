@@ -83,8 +83,8 @@ describe('Add To Favourite Posts', () => {
             userId: addToFavouriteRequest.userId,
         });
 
-        expect(favouritePosts.donations).to.have.lengthOf(1);
-        expect(favouritePosts.donations[0]).to.have.property('postId', postId);
+        expect(favouritePosts.donation).to.have.lengthOf(1);
+        expect(favouritePosts.donation[0]).to.have.property('postId', postId);
     });
 
     it('given a request to add a donation request to favourite posts, when accessing the favourite posts, then the donation request post should be there', async () => {
@@ -101,8 +101,8 @@ describe('Add To Favourite Posts', () => {
             userId: addToFavouriteRequest.userId,
         });
 
-        expect(favouritePosts.donationRequests).to.have.lengthOf(1);
-        expect(favouritePosts.donationRequests[0]).to.have.property('postId', postId);
+        expect(favouritePosts.donationRequest).to.have.lengthOf(1);
+        expect(favouritePosts.donationRequest[0]).to.have.property('postId', postId);
     });
 
     it('given a request to add a family in need to favourite posts, when accessing the favourite posts, then the family in need post should be there', async () => {
@@ -119,8 +119,8 @@ describe('Add To Favourite Posts', () => {
             userId: addToFavouriteRequest.userId,
         });
 
-        expect(favouritePosts.familiesInNeed).to.have.lengthOf(1);
-        expect(favouritePosts.familiesInNeed[0]).to.have.property('postId', postId);
+        expect(favouritePosts.familyInNeed).to.have.lengthOf(1);
+        expect(favouritePosts.familyInNeed[0]).to.have.property('postId', postId);
     });
 
     it('given a request to add a call for help to favourite posts, when accessing the favourite posts, then the call for help post should be there', async () => {
@@ -135,7 +135,7 @@ describe('Add To Favourite Posts', () => {
             userId: addToFavouriteRequest.userId,
         });
 
-        expect(favouritePosts.callForHelps).to.have.lengthOf(1);
-        expect(favouritePosts.callForHelps[0]).to.have.property('postId', postId);
+        expect(favouritePosts.callForHelp).to.have.lengthOf(1);
+        expect(favouritePosts.callForHelp[0]).to.have.property('postId', postId);
     });
 });

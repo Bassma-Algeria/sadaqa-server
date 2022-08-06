@@ -29,17 +29,19 @@ import { Express } from 'express';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { PostsController } from './base/posts.controller';
-import { CreateCallForHelpDto, UpdateCallForHelpDto } from '../dtos/posts.dtos';
 
 import { SupportedLanguages } from '../../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesValidationException';
 
+import {
+    CreateCallForHelpDto,
+    UpdateCallForHelpDto,
+} from '../dtos/PostsDtos/call-for-help-posts.dtos';
 import { CallForHelpPostsService } from '../../services/PostsServices/call-for-help-posts.service';
 
 @ApiTags('posts')
 @Controller('/api/posts')
 class CallForHelpPostsController {
-    constructor(private readonly postsService: CallForHelpPostsService) {
-    }
+    constructor(private readonly postsService: CallForHelpPostsService) {}
 
     @Post('call-for-help')
     @ApiConsumes('multipart/form-data')
@@ -183,8 +185,6 @@ class CallForHelpPostsController {
             PostsController.handleException(e);
         }
     }
-
-
 }
 
 export { CallForHelpPostsController };

@@ -83,7 +83,24 @@ interface UserLoginPayload {
     readonly userId: string;
 }
 
+interface TextMessageSentPayload {
+    messageId: string;
+    senderId: string;
+    content: string;
+    receiverId: string;
+    createdAt: Date;
+    read: boolean;
+}
+
+interface MessageReadPayload {
+    messageId: string;
+}
+
 export interface Events {
+    USER_LOGIN: UserLoginPayload;
+    ASSOCIATION_REGISTERED: AssociationRegisteredPayload;
+    REGULAR_USER_REGISTERED: RegularUserRegisteredPayload;
+
     DONATION_POST_CREATED: DonationPayload;
     DONATION_POST_UPDATED: DonationPayload;
     DONATION_POST_DELETED: DonationPayload;
@@ -107,7 +124,6 @@ export interface Events {
     POST_ADDED_TO_FAVOURITE: FavouritePostPayload;
     POST_DELETED_FROM_FAVOURITE: FavouritePostPayload;
 
-    ASSOCIATION_REGISTERED: AssociationRegisteredPayload;
-    REGULAR_USER_REGISTERED: RegularUserRegisteredPayload;
-    USER_LOGIN: UserLoginPayload;
+    TEXT_MESSAGE_SENT: TextMessageSentPayload;
+    MESSAGE_READ: MessageReadPayload;
 }

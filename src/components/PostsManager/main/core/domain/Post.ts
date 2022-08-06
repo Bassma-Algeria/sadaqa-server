@@ -22,7 +22,7 @@ abstract class Post {
         readonly createdAt: Date,
     ) {}
 
-    toggleEnableStatus() {
+    toggleEnablingStatus() {
         return this.aBuilderFromThis()
             .withStatus(this.status === 'ENABLED' ? PostStatus.DISABLED : PostStatus.ENABLED)
             .build();

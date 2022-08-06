@@ -4,8 +4,8 @@ import { FamilyInNeedPostDto } from '../_common_/dtos/FamilyInNeedPostDto';
 import { DonationRequestPostDto } from '../_common_/dtos/DonationRequestPostDto';
 
 export interface GetFavouritePostsUseCaseResponse {
-    donations: DonationPostDto[];
-    donationRequests: DonationRequestPostDto[];
-    familiesInNeed: FamilyInNeedPostDto[];
-    callForHelps: CallForHelpPostDto[];
+    donation: DonationPostDto[];
+    donationRequest: DonationRequestPostDto[];
+    familyInNeed: FamilyInNeedPostDto[];
+    callForHelp: CallForHelpPostDto[];
 }

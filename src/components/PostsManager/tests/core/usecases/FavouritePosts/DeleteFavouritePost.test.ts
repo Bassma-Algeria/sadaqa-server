@@ -24,14 +24,14 @@ describe('Delete Favourite Post', () => {
         const favouritePost = anAddToFavouriteRequest({ postId, postType: 'donation' });
         await favouritePostsManager.addToFavourite(favouritePost);
 
-        const { donations: favouriteDonationsBeforeDelete } =
+        const { donation: favouriteDonationsBeforeDelete } =
             await favouritePostsManager.getFavouritePosts({
                 userId: favouritePost.userId,
             });
 
         await favouritePostsManager.deleteFromFavourite(favouritePost);
 
-        const { donations: favouriteDonationsAfterDelete } =
+        const { donation: favouriteDonationsAfterDelete } =
             await favouritePostsManager.getFavouritePosts({
                 userId: favouritePost.userId,
             });

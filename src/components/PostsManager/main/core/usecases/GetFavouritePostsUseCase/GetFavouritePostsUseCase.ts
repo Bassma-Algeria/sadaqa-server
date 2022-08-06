@@ -50,16 +50,16 @@ class GetFavouritePostsUseCase
         const donationRequests = await this.getDonationRequestsFrom(favouritePosts);
 
         return {
-            donations: donations.map(donation =>
+            donation: donations.map(donation =>
                 DonationPostDtoMapper.getInstance().toDto(donation),
             ),
-            callForHelps: callForHelps.map(post =>
+            callForHelp: callForHelps.map(post =>
                 CallForHelpPostDtoMapper.getInstance().toDto(post),
             ),
-            familiesInNeed: familiesInNeed.map(post =>
+            familyInNeed: familiesInNeed.map(post =>
                 FamilyInNeedPostDtoMapper.getInstance().toDto(post),
             ),
-            donationRequests: donationRequests.map(post =>
+            donationRequest: donationRequests.map(post =>
                 DonationRequestPostDtoMapper.getInstance().toDto(post),
             ),
         };

@@ -29,8 +29,11 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 // eslint-disable-next-line node/no-extraneous-import
 import { Express } from 'express';
 
+import {
+    CreateFamilyInNeedDto,
+    UpdateFamilyInNeedDto,
+} from '../dtos/PostsDtos/family-in-need-posts.dtos';
 import { PostsController } from './base/posts.controller';
-import { CreateFamilyInNeedDto, UpdateFamilyInNeedDto } from '../dtos/posts.dtos';
 
 import { SupportedLanguages } from '../../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesValidationException';
 

@@ -97,3 +97,12 @@ model FavouritePost {
 
   @@id([userId, postId, postType])
 }
+
+model TextMessage {
+  messageId  String   @id
+  senderId   String
+  receiverId String
+  content    String
+  read       Boolean
+  createdAt  DateTime
+}

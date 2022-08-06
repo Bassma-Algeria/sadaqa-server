@@ -32,7 +32,7 @@ class TogglePostEnablingStatusUseCase
         if (!post.publisherId.equals(userId))
             throw new AuthorizationException(ExceptionsMessages.NOT_AUTHORIZED_TO_EDIT);
 
-        const updatedPost = post.toggleEnableStatus();
+        const updatedPost = post.toggleEnablingStatus();
 
         await this.update(updatedPost);
 

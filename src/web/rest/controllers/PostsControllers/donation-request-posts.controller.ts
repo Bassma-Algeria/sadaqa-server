@@ -29,16 +29,18 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 // eslint-disable-next-line node/no-extraneous-import
 import { Express } from 'express';
 
+import {
+    CreateDonationRequestDto,
+    UpdateDonationRequestDto,
+} from '../dtos/PostsDtos/donation-request-posts.dtos';
 import { PostsController } from './base/posts.controller';
-import { CreateDonationRequestDto, UpdateDonationRequestDto } from '../dtos/posts.dtos';
 
 import { SupportedLanguages } from '../../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesValidationException';
 
 @ApiTags('posts')
 @Controller('/api/posts')
 class DonationRequestPostsController {
-    constructor(private readonly postsService: DonationRequestPostsService) {
-    }
+    constructor(private readonly postsService: DonationRequestPostsService) {}
 
     @Post('donation-request')
     @ApiConsumes('multipart/form-data')
@@ -153,7 +155,7 @@ class DonationRequestPostsController {
             PostsController.handleException(e);
         }
     }
-    
+
     @Get('donation-request/:postId')
     @ApiOkResponse({ description: 'post found' })
     @ApiNotFoundResponse({ description: 'target post not found' })
@@ -181,8 +183,6 @@ class DonationRequestPostsController {
             PostsController.handleException(e);
         }
     }
-
-
 }
 
 export { DonationRequestPostsController };
