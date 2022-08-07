@@ -1,9 +1,9 @@
-import { ExceptionsMessages } from './ExceptionsMessages';
+import { ExceptionMessages } from './ExceptionMessages';
 import { MultiLanguagesException } from './MultiLanguagesException';
 
 class WrongCredentialsException extends MultiLanguagesException {
     constructor() {
-        super(ExceptionsMessages.WRONG_CREDENTIALS);
+        super(ExceptionMessages.WRONG_CREDENTIALS);
     }
 }
 

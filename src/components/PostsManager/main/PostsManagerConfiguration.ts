@@ -1,7 +1,7 @@
 import { UuidPostIdGenerator } from './infra/real/UuidPostIdGenerator';
-import { UsersManagerUsersService } from './infra/real/UsersManagerUsersService';
-import { RegionsManagerWilayasService } from './infra/real/RegionsManagerWilayasService';
-import { MediaManagerPicturesUploader } from './infra/real/MediaManagerPicturesUploader';
+import { UsersServiceImpl } from './infra/real/UsersServiceImpl';
+import { WilayasServiceImpl } from './infra/real/WilayasServiceImpl';
+import { PicturesManagerImpl } from './infra/real/PicturesManagerImpl';
 import { PostgresDonationPostRepository } from './infra/real/PostgresPostRepository/PostgresDonationPostRepository';
 import { DonationPostEventPublisherImpl } from './infra/real/PostEventPublisherImpl/DonationPostEventPublisherImpl';
 import { FavouritePostEventPublisherImpl } from './infra/real/PostEventPublisherImpl/FavouritePostEventPublisherImpl';
@@ -28,9 +28,9 @@ import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsMa
 class PostsManagerConfiguration {
     static aCallForHelpPostsManager() {
         return new CallForHelpPostsManager(
-            new UsersManagerUsersService(UsersManagerConfiguration.aUsersManagerFacade()),
-            new RegionsManagerWilayasService(RegionsManagerConfiguration.aRegionsManagerFacade()),
-            new MediaManagerPicturesUploader(MediaManagerConfiguration.aMediaManagerFacade()),
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+            new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
+            new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
             new PostgresCallForHelpPostRepository(),
             new CallForHelpPostEventPublisherImpl(EventBus.getInstance()),
@@ -39,9 +39,9 @@ class PostsManagerConfiguration {
 
     static aFamilyInNeedPostsManager() {
         return new FamilyInNeedPostsManager(
-            new UsersManagerUsersService(UsersManagerConfiguration.aUsersManagerFacade()),
-            new RegionsManagerWilayasService(RegionsManagerConfiguration.aRegionsManagerFacade()),
-            new MediaManagerPicturesUploader(MediaManagerConfiguration.aMediaManagerFacade()),
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+            new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
+            new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
             new PostgresFamilyInNeedPostRepository(),
             new FamilyInNeedPostEventPublisherImpl(EventBus.getInstance()),
@@ -50,9 +50,9 @@ class PostsManagerConfiguration {
 
     static aDonationPostsManager() {
         return new DonationPostsManager(
-            new UsersManagerUsersService(UsersManagerConfiguration.aUsersManagerFacade()),
-            new RegionsManagerWilayasService(RegionsManagerConfiguration.aRegionsManagerFacade()),
-            new MediaManagerPicturesUploader(MediaManagerConfiguration.aMediaManagerFacade()),
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+            new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
+            new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
             new PostgresDonationPostRepository(),
             new DonationPostEventPublisherImpl(EventBus.getInstance()),
@@ -61,9 +61,9 @@ class PostsManagerConfiguration {
 
     static aDonationRequestPostsManager() {
         return new DonationRequestPostsManager(
-            new UsersManagerUsersService(UsersManagerConfiguration.aUsersManagerFacade()),
-            new RegionsManagerWilayasService(RegionsManagerConfiguration.aRegionsManagerFacade()),
-            new MediaManagerPicturesUploader(MediaManagerConfiguration.aMediaManagerFacade()),
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+            new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
+            new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
             new PostgresDonationRequestPostRepository(),
             new DonationRequestPostEventPublisherImpl(EventBus.getInstance()),
@@ -72,7 +72,7 @@ class PostsManagerConfiguration {
 
     static aFavouritePostsManager() {
         return new FavouritePostsManager(
-            new UsersManagerUsersService(UsersManagerConfiguration.aUsersManagerFacade()),
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
             new PostgresDonationPostRepository(),
             new PostgresFavouritePostRepository(),
             new PostgresCallForHelpPostRepository(),

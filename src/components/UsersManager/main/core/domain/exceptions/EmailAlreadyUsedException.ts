@@ -1,9 +1,9 @@
 import { MultiLanguagesException } from './MultiLanguagesException';
-import { ExceptionsMessages } from './ExceptionsMessages';
+import { ExceptionMessages } from './ExceptionMessages';
 
 class EmailAlreadyUsedException extends MultiLanguagesException {
     constructor() {
-        super(ExceptionsMessages.EMAIL_ALREADY_USED);
+        super(ExceptionMessages.EMAIL_ALREADY_USED);
     }
 }
 

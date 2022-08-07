@@ -1,4 +1,5 @@
-import { InvalidPhoneNumberException } from './exceptions/InvalidPhoneNumberException';
+import { ExceptionMessages } from './exceptions/ExceptionMessages';
+import { MultiLanguagesValidationException } from './exceptions/MultiLanguagesValidationException';
 
 class PhoneNumber {
     private readonly PHONE_REGEX = /^(00213|\+213|0)(5|6|7)[0-9]{8}$/;
@@ -6,7 +7,8 @@ class PhoneNumber {
 
     constructor(phone: string) {
         phone = phone.replace(/\s/g, '');
-        if (!this.PHONE_REGEX.test(phone)) throw new InvalidPhoneNumberException();
+        if (!this.PHONE_REGEX.test(phone))
+            throw new MultiLanguagesValidationException(ExceptionMessages.INVALID_PHONE);
 
         this.phone = phone;
     }

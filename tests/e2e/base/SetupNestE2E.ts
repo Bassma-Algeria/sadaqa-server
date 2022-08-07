@@ -11,8 +11,8 @@ const startNestTestingApp = async (): Promise<INestApplication> => {
 };
 
 const cleanupDB = async () => {
-    await prisma.user.deleteMany();
-    await prisma.association.deleteMany();
+    await prisma.regularUserAccount.deleteMany();
+    await prisma.associationAccount.deleteMany();
     await prisma.donationPost.deleteMany();
     await prisma.donationRequestPost.deleteMany();
     await prisma.callForHelpPost.deleteMany();

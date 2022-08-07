@@ -1,9 +1,9 @@
-import { ExceptionsMessages } from './ExceptionsMessages';
+import { ExceptionMessages } from './ExceptionMessages';
 import { MultiLanguagesException } from './MultiLanguagesException';
 
 class PhoneNumberAlreadyUsedException extends MultiLanguagesException {
     constructor() {
-        super(ExceptionsMessages.PHONE_NUMBER_ALREADY_USED);
+        super(ExceptionMessages.PHONE_NUMBER_ALREADY_USED);
     }
 }
 

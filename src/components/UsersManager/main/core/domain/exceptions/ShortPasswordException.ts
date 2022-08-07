@@ -1,9 +1,9 @@
-import { ExceptionsMessages } from './ExceptionsMessages';
+import { ExceptionMessages } from './ExceptionMessages';
 import { MultiLanguagesException } from './MultiLanguagesException';
 
 class ShortPasswordException extends MultiLanguagesException {
     constructor() {
-        super(ExceptionsMessages.SHORT_PASSWORD);
+        super(ExceptionMessages.SHORT_PASSWORD);
     }
 }
 

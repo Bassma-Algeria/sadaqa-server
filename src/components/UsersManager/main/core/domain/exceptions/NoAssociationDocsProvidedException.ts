@@ -1,9 +1,9 @@
-import { ExceptionsMessages } from './ExceptionsMessages';
+import { ExceptionMessages } from './ExceptionMessages';
 import { MultiLanguagesException } from './MultiLanguagesException';
 
 class NoAssociationDocsProvidedException extends MultiLanguagesException {
     constructor() {
-        super(ExceptionsMessages.NO_ASSOCIATION_DOCS);
+        super(ExceptionMessages.NO_ASSOCIATION_DOCS);
     }
 }
 

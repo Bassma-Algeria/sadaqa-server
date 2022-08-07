@@ -1,5 +1,6 @@
 /* eslint-disable security/detect-unsafe-regex */
-import { InvalidEmailException } from './exceptions/InvalidEmailException';
+import { ExceptionMessages } from './exceptions/ExceptionMessages';
+import { MultiLanguagesValidationException } from './exceptions/MultiLanguagesValidationException';
 
 class Email {
     private readonly email: string;
@@ -8,7 +9,8 @@ class Email {
 
     constructor(email: string) {
         email = email.trim().toLowerCase();
-        if (!this.EMAIL_REGEX.test(email)) throw new InvalidEmailException();
+        if (!this.EMAIL_REGEX.test(email))
+            throw new MultiLanguagesValidationException(ExceptionMessages.INVALID_EMAIL);
 
         this.email = email;
     }

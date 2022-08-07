@@ -11,4 +11,8 @@
 - stay consistence in your namings, no need for plural when returning the list of a specific post, (donation: [THE LIST]
   , and not donations: [THE LIST])
 
+- add delete picture use case in MediaManager
+
+- add the end point to check if a post is in favourite or not
+
 

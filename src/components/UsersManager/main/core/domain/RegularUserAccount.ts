@@ -1,26 +1,40 @@
 import { Email } from './Email';
-import { UserId } from './UserId';
+import { Account } from './Account';
 import { Password } from './Password';
 import { LastName } from './LastName';
+import { AccountId } from './AccountId';
 import { FirstName } from './FirstName';
 import { PhoneNumber } from './PhoneNumber';
 import { WilayaNumber } from './WilayaNumber';
+import { AccountStatus } from './AccountStatus';
+
 import { RegularUserAccountBuilder } from './RegularUserAccountBuilder';
 
-class RegularUserAccount {
+class RegularUserAccount extends Account {
     constructor(
-        readonly userId: UserId,
+        readonly accountId: AccountId,
         readonly firstName: FirstName,
         readonly lastName: LastName,
         readonly wilayaNumber: WilayaNumber,
-        readonly phone: PhoneNumber,
+        readonly phoneNumber: PhoneNumber,
         readonly email: Email,
         readonly password: Password,
+        readonly status: AccountStatus,
         readonly createdAt: Date,
-    ) {}
+    ) {
+        super(accountId, phoneNumber, wilayaNumber, email, password, status, createdAt);
+    }
 
-    static builder(user?: RegularUserAccount): RegularUserAccountBuilder {
-        return new RegularUserAccountBuilder(user);
+    static aBuilder() {
+        return new RegularUserAccountBuilder();
+    }
+
+    static aBuilderFrom(account: RegularUserAccount) {
+        return new RegularUserAccountBuilder(account);
+    }
+
+    protected aBuilderFromThis() {
+        return RegularUserAccount.aBuilderFrom(this);
     }
 }
 

@@ -1,29 +1,38 @@
 import { Email } from './Email';
-import { UserId } from './UserId';
+import { Account } from './Account';
 import { Password } from './Password';
+import { AccountId } from './AccountId';
 import { PhoneNumber } from './PhoneNumber';
 import { WilayaNumber } from './WilayaNumber';
+import { AccountStatus } from './AccountStatus';
 import { AssociationName } from './AssociationName';
+
 import { AssociationAccountBuilder } from './AssociationAccountBuilder';
 
-class AssociationAccount {
+class AssociationAccount extends Account {
     constructor(
-        readonly associationId: UserId,
+        readonly accountId: AccountId,
         readonly associationName: AssociationName,
-        readonly phone: PhoneNumber,
+        readonly phoneNumber: PhoneNumber,
         readonly wilayaNumber: WilayaNumber,
         readonly email: Email,
         readonly password: Password,
-        readonly active: boolean,
+        readonly status: AccountStatus,
         readonly createdAt: Date,
-    ) {}
-
-    public activate(): AssociationAccount {
-        return AssociationAccount.aBuilder(this).withActiveStatus(true).build();
+    ) {
+        super(accountId, phoneNumber, wilayaNumber, email, password, status, createdAt);
     }
 
-    static aBuilder(from?: AssociationAccount) {
-        return new AssociationAccountBuilder(from);
+    static aBuilder() {
+        return new AssociationAccountBuilder();
+    }
+
+    static aBuilderFrom(account: AssociationAccount) {
+        return new AssociationAccountBuilder(account);
+    }
+
+    protected aBuilderFromThis() {
+        return AssociationAccount.aBuilderFrom(this);
     }
 }
 

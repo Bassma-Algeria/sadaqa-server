@@ -1,8 +1,8 @@
-import { ExceptionsMessages } from './ExceptionsMessages';
+import { ExceptionMessages } from './ExceptionMessages';
 
 class UserNotFoundException extends Error {
     constructor() {
-        super(ExceptionsMessages.USER_NOT_FOUND);
+        super(ExceptionMessages.ACCOUNT_NOT_FOUND);
     }
 }
 

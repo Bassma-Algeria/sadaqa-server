@@ -11,9 +11,7 @@ class BcryptPasswordEncryptor implements PasswordEncryptor {
     }
 
     async compare(plain: Password, encrypted: Password): Promise<boolean> {
-        const isMatch = await bcrypt.compare(plain.value(), encrypted.value());
-
-        return isMatch;
+        return await bcrypt.compare(plain.value(), encrypted.value());
     }
 }
 

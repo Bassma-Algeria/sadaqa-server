@@ -1,5 +1,5 @@
 import { MultiLanguagesException } from './MultiLanguagesException';
-import { ExceptionsMessages } from '../../usecases/RegisterRegularUserUseCase/exeptions/ExceptionsMessages';
+import { ExceptionsMessages } from '../../usecases/RegisterUseCases/RegisterRegularUserUseCase/exeptions/ExceptionsMessages';
 
 class InvalidWilayaNumberException extends MultiLanguagesException {
     constructor() {

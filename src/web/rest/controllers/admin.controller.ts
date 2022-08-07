@@ -25,7 +25,7 @@ import { AdminService, InvalidAdminPasswordException } from '../services/admin.s
 class AdminController {
     constructor(private readonly adminService: AdminService) {}
 
-    @Put('associations/:associationId/activate')
+    @Put('associations/:accountId/activate')
     @HttpCode(204)
     @ApiHeader({ name: 'Authorisation', description: 'the admin password' })
     @ApiResponse({ description: 'association activated successfully', status: 204 })
@@ -33,11 +33,11 @@ class AdminController {
     @ApiUnauthorizedResponse({ description: 'wrong Authorisation header' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
     async activateAssociation(
-        @Param('associationId') associationId: string,
+        @Param('accountId') accountId: string,
         @Headers('Authorisation') adminPassword: string,
     ) {
         try {
-            return await this.adminService.activateAssociation(adminPassword, { associationId });
+            return await this.adminService.activateAssociation(adminPassword, { accountId });
         } catch (e) {
             if (e instanceof UserNotFoundException)
                 throw new HttpException({ error: 'association not found' }, HttpStatus.NOT_FOUND);

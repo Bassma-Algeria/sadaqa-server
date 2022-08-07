@@ -1,5 +1,5 @@
 interface LoginUseCaseResponse {
-    readonly userId: string;
+    readonly accountId: string;
 }
 
 export { LoginUseCaseResponse };

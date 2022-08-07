@@ -51,24 +51,25 @@ interface CallForHelpPostPayload {
 }
 
 interface AssociationRegisteredPayload {
-    readonly associationId: string;
+    readonly accountId: string;
     readonly associationName: string;
     readonly wilayaNumber: number;
     readonly phoneNumber: string;
     readonly email: string;
     readonly password: string;
-    readonly active: boolean;
+    readonly status: string;
     readonly createdAt: Date;
     readonly associationDocs: Buffer[];
 }
 
 interface RegularUserRegisteredPayload {
-    readonly userId: string;
+    readonly accountId: string;
     readonly firstName: string;
     readonly lastName: string;
     readonly wilayaNumber: number;
     readonly phoneNumber: string;
     readonly email: string;
+    readonly status: string;
     readonly password: string;
     readonly createdAt: Date;
 }
@@ -80,7 +81,7 @@ interface FavouritePostPayload {
 }
 
 interface UserLoginPayload {
-    readonly userId: string;
+    readonly accountId: string;
 }
 
 interface TextMessageSentPayload {

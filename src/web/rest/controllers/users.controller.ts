@@ -88,13 +88,13 @@ class UsersController {
         }
     }
 
-    @Get('regular-user/:regularUserId')
+    @Get('regular-user/:accountId')
     @ApiOkResponse({ description: 'user found' })
     @ApiNotFoundResponse({ description: 'user not found' })
     @ApiInternalServerErrorResponse({ description: 'internal server error' })
-    async getRegularUserById(@Param('regularUserId') id: string) {
+    async getRegularUserById(@Param('accountId') accountId: string) {
         try {
-            return await this.usersService.getRegularUserById({ regularUserId: id });
+            return await this.usersService.getRegularUserById({ accountId });
         } catch (e) {
             if (e instanceof UserNotFoundException)
                 throw new HttpException({ error: 'no user found' }, HttpStatus.NOT_FOUND);
@@ -145,13 +145,13 @@ class UsersController {
         }
     }
 
-    @Get('associations/:associationId')
+    @Get('associations/:accountId')
     @ApiOkResponse({ description: 'association found' })
     @ApiNotFoundResponse({ description: 'association not found' })
     @ApiInternalServerErrorResponse({ description: 'internal server error' })
-    async getAssociationById(@Param('associationId') id: string) {
+    async getAssociationById(@Param('accountId') accountId: string) {
         try {
-            return await this.usersService.getAssociationById({ associationId: id });
+            return await this.usersService.getAssociationById({ accountId });
         } catch (e) {
             if (e instanceof UserNotFoundException)
                 throw new HttpException({ error: 'no association found' }, HttpStatus.NOT_FOUND);

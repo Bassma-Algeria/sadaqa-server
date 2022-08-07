@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { ActivateAssociationAccountUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/ActivateAssociationAccountUseCase/ActivateAssociationAccountUseCaseRequest';
+import { EnableAssociationAccountUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/EnableAssociationAccountUseCase/EnableAssociationAccountUseCaseRequest';
 
 import { UsersManagerConfiguration } from '../../../components/UsersManager/main/UsersManagerConfiguration';
 
@@ -10,11 +10,11 @@ class AdminService {
 
     async activateAssociation(
         adminPassword: string,
-        request: ActivateAssociationAccountUseCaseRequest,
+        request: EnableAssociationAccountUseCaseRequest,
     ) {
         if (adminPassword !== process.env.ADMIN_PASSWORD) throw new InvalidAdminPasswordException();
 
-        return this.usersManager.activateAssociationAccount(request);
+        return this.usersManager.enableAssociationAccount(request);
     }
 }
 

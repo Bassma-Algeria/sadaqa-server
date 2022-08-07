@@ -15,7 +15,7 @@ class UsersServiceImpl implements UsersService {
 
     private async isRegularUserExist(id: UserId): Promise<boolean> {
         try {
-            await this.usersManagerFacade.getRegularUserById({ regularUserId: id.value() });
+            await this.usersManagerFacade.getRegularUserById({ accountId: id.value() });
 
             return true;
         } catch {
@@ -25,7 +25,7 @@ class UsersServiceImpl implements UsersService {
 
     private async isAssociationExist(id: UserId): Promise<boolean> {
         try {
-            await this.usersManagerFacade.getAssociationById({ associationId: id.value() });
+            await this.usersManagerFacade.getAssociationById({ accountId: id.value() });
 
             return true;
         } catch {

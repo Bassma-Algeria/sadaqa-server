@@ -1,25 +1,25 @@
 import { UsersManagerFacade } from './UsersManagerFacade';
 
-import { UsersEventBusImpl } from './infra/real/UsersEventBusImpl';
-import { UuidUserIdGenerator } from './infra/real/UuidUserIdGenerator';
+import { WilayasServiceImpl } from './infra/real/WilayasServiceImpl';
+import { UserEventPublisherImpl } from './infra/real/UserEventPublisherImpl';
+import { UuidAccountIdGenerator } from './infra/real/UuidAccountIdGenerator';
 import { BcryptPasswordEncryptor } from './infra/real/BcryptPasswordEncryptor';
-import { RegionsManagerWilayasService } from './infra/real/RegionsManagerWilayasService';
-import { PostgresUserAccountRepository } from './infra/real/PostgresUserAccountRepository';
-import { PostgresAssociationAccountRespository } from './infra/real/PostgresAssociationAccountRespository';
-
-import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsManagerConfiguration';
+import { PostgresRegularUserAccountRepository } from './infra/real/PostgresRegularUserAccountRepository';
+import { PostgresAssociationAccountRepository } from './infra/real/PostgresAssociationAccountRepository';
 
 import { EventBus } from '../../_shared_/event-bus/EventBus';
+
+import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsManagerConfiguration';
 
 class UsersManagerConfiguration {
     static aUsersManagerFacade(): UsersManagerFacade {
         return new UsersManagerFacade(
-            new PostgresUserAccountRepository(),
-            new UuidUserIdGenerator(),
+            new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new BcryptPasswordEncryptor(),
-            new RegionsManagerWilayasService(RegionsManagerConfiguration.aRegionsManagerFacade()),
-            new PostgresAssociationAccountRespository(),
-            new UsersEventBusImpl(EventBus.getInstance()),
+            new UuidAccountIdGenerator(),
+            new UserEventPublisherImpl(EventBus.getInstance()),
+            new PostgresRegularUserAccountRepository(),
+            new PostgresAssociationAccountRepository(),
         );
     }
 }

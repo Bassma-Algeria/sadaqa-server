@@ -1,9 +1,9 @@
-import { ExceptionsMessages } from './ExceptionsMessages';
+import { ExceptionMessages } from './ExceptionMessages';
 import { MultiLanguagesException } from './MultiLanguagesException';
 
 class InvalidEmailException extends MultiLanguagesException {
     constructor() {
-        super(ExceptionsMessages.INVALID_EMAIL);
+        super(ExceptionMessages.INVALID_EMAIL);
     }
 }
 

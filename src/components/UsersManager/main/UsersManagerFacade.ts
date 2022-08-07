@@ -1,78 +1,91 @@
+import { RegularUserAccount } from './core/domain/RegularUserAccount';
+import { AssociationAccount } from './core/domain/AssociationAccount';
+
+import { WilayasService } from './core/domain/services/WilayasService';
+import { PasswordEncryptor } from './core/domain/services/PasswordEncryptor';
+import { AccountIdGenerator } from './core/domain/services/AccountIdGenerator';
+import { UserEventPublisher } from './core/domain/services/UserEventPublisher';
+import { RegularUserAccountRepository } from './core/domain/services/AccountRepository/RegularUserAccountRepository';
+import { AssociationAccountRepository } from './core/domain/services/AccountRepository/AssociationAccountRepository';
+
 import { LoginUseCase } from './core/usecases/LoginUseCase/LoginUseCase';
 import { LoginUseCaseRequest } from './core/usecases/LoginUseCase/LoginUseCaseRequest';
 
-import { GetRegularUserByIdUseCase } from './core/usecases/GetRegularUserByIdUseCase/GetRegularUserByIdUseCase';
-import { GetRegularUserByIdUseCaseRequest } from './core/usecases/GetRegularUserByIdUseCase/GetRegularUserByIdUseCaseRequest';
+import { RegisterRegularUserUseCase } from './core/usecases/RegisterUseCases/RegisterRegularUserUseCase/RegisterRegularUserUseCase';
+import { RegisterRegularUserUseCaseRequest } from './core/usecases/RegisterUseCases/RegisterRegularUserUseCase/RegisterRegularUserUseCaseRequest';
 
-import { RegisterRegularUserUseCase } from './core/usecases/RegisterRegularUserUseCase/RegisterRegularUserUseCase';
-import { RegisterRegularUserUseCaseRequest } from './core/usecases/RegisterRegularUserUseCase/RegisterRegularUserUseCaseRequest';
+import { RegisterAssociationUseCase } from './core/usecases/RegisterUseCases/RegisterAssociationUseCase/RegisterAssociationUseCase';
+import { RegisterAssociationUseCaseRequest } from './core/usecases/RegisterUseCases/RegisterAssociationUseCase/RegisterAssociationUseCaseRequest';
 
-import { RegisterAssociationUseCase } from './core/usecases/RegisterAssociationUseCase/RegisterAssociationUseCase';
-import { RegisterAssociationUseCaseRequest } from './core/usecases/RegisterAssociationUseCase/RegisterAssociationUseCaseRequest';
+import { EnableAssociationAccountUseCase } from './core/usecases/EnableAssociationAccountUseCase/EnableAssociationAccountUseCase';
+import { EnableAssociationAccountUseCaseRequest } from './core/usecases/EnableAssociationAccountUseCase/EnableAssociationAccountUseCaseRequest';
 
-import { GetAssociationByIdUseCase } from './core/usecases/GetAssociationByIdUseCase/GetAssociationByIdUseCase';
-import { GetAssociationByIdUseCaseRequest } from './core/usecases/GetAssociationByIdUseCase/GetAssociationByIdUseCaseRequest';
+import { GetAccountByIdUseCase } from './core/usecases/GetAccountByIdUseCase/GetAccountByIdUseCase';
+import { GetAccountByIdUseCaseRequest } from './core/usecases/GetAccountByIdUseCase/GetAccountByIdUseCaseRequest';
 
-import { UsersEventBus } from './core/domain/services/UsersEventBus';
-import { WilayasService } from './core/domain/services/WilayasService';
-import { UserIdGenerator } from './core/domain/services/UserIdGenerator';
-import { PasswordEncryptor } from './core/domain/services/PasswordEncryptor';
-import { RegularUserAccountRepository } from './core/domain/services/RegularUserAccountRepository';
-import { AssociationAccountRepository } from './core/domain/services/AssociationAccountRepository';
-import { ActivateAssociationAccountUseCaseRequest } from './core/usecases/ActivateAssociationAccountUseCase/ActivateAssociationAccountUseCaseRequest';
-import { ActivateAssociationAccountUseCase } from './core/usecases/ActivateAssociationAccountUseCase/ActivateAssociationAccountUseCase';
+import { RegularUserAccountDto } from './core/usecases/_common_/dtos/RegularUserAccountDto';
+import { RegularUserAccountDtoMapper } from './core/usecases/_common_/dtos/RegularUserAccountDtoMapper';
+
+import { AssociationAccountDto } from './core/usecases/_common_/dtos/AssociationAccountDto';
+import { AssociationAccountDtoMapper } from './core/usecases/_common_/dtos/AssociationAccountDtoMapper';
 
 class UsersManagerFacade {
     constructor(
-        private readonly regularUserAccountRepository: RegularUserAccountRepository,
-        private readonly userIdGenerator: UserIdGenerator,
-        private readonly passwordEncryptor: PasswordEncryptor,
         private readonly wilayasService: WilayasService,
+        private readonly passwordEncryptor: PasswordEncryptor,
+        private readonly accountIdGenerator: AccountIdGenerator,
+        private readonly userEventPublisher: UserEventPublisher,
+        private readonly regularUserAccountRepository: RegularUserAccountRepository,
         private readonly associationAccountRepository: AssociationAccountRepository,
-        private readonly usersEventBus: UsersEventBus,
     ) {}
 
     login(request: LoginUseCaseRequest) {
         return new LoginUseCase(
-            this.regularUserAccountRepository,
+            this.userEventPublisher,
             this.passwordEncryptor,
+            this.regularUserAccountRepository,
             this.associationAccountRepository,
-            this.usersEventBus,
         ).handle(request);
     }
 
     registerRegularUser(request: RegisterRegularUserUseCaseRequest) {
         return new RegisterRegularUserUseCase(
-            this.regularUserAccountRepository,
-            this.userIdGenerator,
-            this.passwordEncryptor,
             this.wilayasService,
+            this.passwordEncryptor,
+            this.accountIdGenerator,
+            this.userEventPublisher,
             this.associationAccountRepository,
-            this.usersEventBus,
+            this.regularUserAccountRepository,
         ).handle(request);
     }
 
-    getRegularUserById(request: GetRegularUserByIdUseCaseRequest) {
-        return new GetRegularUserByIdUseCase(this.regularUserAccountRepository).handle(request);
+    getRegularUserById(request: GetAccountByIdUseCaseRequest) {
+        return new GetAccountByIdUseCase<RegularUserAccount>(
+            this.regularUserAccountRepository,
+            RegularUserAccountDtoMapper.getInstance(),
+        ).handle(request) as Promise<RegularUserAccountDto>;
     }
 
     registerAssociation(request: RegisterAssociationUseCaseRequest) {
         return new RegisterAssociationUseCase(
             this.wilayasService,
             this.passwordEncryptor,
-            this.userIdGenerator,
+            this.userEventPublisher,
+            this.accountIdGenerator,
             this.associationAccountRepository,
             this.regularUserAccountRepository,
-            this.usersEventBus,
         ).handle(request);
     }
 
-    getAssociationById(request: GetAssociationByIdUseCaseRequest) {
-        return new GetAssociationByIdUseCase(this.associationAccountRepository).handle(request);
+    getAssociationById(request: GetAccountByIdUseCaseRequest) {
+        return new GetAccountByIdUseCase<AssociationAccount>(
+            this.associationAccountRepository,
+            AssociationAccountDtoMapper.getInstance(),
+        ).handle(request) as Promise<AssociationAccountDto>;
     }
 
-    activateAssociationAccount(request: ActivateAssociationAccountUseCaseRequest) {
-        return new ActivateAssociationAccountUseCase(this.associationAccountRepository).handle(
+    enableAssociationAccount(request: EnableAssociationAccountUseCaseRequest) {
+        return new EnableAssociationAccountUseCase(this.associationAccountRepository).handle(
             request,
         );
     }

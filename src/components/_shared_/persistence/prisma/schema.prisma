@@ -16,25 +16,26 @@ model Wilaya {
   englishName  String
 }
 
-model User {
-  userId       String   @id
+model RegularUserAccount {
+  accountId    String   @id
   firstName    String
   lastName     String
   wilayaNumber Int
-  phone        String   @unique
+  phoneNumber  String   @unique
   email        String   @unique
   password     String
+  status       String
   createdAt    DateTime
 }
 
-model Association {
-  associationId   String   @id
+model AssociationAccount {
+  accountId       String   @id
   associationName String
   wilayaNumber    Int
-  phone           String   @unique
+  phoneNumber     String   @unique
   email           String   @unique
   password        String
-  active          Boolean
+  status          String
   createdAt       DateTime
 }
 

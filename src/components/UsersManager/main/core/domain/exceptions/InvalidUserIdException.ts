@@ -1,8 +1,8 @@
-import { ExceptionsMessages } from './ExceptionsMessages';
+import { ExceptionMessages } from './ExceptionMessages';
 
 class InvalidUserIdException extends Error {
     constructor() {
-        super(ExceptionsMessages.INVALID_USER_ID);
+        super(ExceptionMessages.INVALID_ACCOUNT_ID);
     }
 }
 

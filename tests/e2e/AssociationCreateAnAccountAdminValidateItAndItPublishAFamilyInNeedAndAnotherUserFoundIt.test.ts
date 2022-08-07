@@ -23,9 +23,9 @@ describe('Association Create An Account Admin Validate It And It Publish a Famil
 
     it('should pass with no problem', async () => {
         const { accessToken } = await registerRandomAssociation();
-        const { associationId } = await getAssociationWithToken(accessToken);
+        const { accountId } = await getAssociationWithToken(accessToken);
 
-        await activateAssociationAccount(associationId);
+        await activateAssociationAccount(accountId);
 
         const { postId } = await publishFamilyInNeedPostByAssociationWithToken(accessToken);
         const { list } = await getFamiliesInNeed();
@@ -33,7 +33,7 @@ describe('Association Create An Account Admin Validate It And It Publish a Famil
 
         expect(list).to.have.lengthOf(1);
         expect(list[0]).to.deep.equal(familyInNeedPost);
-        expect(list[0]).to.have.property('publisherId', associationId);
+        expect(list[0]).to.have.property('publisherId', accountId);
     });
 
     const registerRandomAssociation = async () => {
@@ -49,12 +49,12 @@ describe('Association Create An Account Admin Validate It And It Publish a Famil
 
     const getAssociationWithToken = async (accessToken: string) => {
         const {
-            body: { associationId },
+            body: { accountId },
         } = await request(app.getHttpServer())
             .get(EndPoints.GET_AUTHENTICATED_ASSOCIATION)
             .set('Authorisation', accessToken);
 
-        return { associationId };
+        return { accountId };
     };
 
     const activateAssociationAccount = async (id: string) => {
