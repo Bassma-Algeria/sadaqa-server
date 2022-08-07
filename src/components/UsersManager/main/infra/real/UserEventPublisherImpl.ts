@@ -44,6 +44,12 @@ class UserEventPublisherImpl implements UserEventPublisher {
     publishUserLoginEvent(accountId: AccountId): void {
         this.eventBus.publish('USER_LOGIN').withPayload({ accountId: accountId.value() });
     }
+
+    publishAccountCredentialsEdited(accountId: AccountId) {
+        this.eventBus
+            .publish('ACCOUNT_CREDENTIALS_EDITED')
+            .withPayload({ accountId: accountId.value() });
+    }
 }
 
 export { UserEventPublisherImpl };

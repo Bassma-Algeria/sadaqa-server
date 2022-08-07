@@ -80,10 +80,6 @@ interface FavouritePostPayload {
     readonly postType: string;
 }
 
-interface UserLoginPayload {
-    readonly accountId: string;
-}
-
 interface TextMessageSentPayload {
     messageId: string;
     senderId: string;
@@ -98,9 +94,10 @@ interface MessageReadPayload {
 }
 
 export interface Events {
-    USER_LOGIN: UserLoginPayload;
+    USER_LOGIN: { accountId: string };
     ASSOCIATION_REGISTERED: AssociationRegisteredPayload;
     REGULAR_USER_REGISTERED: RegularUserRegisteredPayload;
+    ACCOUNT_CREDENTIALS_EDITED: { accountId: string };
 
     DONATION_POST_CREATED: DonationPayload;
     DONATION_POST_UPDATED: DonationPayload;

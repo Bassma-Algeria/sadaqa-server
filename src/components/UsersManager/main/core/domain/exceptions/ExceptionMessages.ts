@@ -39,6 +39,10 @@ const ExceptionMessages = {
         en: 'confirm password should match the password',
         ar: 'يجب أن يتطابق تأكيد كلمة المرور مع كلمة المرور',
     },
+    WRONG_OLD_PASSWORD: {
+        en: 'wrong old password',
+        ar: 'كلمة المرور القديمة خاطئة',
+    },
     INVALID_ACCOUNT_ID: 'invalid account id',
     ACCOUNT_NOT_FOUND: 'user not found',
 };

@@ -6,6 +6,8 @@ import { RegularUserAccount } from '../RegularUserAccount';
 export interface UserEventPublisher {
     publishUserLoginEvent(accountId: AccountId): void;
 
+    publishAccountCredentialsEdited(accountId: AccountId): void;
+
     publishRegularUserRegisteredEvent(regularUser: RegularUserAccount): void;
 
     publishAssociationRegisteredEvent(payload: {

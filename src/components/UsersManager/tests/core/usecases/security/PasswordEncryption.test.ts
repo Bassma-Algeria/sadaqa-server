@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 import { anything, instance, mock, when } from 'ts-mockito';
 
+import { anEditAccountCredentialsRequest } from '../base/requests/anEditAccountCredentialsRequest';
 import { aRegularUserRegistrationRequest } from '../base/requests/aRegularUserRegistrationRequest';
 import { anAssociationRegistrationRequest } from '../base/requests/anAssociationRegistrationRequest';
 
@@ -38,7 +39,7 @@ describe('Password Encryption', () => {
         associationAccountRepository,
     );
 
-    it('given an association registered, then the password should be encrypted and saved to the data store', async () => {
+    it('given an regularUser registered, then the password should be encrypted and saved to the data store', async () => {
         const password = faker.datatype.string(10);
         const { accountId } = await usersManager.registerAssociation(
             anAssociationRegistrationRequest({ password, confirmPassword: password }),
@@ -73,6 +74,60 @@ describe('Password Encryption', () => {
             new Password(savedPassword),
         );
         expect(savedPassword).to.not.equal(password);
+        expect(isPasswordMatch).to.equal(true);
+    });
+
+    it('given an edit regularUser account credentials, when the password is changed, then should encrypt that new password and saved to the data store', async () => {
+        const NEW_PASSWORD = faker.datatype.string(10);
+
+        const regularUser = anAssociationRegistrationRequest();
+        const { accountId } = await usersManager.registerAssociation(regularUser);
+
+        await usersManager.editAssociationAccountCredentials(
+            anEditAccountCredentialsRequest({
+                accountId,
+                oldPassword: regularUser.password,
+                newPassword: NEW_PASSWORD,
+            }),
+        );
+
+        const savedAccount: any = await associationAccountRepository.findById(
+            new AccountId(accountId),
+        );
+        const savedPassword = savedAccount.password.value();
+
+        const isPasswordMatch = await passwordEncryptor.compare(
+            new Password(NEW_PASSWORD),
+            new Password(savedPassword),
+        );
+        expect(savedPassword).to.not.equal(NEW_PASSWORD);
+        expect(isPasswordMatch).to.equal(true);
+    });
+
+    it('given an edit regular user account credentials, when the password is changed, then should encrypt that new password and saved to the data store', async () => {
+        const NEW_PASSWORD = faker.datatype.string(10);
+
+        const regularUser = aRegularUserRegistrationRequest();
+        const { accountId } = await usersManager.registerRegularUser(regularUser);
+
+        await usersManager.editRegularUseAccountCredentials(
+            anEditAccountCredentialsRequest({
+                accountId,
+                oldPassword: regularUser.password,
+                newPassword: NEW_PASSWORD,
+            }),
+        );
+
+        const savedAccount: any = await regularUserAccountRepository.findById(
+            new AccountId(accountId),
+        );
+        const savedPassword = savedAccount.password.value();
+
+        const isPasswordMatch = await passwordEncryptor.compare(
+            new Password(NEW_PASSWORD),
+            new Password(savedPassword),
+        );
+        expect(savedPassword).to.not.equal(NEW_PASSWORD);
         expect(isPasswordMatch).to.equal(true);
     });
 });

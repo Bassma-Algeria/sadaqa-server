@@ -23,6 +23,12 @@ import { EnableAssociationAccountUseCaseRequest } from './core/usecases/EnableAs
 import { GetAccountByIdUseCase } from './core/usecases/GetAccountByIdUseCase/GetAccountByIdUseCase';
 import { GetAccountByIdUseCaseRequest } from './core/usecases/GetAccountByIdUseCase/GetAccountByIdUseCaseRequest';
 
+import { EditRegularUserAccountCredentialsUseCase } from './core/usecases/EditAccountCredentialsUseCases/EditRegularUseAccountCredentialsUseCase/EditRegularUserAccountCredentialsUseCase';
+import { EditRegularUserAccountCredentialsUseCaseRequest } from './core/usecases/EditAccountCredentialsUseCases/EditRegularUseAccountCredentialsUseCase/EditRegularUserAccountCredentialsUseCaseRequest';
+
+import { EditAssociationAccountCredentialsUseCase } from './core/usecases/EditAccountCredentialsUseCases/EditAssociationAccountCredentialsUseCase/EditAssociationAccountCredentialsUseCase';
+import { EditAssociationAccountCredentialsUseCaseRequest } from './core/usecases/EditAccountCredentialsUseCases/EditAssociationAccountCredentialsUseCase/EditAssociationAccountCredentialsUseCaseRequest';
+
 import { RegularUserAccountDto } from './core/usecases/_common_/dtos/RegularUserAccountDto';
 import { RegularUserAccountDtoMapper } from './core/usecases/_common_/dtos/RegularUserAccountDtoMapper';
 
@@ -88,6 +94,22 @@ class UsersManagerFacade {
         return new EnableAssociationAccountUseCase(this.associationAccountRepository).handle(
             request,
         );
+    }
+
+    editRegularUseAccountCredentials(request: EditRegularUserAccountCredentialsUseCaseRequest) {
+        return new EditRegularUserAccountCredentialsUseCase(
+            this.passwordEncryptor,
+            this.userEventPublisher,
+            this.regularUserAccountRepository,
+        ).handle(request);
+    }
+
+    editAssociationAccountCredentials(request: EditAssociationAccountCredentialsUseCaseRequest) {
+        return new EditAssociationAccountCredentialsUseCase(
+            this.passwordEncryptor,
+            this.userEventPublisher,
+            this.associationAccountRepository,
+        ).handle(request);
     }
 }
 
