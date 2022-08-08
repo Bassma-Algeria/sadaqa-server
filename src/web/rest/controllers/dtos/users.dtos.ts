@@ -54,4 +54,47 @@ class RegisterAssociationDto {
     associationDocs!: any[];
 }
 
-export { LoginDto, RegisterUserDto, RegisterAssociationDto };
+class EditAssociationInfoDto {
+    @ApiProperty({ minLength: 3 })
+    associationName!: string;
+
+    @ApiProperty({ minimum: 1, maximum: 58 })
+    wilayaNumber!: number;
+
+    @ApiProperty()
+    phoneNumber!: string;
+}
+
+class EditRegularUserInfoDto {
+    @ApiProperty({ minLength: 3 })
+    firstName!: string;
+
+    @ApiProperty({ minLength: 3 })
+    lastName!: string;
+
+    @ApiProperty({ minimum: 1, maximum: 58 })
+    wilayaNumber!: number;
+
+    @ApiProperty()
+    phoneNumber!: string;
+}
+
+class EditCredentialsDto {
+    @ApiProperty()
+    email!: string;
+
+    @ApiProperty({ minLength: 6 })
+    oldPassword!: string;
+
+    @ApiProperty({ minLength: 6 })
+    newPassword!: string;
+}
+
+export {
+    LoginDto,
+    RegisterUserDto,
+    RegisterAssociationDto,
+    EditAssociationInfoDto,
+    EditRegularUserInfoDto,
+    EditCredentialsDto,
+};

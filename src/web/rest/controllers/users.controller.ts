@@ -18,6 +18,7 @@ import {
     HttpStatus,
     Param,
     Post,
+    Put,
     UploadedFiles,
     UseInterceptors,
 } from '@nestjs/common';
@@ -25,14 +26,23 @@ import { Express } from 'express';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 import {
-    MultiLanguagesException,
-    SupportedLanguages,
-} from '../../../components/UsersManager/main/core/domain/exceptions/MultiLanguagesException';
-import { UserNotFoundException } from '../../../components/UsersManager/main/core/domain/exceptions/UserNotFoundException';
-
-import { LoginDto, RegisterAssociationDto, RegisterUserDto } from './dtos/users.dtos';
+    EditAssociationInfoDto,
+    EditCredentialsDto,
+    EditRegularUserInfoDto,
+    LoginDto,
+    RegisterAssociationDto,
+    RegisterUserDto,
+} from './dtos/users.dtos';
 
 import { UsersService } from '../services/users.service';
+
+import {
+    MultiLanguagesValidationException,
+    SupportedLanguages,
+} from '../../../components/UsersManager/main/core/domain/exceptions/MultiLanguagesValidationException';
+import { NotFoundException } from '../../../components/UsersManager/main/core/domain/exceptions/NotFoundException';
+import { ValidationException } from '../../../components/UsersManager/main/core/domain/exceptions/ValidationException';
+import { InvalidTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidTokenException';
 import { InvalidAccessTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidAccessTokenException';
 
 @ApiTags('users')
@@ -49,7 +59,7 @@ class UsersController {
         try {
             return await this.usersService.login(body);
         } catch (e) {
-            this.handleError(e, language);
+            UsersController.handleError(e, language);
         }
     }
 
@@ -65,7 +75,7 @@ class UsersController {
         try {
             return await this.usersService.registerRegularUser(signupBody);
         } catch (e) {
-            this.handleError(e, language);
+            UsersController.handleError(e, language);
         }
     }
 
@@ -79,12 +89,7 @@ class UsersController {
         try {
             return await this.usersService.getAuthenticatedRegularUser(accessToken);
         } catch (e) {
-            if (e instanceof InvalidAccessTokenException)
-                throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
-            if (e instanceof UserNotFoundException)
-                throw new HttpException({ error: 'not found' }, HttpStatus.NOT_FOUND);
-
-            throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+            UsersController.handleError(e);
         }
     }
 
@@ -96,10 +101,7 @@ class UsersController {
         try {
             return await this.usersService.getRegularUserById({ accountId });
         } catch (e) {
-            if (e instanceof UserNotFoundException)
-                throw new HttpException({ error: 'no user found' }, HttpStatus.NOT_FOUND);
-
-            throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+            UsersController.handleError(e);
         }
     }
 
@@ -122,7 +124,7 @@ class UsersController {
                 associationDocs: docs.map(doc => doc.buffer),
             });
         } catch (e) {
-            this.handleError(e, language);
+            UsersController.handleError(e, language);
         }
     }
 
@@ -136,12 +138,7 @@ class UsersController {
         try {
             return await this.usersService.getAuthenticatedAssociation(accessToken);
         } catch (e) {
-            if (e instanceof InvalidAccessTokenException)
-                throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
-            if (e instanceof UserNotFoundException)
-                throw new HttpException({ error: 'not found' }, HttpStatus.NOT_FOUND);
-
-            throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+            UsersController.handleError(e);
         }
     }
 
@@ -153,16 +150,91 @@ class UsersController {
         try {
             return await this.usersService.getAssociationById({ accountId });
         } catch (e) {
-            if (e instanceof UserNotFoundException)
-                throw new HttpException({ error: 'no association found' }, HttpStatus.NOT_FOUND);
-
-            throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
+            UsersController.handleError(e);
         }
     }
 
-    private handleError(e: unknown, lang: SupportedLanguages): never {
-        if (e instanceof MultiLanguagesException)
-            throw new HttpException({ error: e.errorMessage[lang] }, HttpStatus.BAD_REQUEST);
+    @Put('associations/info')
+    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiOkResponse({ description: 'association info edited' })
+    @ApiNotFoundResponse({ description: 'association not found' })
+    @ApiBadRequestResponse({ description: 'error in the body form data' })
+    @ApiUnauthorizedResponse({ description: 'the access token is not valid' })
+    @ApiInternalServerErrorResponse({ description: 'internal server error' })
+    async editAssociationInfo(
+        @Body() body: EditAssociationInfoDto,
+        @Headers('Authorisation') accessToken: string,
+    ) {
+        try {
+            return await this.usersService.editAssociationInfo(accessToken, body);
+        } catch (e) {
+            UsersController.handleError(e);
+        }
+    }
+
+    @Put('associations/credentials')
+    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiOkResponse({ description: 'association credentials edited' })
+    @ApiNotFoundResponse({ description: 'association not found' })
+    @ApiBadRequestResponse({ description: 'error in the body form data' })
+    @ApiUnauthorizedResponse({ description: 'the access token is not valid' })
+    @ApiInternalServerErrorResponse({ description: 'internal server error' })
+    async editAssociationCredentials(
+        @Body() body: EditCredentialsDto,
+        @Headers('Authorisation') accessToken: string,
+    ) {
+        try {
+            return await this.usersService.editAssociationCredentials(accessToken, body);
+        } catch (e) {
+            UsersController.handleError(e);
+        }
+    }
+
+    @Put('regular-user/info')
+    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiOkResponse({ description: 'regular user info edited' })
+    @ApiNotFoundResponse({ description: 'regular user not found' })
+    @ApiBadRequestResponse({ description: 'error in the body form data' })
+    @ApiUnauthorizedResponse({ description: 'the access token is not valid' })
+    @ApiInternalServerErrorResponse({ description: 'internal server error' })
+    async editRegularUserInfo(
+        @Body() body: EditRegularUserInfoDto,
+        @Headers('Authorisation') accessToken: string,
+    ) {
+        try {
+            return await this.usersService.editRegularUserInfo(accessToken, body);
+        } catch (e) {
+            UsersController.handleError(e);
+        }
+    }
+
+    @Put('regular-user/credentials')
+    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiOkResponse({ description: 'regular user credentials edited' })
+    @ApiNotFoundResponse({ description: 'regular user not found' })
+    @ApiBadRequestResponse({ description: 'error in the body form data' })
+    @ApiUnauthorizedResponse({ description: 'the access token is not valid' })
+    @ApiInternalServerErrorResponse({ description: 'internal server error' })
+    async editRegularUserCredentials(
+        @Body() body: EditCredentialsDto,
+        @Headers('Authorisation') accessToken: string,
+    ) {
+        try {
+            return await this.usersService.editRegularUserCredentials(accessToken, body);
+        } catch (e) {
+            UsersController.handleError(e);
+        }
+    }
+
+    private static handleError(e: unknown, lang?: SupportedLanguages): never {
+        if (e instanceof InvalidAccessTokenException || e instanceof InvalidTokenException)
+            throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
+        if (e instanceof MultiLanguagesValidationException)
+            throw new HttpException({ error: e.error[lang!] }, HttpStatus.BAD_REQUEST);
+        if (e instanceof ValidationException)
+            throw new HttpException({ error: e.message }, HttpStatus.BAD_REQUEST);
+        if (e instanceof NotFoundException)
+            throw new HttpException({ error: e.message }, HttpStatus.NOT_FOUND);
 
         throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }

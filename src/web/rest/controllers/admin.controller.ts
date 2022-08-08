@@ -16,9 +16,8 @@ import {
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-import { UserNotFoundException } from '../../../components/UsersManager/main/core/domain/exceptions/UserNotFoundException';
-
 import { AdminService, InvalidAdminPasswordException } from '../services/admin.service';
+import { NotFoundException } from '../../../components/UsersManager/main/core/domain/exceptions/NotFoundException';
 
 @ApiTags('admin')
 @Controller('/admin')
@@ -39,8 +38,8 @@ class AdminController {
         try {
             return await this.adminService.activateAssociation(adminPassword, { accountId });
         } catch (e) {
-            if (e instanceof UserNotFoundException)
-                throw new HttpException({ error: 'association not found' }, HttpStatus.NOT_FOUND);
+            if (e instanceof NotFoundException)
+                throw new HttpException({ error: e.message }, HttpStatus.NOT_FOUND);
             if (e instanceof InvalidAdminPasswordException) {
                 throw new HttpException({ error: 'not authorized' }, HttpStatus.UNAUTHORIZED);
             }

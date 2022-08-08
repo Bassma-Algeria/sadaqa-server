@@ -10,6 +10,7 @@ import { PostgresAssociationAccountRepository } from './infra/real/PostgresAssoc
 import { EventBus } from '../../_shared_/event-bus/EventBus';
 
 import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsManagerConfiguration';
+import { InMemoryOnlineUserRepository } from './infra/real/InMemoryOnlineUserRepository';
 
 class UsersManagerConfiguration {
     static aUsersManagerFacade(): UsersManagerFacade {
@@ -18,6 +19,7 @@ class UsersManagerConfiguration {
             new BcryptPasswordEncryptor(),
             new UuidAccountIdGenerator(),
             new UserEventPublisherImpl(EventBus.getInstance()),
+            new InMemoryOnlineUserRepository(),
             new PostgresRegularUserAccountRepository(),
             new PostgresAssociationAccountRepository(),
         );

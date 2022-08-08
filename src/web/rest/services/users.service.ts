@@ -4,6 +4,10 @@ import { LoginUseCaseRequest } from '../../../components/UsersManager/main/core/
 import { GetAccountByIdUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/GetAccountByIdUseCase/GetAccountByIdUseCaseRequest';
 import { RegisterRegularUserUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/RegisterUseCases/RegisterRegularUserUseCase/RegisterRegularUserUseCaseRequest';
 import { RegisterAssociationUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/RegisterUseCases/RegisterAssociationUseCase/RegisterAssociationUseCaseRequest';
+import { EditAssociationAccountInfoUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/EditAccountInfoUseCases/EditAssociationAccountInfoUseCase/EditAssociationAccountInfoUseCaseRequest';
+import { EditRegularUserAccountInfoUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/EditAccountInfoUseCases/EditRegularUserAccountInfoUseCase/EditRegularUserAccountInfoUseCaseRequest';
+import { EditAssociationAccountCredentialsUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/EditAccountCredentialsUseCases/EditAssociationAccountCredentialsUseCase/EditAssociationAccountCredentialsUseCaseRequest';
+import { EditRegularUserAccountCredentialsUseCaseRequest } from '../../../components/UsersManager/main/core/usecases/EditAccountCredentialsUseCases/EditRegularUseAccountCredentialsUseCase/EditRegularUserAccountCredentialsUseCaseRequest';
 
 import { UsersManagerConfiguration } from '../../../components/UsersManager/main/UsersManagerConfiguration';
 import { AuthenticationManagerConfiguration } from '../../../components/AuthenticationManager/main/AuthenticationManagerConfiguration';
@@ -59,6 +63,50 @@ class UsersService {
 
     async getAssociationById(request: GetAccountByIdUseCaseRequest) {
         return this.usersManager.getAssociationById(request);
+    }
+
+    async editAssociationInfo(
+        accessToken: string,
+        request: Omit<EditAssociationAccountInfoUseCaseRequest, 'accountId'>,
+    ) {
+        const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
+            accessToken,
+        });
+
+        return this.usersManager.editAssociationAccountInfo({ ...request, accountId });
+    }
+
+    async editAssociationCredentials(
+        accessToken: string,
+        request: Omit<EditAssociationAccountCredentialsUseCaseRequest, 'accountId'>,
+    ) {
+        const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
+            accessToken,
+        });
+
+        return this.usersManager.editAssociationAccountCredentials({ ...request, accountId });
+    }
+
+    async editRegularUserInfo(
+        accessToken: string,
+        request: Omit<EditRegularUserAccountInfoUseCaseRequest, 'accountId'>,
+    ) {
+        const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
+            accessToken,
+        });
+
+        return this.usersManager.editRegularUserAccountInfo({ ...request, accountId });
+    }
+
+    async editRegularUserCredentials(
+        accessToken: string,
+        request: Omit<EditRegularUserAccountCredentialsUseCaseRequest, 'accountId'>,
+    ) {
+        const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
+            accessToken,
+        });
+
+        return this.usersManager.editRegularUserAccountCredentials({ ...request, accountId });
     }
 }
 

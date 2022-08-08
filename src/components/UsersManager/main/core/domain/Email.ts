@@ -18,6 +18,10 @@ class Email {
     value() {
         return this.email;
     }
+
+    equals(email: Email) {
+        return this.email === email.value();
+    }
 }
 
 export { Email };

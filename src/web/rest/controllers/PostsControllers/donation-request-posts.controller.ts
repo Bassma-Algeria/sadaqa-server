@@ -36,6 +36,7 @@ import {
 import { PostsController } from './base/posts.controller';
 
 import { SupportedLanguages } from '../../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesValidationException';
+import { DonationCategory } from '../../../../components/PostsManager/main/core/domain/DonationCategory';
 
 @ApiTags('posts')
 @Controller('/api/posts')
@@ -169,15 +170,25 @@ class DonationRequestPostsController {
     }
 
     @Get('donation-request')
+    @ApiQuery({
+        name: 'category',
+        description: 'donation category',
+        enum: DonationCategory.SUPPORTED_CATEGORIES,
+    })
     @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
     @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })
     @ApiOkResponse({ description: 'posts found' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getList(@Query('page') page: number, @Query('wilayaNumber') wilayaNumber: number) {
+    async getList(
+        @Query('page') page: number,
+        @Query('category') category: string,
+        @Query('wilayaNumber') wilayaNumber: number,
+    ) {
         try {
             return await this.postsService.getList({
                 page: Number(page),
                 wilayaNumber: Number(wilayaNumber),
+                category,
             });
         } catch (e) {
             PostsController.handleException(e);

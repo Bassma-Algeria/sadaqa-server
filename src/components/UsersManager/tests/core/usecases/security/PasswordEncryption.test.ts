@@ -20,6 +20,7 @@ import { PostgresRegularUserAccountRepository } from '../../../../main/infra/rea
 import { PostgresAssociationAccountRepository } from '../../../../main/infra/real/PostgresAssociationAccountRepository';
 
 import { UsersManagerFacade } from '../../../../main/UsersManagerFacade';
+import { InMemoryOnlineUserRepository } from '../../../../main/infra/real/InMemoryOnlineUserRepository';
 
 describe('Password Encryption', () => {
     const wilayasServiceMock = mock<WilayasService>();
@@ -35,6 +36,7 @@ describe('Password Encryption', () => {
         passwordEncryptor,
         new UuidAccountIdGenerator(),
         new UserEventPublisherImpl(EventBus.getInstance()),
+        new InMemoryOnlineUserRepository(),
         regularUserAccountRepository,
         associationAccountRepository,
     );
@@ -110,7 +112,7 @@ describe('Password Encryption', () => {
         const regularUser = aRegularUserRegistrationRequest();
         const { accountId } = await usersManager.registerRegularUser(regularUser);
 
-        await usersManager.editRegularUseAccountCredentials(
+        await usersManager.editRegularUserAccountCredentials(
             anEditAccountCredentialsRequest({
                 accountId,
                 oldPassword: regularUser.password,

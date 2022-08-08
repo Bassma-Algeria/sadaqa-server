@@ -2,9 +2,9 @@ import { PostId } from '../../../core/domain/PostId';
 import { DonationPost } from '../../../core/domain/DonationPost';
 
 import { Title } from '../../../core/domain/Title';
+import { UserId } from '../../../core/domain/UserId';
 import { Picture } from '../../../core/domain/Picture';
 import { Description } from '../../../core/domain/Description';
-import { UserId } from '../../../core/domain/UserId';
 import { WilayaNumber } from '../../../core/domain/WilayaNumber';
 import { DonationCategory } from '../../../core/domain/DonationCategory';
 
@@ -57,7 +57,7 @@ class PostgresDonationPostRepository implements DonationPostRepository {
 
         const dbModels = await prisma.donationPost.findMany({
             where: {
-                category: filters.category.value(),
+                category: filters.category?.value(),
                 wilayaNumber: filters.wilayaNumber?.value(),
             },
             orderBy: { createdAt: 'desc' },
@@ -71,7 +71,7 @@ class PostgresDonationPostRepository implements DonationPostRepository {
     async count(filters: DonationPostRepositoryCountFilters): Promise<number> {
         const total = await prisma.donationPost.count({
             where: {
-                category: filters.category.value(),
+                category: filters.category?.value(),
                 wilayaNumber: filters.wilayaNumber?.value(),
             },
         });

@@ -7,6 +7,7 @@ import { WilayasService } from '../../../../main/core/domain/services/WilayasSer
 import { UserEventPublisherImpl } from '../../../../main/infra/real/UserEventPublisherImpl';
 import { UuidAccountIdGenerator } from '../../../../main/infra/real/UuidAccountIdGenerator';
 import { BcryptPasswordEncryptor } from '../../../../main/infra/real/BcryptPasswordEncryptor';
+import { InMemoryOnlineUserRepository } from '../../../../main/infra/real/InMemoryOnlineUserRepository';
 import { PostgresAssociationAccountRepository } from '../../../../main/infra/real/PostgresAssociationAccountRepository';
 import { PostgresRegularUserAccountRepository } from '../../../../main/infra/real/PostgresRegularUserAccountRepository';
 
@@ -26,6 +27,7 @@ const aUsersManagerFacade = (dependencies?: Dependencies) => {
         new BcryptPasswordEncryptor(),
         new UuidAccountIdGenerator(),
         new UserEventPublisherImpl(EventBus.getInstance()),
+        new InMemoryOnlineUserRepository(),
         new PostgresRegularUserAccountRepository(),
         new PostgresAssociationAccountRepository(),
     );

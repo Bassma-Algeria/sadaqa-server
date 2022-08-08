@@ -17,9 +17,9 @@ import { ExceptionMessages } from '../../../domain/exceptions/ExceptionMessages'
 import { MultiLanguagesValidationException } from '../../../domain/exceptions/MultiLanguagesValidationException';
 
 abstract class RegisterUseCase {
-    abstract getInitialAccountStatus(): AccountStatus;
+    protected abstract getInitialAccountStatus(): AccountStatus;
 
-    abstract getAccountBuilder(): AccountBuilder;
+    protected abstract getAccountBuilder(): AccountBuilder;
 
     protected constructor(
         protected readonly wilayaService: WilayasService,

@@ -8,11 +8,11 @@ import {
 } from './base/PostRepository';
 
 export interface DonationPostRepositoryFindManyFilters extends PostRepositoryFindManyFilters {
-    category: DonationCategory;
+    category?: DonationCategory;
 }
 
 export interface DonationPostRepositoryCountFilters extends PostRepositoryCountFilters {
-    category: DonationCategory;
+    category?: DonationCategory;
 }
 
 export interface DonationPostRepository extends PostRepository<DonationPost> {

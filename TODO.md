@@ -15,4 +15,6 @@
 
 - add the end point to check if a post is in favourite or not
 
+- always start from e2e test, then go into the acceptance tests
+
 

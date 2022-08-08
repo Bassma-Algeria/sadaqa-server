@@ -3,6 +3,9 @@ import { expect } from 'chai';
 import { cleanData } from './base/cleanData';
 import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
 import { aDonationRequestPostsManager } from '../base/aDonationRequestPostsManager';
+import { faker } from '@faker-js/faker';
+import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
 describe('Get Donation Requests Posts', () => {
     const postsManager = aDonationRequestPostsManager();
@@ -11,15 +14,57 @@ describe('Get Donation Requests Posts', () => {
         await cleanData();
     });
 
-    it('as a user, i should be able to get donation requests in a specific wilaya', async () => {
-        const foodDonationAtWilaya1 = aDonationRequestPostCreationRequest({ wilayaNumber: 1 });
+    it('as a user, i should be able to get all the donation posts for a specific category', async () => {
+        const foodDonation = aDonationRequestPostCreationRequest({ category: 'food' });
+        const toysDonation = aDonationRequestPostCreationRequest({ category: 'toys' });
+
+        await postsManager.create(foodDonation);
+        await postsManager.create(toysDonation);
+
+        const { list: foodDonations } = await postsManager.getList({
+            category: 'food',
+        });
+        const { list: toysDonations } = await postsManager.getList({
+            category: 'toys',
+        });
+
+        expect(foodDonations).to.have.lengthOf(1);
+        expect(toysDonations).to.have.lengthOf(1);
+
+        expect(foodDonations[0]).to.have.property('publisherId', foodDonation.publisherId);
+    });
+
+    it('should not be able to get donations requests of none existing categories', async () => {
+        const SOME_RANDOM_WORD = faker.word.noun();
+
+        await expect(postsManager.getList({ category: SOME_RANDOM_WORD }))
+            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CATEGORY.en)
+            .and.to.be.an.instanceOf(MultiLanguagesValidationException);
+    });
+
+    it('as a user, i should be able to get all the donations requests of all the categories', async () => {
+        await postsManager.create(aDonationRequestPostCreationRequest({ category: 'food' }));
+        await postsManager.create(aDonationRequestPostCreationRequest({ category: 'toys' }));
+
+        const { list } = await postsManager.getList();
+
+        expect(list).to.have.lengthOf(2);
+    });
+
+    it('as a user, i should be able to get donations requests for a specific category, in a specific wilaya', async () => {
+        const foodDonationAtWilaya1 = aDonationRequestPostCreationRequest({
+            wilayaNumber: 1,
+            category: 'food',
+        });
 
         await postsManager.create(foodDonationAtWilaya1);
 
         const { list: donationsAtWilaya1 } = await postsManager.getList({
+            category: 'food',
             wilayaNumber: 1,
         });
         const { list: donationsAtAnotherWilaya } = await postsManager.getList({
+            category: 'food',
             wilayaNumber: 2,
         });
 

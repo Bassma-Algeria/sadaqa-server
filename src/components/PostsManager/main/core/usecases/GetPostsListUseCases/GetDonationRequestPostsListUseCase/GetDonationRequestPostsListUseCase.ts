@@ -2,6 +2,8 @@ import { UseCase } from '../../UseCase';
 import { GetDonationRequestPostsListUseCaseRequest } from './GetDonationRequestPostsListUseCaseRequest';
 import { GetDonationRequestPostsListUseCaseResponse } from './GetDonationRequestPostsListUseCaseResponse';
 
+import { DonationCategory } from '../../../domain/DonationCategory';
+
 import { DonationRequestPostDtoMapper } from '../../_common_/dtos/DonationRequestPostDtoMapper';
 
 import { DonationRequestPostRepository } from '../../../domain/services/PostRepository/DonationRequestPostRepository';
@@ -23,7 +25,7 @@ class GetDonationRequestPostsListUseCase
     async handle(
         request?: GetDonationRequestPostsListUseCaseRequest,
     ): Promise<GetDonationRequestPostsListUseCaseResponse> {
-        const filters = await this.getBasicFiltersFrom(request);
+        const filters = await this.getFiltersFrom(request);
 
         const donationRequestPosts = await this.donationRequestPostRepository.findMany(filters);
         const total = await this.donationRequestPostRepository.count(filters);
@@ -36,6 +38,13 @@ class GetDonationRequestPostsListUseCase
                 DonationRequestPostDtoMapper.getInstance().toDto(post),
             ),
         };
+    }
+
+    private async getFiltersFrom(request?: GetDonationRequestPostsListUseCaseRequest) {
+        const category = request?.category ? new DonationCategory(request.category) : undefined;
+        const basicFilters = this.getBasicFiltersFrom(request);
+
+        return { ...basicFilters, category };
     }
 }
 

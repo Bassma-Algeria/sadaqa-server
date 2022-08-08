@@ -28,8 +28,8 @@ const ExceptionMessages = {
         ar: 'يجب أن تقدم وثيقة قانونية واحدة على الأقل',
     },
     PHONE_NUMBER_ALREADY_USED: {
-        en: 'this phone number is used by another association, please try to register with another one',
-        ar: 'رقم الهاتف مستخدم من قبل جمعية أخرى ، يرجى محاولة التسجيل برقم آخر',
+        en: 'this phone number is used by another user, please try to register with another one',
+        ar: 'رقم الهاتف مستخدم من قبل مستخدم آخر ، يرجى محاولة التسجيل برقم آخر',
     },
     INVALID_WILAYA_NUMBER: {
         en: 'this wilaya does not exist, please try another one',

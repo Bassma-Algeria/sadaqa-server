@@ -60,11 +60,11 @@ class RegisterAssociationUseCase
         return { accountId: associationAccount.accountId.value() };
     }
 
-    getAccountBuilder() {
+    protected getAccountBuilder() {
         return AssociationAccount.aBuilder();
     }
 
-    getInitialAccountStatus() {
+    protected getInitialAccountStatus() {
         return AccountStatus.DISABLED;
     }
 }

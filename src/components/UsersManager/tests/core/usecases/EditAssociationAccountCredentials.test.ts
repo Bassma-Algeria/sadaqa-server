@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 
 import { aUsersManagerFacade } from './base/aUsersManagerFacade';
+import { aRegularUserRegistrationRequest } from './base/requests/aRegularUserRegistrationRequest';
 import { anEditAccountCredentialsRequest } from './base/requests/anEditAccountCredentialsRequest';
 import { anAssociationRegistrationRequest } from './base/requests/anAssociationRegistrationRequest';
 
@@ -69,6 +70,46 @@ describe('Edit Association Account Credentials', () => {
             ),
         )
             .to.eventually.be.rejectedWith(ExceptionMessages.SHORT_PASSWORD.en)
+            .and.to.be.an.instanceOf(MultiLanguagesValidationException);
+    });
+
+    it('given an email used by another association, when trying to edit the association account credentials, then should fail', async () => {
+        const anotherAssociation = anAssociationRegistrationRequest();
+        await usersManager.registerAssociation(anotherAssociation);
+
+        const association = anAssociationRegistrationRequest();
+        const { accountId } = await usersManager.registerAssociation(association);
+
+        await expect(
+            usersManager.editAssociationAccountCredentials(
+                anEditAccountCredentialsRequest({
+                    accountId,
+                    email: anotherAssociation.email,
+                    oldPassword: association.password,
+                }),
+            ),
+        )
+            .to.eventually.be.rejectedWith(ExceptionMessages.EMAIL_ALREADY_USED.en)
+            .and.to.be.an.instanceOf(MultiLanguagesValidationException);
+    });
+
+    it('given an email used by another regular user, when trying to edit the association account credentials, then should fail', async () => {
+        const anotherUser = aRegularUserRegistrationRequest();
+        await usersManager.registerRegularUser(anotherUser);
+
+        const association = anAssociationRegistrationRequest();
+        const { accountId } = await usersManager.registerAssociation(association);
+
+        await expect(
+            usersManager.editAssociationAccountCredentials(
+                anEditAccountCredentialsRequest({
+                    accountId,
+                    email: anotherUser.email,
+                    oldPassword: association.password,
+                }),
+            ),
+        )
+            .to.eventually.be.rejectedWith(ExceptionMessages.EMAIL_ALREADY_USED.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 

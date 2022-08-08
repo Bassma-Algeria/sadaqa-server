@@ -16,6 +16,10 @@ class PhoneNumber {
     value() {
         return this.phone;
     }
+
+    equals(phone: PhoneNumber) {
+        return phone.value() === this.phone;
+    }
 }
 
 export { PhoneNumber };

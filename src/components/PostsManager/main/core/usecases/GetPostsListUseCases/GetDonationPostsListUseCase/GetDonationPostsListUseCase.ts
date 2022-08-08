@@ -19,7 +19,7 @@ class GetDonationPostsListUseCase
     }
 
     async handle(
-        request: GetDonationPostsListUseCaseRequest,
+        request?: GetDonationPostsListUseCaseRequest,
     ): Promise<GetDonationPostsListUseCaseResponse> {
         const filters = await this.getFiltersFrom(request);
 
@@ -34,8 +34,8 @@ class GetDonationPostsListUseCase
         };
     }
 
-    private async getFiltersFrom(request: GetDonationPostsListUseCaseRequest) {
-        const category = new DonationCategory(request.category);
+    private async getFiltersFrom(request?: GetDonationPostsListUseCaseRequest) {
+        const category = request?.category ? new DonationCategory(request.category) : undefined;
         const basicFilters = this.getBasicFiltersFrom(request);
 
         return { ...basicFilters, category };

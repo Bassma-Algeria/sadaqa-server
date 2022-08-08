@@ -93,11 +93,30 @@ interface MessageReadPayload {
     messageId: string;
 }
 
+interface RegularUserAccountInfoEdited {
+    readonly accountId: string;
+    readonly firstName: string;
+    readonly lastName: string;
+    readonly wilayaNumber: number;
+    readonly phoneNumber: string;
+}
+
+interface AssociationAccountInfoEdited {
+    readonly accountId: string;
+    readonly associationName: string;
+    readonly wilayaNumber: number;
+    readonly phoneNumber: string;
+}
+
 export interface Events {
     USER_LOGIN: { accountId: string };
     ASSOCIATION_REGISTERED: AssociationRegisteredPayload;
     REGULAR_USER_REGISTERED: RegularUserRegisteredPayload;
+    REGULAR_USER_ACCOUNT_INFO_EDITED: RegularUserAccountInfoEdited;
+    ASSOCIATION_ACCOUNT_INFO_EDITED: AssociationAccountInfoEdited;
     ACCOUNT_CREDENTIALS_EDITED: { accountId: string };
+    USER_GO_OFFLINE: { accountId: string };
+    USER_BECAME_ONLINE: { accountId: string };
 
     DONATION_POST_CREATED: DonationPayload;
     DONATION_POST_UPDATED: DonationPayload;

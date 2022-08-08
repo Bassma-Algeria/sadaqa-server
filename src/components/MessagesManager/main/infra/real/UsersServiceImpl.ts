@@ -1,11 +1,11 @@
 import { UserId } from '../../core/domain/UserId';
-
 import { UsersService } from '../../core/domain/services/UsersService';
+
 import { UsersManagerFacade } from '../../../../UsersManager/main/UsersManagerFacade';
 
 class UsersServiceImpl implements UsersService {
     constructor(private readonly usersManagerFacade: UsersManagerFacade) {}
-
+ 
     async isExist(publisherId: UserId): Promise<boolean> {
         const isRegularUserExist = await this.isRegularUserExist(publisherId);
         const isAssociationExist = await this.isAssociationExist(publisherId);

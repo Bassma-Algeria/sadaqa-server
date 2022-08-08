@@ -174,7 +174,6 @@ class DonationPostsController {
         name: 'category',
         description: 'donation category',
         enum: DonationCategory.SUPPORTED_CATEGORIES,
-        required: true,
     })
     @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
     @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })

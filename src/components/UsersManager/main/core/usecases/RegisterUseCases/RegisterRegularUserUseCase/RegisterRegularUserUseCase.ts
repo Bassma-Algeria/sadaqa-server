@@ -57,11 +57,11 @@ class RegisterRegularUserUseCase
         return { accountId: regularUser.accountId.value() };
     }
 
-    getAccountBuilder() {
+    protected getAccountBuilder() {
         return RegularUserAccount.aBuilder();
     }
 
-    getInitialAccountStatus() {
+    protected getInitialAccountStatus() {
         return AccountStatus.ENABLED;
     }
 }

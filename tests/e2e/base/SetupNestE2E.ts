@@ -17,6 +17,7 @@ const cleanupDB = async () => {
     await prisma.donationRequestPost.deleteMany();
     await prisma.callForHelpPost.deleteMany();
     await prisma.familyInNeedPost.deleteMany();
+    await prisma.favouritePost.deleteMany();
 };
 
 export { cleanupDB, startNestTestingApp };

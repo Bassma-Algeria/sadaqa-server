@@ -29,6 +29,21 @@ import { EditRegularUserAccountCredentialsUseCaseRequest } from './core/usecases
 import { EditAssociationAccountCredentialsUseCase } from './core/usecases/EditAccountCredentialsUseCases/EditAssociationAccountCredentialsUseCase/EditAssociationAccountCredentialsUseCase';
 import { EditAssociationAccountCredentialsUseCaseRequest } from './core/usecases/EditAccountCredentialsUseCases/EditAssociationAccountCredentialsUseCase/EditAssociationAccountCredentialsUseCaseRequest';
 
+import { EditRegularUserAccountInfoUseCase } from './core/usecases/EditAccountInfoUseCases/EditRegularUserAccountInfoUseCase/EditRegularUserAccountInfoUseCase';
+import { EditRegularUserAccountInfoUseCaseRequest } from './core/usecases/EditAccountInfoUseCases/EditRegularUserAccountInfoUseCase/EditRegularUserAccountInfoUseCaseRequest';
+
+import { EditAssociationAccountInfoUseCase } from './core/usecases/EditAccountInfoUseCases/EditAssociationAccountInfoUseCase/EditAssociationAccountInfoUseCase';
+import { EditAssociationAccountInfoUseCaseRequest } from './core/usecases/EditAccountInfoUseCases/EditAssociationAccountInfoUseCase/EditAssociationAccountInfoUseCaseRequest';
+
+import { GetOnlineUsersListUseCase } from './core/usecases/GetOnlineUsersListUseCase/GetOnlineUsersListUseCase';
+import { UserBecameOnlineUseCaseRequest } from './core/usecases/UserBecameOnlineUseCase/UserBecameOnlineUseCaseRequest';
+
+import { OnlineUserRepository } from './core/domain/services/OnlineUserRepository';
+import { UserBecameOnlineUseCase } from './core/usecases/UserBecameOnlineUseCase/UserBecameOnlineUseCase';
+
+import { UserGoOfflineUseCase } from './core/usecases/UserGoOfflineUseCase/UserGoOfflineUseCase';
+import { UserGoOfflineUseCaseRequest } from './core/usecases/UserGoOfflineUseCase/UserGoOfflineUseCaseRequest';
+
 import { RegularUserAccountDto } from './core/usecases/_common_/dtos/RegularUserAccountDto';
 import { RegularUserAccountDtoMapper } from './core/usecases/_common_/dtos/RegularUserAccountDtoMapper';
 
@@ -41,6 +56,7 @@ class UsersManagerFacade {
         private readonly passwordEncryptor: PasswordEncryptor,
         private readonly accountIdGenerator: AccountIdGenerator,
         private readonly userEventPublisher: UserEventPublisher,
+        private readonly onlineUserRepository: OnlineUserRepository,
         private readonly regularUserAccountRepository: RegularUserAccountRepository,
         private readonly associationAccountRepository: AssociationAccountRepository,
     ) {}
@@ -96,10 +112,11 @@ class UsersManagerFacade {
         );
     }
 
-    editRegularUseAccountCredentials(request: EditRegularUserAccountCredentialsUseCaseRequest) {
+    editRegularUserAccountCredentials(request: EditRegularUserAccountCredentialsUseCaseRequest) {
         return new EditRegularUserAccountCredentialsUseCase(
             this.passwordEncryptor,
             this.userEventPublisher,
+            this.associationAccountRepository,
             this.regularUserAccountRepository,
         ).handle(request);
     }
@@ -109,7 +126,43 @@ class UsersManagerFacade {
             this.passwordEncryptor,
             this.userEventPublisher,
             this.associationAccountRepository,
+            this.regularUserAccountRepository,
         ).handle(request);
+    }
+
+    editRegularUserAccountInfo(request: EditRegularUserAccountInfoUseCaseRequest) {
+        return new EditRegularUserAccountInfoUseCase(
+            this.wilayasService,
+            this.userEventPublisher,
+            this.regularUserAccountRepository,
+            this.associationAccountRepository,
+        ).handle(request);
+    }
+
+    editAssociationAccountInfo(request: EditAssociationAccountInfoUseCaseRequest) {
+        return new EditAssociationAccountInfoUseCase(
+            this.wilayasService,
+            this.userEventPublisher,
+            this.regularUserAccountRepository,
+            this.associationAccountRepository,
+        ).handle(request);
+    }
+
+    getOnlineUsersList() {
+        return new GetOnlineUsersListUseCase(this.onlineUserRepository).handle();
+    }
+
+    userBecameOnline(request: UserBecameOnlineUseCaseRequest) {
+        return new UserBecameOnlineUseCase(
+            this.userEventPublisher,
+            this.onlineUserRepository,
+        ).handle(request);
+    }
+
+    userGoOffline(request: UserGoOfflineUseCaseRequest) {
+        return new UserGoOfflineUseCase(this.userEventPublisher, this.onlineUserRepository).handle(
+            request,
+        );
     }
 }
 

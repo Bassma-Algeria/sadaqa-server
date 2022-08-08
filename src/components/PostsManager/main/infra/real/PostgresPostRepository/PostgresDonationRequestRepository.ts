@@ -9,11 +9,13 @@ import { Description } from '../../../core/domain/Description';
 import { WilayaNumber } from '../../../core/domain/WilayaNumber';
 import { DonationCategory } from '../../../core/domain/DonationCategory';
 
-import { DonationRequestPostRepository } from '../../../core/domain/services/PostRepository/DonationRequestPostRepository';
+import {
+    DonationRequestPostRepository,
+    DonationRequestPostRepositoryCountFilters,
+    DonationRequestPostRepositoryFindManyFilters,
+} from '../../../core/domain/services/PostRepository/DonationRequestPostRepository';
 
 import {
-    PostRepositoryCountFilters,
-    PostRepositoryFindManyFilters,
     PostRepositorySearchCountFilters,
     PostRepositorySearchFilters,
 } from '../../../core/domain/services/PostRepository/base/PostRepository';
@@ -53,11 +55,16 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
         else return this.toEntity(dbModel);
     }
 
-    async findMany(filters: PostRepositoryFindManyFilters): Promise<DonationRequestPost[]> {
+    async findMany(
+        filters: DonationRequestPostRepositoryFindManyFilters,
+    ): Promise<DonationRequestPost[]> {
         const numOfPostsToSkip = (filters.page - 1) * filters.pageLimit;
 
         const dbModels = await prisma.donationRequestPost.findMany({
-            where: { wilayaNumber: filters.wilayaNumber?.value() },
+            where: {
+                category: filters.category?.value(),
+                wilayaNumber: filters.wilayaNumber?.value(),
+            },
             orderBy: { createdAt: 'desc' },
             skip: numOfPostsToSkip,
             take: filters.pageLimit,
@@ -66,10 +73,11 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
         return dbModels.map(model => this.toEntity(model));
     }
 
-    async count(filters: PostRepositoryCountFilters): Promise<number> {
+    async count(filters: DonationRequestPostRepositoryCountFilters): Promise<number> {
         const total = await prisma.donationRequestPost.count({
             where: {
                 wilayaNumber: filters.wilayaNumber?.value(),
+                category: filters.category?.value(),
             },
         });
 

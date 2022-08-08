@@ -5,6 +5,7 @@ import { faker } from '@faker-js/faker';
 import { aUsersManagerFacade } from './base/aUsersManagerFacade';
 import { anEditAccountCredentialsRequest } from './base/requests/anEditAccountCredentialsRequest';
 import { aRegularUserRegistrationRequest } from './base/requests/aRegularUserRegistrationRequest';
+import { anAssociationRegistrationRequest } from './base/requests/anAssociationRegistrationRequest';
 
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../main/core/domain/exceptions/NotFoundException';
@@ -19,7 +20,7 @@ describe('Edit Regular User Account Credentials', () => {
         const NOT_EXIST = faker.datatype.uuid();
 
         await expect(
-            usersManager.editRegularUseAccountCredentials(
+            usersManager.editRegularUserAccountCredentials(
                 anEditAccountCredentialsRequest({ accountId: NOT_EXIST }),
             ),
         )
@@ -34,7 +35,7 @@ describe('Edit Regular User Account Credentials', () => {
         );
 
         await expect(
-            usersManager.editRegularUseAccountCredentials(
+            usersManager.editRegularUserAccountCredentials(
                 anEditAccountCredentialsRequest({ accountId, oldPassword: WRONG_PASSWORD }),
             ),
         )
@@ -49,7 +50,7 @@ describe('Edit Regular User Account Credentials', () => {
         );
 
         await expect(
-            usersManager.editRegularUseAccountCredentials(
+            usersManager.editRegularUserAccountCredentials(
                 anEditAccountCredentialsRequest({ accountId, email: INCORRECT_EMAIL }),
             ),
         )
@@ -64,7 +65,7 @@ describe('Edit Regular User Account Credentials', () => {
         );
 
         await expect(
-            usersManager.editRegularUseAccountCredentials(
+            usersManager.editRegularUserAccountCredentials(
                 anEditAccountCredentialsRequest({ accountId, newPassword: SHORT_PASSWORD }),
             ),
         )
@@ -72,40 +73,80 @@ describe('Edit Regular User Account Credentials', () => {
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
+    it('given an email used by another regularUser, when trying to edit the regular user account credentials, then should fail', async () => {
+        const anotherAssociation = anAssociationRegistrationRequest();
+        await usersManager.registerAssociation(anotherAssociation);
+
+        const regularUser = aRegularUserRegistrationRequest();
+        const { accountId } = await usersManager.registerRegularUser(regularUser);
+
+        await expect(
+            usersManager.editRegularUserAccountCredentials(
+                anEditAccountCredentialsRequest({
+                    accountId,
+                    email: anotherAssociation.email,
+                    oldPassword: regularUser.password,
+                }),
+            ),
+        )
+            .to.eventually.be.rejectedWith(ExceptionMessages.EMAIL_ALREADY_USED.en)
+            .and.to.be.an.instanceOf(MultiLanguagesValidationException);
+    });
+
+    it('given an email used by another regular user, when trying to edit the regular user account credentials, then should fail', async () => {
+        const anotherUser = aRegularUserRegistrationRequest();
+        await usersManager.registerRegularUser(anotherUser);
+
+        const regularUser = aRegularUserRegistrationRequest();
+        const { accountId } = await usersManager.registerRegularUser(regularUser);
+
+        await expect(
+            usersManager.editRegularUserAccountCredentials(
+                anEditAccountCredentialsRequest({
+                    accountId,
+                    email: anotherUser.email,
+                    oldPassword: regularUser.password,
+                }),
+            ),
+        )
+            .to.eventually.be.rejectedWith(ExceptionMessages.EMAIL_ALREADY_USED.en)
+            .and.to.be.an.instanceOf(MultiLanguagesValidationException);
+    });
+
     it('given an edit regular account credentials request with correct values and a new email, then should change the account email', async () => {
-        const association = aRegularUserRegistrationRequest();
-        const { accountId } = await usersManager.registerRegularUser(association);
+        const regularUser = aRegularUserRegistrationRequest();
+        const { accountId } = await usersManager.registerRegularUser(regularUser);
 
         const NEW_EMAIL = faker.internet.email();
-        await usersManager.editRegularUseAccountCredentials(
+        await usersManager.editRegularUserAccountCredentials(
             anEditAccountCredentialsRequest({
                 accountId,
                 email: NEW_EMAIL,
-                oldPassword: association.password,
+                oldPassword: regularUser.password,
             }),
         );
- 
+
         const { email } = await usersManager.getRegularUserById({ accountId });
 
         expect(email).to.equal(NEW_EMAIL.toLowerCase());
     });
 
     it('given an edit regular account credentials request with correct values and a new password, then should change the account password', async () => {
-        const association = aRegularUserRegistrationRequest();
-        const { accountId } = await usersManager.registerRegularUser(association);
+        const regularUser = aRegularUserRegistrationRequest();
+        const { accountId } = await usersManager.registerRegularUser(regularUser);
 
         const NEW_PASSWORD = faker.internet.password(10);
-        await usersManager.editRegularUseAccountCredentials(
+        await usersManager.editRegularUserAccountCredentials(
             anEditAccountCredentialsRequest({
                 accountId,
-                email: association.email,
+                email: regularUser.email,
                 newPassword: NEW_PASSWORD,
-                oldPassword: association.password,
+                oldPassword: regularUser.password,
             }),
         );
 
         const { accountId: idFromLogin } = await usersManager.login({
-            email: association.email,
+            email: regularUser.email,
             password: NEW_PASSWORD,
         });
 
@@ -117,11 +158,11 @@ describe('Edit Regular User Account Credentials', () => {
 
         EventBus.getInstance().subscribeTo('ACCOUNT_CREDENTIALS_EDITED').by(mockFn);
 
-        const association = aRegularUserRegistrationRequest();
-        const { accountId } = await usersManager.registerRegularUser(association);
+        const regularUser = aRegularUserRegistrationRequest();
+        const { accountId } = await usersManager.registerRegularUser(regularUser);
 
-        await usersManager.editRegularUseAccountCredentials(
-            anEditAccountCredentialsRequest({ accountId, oldPassword: association.password }),
+        await usersManager.editRegularUserAccountCredentials(
+            anEditAccountCredentialsRequest({ accountId, oldPassword: regularUser.password }),
         );
 
         expect(mockFn.calledOnce).to.equal(true);

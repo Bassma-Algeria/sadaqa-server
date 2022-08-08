@@ -73,7 +73,7 @@ class DonationPostsManager {
         ).handle(request) as Promise<DonationPostDto>;
     }
 
-    getList(request: GetDonationPostsListUseCaseRequest) {
+    getList(request?: GetDonationPostsListUseCaseRequest) {
         return new GetDonationPostsListUseCase(this.donationPostRepository).handle(request);
     }
 

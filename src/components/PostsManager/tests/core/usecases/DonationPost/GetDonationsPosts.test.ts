@@ -9,7 +9,7 @@ import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/Exce
 
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
-describe('Get Donations Posts', () => {
+describe('Get Donations Posts List', () => {
     const postsManager = aDonationPostsManager();
 
     beforeEach(async () => {
@@ -42,6 +42,15 @@ describe('Get Donations Posts', () => {
         await expect(postsManager.getList({ category: SOME_RANDOM_WORD }))
             .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CATEGORY.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
+    });
+
+    it('as a user, i should be able to get all the donations of all the categories', async () => {
+        await postsManager.create(aDonationPostCreationRequest({ category: 'food' }));
+        await postsManager.create(aDonationPostCreationRequest({ category: 'toys' }));
+
+        const { list } = await postsManager.getList();
+
+        expect(list).to.have.lengthOf(2);
     });
 
     it('as a user, i should be able to get donations for a specific category, in a specific wilaya', async () => {
