@@ -1,13 +1,17 @@
 import { expect } from 'chai';
 
 import { FileSize } from '../../../main/core/domain/FileSize';
-import { InvalidFileSizeException } from '../../../main/core/domain/exceptions/InvalidFileSizeException';
+
+import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
+import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 
 describe('FileSize value object', () => {
     it('should not have a negative size in negative', () => {
         const NEGATIVE_NUMBER = -193;
 
-        expect(() => new FileSize(NEGATIVE_NUMBER)).to.throw(InvalidFileSizeException);
+        expect(() => new FileSize(NEGATIVE_NUMBER))
+            .to.throw(ExceptionMessages.INVALID_FILE_SIZE)
+            .instanceof(ValidationException);
     });
 
     it('should get the size in mb', () => {

@@ -1,11 +1,15 @@
 import { faker } from '@faker-js/faker';
 
-import { URL } from '../../core/domain/URL';
+import { PictureUrl } from '../../core/domain/PictureUrl';
 import { CloudService } from '../../core/domain/services/CloudService';
 
 class FakeCloudService implements CloudService {
-    async upload(): Promise<URL> {
-        return new URL(faker.image.imageUrl());
+    async uploadPicture(): Promise<PictureUrl> {
+        return new PictureUrl(faker.image.imageUrl());
+    }
+
+    async deletePicture(picUrl: PictureUrl) {
+        // ...
     }
 }
 

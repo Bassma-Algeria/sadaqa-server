@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 
-import { createAuthenticationManagerFacade } from './base/getFacade';
+import { anAuthenticationManager } from './base/anAuthenticationManager';
 import { AuthenticationManagerFacade } from '../../../main/AuthenticationManagerFacade';
 
 describe('GenerateAccessTokenUseCase', () => {
     let authenticationManager: AuthenticationManagerFacade;
 
     before(() => {
-        authenticationManager = createAuthenticationManagerFacade();
+        authenticationManager = anAuthenticationManager();
     });
 
     it('should generate a unique token for every userId', async () => {

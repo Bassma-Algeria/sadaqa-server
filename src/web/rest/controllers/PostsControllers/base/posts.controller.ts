@@ -5,10 +5,9 @@ import {
     SupportedLanguages,
 } from '../../../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesValidationException';
 import { ValidationException } from '../../../../../components/PostsManager/main/core/domain/exceptions/ValidationException';
-import { InvalidTokenException } from '../../../../../components/AuthenticationManager/main/core/domain/exception/InvalidTokenException';
-import { InvalidAccessTokenException } from '../../../../../components/AuthenticationManager/main/core/domain/exception/InvalidAccessTokenException';
 
 import { NotFoundException } from '../../../../../components/PostsManager/main/core/domain/exceptions/NotFoundException';
+import { TokenException } from '../../../../../components/AuthenticationManager/main/core/domain/exception/TokenException';
 import { AuthorizationException } from '../../../../../components/PostsManager/main/core/domain/exceptions/AuthorizationException';
 
 class PostsController {
@@ -17,7 +16,7 @@ class PostsController {
             throw new HttpException({ error: e.errorMessage[language!] }, HttpStatus.BAD_REQUEST);
         if (e instanceof ValidationException)
             throw new HttpException({ error: e.message }, HttpStatus.BAD_REQUEST);
-        if (e instanceof InvalidTokenException || e instanceof InvalidAccessTokenException)
+        if (e instanceof TokenException)
             throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
         if (e instanceof NotFoundException)
             throw new HttpException({ error: e.message }, HttpStatus.NOT_FOUND);

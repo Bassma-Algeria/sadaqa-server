@@ -1,14 +1,17 @@
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 
-import { URL } from '../../../main/core/domain/URL';
+import { PictureUrl } from '../../../main/core/domain/PictureUrl';
 
-import { InvalidUrlException } from '../../../main/core/domain/exceptions/InvalidUrlException';
+import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
+import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 
 describe('URL value object', () => {
     it('should accept have an invalid url', () => {
         const RANDOM_STRING = faker.datatype.string();
 
-        expect(() => new URL(RANDOM_STRING)).to.throw(InvalidUrlException);
+        expect(() => new PictureUrl(RANDOM_STRING))
+            .to.throw(ExceptionMessages.INVALID_URL)
+            .instanceof(ValidationException);
     });
 });

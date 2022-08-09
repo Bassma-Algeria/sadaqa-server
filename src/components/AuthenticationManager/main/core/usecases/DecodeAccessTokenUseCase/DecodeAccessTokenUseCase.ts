@@ -2,7 +2,8 @@ import { UseCase } from '../UseCase';
 import { DecodeAccessTokenUseCaseRequest } from './DecodeAccessTokenUseCaseRequest';
 import { DecodeAccessTokenUseCaseResponse } from './DecodeAccessTokenUseCaseResponse';
 
-import { AccessToken } from '../../domain/AccessToken';
+import { BearerToken } from '../../domain/BearerToken';
+
 import { TokenizationService } from '../../domain/services/TokenizationService';
 
 class DecodeAccessTokenUseCase
@@ -13,7 +14,7 @@ class DecodeAccessTokenUseCase
     async handle({
         accessToken: tokenFromRequest,
     }: DecodeAccessTokenUseCaseRequest): Promise<DecodeAccessTokenUseCaseResponse> {
-        const accessToken = AccessToken.from(tokenFromRequest);
+        const accessToken = BearerToken.from(tokenFromRequest);
 
         const userId = await this.tokenizationService.decodeToken(accessToken.getToken());
 

@@ -18,8 +18,8 @@ class PicturesManagerImpl implements PicturesManager {
         return pictures;
     }
 
-    delete(picture: Picture): Promise<void> {
-        return Promise.resolve(undefined);
+    async delete(picture: Picture): Promise<void> {
+        await this.mediaManager.deletePicture({ picUrl: picture.url() });
     }
 }
 

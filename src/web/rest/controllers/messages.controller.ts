@@ -28,9 +28,7 @@ import { MessagesService } from '../services/messages.service';
 
 import { NotFoundException } from '../../../components/MessagesManager/main/core/domain/exceptions/NotFoundException';
 import { ValidationException } from '../../../components/MessagesManager/main/core/domain/exceptions/ValidationException';
-
-import { InvalidTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidTokenException';
-import { InvalidAccessTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidAccessTokenException';
+import { TokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/TokenException';
 
 @ApiTags('messages')
 @Controller('/api/messages')
@@ -108,7 +106,7 @@ class MessagesController {
     }
 
     private static handleError(e: unknown) {
-        if (e instanceof InvalidTokenException || e instanceof InvalidAccessTokenException)
+        if (e instanceof TokenException)
             throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
         if (e instanceof ValidationException)
             throw new HttpException({ error: e.message }, HttpStatus.BAD_REQUEST);

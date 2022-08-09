@@ -1,5 +1,5 @@
 import { PictureToUpload } from '../PictureToUpload';
 
-export interface ImageCompressor {
+export interface PictureCompressor {
     minify(picture: PictureToUpload): Promise<PictureToUpload>;
 }

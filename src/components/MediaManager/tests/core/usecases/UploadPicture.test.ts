@@ -5,7 +5,7 @@ import { aMediaManagerFacade } from './base/aMediaManagerFacade';
 
 import { FakeImageCompressor } from '../../../main/infra/fake/FakeImageCompressor';
 
-describe('UploadPictureUseCase', () => {
+describe('Upload Picture', () => {
     const imageCompressor = new FakeImageCompressor();
     const mediaManager = aMediaManagerFacade({ imageCompressor });
 
@@ -24,7 +24,7 @@ describe('UploadPictureUseCase', () => {
         minifyImageSpy.restore();
     });
 
-    it('given an image of size < 0.5mb, it should be resized and then uploaded to the cloud', async () => {
+    it('given an image of size < 0.5mb, it should not be resized and then uploaded to the cloud', async () => {
         const minifyImageSpy = spy(imageCompressor, 'minify');
 
         const LESS_THAN_HALF_MEGA_BYTE = 1 ** 20 / 2;

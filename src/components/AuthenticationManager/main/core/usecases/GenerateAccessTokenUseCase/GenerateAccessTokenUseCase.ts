@@ -3,7 +3,7 @@ import { GenerateAccessTokenUseCaseRequest } from './GenerateAccessTokenUseCaseR
 import { GenerateAccessTokenUseCaseResponse } from './GenerateAccessTokenUseCaseResponse';
 
 import { UserId } from '../../domain/UserId';
-import { AccessToken } from '../../domain/AccessToken';
+import { BearerToken } from '../../domain/BearerToken';
 import { TokenizationService } from '../../domain/services/TokenizationService';
 
 class GenerateAccessTokenUseCase
@@ -16,9 +16,9 @@ class GenerateAccessTokenUseCase
     }: GenerateAccessTokenUseCaseRequest): Promise<GenerateAccessTokenUseCaseResponse> {
         const token = await this.tokenizationService.generateTokenFrom(new UserId(userId));
 
-        const accessToken = new AccessToken(token);
+        const bearerToken = new BearerToken(token);
 
-        return { accessToken: accessToken.value() };
+        return { accessToken: bearerToken.value() };
     }
 }
 

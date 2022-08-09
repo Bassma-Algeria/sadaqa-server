@@ -2,8 +2,11 @@ import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 
 import { Token } from '../../core/domain/Token';
 import { UserId } from '../../core/domain/UserId';
+
 import { TokenizationService } from '../../core/domain/services/TokenizationService';
-import { InvalidTokenException } from '../../core/domain/exception/InvalidTokenException';
+
+import { TokenException } from '../../core/domain/exception/TokenException';
+import { ExceptionMessages } from '../../core/domain/exception/ExceptionMessages';
 
 class JwtTokenizationService implements TokenizationService {
     private readonly JWT_SECRET_KEY: string;
@@ -27,7 +30,8 @@ class JwtTokenizationService implements TokenizationService {
 
             return new UserId(userId);
         } catch (e) {
-            if (e instanceof JsonWebTokenError) throw new InvalidTokenException();
+            if (e instanceof JsonWebTokenError)
+                throw new TokenException(ExceptionMessages.INVALID_TOKEN);
             else throw e;
         }
     }

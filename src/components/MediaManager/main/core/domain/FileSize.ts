@@ -1,4 +1,5 @@
-import { InvalidFileSizeException } from './exceptions/InvalidFileSizeException';
+import { ExceptionMessages } from './exceptions/ExceptionMessages';
+import { ValidationException } from './exceptions/ValidationException';
 
 class FileSize {
     static readonly ONE_MEGA_BYTE = 2 ** 20;
@@ -6,7 +7,7 @@ class FileSize {
     private readonly bytes: number;
 
     constructor(inBytes: number) {
-        if (inBytes < 0) throw new InvalidFileSizeException();
+        if (inBytes < 0) throw new ValidationException(ExceptionMessages.INVALID_FILE_SIZE);
 
         this.bytes = inBytes;
     }

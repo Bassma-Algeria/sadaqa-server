@@ -41,9 +41,8 @@ import {
     SupportedLanguages,
 } from '../../../components/UsersManager/main/core/domain/exceptions/MultiLanguagesValidationException';
 import { NotFoundException } from '../../../components/UsersManager/main/core/domain/exceptions/NotFoundException';
+import { TokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/TokenException';
 import { ValidationException } from '../../../components/UsersManager/main/core/domain/exceptions/ValidationException';
-import { InvalidTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidTokenException';
-import { InvalidAccessTokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/InvalidAccessTokenException';
 
 @ApiTags('users')
 @Controller('/api/users')
@@ -227,7 +226,7 @@ class UsersController {
     }
 
     private static handleError(e: unknown, lang?: SupportedLanguages): never {
-        if (e instanceof InvalidAccessTokenException || e instanceof InvalidTokenException)
+        if (e instanceof TokenException)
             throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);
         if (e instanceof MultiLanguagesValidationException)
             throw new HttpException({ error: e.error[lang!] }, HttpStatus.BAD_REQUEST);
