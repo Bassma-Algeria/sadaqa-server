@@ -143,4 +143,6 @@ export interface Events {
 
     TEXT_MESSAGE_SENT: TextMessageSentPayload;
     MESSAGE_READ: MessageReadPayload;
+    USER_STOP_TYPING: { userId: string; receiverId: string };
+    USER_START_TYPING: { userId: string; receiverId: string };
 }

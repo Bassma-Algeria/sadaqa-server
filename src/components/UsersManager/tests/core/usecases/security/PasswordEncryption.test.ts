@@ -16,11 +16,11 @@ import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 import { UuidAccountIdGenerator } from '../../../../main/infra/real/UuidAccountIdGenerator';
 import { UserEventPublisherImpl } from '../../../../main/infra/real/UserEventPublisherImpl';
 import { BcryptPasswordEncryptor } from '../../../../main/infra/real/BcryptPasswordEncryptor';
+import { InMemoryOnlineUserRepository } from '../../../../main/infra/real/InMemoryOnlineUserRepository';
 import { PostgresRegularUserAccountRepository } from '../../../../main/infra/real/PostgresRegularUserAccountRepository';
 import { PostgresAssociationAccountRepository } from '../../../../main/infra/real/PostgresAssociationAccountRepository';
 
 import { UsersManagerFacade } from '../../../../main/UsersManagerFacade';
-import { InMemoryOnlineUserRepository } from '../../../../main/infra/real/InMemoryOnlineUserRepository';
 
 describe('Password Encryption', () => {
     const wilayasServiceMock = mock<WilayasService>();

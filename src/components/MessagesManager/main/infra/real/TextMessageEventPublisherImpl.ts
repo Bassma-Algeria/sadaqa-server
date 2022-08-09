@@ -3,6 +3,7 @@ import { TextMessage } from '../../core/domain/TextMessage';
 import { TextMessageEventPublisher } from '../../core/domain/services/MessageEventPublisher/TextMessageEventPublisher';
 
 import { EventBus } from '../../../../_shared_/event-bus/EventBus';
+import { UserId } from '../../core/domain/UserId';
 
 class TextMessageEventPublisherImpl implements TextMessageEventPublisher {
     constructor(private readonly eventBus: EventBus) {}
@@ -21,6 +22,20 @@ class TextMessageEventPublisherImpl implements TextMessageEventPublisher {
     publishMessageRead(message: TextMessage) {
         this.eventBus.publish('MESSAGE_READ').withPayload({
             messageId: message.messageId.value(),
+        });
+    }
+
+    publishUserStartTypingEvent(userId: UserId, receiverId: UserId): void {
+        this.eventBus.publish('USER_START_TYPING').withPayload({
+            userId: userId.value(),
+            receiverId: receiverId.value(),
+        });
+    }
+
+    publishUserStopTypingEvent(userId: UserId, receiverId: UserId): void {
+        this.eventBus.publish('USER_STOP_TYPING').withPayload({
+            userId: userId.value(),
+            receiverId: receiverId.value(),
         });
     }
 }

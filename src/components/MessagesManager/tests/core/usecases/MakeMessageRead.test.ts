@@ -1,3 +1,4 @@
+import { spy } from 'sinon';
 import { expect } from 'chai';
 
 import { aMessagesManager } from './base/aMessagesManager';
@@ -6,7 +7,7 @@ import { aSendTextMessageRequest } from './base/requests/aSendTextMessageRequest
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../main/core/domain/exceptions/NotFoundException';
 import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
-import { spy } from 'sinon';
+
 import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Make Message Read', () => {
