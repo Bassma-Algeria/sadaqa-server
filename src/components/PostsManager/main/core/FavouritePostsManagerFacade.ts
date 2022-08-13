@@ -15,6 +15,9 @@ import { DeleteFromFavouriteUseCaseRequest } from './usecases/DeleteFromFavourit
 import { GetFavouritePostsUseCase } from './usecases/GetFavouritePostsUseCase/GetFavouritePostsUseCase';
 import { GetFavouritePostsUseCaseRequest } from './usecases/GetFavouritePostsUseCase/GetFavouritePostsUseCaseRequest';
 
+import { IsPostInFavouritesUseCase } from './usecases/IsPostInFavouritesUseCase/IsPostInFavouritesUseCase';
+import { IsPostInFavouritesUseCaseRequest } from './usecases/IsPostInFavouritesUseCase/IsPostInFavouritesUseCaseRequest';
+
 class FavouritePostsManager {
     constructor(
         private readonly usersService: UsersService,
@@ -54,6 +57,10 @@ class FavouritePostsManager {
             this.familyInNeedPostRepository,
             this.donationRequestPostRepository,
         ).handle(request);
+    }
+
+    isPostInFavourite(request: IsPostInFavouritesUseCaseRequest) {
+        return new IsPostInFavouritesUseCase(this.favouritePostRepository).handle(request);
     }
 }
 
