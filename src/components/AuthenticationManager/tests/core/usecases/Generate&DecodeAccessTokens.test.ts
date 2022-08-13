@@ -1,16 +1,10 @@
-import { faker } from '@faker-js/faker';
 import { expect } from 'chai';
+import { faker } from '@faker-js/faker';
 
 import { anAuthenticationManager } from './base/anAuthenticationManager';
 
-import { AuthenticationManagerFacade } from '../../../main/AuthenticationManagerFacade';
-
 describe('Generate & Decode Access Tokens', () => {
-    let authenticationManager: AuthenticationManagerFacade;
-
-    before(() => {
-        authenticationManager = anAuthenticationManager();
-    });
+    const authenticationManager = anAuthenticationManager();
 
     it('should generate a token from the userId and be able to decode it', async () => {
         const userId = faker.datatype.uuid();

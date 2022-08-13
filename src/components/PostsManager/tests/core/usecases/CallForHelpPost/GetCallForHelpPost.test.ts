@@ -5,7 +5,7 @@ import { aCallForHelpPostsManager } from '../base/aCallForHelpPostsManager';
 import { aCallForHelpPostCreationRequest } from '../base/requests/aCallForHelpPostCreationRequest';
 
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 
 describe('Get Call For Help', () => {
     const postsManager = aCallForHelpPostsManager();
@@ -25,7 +25,7 @@ describe('Get Call For Help', () => {
         const NOT_EXIST = faker.datatype.uuid();
 
         await expect(postsManager.getById({ postId: NOT_EXIST }))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_FOUND)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .and.to.be.an.instanceOf(NotFoundException);
     });
 });

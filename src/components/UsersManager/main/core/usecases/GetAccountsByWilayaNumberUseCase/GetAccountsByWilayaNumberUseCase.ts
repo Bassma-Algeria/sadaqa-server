@@ -3,10 +3,15 @@ import { GetAccountsByWilayaNumberUseCaseRequest } from './GetAccountsByWilayaNu
 import { GetAccountsByWilayaNumberUseCaseResponse } from './GetAccountsByWilayaNumberUseCaseResponse';
 
 import { Account } from '../../domain/Account';
+import { WilayaNumber } from '../../domain/WilayaNumber';
+import { AccountStatus } from '../../domain/AccountStatus';
 
 import { AccountDtoMapper } from '../_common_/dtos/base/AccountDtoMapper';
 
-import { AccountRepository } from '../../domain/services/AccountRepository/base/AccountRepository';
+import {
+    AccountRepository,
+    AccountRepositoryFindManyFilters,
+} from '../../domain/services/AccountRepository/base/AccountRepository';
 
 class GetAccountsByWilayaNumberUseCase
     implements
@@ -20,7 +25,20 @@ class GetAccountsByWilayaNumberUseCase
     async handle(
         request: GetAccountsByWilayaNumberUseCaseRequest,
     ): Promise<GetAccountsByWilayaNumberUseCaseResponse> {
-        return {} as any;
+        const filters = this.getFiltersFrom(request);
+
+        const accounts = await this.accountRepository.findMany(filters);
+ 
+        return accounts.map(this.AccountDtoMapper.toDto);
+    }
+
+    private getFiltersFrom(
+        request: GetAccountsByWilayaNumberUseCaseRequest,
+    ): AccountRepositoryFindManyFilters {
+        const wilayaNumber = new WilayaNumber(request.wilayaNumber);
+        const accountStatus = AccountStatus.ENABLED;
+
+        return { wilayaNumber, accountStatus };
     }
 }
 

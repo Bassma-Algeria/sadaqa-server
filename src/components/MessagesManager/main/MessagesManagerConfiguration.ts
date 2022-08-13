@@ -12,7 +12,7 @@ import { UsersManagerConfiguration } from '../../UsersManager/main/UsersManagerC
 class MessagesManagerConfiguration {
     static aMessagesManager() {
         return new MessagesManagerFacade(
-            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManager()),
             new UuidMessageIdGenerator(),
             new PostgresTextMessageRepository(),
             new TextMessageEventPublisherImpl(EventBus.getInstance()),

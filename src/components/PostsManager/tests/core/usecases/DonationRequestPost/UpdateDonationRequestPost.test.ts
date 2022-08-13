@@ -10,7 +10,7 @@ import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationR
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';
 
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../../../main/core/domain/exceptions/ValidationException';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
@@ -36,7 +36,7 @@ describe('Update Donation Request Post', () => {
         const NOT_EXIST = faker.datatype.uuid();
 
         await expect(postsManager.update(anEditDonationRequestPostRequest({ postId: NOT_EXIST })))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_FOUND)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .and.to.be.an.instanceOf(NotFoundException);
     });
 
@@ -49,7 +49,7 @@ describe('Update Donation Request Post', () => {
                 anEditDonationRequestPostRequest({ userId: NOT_PUBLISHER, postId }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.NOT_AUTHORIZED_TO_EDIT)
+            .to.eventually.be.rejectedWith(ExceptionMessages.NOT_AUTHORIZED_TO_EDIT)
             .and.to.be.an.instanceOf(AuthorizationException);
     });
 
@@ -61,7 +61,7 @@ describe('Update Donation Request Post', () => {
         await expect(
             postsManager.update(anEditDonationRequestPostRequest({ title: SHORT_TITLE, postId })),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.SHORT_TITLE.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.SHORT_TITLE.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -75,7 +75,7 @@ describe('Update Donation Request Post', () => {
                 anEditDonationRequestPostRequest({ category: INVALID_CATEGORY, postId, userId }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CATEGORY.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CATEGORY.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -95,7 +95,7 @@ describe('Update Donation Request Post', () => {
                 }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_WILAYA_NUMBER.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_WILAYA_NUMBER.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -216,7 +216,7 @@ describe('Update Donation Request Post', () => {
                 }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_PICTURE_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_PICTURE_NOT_EXIST)
             .and.to.be.an.instanceOf(ValidationException);
     });
 

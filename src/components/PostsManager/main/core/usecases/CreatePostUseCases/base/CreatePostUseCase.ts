@@ -15,7 +15,7 @@ import { PostIdGenerator } from '../../../domain/services/PostIdGenerator';
 import { PostRepository } from '../../../domain/services/PostRepository/base/PostRepository';
 import { PostEventPublisher } from '../../../domain/services/PostEventPublisher/base/PostEventPublisher';
 
-import { ExceptionsMessages } from '../../../domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../../domain/exceptions/AuthorizationException';
 import { MultiLanguagesValidationException } from '../../../domain/exceptions/MultiLanguagesValidationException';
 
@@ -69,7 +69,7 @@ abstract class CreatePostUseCase {
 
         const isExist = await this.wilayasService.isExist(wilayaNumber);
         if (!isExist)
-            throw new MultiLanguagesValidationException(ExceptionsMessages.INVALID_WILAYA_NUMBER);
+            throw new MultiLanguagesValidationException(ExceptionMessages.INVALID_WILAYA_NUMBER);
 
         return wilayaNumber;
     }
@@ -79,7 +79,7 @@ abstract class CreatePostUseCase {
 
         const isAuthorized = await this.isPublisherAuthorized(publisherId);
         if (!isAuthorized)
-            throw new AuthorizationException(ExceptionsMessages.NOT_AUTHORIZED_TO_PUBLISH);
+            throw new AuthorizationException(ExceptionMessages.NOT_AUTHORIZED_TO_PUBLISH);
 
         return publisherId;
     }

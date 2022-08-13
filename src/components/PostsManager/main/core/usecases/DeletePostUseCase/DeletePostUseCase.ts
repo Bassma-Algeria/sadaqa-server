@@ -9,7 +9,7 @@ import { PostRepository } from '../../domain/services/PostRepository/base/PostRe
 import { PostEventPublisher } from '../../domain/services/PostEventPublisher/base/PostEventPublisher';
 
 import { NotFoundException } from '../../domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../domain/exceptions/AuthorizationException';
 
 class DeletePostUseCase implements UseCase<DeletePostUseCaseRequest, void> {
@@ -24,7 +24,7 @@ class DeletePostUseCase implements UseCase<DeletePostUseCaseRequest, void> {
         const post = await this.findPostByIdThrowIfNotFound(postId);
 
         if (!post.publisherId.equals(userId))
-            throw new AuthorizationException(ExceptionsMessages.NOT_AUTHORIZED_TO_DELETE);
+            throw new AuthorizationException(ExceptionMessages.NOT_AUTHORIZED_TO_DELETE);
 
         await this.delete(post);
 
@@ -33,7 +33,7 @@ class DeletePostUseCase implements UseCase<DeletePostUseCaseRequest, void> {
 
     private async findPostByIdThrowIfNotFound(postId: PostId) {
         const post = await this.postRepository.findById(postId);
-        if (!post) throw new NotFoundException(ExceptionsMessages.POST_NOT_FOUND);
+        if (!post) throw new NotFoundException(ExceptionMessages.POST_NOT_FOUND);
 
         return post;
     }

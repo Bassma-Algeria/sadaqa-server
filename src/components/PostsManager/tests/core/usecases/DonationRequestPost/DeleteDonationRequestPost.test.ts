@@ -6,7 +6,7 @@ import { aDonationRequestPostsManager } from '../base/aDonationRequestPostsManag
 import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
 
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 
 describe('Delete Donation Request Post', () => {
@@ -16,7 +16,7 @@ describe('Delete Donation Request Post', () => {
         const NOT_EXIST = faker.datatype.uuid();
 
         await expect(postsManager.delete(aDeletePostRequest({ postId: NOT_EXIST })))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_FOUND)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .to.be.an.instanceOf(NotFoundException);
     });
 
@@ -25,7 +25,7 @@ describe('Delete Donation Request Post', () => {
         const { postId } = await postsManager.create(aDonationRequestPostCreationRequest());
 
         await expect(postsManager.delete(aDeletePostRequest({ postId, userId: NOT_PUBLISHER })))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.NOT_AUTHORIZED_TO_DELETE)
+            .to.eventually.be.rejectedWith(ExceptionMessages.NOT_AUTHORIZED_TO_DELETE)
             .and.to.be.an.instanceOf(AuthorizationException);
     });
 
@@ -36,7 +36,7 @@ describe('Delete Donation Request Post', () => {
         await postsManager.delete({ postId, userId: post.publisherId });
 
         await expect(postsManager.getById({ postId }))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_FOUND)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .to.be.an.instanceOf(NotFoundException);
     });
 });

@@ -4,7 +4,7 @@ import { cleanData } from './base/cleanData';
 import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
 import { aDonationRequestPostsManager } from '../base/aDonationRequestPostsManager';
 import { faker } from '@faker-js/faker';
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
 describe('Get Donation Requests Posts', () => {
@@ -38,7 +38,7 @@ describe('Get Donation Requests Posts', () => {
         const SOME_RANDOM_WORD = faker.word.noun();
 
         await expect(postsManager.getList({ category: SOME_RANDOM_WORD }))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CATEGORY.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CATEGORY.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 

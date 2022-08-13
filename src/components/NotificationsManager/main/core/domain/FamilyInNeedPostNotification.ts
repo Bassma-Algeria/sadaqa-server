@@ -4,10 +4,12 @@ import { NotificationId } from './NotificationId';
 import { NotificationType } from './NotificationType';
 import { PostNotificationReason } from './PostNotificationReason';
 
-import { DonationPostNotificationBuilder } from './DonationPostNotificationBuilder';
+import { FamilyInNeedPostNotificationBuilder } from './FamilyInNeedPostNotificationBuilder';
 
-class DonationPostNotification {
-    readonly type = NotificationType.NEW_DONATION_POST;
+import { Notification } from './Notification';
+
+class FamilyInNeedPostNotification extends Notification {
+    readonly type = NotificationType.NEW_FAMILY_IN_NEED_POST;
 
     constructor(
         readonly notificationId: NotificationId,
@@ -17,15 +19,28 @@ class DonationPostNotification {
         readonly clicked: boolean,
         readonly read: boolean,
         readonly createdAt: Date,
-    ) {}
-
-    static aBuilder() {
-        return new DonationPostNotificationBuilder();
+    ) {
+        super(
+            notificationId,
+            receiverId,
+            NotificationType.NEW_FAMILY_IN_NEED_POST,
+            clicked,
+            read,
+            createdAt,
+        );
     }
 
-    static aBuilderFrom(notification: DonationPostNotification) {
-        return new DonationPostNotificationBuilder(notification);
+    static aBuilder() {
+        return new FamilyInNeedPostNotificationBuilder();
+    }
+
+    static aBuilderFrom(notification: FamilyInNeedPostNotification) {
+        return new FamilyInNeedPostNotificationBuilder(notification);
+    }
+
+    protected aBuilderFromThis() {
+        return FamilyInNeedPostNotification.aBuilderFrom(this);
     }
 }
 
-export { DonationPostNotification };
+export { FamilyInNeedPostNotification };

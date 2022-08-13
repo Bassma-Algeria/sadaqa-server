@@ -1,14 +1,6 @@
-import { UserId } from '../../UserId';
-import { FamilyInNeedPostNotification } from '../../FamilyInNeedPostNotification';
+import { CallForHelpPostNotification } from '../../CallForHelpPostNotification';
 
-export interface FindManyFamilyInNeedPostNotificationRepository {
-    receiverId: UserId;
-}
+import { NotificationRepository } from './base/NotificationRepository';
 
-export interface FamilyInNeedPostNotificationRepository {
-    save(notification: FamilyInNeedPostNotification): Promise<void>;
-
-    findMany(
-        filters: FindManyFamilyInNeedPostNotificationRepository,
-    ): Promise<FamilyInNeedPostNotification[]>;
-}
+export interface CallForHelpPostNotificationRepository
+    extends NotificationRepository<CallForHelpPostNotification> {}

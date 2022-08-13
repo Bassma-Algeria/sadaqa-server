@@ -4,7 +4,7 @@ import { aDonationRequestPostsManager } from '../base/aDonationRequestPostsManag
 import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
 
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 
 describe('Get Donation Request Post', () => {
     const postsManager = aDonationRequestPostsManager();
@@ -25,7 +25,7 @@ describe('Get Donation Request Post', () => {
         const NOT_EXISING_POST = 'some random';
 
         await expect(postsManager.getById({ postId: NOT_EXISING_POST }))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_FOUND)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .to.be.an.instanceOf(NotFoundException);
     });
 });

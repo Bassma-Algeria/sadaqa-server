@@ -1,35 +1,35 @@
 import { UseCase } from '../../../UseCase';
-import { CreateNewFamilyInNeedPostNotificationUseCaseRequest } from './CreateNewFamilyInNeedPostNotificationUseCaseRequest';
+import { CreateNewCallForHelpPostNotificationUseCaseRequest } from './CreateNewCallForHelpPostNotificationUseCaseRequest';
 
 import { PostId } from '../../../../domain/PostId';
 import { UserId } from '../../../../domain/UserId';
 import { PostNotificationReason } from '../../../../domain/PostNotificationReason';
-import { FamilyInNeedPostNotification } from '../../../../domain/FamilyInNeedPostNotification';
+import { CallForHelpPostNotification } from '../../../../domain/CallForHelpPostNotification';
+import { CallForHelpPostNotificationBuilder } from '../../../../domain/CallForHelpPostNotificationBuilder';
 
 import { UsersService } from '../../../../domain/services/UsersService';
 import { NotificationIdGenerator } from '../../../../domain/services/NotificationIdGenerator';
 import { NotificationEventPublisher } from '../../../../domain/services/NotificationEventPublisher';
-import { FamilyInNeedPostNotificationRepository } from '../../../../domain/services/repositories/FamilyInNeedPostNotificationRepository';
-import { FamilyInNeedPostNotificationBuilder } from '../../../../domain/FamilyInNeedPostNotificationBuilder';
+import { CallForHelpPostNotificationRepository } from '../../../../domain/services/repositories/CallForHelpPostNotificationRepository';
 
-class CreateNewFamilyInNeedPostNotificationUseCase
-    implements UseCase<CreateNewFamilyInNeedPostNotificationUseCaseRequest, void>
+class CreateNewCallForHelpPostNotificationUseCase
+    implements UseCase<CreateNewCallForHelpPostNotificationUseCaseRequest, void>
 {
     constructor(
         private readonly usersService: UsersService,
         private readonly notificationIdGenerator: NotificationIdGenerator,
         private readonly notificationEventPublisher: NotificationEventPublisher,
-        private readonly postNotificationRepository: FamilyInNeedPostNotificationRepository,
+        private readonly postNotificationRepository: CallForHelpPostNotificationRepository,
     ) {}
 
-    async handle(request: CreateNewFamilyInNeedPostNotificationUseCaseRequest): Promise<void> {
+    async handle(request: CreateNewCallForHelpPostNotificationUseCaseRequest): Promise<void> {
         const { postId, wilayaNumber, publisherId } = this.getFrom(request);
 
         const usersInSameWilaya = await this.getIdsOfUsersInWilaya(wilayaNumber).exclude([
             publisherId,
         ]);
 
-        const notificationBuilder = FamilyInNeedPostNotification.aBuilder()
+        const notificationBuilder = CallForHelpPostNotification.aBuilder()
             .withPostId(postId)
             .withClicked(false)
             .withRead(false);
@@ -38,7 +38,7 @@ class CreateNewFamilyInNeedPostNotificationUseCase
             await this.createNotificationForUserInSameWilaya(notificationBuilder, userId);
     }
 
-    private getFrom(request: CreateNewFamilyInNeedPostNotificationUseCaseRequest) {
+    private getFrom(request: CreateNewCallForHelpPostNotificationUseCaseRequest) {
         const postId = new PostId(request.postId);
         const publisherId = new UserId(request.publisherId);
         const wilayaNumber = request.wilayaNumber;
@@ -61,7 +61,7 @@ class CreateNewFamilyInNeedPostNotificationUseCase
     }
 
     private async createNotificationForUserInSameWilaya(
-        notificationBuilder: FamilyInNeedPostNotificationBuilder,
+        notificationBuilder: CallForHelpPostNotificationBuilder,
         userId: UserId,
     ) {
         const notification = notificationBuilder
@@ -83,15 +83,15 @@ class CreateNewFamilyInNeedPostNotificationUseCase
         return new Date();
     }
 
-    private async saveNotification(notification: FamilyInNeedPostNotification) {
+    private async saveNotification(notification: CallForHelpPostNotification) {
         await this.postNotificationRepository.save(notification);
     }
 
     private publishNewDonationRequestPostNotificationCreatedEvent(
-        notification: FamilyInNeedPostNotification,
+        notification: CallForHelpPostNotification,
     ) {
-        this.notificationEventPublisher.newFamilyInNeedPostNotificationCreated(notification);
+        this.notificationEventPublisher.newCallForHelpPostNotificationCreated(notification);
     }
 }
 
-export { CreateNewFamilyInNeedPostNotificationUseCase };
+export { CreateNewCallForHelpPostNotificationUseCase };

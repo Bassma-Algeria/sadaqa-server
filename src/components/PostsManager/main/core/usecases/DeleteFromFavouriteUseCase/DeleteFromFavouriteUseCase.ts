@@ -9,7 +9,7 @@ import { FavouritePostBuilder } from '../../domain/FavouritePostBuilder';
 
 import { FavouritePostRepository } from '../../domain/services/PostRepository/FavouritePostRepository';
 
-import { ExceptionsMessages } from '../../domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../domain/exceptions/ValidationException';
 import { FavouritePostEventPublisher } from '../../domain/services/PostEventPublisher/FavouritePostEventPublisher';
 
@@ -53,7 +53,7 @@ class DeleteFromFavouriteUseCase implements UseCase<DeleteFromFavouriteUseCaseRe
             );
         });
 
-        if (!found) throw new ValidationException(ExceptionsMessages.FAVOURITE_POST_NOT_EXIST);
+        if (!found) throw new ValidationException(ExceptionMessages.FAVOURITE_POST_NOT_EXIST);
     }
 
     private async delete(post: FavouritePost) {

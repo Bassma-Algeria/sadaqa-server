@@ -29,7 +29,7 @@ class LoginUseCase implements UseCase<LoginUseCaseRequest, LoginUseCaseResponse>
 
         await this.checkIfPasswordsMatchAndThrowIfNot(passwordFromRequest, realPassword);
 
-        this.usersEventBus.publishUserLoginEvent(accountId);
+        this.usersEventBus.publishUserLogin(accountId);
 
         return { accountId: accountId.value() };
     }

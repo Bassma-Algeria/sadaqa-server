@@ -11,7 +11,7 @@ import { DonationRequestPostEventPublisherImpl } from '../../../../main/infra/re
 import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
 
 import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
-import { DonationRequestPostsManager } from '../../../../main/core/DonationRequestPostsManager';
+import { DonationRequestPostsManagerFacade } from '../../../../main/core/DonationRequestPostsManagerFacade';
 
 interface Dependencies {
     usersService: UsersService;
@@ -28,7 +28,7 @@ const aDonationRequestPostsManager = (dependencies?: Partial<Dependencies>) => {
 
     when(mockWilayasService.isExist(anything())).thenResolve(true);
 
-    return new DonationRequestPostsManager(
+    return new DonationRequestPostsManagerFacade(
         dependencies?.usersService || instance(mockUsersService),
         dependencies?.wilayasService || instance(mockWilayasService),
         dependencies?.picturesManager || new FakePicturesManager(),

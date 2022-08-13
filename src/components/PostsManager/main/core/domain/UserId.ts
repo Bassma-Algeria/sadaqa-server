@@ -1,11 +1,11 @@
 import { ValidationException } from './exceptions/ValidationException';
-import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
+import { ExceptionMessages } from './exceptions/ExceptionMessages';
 
 class UserId {
     private readonly id: string;
 
     constructor(id: string) {
-        if (!id) throw new ValidationException(ExceptionsMessages.INVALID_USER_ID);
+        if (!id) throw new ValidationException(ExceptionMessages.INVALID_USER_ID);
 
         this.id = id;
     }

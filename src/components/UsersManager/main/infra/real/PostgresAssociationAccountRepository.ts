@@ -10,6 +10,7 @@ import { AssociationName } from '../../core/domain/AssociationName';
 import { AssociationAccount } from '../../core/domain/AssociationAccount';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
+import { AccountRepositoryFindManyFilters } from '../../core/domain/services/AccountRepository/base/AccountRepository';
 
 interface DBModel {
     accountId: string;
@@ -59,6 +60,21 @@ class PostgresAssociationAccountRepository implements AssociationAccountReposito
 
         if (!account) return undefined;
         return this.toEntity(account);
+    }
+
+    async findMany(filters: AccountRepositoryFindManyFilters): Promise<AssociationAccount[]> {
+        const accounts = await prisma.associationAccount.findMany({
+            where: {
+                status: filters.accountStatus,
+                wilayaNumber: filters.wilayaNumber.value(),
+            },
+        });
+
+        return accounts.map(this.toEntity);
+    }
+
+    async deleteAll() {
+        await prisma.associationAccount.deleteMany();
     }
 
     private toDBModel(account: AssociationAccount): DBModel {

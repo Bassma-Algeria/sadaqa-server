@@ -49,6 +49,8 @@ import { RegularUserAccountDtoMapper } from './core/usecases/_common_/dtos/Regul
 
 import { AssociationAccountDto } from './core/usecases/_common_/dtos/AssociationAccountDto';
 import { AssociationAccountDtoMapper } from './core/usecases/_common_/dtos/AssociationAccountDtoMapper';
+import { GetAccountsByWilayaNumberUseCaseRequest } from './core/usecases/GetAccountsByWilayaNumberUseCase/GetAccountsByWilayaNumberUseCaseRequest';
+import { GetAccountsByWilayaNumberUseCase } from './core/usecases/GetAccountsByWilayaNumberUseCase/GetAccountsByWilayaNumberUseCase';
 
 class UsersManagerFacade {
     constructor(
@@ -163,6 +165,20 @@ class UsersManagerFacade {
         return new UserGoOfflineUseCase(this.userEventPublisher, this.onlineUserRepository).handle(
             request,
         );
+    }
+
+    getAssociationsInWilaya(request: GetAccountsByWilayaNumberUseCaseRequest) {
+        return new GetAccountsByWilayaNumberUseCase(
+            AssociationAccountDtoMapper.getInstance(),
+            this.associationAccountRepository,
+        ).handle(request) as Promise<AssociationAccountDto[]>;
+    }
+
+    getRegularUsersInWilaya(request: GetAccountsByWilayaNumberUseCaseRequest) {
+        return new GetAccountsByWilayaNumberUseCase(
+            RegularUserAccountDtoMapper.getInstance(),
+            this.regularUserAccountRepository,
+        ).handle(request) as Promise<RegularUserAccountDto[]>;
     }
 }
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { IsPostInFavouritesUseCaseRequest } from '../../../../components/PostsManager/main/core/usecases/IsPostInFavouritesUseCase/IsPostInFavouritesUseCaseRequest';
 import { AddToFavouritePostsUseCaseRequest } from '../../../../components/PostsManager/main/core/usecases/AddToFavouritePostsUseCase/AddToFavouritePostsUseCaseRequest';
 import { DeleteFromFavouriteUseCaseRequest } from '../../../../components/PostsManager/main/core/usecases/DeleteFromFavouriteUseCase/DeleteFromFavouriteUseCaseRequest';
 
@@ -25,6 +26,14 @@ class FavouritePostsService {
     async getAll(accessToken: string) {
         const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
         return this.favouritePostsManager.getFavouritePosts({ userId });
+    }
+
+    async isFavourite(
+        accessToken: string,
+        request: Omit<IsPostInFavouritesUseCaseRequest, 'userId'>,
+    ) {
+        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+        return this.favouritePostsManager.isPostInFavourite({ userId, ...request });
     }
 }
 

@@ -1,10 +1,9 @@
 import { faker } from '@faker-js/faker';
+import { CreateNewDonationRequestPostNotificationUseCaseRequest } from '../../../../../main/core/usecases/CreateNotificationUseCases/CreatePostNotificationsUseCases/CreateNewDonationRequestPostNotificationUseCase/CreateNewDonationRequestPostNotificationUseCaseRequest';
 
-import { CreateNewDonationPostNotificationUseCaseRequest } from '../../../../../main/core/usecases/CreateNotificationUseCases/CreatePostNotificationsUseCases/CreateNewDonationPostNotificationUseCase/CreateNewDonationPostNotificationUseCaseRequest';
-
-const aCreateNewDonationPostNotificationRequest = (
-    request?: Partial<CreateNewDonationPostNotificationUseCaseRequest>,
-): CreateNewDonationPostNotificationUseCaseRequest => {
+const aCreateNewDonationRequestPostNotificationRequest = (
+    request?: Partial<CreateNewDonationRequestPostNotificationUseCaseRequest>,
+): CreateNewDonationRequestPostNotificationUseCaseRequest => {
     return {
         postId: faker.datatype.uuid(),
         publisherId: faker.datatype.uuid(),
@@ -14,4 +13,4 @@ const aCreateNewDonationPostNotificationRequest = (
     };
 };
 
-export { aCreateNewDonationPostNotificationRequest };
+export { aCreateNewDonationRequestPostNotificationRequest };

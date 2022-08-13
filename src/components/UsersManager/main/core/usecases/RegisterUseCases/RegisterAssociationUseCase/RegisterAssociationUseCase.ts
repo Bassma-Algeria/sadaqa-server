@@ -52,7 +52,7 @@ class RegisterAssociationUseCase
 
         await this.associationAccountRepository.save(associationAccount);
 
-        this.userEventPublisher.publishAssociationRegisteredEvent({
+        this.userEventPublisher.publishAssociationRegistered({
             associationAccount,
             associationDocs,
         });

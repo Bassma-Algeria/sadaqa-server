@@ -10,7 +10,7 @@ import { UuidPostIdGenerator } from '../../../../main/infra/real/UuidPostIdGener
 import { PostgresDonationPostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresDonationPostRepository';
 import { DonationPostEventPublisherImpl } from '../../../../main/infra/real/PostEventPublisherImpl/DonationPostEventPublisherImpl';
 
-import { DonationPostsManager } from '../../../../main/core/DonationPostsManager';
+import { DonationPostsManagerFacade } from '../../../../main/core/DonationPostsManagerFacade';
 
 import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 
@@ -29,7 +29,7 @@ const aDonationPostsManager = (dependencies?: Partial<Dependencies>) => {
 
     when(mockWilayasService.isExist(anything())).thenResolve(true);
 
-    return new DonationPostsManager(
+    return new DonationPostsManagerFacade(
         dependencies?.usersService || instance(mockUsersService),
         dependencies?.wilayasService || instance(mockWilayasService),
         dependencies?.picturesManager || new FakePicturesManager(),

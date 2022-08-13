@@ -14,7 +14,7 @@ import { FamilyInNeedPostRepository } from '../../domain/services/PostRepository
 import { FavouritePostEventPublisher } from '../../domain/services/PostEventPublisher/FavouritePostEventPublisher';
 import { DonationRequestPostRepository } from '../../domain/services/PostRepository/DonationRequestPostRepository';
 
-import { ExceptionsMessages } from '../../domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../domain/exceptions/ValidationException';
 import { FavouritePostRepository } from '../../domain/services/PostRepository/FavouritePostRepository';
 
@@ -57,7 +57,7 @@ class AddToFavouritePostsUseCase implements UseCase<AddToFavouritePostsUseCaseRe
     private async checkIfUserExistAndThrowIfNot(id: UserId) {
         const isExist = await this.usersService.isExist(id);
 
-        if (!isExist) throw new ValidationException(ExceptionsMessages.USER_NOT_EXIST);
+        if (!isExist) throw new ValidationException(ExceptionMessages.USER_NOT_EXIST);
     }
 
     private async checkIfPostExistAndThrowIfNot(id: PostId, type: PostType) {
@@ -81,7 +81,7 @@ class AddToFavouritePostsUseCase implements UseCase<AddToFavouritePostsUseCaseRe
                 break;
         }
 
-        if (!isExist) throw new ValidationException(ExceptionsMessages.POST_NOT_EXIST);
+        if (!isExist) throw new ValidationException(ExceptionMessages.POST_NOT_EXIST);
     }
 
     private async saveFavouritePost(post: FavouritePost) {

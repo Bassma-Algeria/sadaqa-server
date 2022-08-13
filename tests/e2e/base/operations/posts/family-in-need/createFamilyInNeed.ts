@@ -3,15 +3,17 @@ import { faker } from '@faker-js/faker';
 
 import { EndPoints } from '../../../Endpoints';
 
-const createFamilyInNeedPost = async (app: any, token: string) => {
+const createFamilyInNeedPost = async (app: any, token: string, body?: any) => {
+    const familyInNeedInfo = { ...aNewFamilyInNeedCreationBody(), ...body };
+
     const {
         body: { postId },
     } = await request(app)
         .post(EndPoints.NEW_FAMILY_IN_NEED)
-        .field(aNewFamilyInNeedCreationBody() as any)
+        .field(familyInNeedInfo)
         .set('Authorisation', token);
 
-    return { postId };
+    return { postId, familyInNeedInfo };
 };
 
 const aNewFamilyInNeedCreationBody = () => ({

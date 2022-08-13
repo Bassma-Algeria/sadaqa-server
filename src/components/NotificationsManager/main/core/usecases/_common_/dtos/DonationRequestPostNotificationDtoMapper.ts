@@ -1,22 +1,23 @@
-import { DonationPostNotificationDto } from './DonationPostNotificationDto';
+import { DonationRequestPostNotification } from '../../../domain/DonationRequestPostNotification';
 
-import { DonationPostNotification } from '../../../domain/DonationPostNotification';
+import { NotificationDtoMapper } from './base/NotificationDtoMapper';
 
-class DonationPostNotificationDtoMapper {
-    static toDto(notification: DonationPostNotification): DonationPostNotificationDto {
+import { DonationRequestPostNotificationDto } from './DonationRequestPostNotificationDto';
+
+class DonationRequestPostNotificationDtoMapper extends NotificationDtoMapper {
+    static toDto(
+        notification: DonationRequestPostNotification,
+    ): DonationRequestPostNotificationDto {
         return {
-            type: notification.type,
+            ...super.toDto(notification),
             notification: {
-                notificationId: notification.notificationId.value(),
+                ...super.toDto(notification).notification,
+
                 postId: notification.postId.value(),
-                receiverId: notification.receiverId.value(),
                 reason: notification.reason,
-                read: notification.read,
-                clicked: notification.clicked,
-                createdAt: notification.createdAt,
             },
         };
     }
 }
 
-export { DonationPostNotificationDtoMapper };
+export { DonationRequestPostNotificationDtoMapper };

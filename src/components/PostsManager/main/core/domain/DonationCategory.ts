@@ -1,5 +1,5 @@
 import { MultiLanguagesValidationException } from './exceptions/MultiLanguagesValidationException';
-import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
+import { ExceptionMessages } from './exceptions/ExceptionMessages';
 
 class DonationCategory {
     public static readonly SUPPORTED_CATEGORIES = [
@@ -23,7 +23,7 @@ class DonationCategory {
 
     constructor(category: string) {
         if (!DonationCategory.SUPPORTED_CATEGORIES.includes(category as any))
-            throw new MultiLanguagesValidationException(ExceptionsMessages.INVALID_CATEGORY);
+            throw new MultiLanguagesValidationException(ExceptionMessages.INVALID_CATEGORY);
 
         this.category = category;
     }

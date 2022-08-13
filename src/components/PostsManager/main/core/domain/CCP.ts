@@ -1,5 +1,5 @@
 import { MultiLanguagesValidationException } from './exceptions/MultiLanguagesValidationException';
-import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
+import { ExceptionMessages } from './exceptions/ExceptionMessages';
 
 class CCP {
     private readonly ONLY_NUMBERS_REGEX = /^\d+$/;
@@ -12,7 +12,7 @@ class CCP {
         ccpKey = ccpKey?.trim();
 
         if (!this.isValidCCPNumber(ccpNumber) || !this.isValidCCPKey(ccpKey))
-            throw new MultiLanguagesValidationException(ExceptionsMessages.INVALID_CCP);
+            throw new MultiLanguagesValidationException(ExceptionMessages.INVALID_CCP);
 
         this._ccpNumber = ccpNumber;
         this._ccpKey = ccpKey;

@@ -2,12 +2,10 @@ import { PostId } from '../../core/domain/PostId';
 import { UserId } from '../../core/domain/UserId';
 import { NotificationId } from '../../core/domain/NotificationId';
 import { PostNotificationReason } from '../../core/domain/PostNotificationReason';
-import { DonationRequestPostNotification } from '../../core/domain/DonationRequestPostNotification';
+import { FamilyInNeedPostNotification } from '../../core/domain/FamilyInNeedPostNotification';
 
-import {
-    DonationRequestPostNotificationRepository,
-    FindManyDonationRequestPostNotificationRepository,
-} from '../../core/domain/services/repositories/DonationRequestPostNotificationRepository';
+import { FindManyFiltersNotificationRepository } from '../../core/domain/services/repositories/base/NotificationRepository';
+import { FamilyInNeedPostNotificationRepository } from '../../core/domain/services/repositories/FamilyInNeedPostNotificationRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
 
@@ -21,17 +19,17 @@ interface DBModel {
     createdAt: Date;
 }
 
-class PostgresDonationRequestPostNotificationRepository
-    implements DonationRequestPostNotificationRepository
+class PostgresFamilyInNeedPostNotificationRepository
+    implements FamilyInNeedPostNotificationRepository
 {
-    async save(notification: DonationRequestPostNotification): Promise<void> {
-        await prisma.donationRequestPostNotification.create({ data: this.toDBModel(notification) });
+    async save(notification: FamilyInNeedPostNotification): Promise<void> {
+        await prisma.familyInNeedPostNotification.create({ data: this.toDBModel(notification) });
     }
 
     async findMany(
-        filters: FindManyDonationRequestPostNotificationRepository,
-    ): Promise<DonationRequestPostNotification[]> {
-        const notifications = await prisma.donationRequestPostNotification.findMany({
+        filters: FindManyFiltersNotificationRepository,
+    ): Promise<FamilyInNeedPostNotification[]> {
+        const notifications = await prisma.familyInNeedPostNotification.findMany({
             where: {
                 receiverId: filters.receiverId.value(),
             },
@@ -40,7 +38,7 @@ class PostgresDonationRequestPostNotificationRepository
         return notifications.map(this.toEntity);
     }
 
-    private toDBModel(entity: DonationRequestPostNotification): DBModel {
+    private toDBModel(entity: FamilyInNeedPostNotification): DBModel {
         return {
             notificationId: entity.notificationId.value(),
             postId: entity.postId.value(),
@@ -53,7 +51,7 @@ class PostgresDonationRequestPostNotificationRepository
     }
 
     private toEntity(model: DBModel) {
-        return DonationRequestPostNotification.aBuilder()
+        return FamilyInNeedPostNotification.aBuilder()
             .withId(new NotificationId(model.notificationId))
             .withReceiverId(new UserId(model.receiverId))
             .withPostId(new PostId(model.postId))
@@ -65,4 +63,4 @@ class PostgresDonationRequestPostNotificationRepository
     }
 }
 
-export { PostgresDonationRequestPostNotificationRepository };
+export { PostgresFamilyInNeedPostNotificationRepository };

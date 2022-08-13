@@ -9,7 +9,7 @@ import { aCallForHelpPostCreationRequest } from '../base/requests/aCallForHelpPo
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';
 
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
@@ -35,7 +35,7 @@ describe('Create Call For Help Post', () => {
         await expect(
             callForHelpPostsManager.create(aCallForHelpPostCreationRequest({ title: 'sd' })),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.SHORT_TITLE.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.SHORT_TITLE.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -49,7 +49,7 @@ describe('Create Call For Help Post', () => {
                 aCallForHelpPostCreationRequest({ wilayaNumber: INVALID_WILAYA_NUMBER }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_WILAYA_NUMBER.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_WILAYA_NUMBER.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -63,7 +63,7 @@ describe('Create Call For Help Post', () => {
                 aCallForHelpPostCreationRequest({ publisherId: NOT_ACTIVE_ASSOCIATION_ID }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.NOT_AUTHORIZED_TO_PUBLISH)
+            .to.eventually.be.rejectedWith(ExceptionMessages.NOT_AUTHORIZED_TO_PUBLISH)
             .and.to.be.an.instanceOf(AuthorizationException);
     });
 
@@ -73,7 +73,7 @@ describe('Create Call For Help Post', () => {
         await expect(
             callForHelpPostsManager.create(aCallForHelpPostCreationRequest({ ccp: INVALID_CCP })),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CCP.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CCP.en)
             .and.be.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -85,7 +85,7 @@ describe('Create Call For Help Post', () => {
                 aCallForHelpPostCreationRequest({ ccpKey: INVALID_CCP_KEY }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CCP.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CCP.en)
             .and.be.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -105,7 +105,7 @@ describe('Create Call For Help Post', () => {
                 aCallForHelpPostCreationRequest({ baridiMobNumber: INVALID_BARIDI_MOB_NUMBER }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_BARIDI_MOB_NUMBER.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_BARIDI_MOB_NUMBER.en)
             .and.be.be.an.instanceOf(MultiLanguagesValidationException);
     });
 

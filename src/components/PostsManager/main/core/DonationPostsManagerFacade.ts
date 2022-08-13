@@ -29,7 +29,7 @@ import { SearchForPostsUseCaseRequest } from './usecases/SearchForPostsUseCase/S
 import { DonationPostDto } from './usecases/_common_/dtos/DonationPostDto';
 import { DonationPostDtoMapper } from './usecases/_common_/dtos/DonationPostDtoMapper';
 
-class DonationPostsManager {
+class DonationPostsManagerFacade {
     constructor(
         private readonly usersService: UsersService,
         private readonly wilayasService: WilayasService,
@@ -97,4 +97,4 @@ class DonationPostsManager {
     }
 }
 
-export { DonationPostsManager };
+export { DonationPostsManagerFacade };

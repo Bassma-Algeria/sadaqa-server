@@ -9,7 +9,7 @@ import { FamilyInNeedPostEventPublisherImpl } from '../../../../main/infra/real/
 
 import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
 
-import { FamilyInNeedPostsManager } from '../../../../main/core/FamilyInNeedPostsManager';
+import { FamilyInNeedPostsManagerFacade } from '../../../../main/core/FamilyInNeedPostsManagerFacade';
 
 import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 import { PostgresFamilyInNeedPostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresFamilyInNeedPostRepository';
@@ -29,7 +29,7 @@ const aFamilyInNeedPostsManager = (dependencies?: Partial<Dependencies>) => {
 
     when(mockWilayasService.isExist(anything())).thenResolve(true);
 
-    return new FamilyInNeedPostsManager(
+    return new FamilyInNeedPostsManagerFacade(
         dependencies?.usersService || instance(mockUsersService),
         dependencies?.wilayasService || instance(mockWilayasService),
         dependencies?.picturesManager || new FakePicturesManager(),

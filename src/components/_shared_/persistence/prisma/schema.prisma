@@ -1,8 +1,9 @@
 // This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// learn more about it in the docs https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -106,4 +107,44 @@ model TextMessage {
   content    String
   read       Boolean
   createdAt  DateTime
+}
+
+model DonationPostNotification {
+  notificationId String   @id
+  receiverId     String
+  postId         String
+  reason         String
+  clicked        Boolean
+  read           Boolean
+  createdAt      DateTime
+}
+
+model DonationRequestPostNotification {
+  notificationId String   @id
+  receiverId     String
+  postId         String
+  reason         String
+  clicked        Boolean
+  read           Boolean
+  createdAt      DateTime
+}
+
+model FamilyInNeedPostNotification {
+  notificationId String   @id
+  receiverId     String
+  postId         String
+  reason         String
+  clicked        Boolean
+  read           Boolean
+  createdAt      DateTime
+}
+
+model CallForHelpPostNotification {
+  notificationId String   @id
+  receiverId     String
+  postId         String
+  reason         String
+  clicked        Boolean
+  read           Boolean
+  createdAt      DateTime
 }

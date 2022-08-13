@@ -11,6 +11,7 @@ import { AccountStatus } from '../../core/domain/AccountStatus';
 import { RegularUserAccount } from '../../core/domain/RegularUserAccount';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
+import { AccountRepositoryFindManyFilters } from '../../core/domain/services/AccountRepository/base/AccountRepository';
 
 interface AccountDBModel {
     accountId: string;
@@ -61,6 +62,21 @@ class PostgresRegularUserAccountRepository implements RegularUserAccountReposito
 
         if (account) return this.toDomainEntity(account);
         else return undefined;
+    }
+
+    async findMany(filters: AccountRepositoryFindManyFilters): Promise<RegularUserAccount[]> {
+        const accounts = await prisma.regularUserAccount.findMany({
+            where: {
+                status: filters.accountStatus,
+                wilayaNumber: filters.wilayaNumber.value(),
+            },
+        });
+
+        return accounts.map(this.toDomainEntity);
+    }
+
+    async deleteAll() {
+        await prisma.regularUserAccount.deleteMany();
     }
 
     private toDBModel(user: RegularUserAccount): AccountDBModel {

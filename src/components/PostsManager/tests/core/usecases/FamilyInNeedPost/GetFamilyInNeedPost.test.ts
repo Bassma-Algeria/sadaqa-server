@@ -5,7 +5,7 @@ import { aFamilyInNeedPostsManager } from '../base/aFamilyInNeedPostsManager';
 import { aFamilyInNeedPostCreationRequest } from '../base/requests/aFamilyInNeedPostCreationRequest';
 
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 
 describe('Get Family In Need', () => {
     const postsManager = aFamilyInNeedPostsManager();
@@ -27,7 +27,7 @@ describe('Get Family In Need', () => {
         const NOT_EXIST = faker.datatype.uuid();
 
         await expect(postsManager.getById({ postId: NOT_EXIST }))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_FOUND)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .to.be.an.instanceOf(NotFoundException);
     });
 });

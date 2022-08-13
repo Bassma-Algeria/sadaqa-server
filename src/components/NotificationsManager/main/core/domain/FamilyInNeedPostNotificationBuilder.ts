@@ -1,39 +1,21 @@
-import { UserId } from './UserId';
 import { PostId } from './PostId';
-import { NotificationId } from './NotificationId';
 import { PostNotificationReason } from './PostNotificationReason';
 
-import { DonationPostNotification } from './DonationPostNotification';
+import { FamilyInNeedPostNotification } from './FamilyInNeedPostNotification';
 
-class DonationPostNotificationBuilder {
-    private notificationId!: NotificationId;
-    private receiverId!: UserId;
+import { NotificationBuilder } from './NotificationBuilder';
+
+class FamilyInNeedPostNotificationBuilder extends NotificationBuilder {
     private postId!: PostId;
     private reason!: PostNotificationReason;
-    private clicked!: boolean;
-    private read!: boolean;
-    private createdAt!: Date;
 
-    constructor(postNotification?: DonationPostNotification) {
+    constructor(postNotification?: FamilyInNeedPostNotification) {
+        super(postNotification);
+
         if (!postNotification) return;
 
-        this.notificationId = postNotification.notificationId;
         this.postId = postNotification.postId;
-        this.receiverId = postNotification.receiverId;
         this.reason = postNotification.reason;
-        this.clicked = postNotification.clicked;
-        this.read = postNotification.read;
-        this.createdAt = postNotification.createdAt;
-    }
-
-    withId(notificationId: NotificationId) {
-        this.notificationId = notificationId;
-        return this;
-    }
-
-    withReceiverId(receiverId: UserId) {
-        this.receiverId = receiverId;
-        return this;
     }
 
     withPostId(postId: PostId) {
@@ -41,28 +23,13 @@ class DonationPostNotificationBuilder {
         return this;
     }
 
-    withReason(resaon: PostNotificationReason) {
-        this.reason = resaon;
-        return this;
-    }
-
-    withClicked(isClicked: boolean) {
-        this.clicked = isClicked;
-        return this;
-    }
-
-    withRead(isRead: boolean) {
-        this.read = isRead;
-        return this;
-    }
-
-    withCreatedAt(creationTime: Date) {
-        this.createdAt = creationTime;
+    withReason(reason: PostNotificationReason) {
+        this.reason = reason;
         return this;
     }
 
     build() {
-        return new DonationPostNotification(
+        return new FamilyInNeedPostNotification(
             this.notificationId,
             this.receiverId,
             this.postId,
@@ -74,4 +41,4 @@ class DonationPostNotificationBuilder {
     }
 }
 
-export { DonationPostNotificationBuilder };
+export { FamilyInNeedPostNotificationBuilder };

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { aDonationPostsManager } from '../base/aDonationPostsManager';
 import { aDonationPostCreationRequest } from '../base/requests/aDonationPostCreationRequest';
 
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
 
 describe('Get DonationPost Post', () => {
@@ -24,7 +24,7 @@ describe('Get DonationPost Post', () => {
         const NOT_EXISING_POST = 'some random';
 
         await expect(postsManager.getById({ postId: NOT_EXISING_POST }))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_FOUND)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .and.to.be.an.instanceOf(NotFoundException);
     });
 });

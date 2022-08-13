@@ -2,15 +2,17 @@ import request from 'supertest';
 import { EndPoints } from '../../../Endpoints';
 import { faker } from '@faker-js/faker';
 
-const createCallForHelpPost = async (app: any, token: string) => {
+const createCallForHelpPost = async (app: any, token: string, body?: any) => {
+    const callForHelpInfo = { ...aNewCallForHelpCreationBody(), ...body };
+
     const {
         body: { postId },
     } = await request(app)
         .post(EndPoints.NEW_CALL_FOR_HELP)
-        .field(aNewCallForHelpCreationBody())
+        .field(callForHelpInfo)
         .set('Authorisation', token);
 
-    return { postId };
+    return { postId, callForHelpInfo };
 };
 
 const aNewCallForHelpCreationBody = () => ({

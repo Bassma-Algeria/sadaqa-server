@@ -13,7 +13,7 @@ import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsMa
 import { InMemoryOnlineUserRepository } from './infra/real/InMemoryOnlineUserRepository';
 
 class UsersManagerConfiguration {
-    static aUsersManagerFacade(): UsersManagerFacade {
+    static aUsersManager(): UsersManagerFacade {
         return new UsersManagerFacade(
             new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new BcryptPasswordEncryptor(),

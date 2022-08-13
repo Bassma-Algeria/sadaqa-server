@@ -1,13 +1,11 @@
 import { PostId } from '../../core/domain/PostId';
 import { UserId } from '../../core/domain/UserId';
 import { NotificationId } from '../../core/domain/NotificationId';
-import { DonationPostNotification } from '../../core/domain/DonationPostNotification';
 import { PostNotificationReason } from '../../core/domain/PostNotificationReason';
+import { DonationRequestPostNotification } from '../../core/domain/DonationRequestPostNotification';
 
-import {
-    DonationPostNotificationRepository,
-    FindManyDonationPostNotificationRepository,
-} from '../../core/domain/services/repositories/DonationPostNotificationRepository';
+import { FindManyFiltersNotificationRepository } from '../../core/domain/services/repositories/base/NotificationRepository';
+import { DonationRequestPostNotificationRepository } from '../../core/domain/services/repositories/DonationRequestPostNotificationRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
 
@@ -21,15 +19,17 @@ interface DBModel {
     createdAt: Date;
 }
 
-class PostgresDonationPostNotificationRepository implements DonationPostNotificationRepository {
-    async save(notification: DonationPostNotification): Promise<void> {
-        await prisma.donationPostNotification.create({ data: this.toDBModel(notification) });
+class PostgresDonationRequestPostNotificationRepository
+    implements DonationRequestPostNotificationRepository
+{
+    async save(notification: DonationRequestPostNotification): Promise<void> {
+        await prisma.donationRequestPostNotification.create({ data: this.toDBModel(notification) });
     }
 
     async findMany(
-        filters: FindManyDonationPostNotificationRepository,
-    ): Promise<DonationPostNotification[]> {
-        const notifications = await prisma.donationPostNotification.findMany({
+        filters: FindManyFiltersNotificationRepository,
+    ): Promise<DonationRequestPostNotification[]> {
+        const notifications = await prisma.donationRequestPostNotification.findMany({
             where: {
                 receiverId: filters.receiverId.value(),
             },
@@ -38,7 +38,7 @@ class PostgresDonationPostNotificationRepository implements DonationPostNotifica
         return notifications.map(this.toEntity);
     }
 
-    private toDBModel(entity: DonationPostNotification): DBModel {
+    private toDBModel(entity: DonationRequestPostNotification): DBModel {
         return {
             notificationId: entity.notificationId.value(),
             postId: entity.postId.value(),
@@ -51,7 +51,7 @@ class PostgresDonationPostNotificationRepository implements DonationPostNotifica
     }
 
     private toEntity(model: DBModel) {
-        return DonationPostNotification.aBuilder()
+        return DonationRequestPostNotification.aBuilder()
             .withId(new NotificationId(model.notificationId))
             .withReceiverId(new UserId(model.receiverId))
             .withPostId(new PostId(model.postId))
@@ -63,4 +63,4 @@ class PostgresDonationPostNotificationRepository implements DonationPostNotifica
     }
 }
 
-export { PostgresDonationPostNotificationRepository };
+export { PostgresDonationRequestPostNotificationRepository };

@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker';
 
-import { CreateNewFamilyInNeedPostNotificationUseCaseRequest } from '../../../../../main/core/usecases/CreateNotificationUseCases/CreatePostNotificationsUseCases/CreateNewFamilyInNeedPostNotificationUseCase/CreateNewFamilyInNeedPostNotificationUseCaseRequest';
+import { CreateNewCallForHelpPostNotificationUseCaseRequest } from '../../../../../main/core/usecases/CreateNotificationUseCases/CreatePostNotificationsUseCases/CreateNewCallForHelpPostNotificationUseCase/CreateNewCallForHelpPostNotificationUseCaseRequest';
 
-const aCreateNewFamilyInNeedPostNotificationRequest = (
-    request?: Partial<CreateNewFamilyInNeedPostNotificationUseCaseRequest>,
-): CreateNewFamilyInNeedPostNotificationUseCaseRequest => {
+const aCreateNewCallForHelpPostNotificationRequest = (
+    request?: Partial<CreateNewCallForHelpPostNotificationUseCaseRequest>,
+): CreateNewCallForHelpPostNotificationUseCaseRequest => {
     return {
         postId: faker.datatype.uuid(),
         publisherId: faker.datatype.uuid(),
@@ -13,4 +13,4 @@ const aCreateNewFamilyInNeedPostNotificationRequest = (
     };
 };
 
-export { aCreateNewFamilyInNeedPostNotificationRequest };
+export { aCreateNewCallForHelpPostNotificationRequest }; 

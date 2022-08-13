@@ -108,6 +108,12 @@ interface AssociationAccountInfoEdited {
     readonly phoneNumber: string;
 }
 
+interface PostNotificationPayload {
+    postId: string;
+    receiverId: string;
+    reason: string;
+}
+
 export interface Events {
     USER_LOGIN: { accountId: string };
     ASSOCIATION_REGISTERED: AssociationRegisteredPayload;
@@ -145,4 +151,9 @@ export interface Events {
     MESSAGE_READ: MessageReadPayload;
     USER_STOP_TYPING: { userId: string; receiverId: string };
     USER_START_TYPING: { userId: string; receiverId: string };
+
+    NEW_DONATION_POST_NOTIFICATION: PostNotificationPayload;
+    NEW_CALL_FOR_HELP_POST_NOTIFICATION: PostNotificationPayload;
+    NEW_FAMILY_IN_NEED_POST_NOTIFICATION: PostNotificationPayload;
+    NEW_DONATION_REQUEST_POST_NOTIFICATION: PostNotificationPayload;
 }

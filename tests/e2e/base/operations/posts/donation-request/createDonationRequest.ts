@@ -3,15 +3,21 @@ import { faker } from '@faker-js/faker';
 
 import { EndPoints } from '../../../Endpoints';
 
-const createDonationRequest = async (server: any, accessToken: string) => {
+const createDonationRequest = async (
+    server: any,
+    accessToken: string,
+    values?: Record<string, any>,
+) => {
+    const donationRequestInfo = { ...aDonationRequestCreationBody(), ...values };
+
     const {
         body: { postId },
     } = await request(server)
         .post(EndPoints.NEW_DONATION_REQUEST)
-        .field(aDonationRequestCreationBody())
+        .field(donationRequestInfo)
         .set('Authorisation', accessToken);
 
-    return { postId };
+    return { postId, donationRequestInfo };
 };
 
 const aDonationRequestCreationBody = () => {

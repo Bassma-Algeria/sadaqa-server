@@ -1,7 +1,7 @@
-import { UuidPostIdGenerator } from './infra/real/UuidPostIdGenerator';
 import { UsersServiceImpl } from './infra/real/UsersServiceImpl';
 import { WilayasServiceImpl } from './infra/real/WilayasServiceImpl';
 import { PicturesManagerImpl } from './infra/real/PicturesManagerImpl';
+import { UuidPostIdGenerator } from './infra/real/UuidPostIdGenerator';
 import { PostgresDonationPostRepository } from './infra/real/PostgresPostRepository/PostgresDonationPostRepository';
 import { DonationPostEventPublisherImpl } from './infra/real/PostEventPublisherImpl/DonationPostEventPublisherImpl';
 import { FavouritePostEventPublisherImpl } from './infra/real/PostEventPublisherImpl/FavouritePostEventPublisherImpl';
@@ -13,22 +13,21 @@ import { PostgresFamilyInNeedPostRepository } from './infra/real/PostgresPostRep
 import { PostgresDonationRequestPostRepository } from './infra/real/PostgresPostRepository/PostgresDonationRequestRepository';
 import { DonationRequestPostEventPublisherImpl } from './infra/real/PostEventPublisherImpl/DonationRequestPostEventPublisher';
 
-import { DonationPostsManager } from './core/DonationPostsManager';
-import { FavouritePostsManager } from './core/FavouritePostsManager';
-import { CallForHelpPostsManager } from './core/CallForHelpPostsManager';
-import { FamilyInNeedPostsManager } from './core/FamilyInNeedPostsManager';
-import { DonationRequestPostsManager } from './core/DonationRequestPostsManager';
+import { DonationPostsManagerFacade } from './core/DonationPostsManagerFacade';
+import { FavouritePostsManagerFacade } from './core/FavouritePostsManagerFacade';
+import { CallForHelpPostsManagerFacade } from './core/CallForHelpPostsManagerFacade';
+import { FamilyInNeedPostsManagerFacade } from './core/FamilyInNeedPostsManagerFacade';
+import { DonationRequestPostsManagerFacade } from './core/DonationRequestPostsManagerFacade';
 
 import { EventBus } from '../../_shared_/event-bus/EventBus';
-
 import { MediaManagerConfiguration } from '../../MediaManager/main/MediaManagerConfiguration';
 import { UsersManagerConfiguration } from '../../UsersManager/main/UsersManagerConfiguration';
 import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsManagerConfiguration';
 
 class PostsManagerConfiguration {
     static aCallForHelpPostsManager() {
-        return new CallForHelpPostsManager(
-            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+        return new CallForHelpPostsManagerFacade(
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManager()),
             new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
@@ -38,8 +37,8 @@ class PostsManagerConfiguration {
     }
 
     static aFamilyInNeedPostsManager() {
-        return new FamilyInNeedPostsManager(
-            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+        return new FamilyInNeedPostsManagerFacade(
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManager()),
             new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
@@ -49,8 +48,8 @@ class PostsManagerConfiguration {
     }
 
     static aDonationPostsManager() {
-        return new DonationPostsManager(
-            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+        return new DonationPostsManagerFacade(
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManager()),
             new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
@@ -60,8 +59,8 @@ class PostsManagerConfiguration {
     }
 
     static aDonationRequestPostsManager() {
-        return new DonationRequestPostsManager(
-            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+        return new DonationRequestPostsManagerFacade(
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManager()),
             new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
@@ -71,8 +70,8 @@ class PostsManagerConfiguration {
     }
 
     static aFavouritePostsManager() {
-        return new FavouritePostsManager(
-            new UsersServiceImpl(UsersManagerConfiguration.aUsersManagerFacade()),
+        return new FavouritePostsManagerFacade(
+            new UsersServiceImpl(UsersManagerConfiguration.aUsersManager()),
             new PostgresDonationPostRepository(),
             new PostgresFavouritePostRepository(),
             new PostgresCallForHelpPostRepository(),

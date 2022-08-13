@@ -5,7 +5,7 @@ import { aFavouritePostsManager } from '../base/aFavouritePostsManager';
 
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
 
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 
 describe('Get Favourite Posts', () => {
@@ -22,7 +22,7 @@ describe('Get Favourite Posts', () => {
         const NOT_EXISTING_USER_ID = faker.datatype.uuid();
 
         await expect(postsManager.getFavouritePosts({ userId: NOT_EXISTING_USER_ID }))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.USER_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_EXIST)
             .and.be.and.instanceOf(AuthorizationException);
     });
 });

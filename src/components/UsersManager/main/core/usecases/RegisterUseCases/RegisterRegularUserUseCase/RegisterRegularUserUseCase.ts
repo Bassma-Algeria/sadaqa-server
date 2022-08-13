@@ -52,7 +52,7 @@ class RegisterRegularUserUseCase
 
         await this.regularUserAccountRepository.save(regularUser);
 
-        this.userEventPublisher.publishRegularUserRegisteredEvent(regularUser);
+        this.userEventPublisher.publishRegularUserRegistered(regularUser);
 
         return { accountId: regularUser.accountId.value() };
     }

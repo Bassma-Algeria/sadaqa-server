@@ -10,7 +10,7 @@ import { CallForHelpPostEventPublisherImpl } from '../../../../main/infra/real/P
 
 import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
 
-import { CallForHelpPostsManager } from '../../../../main/core/CallForHelpPostsManager';
+import { CallForHelpPostsManagerFacade } from '../../../../main/core/CallForHelpPostsManagerFacade';
 
 import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 
@@ -29,7 +29,7 @@ const aCallForHelpPostsManager = (dependencies?: Partial<Dependencies>) => {
 
     when(mockWilayasService.isExist(anything())).thenResolve(true);
 
-    return new CallForHelpPostsManager(
+    return new CallForHelpPostsManagerFacade(
         dependencies?.usersService || instance(mockUsersService),
         dependencies?.wilayasService || instance(mockWilayasService),
         dependencies?.picturesManager || new FakePicturesManager(),

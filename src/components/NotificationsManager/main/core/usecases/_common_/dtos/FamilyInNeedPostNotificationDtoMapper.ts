@@ -1,22 +1,21 @@
-import { DonationPostNotificationDto } from './DonationPostNotificationDto';
+import { FamilyInNeedPostNotification } from '../../../domain/FamilyInNeedPostNotification';
 
-import { DonationPostNotification } from '../../../domain/DonationPostNotification';
+import { FamilyInNeedPostNotificationDto } from './FamilyInNeedPostNotificationDto';
 
-class DonationPostNotificationDtoMapper {
-    static toDto(notification: DonationPostNotification): DonationPostNotificationDto {
+import { NotificationDtoMapper } from './base/NotificationDtoMapper';
+
+class FamilyInNeedPostNotificationDtoMapper extends NotificationDtoMapper {
+    static toDto(notification: FamilyInNeedPostNotification): FamilyInNeedPostNotificationDto {
         return {
-            type: notification.type,
+            ...super.toDto(notification),
             notification: {
-                notificationId: notification.notificationId.value(),
+                ...super.toDto(notification).notification,
+
                 postId: notification.postId.value(),
-                receiverId: notification.receiverId.value(),
                 reason: notification.reason,
-                read: notification.read,
-                clicked: notification.clicked,
-                createdAt: notification.createdAt,
             },
         };
     }
 }
 
-export { DonationPostNotificationDtoMapper };
+export { FamilyInNeedPostNotificationDtoMapper };

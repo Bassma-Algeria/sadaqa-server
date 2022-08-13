@@ -1,4 +1,4 @@
-import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
+import { ExceptionMessages } from './exceptions/ExceptionMessages';
 import { ValidationException } from './exceptions/ValidationException';
 
 class Picture {
@@ -10,7 +10,7 @@ class Picture {
 
     constructor(url: string) {
         if (!url.match(this.URL_REGEX))
-            throw new ValidationException(ExceptionsMessages.INVALID_PICTURE_URL);
+            throw new ValidationException(ExceptionMessages.INVALID_PICTURE_URL);
 
         this._url = url;
     }

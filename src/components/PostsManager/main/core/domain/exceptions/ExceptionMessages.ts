@@ -1,4 +1,4 @@
-const ExceptionsMessages = {
+const ExceptionMessages = {
     SHORT_TITLE: {
         en: 'title should have more than 3 characters',
         ar: 'يجب أن يحتوي العنوان على أكثر من 3 أحرف',
@@ -40,4 +40,4 @@ const ExceptionsMessages = {
     POST_PICTURE_NOT_EXIST: 'pictures provided does not exist in the post pics',
 };
 
-export { ExceptionsMessages };
+export { ExceptionMessages };

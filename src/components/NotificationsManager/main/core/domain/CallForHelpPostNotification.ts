@@ -4,10 +4,12 @@ import { NotificationId } from './NotificationId';
 import { NotificationType } from './NotificationType';
 import { PostNotificationReason } from './PostNotificationReason';
 
-import { FamilyInNeedPostNotificationBuilder } from './FamilyInNeedPostNotificationBuilder';
+import { CallForHelpPostNotificationBuilder } from './CallForHelpPostNotificationBuilder';
 
-class FamilyInNeedPostNotification {
-    readonly type = NotificationType.NEW_FAMILY_IN_NEED_POST;
+import { Notification } from './Notification';
+
+class CallForHelpPostNotification extends Notification {
+    readonly type = NotificationType.NEW_CALL_FOR_HELP_POST;
 
     constructor(
         readonly notificationId: NotificationId,
@@ -17,15 +19,28 @@ class FamilyInNeedPostNotification {
         readonly clicked: boolean,
         readonly read: boolean,
         readonly createdAt: Date,
-    ) {}
-
-    static aBuilder() {
-        return new FamilyInNeedPostNotificationBuilder();
+    ) {
+        super(
+            notificationId,
+            receiverId,
+            NotificationType.NEW_CALL_FOR_HELP_POST,
+            clicked,
+            read,
+            createdAt,
+        );
     }
 
-    static aBuilderFrom(notification: FamilyInNeedPostNotification) {
-        return new FamilyInNeedPostNotificationBuilder(notification);
+    static aBuilder() {
+        return new CallForHelpPostNotificationBuilder();
+    }
+
+    static aBuilderFrom(notification: CallForHelpPostNotification) {
+        return new CallForHelpPostNotificationBuilder(notification);
+    }
+
+    protected aBuilderFromThis() {
+        return CallForHelpPostNotification.aBuilderFrom(this);
     }
 }
 
-export { FamilyInNeedPostNotification };
+export { CallForHelpPostNotification }; 

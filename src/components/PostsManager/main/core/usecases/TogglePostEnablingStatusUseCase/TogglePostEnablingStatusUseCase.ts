@@ -10,7 +10,7 @@ import { PostRepository } from '../../domain/services/PostRepository/base/PostRe
 import { PostEventPublisher } from '../../domain/services/PostEventPublisher/base/PostEventPublisher';
 
 import { NotFoundException } from '../../domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../domain/exceptions/AuthorizationException';
 
 class TogglePostEnablingStatusUseCase
@@ -30,7 +30,7 @@ class TogglePostEnablingStatusUseCase
         const post = await this.findPostByIdThrowIfNotFound(postId);
 
         if (!post.publisherId.equals(userId))
-            throw new AuthorizationException(ExceptionsMessages.NOT_AUTHORIZED_TO_EDIT);
+            throw new AuthorizationException(ExceptionMessages.NOT_AUTHORIZED_TO_EDIT);
 
         const updatedPost = post.toggleEnablingStatus();
 
@@ -47,7 +47,7 @@ class TogglePostEnablingStatusUseCase
 
     private async findPostByIdThrowIfNotFound(id: PostId) {
         const post = await this.postRepository.findById(id);
-        if (!post) throw new NotFoundException(ExceptionsMessages.POST_NOT_FOUND);
+        if (!post) throw new NotFoundException(ExceptionMessages.POST_NOT_FOUND);
 
         return post;
     }

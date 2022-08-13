@@ -9,7 +9,7 @@ import { aFamilyInNeedPostCreationRequest } from '../base/requests/aFamilyInNeed
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';
 
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
@@ -33,7 +33,7 @@ describe('Create Family In Need Post', () => {
 
     it('given a family in need creation request, the title should have more than 3 characters', async () => {
         await expect(postsManager.create(aFamilyInNeedPostCreationRequest({ title: 'sd' })))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.SHORT_TITLE.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.SHORT_TITLE.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -47,7 +47,7 @@ describe('Create Family In Need Post', () => {
                 aFamilyInNeedPostCreationRequest({ wilayaNumber: INVALID_WILAYA_NUMBER }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_WILAYA_NUMBER.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_WILAYA_NUMBER.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -61,7 +61,7 @@ describe('Create Family In Need Post', () => {
                 aFamilyInNeedPostCreationRequest({ publisherId: NOT_ACTIVE_ASSOCIATION_ID }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.NOT_AUTHORIZED_TO_PUBLISH)
+            .to.eventually.be.rejectedWith(ExceptionMessages.NOT_AUTHORIZED_TO_PUBLISH)
             .and.to.be.an.instanceOf(AuthorizationException);
     });
 
@@ -69,7 +69,7 @@ describe('Create Family In Need Post', () => {
         const INVALID_CCP = faker.datatype.number().toString();
 
         await expect(postsManager.create(aFamilyInNeedPostCreationRequest({ ccp: INVALID_CCP })))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CCP.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CCP.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -79,19 +79,19 @@ describe('Create Family In Need Post', () => {
         await expect(
             postsManager.create(aFamilyInNeedPostCreationRequest({ ccpKey: INVALID_CCP_KEY })),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CCP.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CCP.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
     it('given a family in need creation request, if there is a ccp there should be a ccp key', async () => {
         await expect(postsManager.create(aFamilyInNeedPostCreationRequest({ ccpKey: undefined })))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CCP.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CCP.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
     it('given a family in need creation request, if there is a ccp key there should be a ccp', async () => {
         await expect(postsManager.create(aFamilyInNeedPostCreationRequest({ ccp: undefined })))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CCP.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CCP.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -111,7 +111,7 @@ describe('Create Family In Need Post', () => {
                 aFamilyInNeedPostCreationRequest({ baridiMobNumber: INVALID_BARIDI_MOB_NUMBER }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_BARIDI_MOB_NUMBER.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_BARIDI_MOB_NUMBER.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 

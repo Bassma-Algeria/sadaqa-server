@@ -1,8 +1,5 @@
 import { expect } from 'chai';
-import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
-
-import { EndPoints } from './base/Endpoints';
 import { cleanupDB, startNestTestingApp } from './base/SetupNestE2E';
 
 import { registerAssociation } from './base/operations/users/registerAssociation';
@@ -10,6 +7,7 @@ import { getFamiliesInNeed } from './base/operations/posts/family-in-need/getFam
 import { activateAssociationAccount } from './base/operations/users/activateAssociationAccount';
 import { getFamilyInNeedById } from './base/operations/posts/family-in-need/getFamilyInNeedById';
 import { createFamilyInNeedPost } from './base/operations/posts/family-in-need/createFamilyInNeed';
+import { getAssociationByToken } from './base/operations/users/getAssociationByToken';
 
 describe('Association Create An Account Admin Validate It And It Publish a Family in Need And Another User Found It', () => {
     let app: INestApplication;
@@ -30,7 +28,7 @@ describe('Association Create An Account Admin Validate It And It Publish a Famil
 
     it('should pass with no problem', async () => {
         const { accessToken } = await registerAssociation(server);
-        const { accountId } = await getAssociationWithToken(accessToken);
+        const { info: { accountId } } = await getAssociationByToken(server, accessToken);
 
         await activateAssociationAccount(server, accountId);
 
@@ -43,13 +41,5 @@ describe('Association Create An Account Admin Validate It And It Publish a Famil
         expect(list[0]).to.have.property('publisherId', accountId);
     });
 
-    const getAssociationWithToken = async (accessToken: string) => {
-        const {
-            body: { accountId },
-        } = await request(app.getHttpServer())
-            .get(EndPoints.GET_AUTHENTICATED_ASSOCIATION)
-            .set('Authorisation', accessToken);
 
-        return { accountId };
-    };
 });

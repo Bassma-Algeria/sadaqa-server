@@ -10,7 +10,7 @@ import { PostRepository } from '../../domain/services/PostRepository/base/PostRe
 import { PostDtoMapper } from '../_common_/dtos/base/PostDtoMapper';
 
 import { NotFoundException } from '../../domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
 
 class GetPostByIdUseCase implements UseCase<GetPostByIdUseCaseRequest, GetPostByIdUseCaseResponse> {
     constructor(
@@ -21,7 +21,7 @@ class GetPostByIdUseCase implements UseCase<GetPostByIdUseCaseRequest, GetPostBy
     async handle(request: GetPostByIdUseCaseRequest): Promise<GetPostByIdUseCaseResponse> {
         const post = await this.postRepository.findById(new PostId(request.postId));
 
-        if (!post) throw new NotFoundException(ExceptionsMessages.POST_NOT_FOUND);
+        if (!post) throw new NotFoundException(ExceptionMessages.POST_NOT_FOUND);
 
         return this.dtoMapper.toDto(post);
     }

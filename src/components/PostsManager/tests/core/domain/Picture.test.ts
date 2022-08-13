@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 import { Picture } from '../../../main/core/domain/Picture';
 
-import { ExceptionsMessages } from '../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 
 describe('PictureToUpload value object', () => {
@@ -14,7 +14,7 @@ describe('PictureToUpload value object', () => {
         expect(() => new Picture(VALID_URL)).to.not.throw();
 
         expect(() => new Picture(INVALID_URL))
-            .to.throw(ExceptionsMessages.INVALID_PICTURE_URL)
+            .to.throw(ExceptionMessages.INVALID_PICTURE_URL)
             .and.to.be.an.instanceOf(ValidationException);
     });
 });

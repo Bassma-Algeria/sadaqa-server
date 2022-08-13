@@ -6,7 +6,7 @@ import { aTogglePostEnablingStatusRequest } from '../base/requests/aTogglePostEn
 import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
 
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 
 describe('Toggle Donation Request Post Enabling Status', () => {
@@ -20,7 +20,7 @@ describe('Toggle Donation Request Post Enabling Status', () => {
                 aTogglePostEnablingStatusRequest({ postId: NOT_EXIST }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_FOUND)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .and.to.be.an.instanceOf(NotFoundException);
     });
 
@@ -33,7 +33,7 @@ describe('Toggle Donation Request Post Enabling Status', () => {
                 aTogglePostEnablingStatusRequest({ postId, userId: NOT_PUBLISHER }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.NOT_AUTHORIZED_TO_EDIT)
+            .to.eventually.be.rejectedWith(ExceptionMessages.NOT_AUTHORIZED_TO_EDIT)
             .and.to.be.an.instanceOf(AuthorizationException);
     });
 

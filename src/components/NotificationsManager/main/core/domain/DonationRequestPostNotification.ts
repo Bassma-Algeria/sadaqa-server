@@ -2,30 +2,44 @@ import { UserId } from './UserId';
 import { PostId } from './PostId';
 import { NotificationId } from './NotificationId';
 import { NotificationType } from './NotificationType';
-import { DonationPostNotificationReason } from './DonationPostNotificationReason';
+import { PostNotificationReason } from './PostNotificationReason';
+import { DonationRequestPostNotificationBuilder } from './DonationRequestPostNotificationBuilder';
 
-import { DonationPostNotificationBuilder } from './DonationPostNotificationBuilder';
+import { Notification } from './Notification';
 
-class DonationPostNotification {
-    readonly type = NotificationType.NEW_DONATION_POST;
+class DonationRequestPostNotification extends Notification {
+    readonly type = NotificationType.NEW_DONATION_REQUEST_POST;
 
     constructor(
         readonly notificationId: NotificationId,
         readonly receiverId: UserId,
         readonly postId: PostId,
-        readonly reason: DonationPostNotificationReason,
+        readonly reason: PostNotificationReason,
         readonly clicked: boolean,
         readonly read: boolean,
         readonly createdAt: Date,
-    ) {}
-
-    static aBuilder() {
-        return new DonationPostNotificationBuilder();
+    ) {
+        super(
+            notificationId,
+            receiverId,
+            NotificationType.NEW_DONATION_REQUEST_POST,
+            clicked,
+            read,
+            createdAt,
+        );
     }
 
-    static aBuilderFrom(notification: DonationPostNotification) {
-        return new DonationPostNotificationBuilder(notification);
+    static aBuilder() {
+        return new DonationRequestPostNotificationBuilder();
+    }
+
+    static aBuilderFrom(notification: DonationRequestPostNotification) {
+        return new DonationRequestPostNotificationBuilder(notification);
+    }
+
+    protected aBuilderFromThis() {
+        return DonationRequestPostNotification.aBuilderFrom(this);
     }
 }
 
-export { DonationPostNotification };
+export { DonationRequestPostNotification }; 

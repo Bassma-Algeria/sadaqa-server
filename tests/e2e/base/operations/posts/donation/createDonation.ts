@@ -2,15 +2,16 @@ import request from 'supertest';
 import { EndPoints } from '../../../Endpoints';
 import { faker } from '@faker-js/faker';
 
-const createDonation = async (server: any, accessToken: string) => {
+const createDonation = async (server: any, accessToken: string, body?: any) => {
+    const donationInfo = { ...aDonationCreationBody(), ...body };
     const {
         body: { postId },
     } = await request(server)
         .post(EndPoints.NEW_DONATION)
-        .field(aDonationCreationBody())
+        .field(donationInfo)
         .set('Authorisation', accessToken);
 
-    return { postId };
+    return { postId, donationInfo };
 };
 
 const aDonationCreationBody = () => {

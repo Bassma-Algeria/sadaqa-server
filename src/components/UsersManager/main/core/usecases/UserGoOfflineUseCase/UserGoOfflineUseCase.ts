@@ -17,7 +17,7 @@ class UserGoOfflineUseCase implements UseCase<UserGoOfflineUseCaseRequest, void>
 
         await this.onlineUserRepository.remove(accountId);
 
-        this.userEventPublisher.publishUserGoOfflineEvent(accountId);
+        this.userEventPublisher.publishUserGoOffline(accountId);
     }
 }
 

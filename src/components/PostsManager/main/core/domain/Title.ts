@@ -1,5 +1,5 @@
 import { MultiLanguagesValidationException } from './exceptions/MultiLanguagesValidationException';
-import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
+import { ExceptionMessages } from './exceptions/ExceptionMessages';
 
 class Title {
     private readonly title: string;
@@ -8,7 +8,7 @@ class Title {
         title = title?.trim().toLowerCase();
 
         if (title?.length < 3)
-            throw new MultiLanguagesValidationException(ExceptionsMessages.SHORT_TITLE);
+            throw new MultiLanguagesValidationException(ExceptionMessages.SHORT_TITLE);
 
         this.title = title;
     }

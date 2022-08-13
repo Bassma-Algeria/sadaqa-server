@@ -1,12 +1,8 @@
-export interface DonationPostNotificationDto {
-    type: string;
-    notification: {
-        notificationId: string;
+import { NotificationDto } from './base/NotificationDto';
+
+export interface DonationRequestPostNotificationDto extends NotificationDto {
+    notification: NotificationDto['notification'] & {
         postId: string;
-        receiverId: string;
         reason: string;
-        read: boolean;
-        clicked: boolean;
-        createdAt: Date;
     };
 }

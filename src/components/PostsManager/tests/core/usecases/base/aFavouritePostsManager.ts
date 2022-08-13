@@ -9,7 +9,7 @@ import { PostgresCallForHelpPostRepository } from '../../../../main/infra/real/P
 import { PostgresFamilyInNeedPostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresFamilyInNeedPostRepository';
 import { PostgresDonationRequestPostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresDonationRequestRepository';
 
-import { FavouritePostsManager } from '../../../../main/core/FavouritePostsManager';
+import { FavouritePostsManagerFacade } from '../../../../main/core/FavouritePostsManagerFacade';
 
 import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 
@@ -23,7 +23,7 @@ const aFavouritePostsManager = (dependencies?: Partial<Dependencies>) => {
     when(mockUsersService.isExist(anything())).thenResolve(true);
     when(mockUsersService.isActiveAssociation(anything())).thenResolve(true);
 
-    return new FavouritePostsManager(
+    return new FavouritePostsManagerFacade(
         dependencies?.usersService || instance(mockUsersService),
         new PostgresDonationPostRepository(),
         new PostgresFavouritePostRepository(),

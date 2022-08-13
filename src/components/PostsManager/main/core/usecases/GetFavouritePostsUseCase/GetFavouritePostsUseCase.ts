@@ -17,7 +17,7 @@ import { CallForHelpPostRepository } from '../../domain/services/PostRepository/
 import { FamilyInNeedPostRepository } from '../../domain/services/PostRepository/FamilyInNeedPostRepository';
 import { DonationRequestPostRepository } from '../../domain/services/PostRepository/DonationRequestPostRepository';
 
-import { ExceptionsMessages } from '../../domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../domain/exceptions/AuthorizationException';
 
 import { DonationPostDtoMapper } from '../_common_/dtos/DonationPostDtoMapper';
@@ -69,7 +69,7 @@ class GetFavouritePostsUseCase
         const userId = new UserId(request.userId);
 
         const isExist = await this.usersService.isExist(userId);
-        if (!isExist) throw new AuthorizationException(ExceptionsMessages.USER_NOT_EXIST);
+        if (!isExist) throw new AuthorizationException(ExceptionMessages.USER_NOT_EXIST);
 
         return { userId };
     }

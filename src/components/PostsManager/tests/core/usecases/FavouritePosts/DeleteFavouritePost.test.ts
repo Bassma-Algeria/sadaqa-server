@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../../../main/core/domain/exceptions/ValidationException';
 
 import { aDonationPostsManager } from '../base/aDonationPostsManager';
@@ -15,7 +15,7 @@ describe('Delete Favourite Post', () => {
 
     it('given a delete favourite post request, when the favourite post requested does not exist, then should fail', async () => {
         await expect(favouritePostsManager.deleteFromFavourite(aDeleteFavouritePostRequest()))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.FAVOURITE_POST_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.FAVOURITE_POST_NOT_EXIST)
             .and.be.and.instanceOf(ValidationException);
     });
 

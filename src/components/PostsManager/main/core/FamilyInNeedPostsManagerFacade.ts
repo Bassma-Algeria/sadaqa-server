@@ -29,7 +29,7 @@ import { FamilyInNeedPostDtoMapper } from './usecases/_common_/dtos/FamilyInNeed
 import { SearchForPostsUseCase } from './usecases/SearchForPostsUseCase/SearchForPostsUseCase';
 import { SearchForPostsUseCaseRequest } from './usecases/SearchForPostsUseCase/SearchForPostsUseCaseRequest';
 
-class FamilyInNeedPostsManager {
+class FamilyInNeedPostsManagerFacade {
     constructor(
         private readonly usersService: UsersService,
         private readonly wilayasService: WilayasService,
@@ -97,4 +97,4 @@ class FamilyInNeedPostsManager {
     }
 }
 
-export { FamilyInNeedPostsManager };
+export { FamilyInNeedPostsManagerFacade };

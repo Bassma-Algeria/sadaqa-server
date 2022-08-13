@@ -9,7 +9,7 @@ import { Post } from '../../../domain/Post';
 import { PostBuilder } from '../../../domain/PostBuilder';
 
 import { NotFoundException } from '../../../domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../../domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../../domain/exceptions/ValidationException';
 import { AuthorizationException } from '../../../domain/exceptions/AuthorizationException';
 import { MultiLanguagesValidationException } from '../../../domain/exceptions/MultiLanguagesValidationException';
@@ -67,21 +67,21 @@ abstract class UpdatePostUseCase {
     private async findPostByIdThrowIfNotExist(postId: PostId) {
         const post = await this.postRepository.findById(postId);
 
-        if (!post) throw new NotFoundException(ExceptionsMessages.POST_NOT_FOUND);
+        if (!post) throw new NotFoundException(ExceptionMessages.POST_NOT_FOUND);
 
         return post;
     }
 
     private checkIfPublisherIsEditRequesterThrowIfNot(post: Post, userId: UserId) {
         if (!post.publisherId.equals(userId))
-            throw new AuthorizationException(ExceptionsMessages.NOT_AUTHORIZED_TO_EDIT);
+            throw new AuthorizationException(ExceptionMessages.NOT_AUTHORIZED_TO_EDIT);
     }
 
     private async checkIfWilayaExistThrowIfNot(wilayaNumber: WilayaNumber) {
         const isWilayaExist = await this.wilayasService.isExist(wilayaNumber);
 
         if (!isWilayaExist)
-            throw new MultiLanguagesValidationException(ExceptionsMessages.INVALID_WILAYA_NUMBER);
+            throw new MultiLanguagesValidationException(ExceptionMessages.INVALID_WILAYA_NUMBER);
     }
 
     private checkIfPostHaveOldPicturesSentThrowIfNot(
@@ -90,7 +90,7 @@ abstract class UpdatePostUseCase {
     ) {
         for (const pic of request.pictures.old)
             if (!post.havePicture(new Picture(pic)))
-                throw new ValidationException(ExceptionsMessages.POST_PICTURE_NOT_EXIST);
+                throw new ValidationException(ExceptionMessages.POST_PICTURE_NOT_EXIST);
     }
 
     private async getNewPicsFrom({ pictures }: UpdatePostUseCaseRequest) {

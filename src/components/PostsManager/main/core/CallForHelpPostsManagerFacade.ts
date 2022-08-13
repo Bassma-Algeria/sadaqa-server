@@ -30,7 +30,7 @@ import { SearchForPostsUseCaseRequest } from './usecases/SearchForPostsUseCase/S
 import { CallForHelpPostDto } from './usecases/_common_/dtos/CallForHelpPostDto';
 import { CallForHelpPostDtoMapper } from './usecases/_common_/dtos/CallForHelpPostDtoMapper';
 
-class CallForHelpPostsManager {
+class CallForHelpPostsManagerFacade {
     constructor(
         private readonly usersService: UsersService,
         private readonly wilayasService: WilayasService,
@@ -98,4 +98,4 @@ class CallForHelpPostsManager {
     }
 }
 
-export { CallForHelpPostsManager };
+export { CallForHelpPostsManagerFacade };

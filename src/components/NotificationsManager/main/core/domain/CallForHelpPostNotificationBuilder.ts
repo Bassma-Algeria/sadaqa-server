@@ -1,39 +1,20 @@
-import { UserId } from './UserId';
 import { PostId } from './PostId';
-import { NotificationId } from './NotificationId';
 import { PostNotificationReason } from './PostNotificationReason';
 
-import { FamilyInNeedPostNotification } from './FamilyInNeedPostNotification';
+import { NotificationBuilder } from './NotificationBuilder';
+import { CallForHelpPostNotification } from './CallForHelpPostNotification';
 
-class FamilyInNeedPostNotificationBuilder {
-    private notificationId!: NotificationId;
-    private receiverId!: UserId;
+class CallForHelpPostNotificationBuilder extends NotificationBuilder {
     private postId!: PostId;
     private reason!: PostNotificationReason;
-    private clicked!: boolean;
-    private read!: boolean;
-    private createdAt!: Date;
 
-    constructor(postNotification?: FamilyInNeedPostNotification) {
+    constructor(postNotification?: CallForHelpPostNotification) {
+        super(postNotification);
+
         if (!postNotification) return;
 
-        this.notificationId = postNotification.notificationId;
         this.postId = postNotification.postId;
-        this.receiverId = postNotification.receiverId;
         this.reason = postNotification.reason;
-        this.clicked = postNotification.clicked;
-        this.read = postNotification.read;
-        this.createdAt = postNotification.createdAt;
-    }
-
-    withId(notificationId: NotificationId) {
-        this.notificationId = notificationId;
-        return this;
-    }
-
-    withReceiverId(receiverId: UserId) {
-        this.receiverId = receiverId;
-        return this;
     }
 
     withPostId(postId: PostId) {
@@ -41,28 +22,13 @@ class FamilyInNeedPostNotificationBuilder {
         return this;
     }
 
-    withReason(resaon: PostNotificationReason) {
-        this.reason = resaon;
-        return this;
-    }
-
-    withClicked(isClicked: boolean) {
-        this.clicked = isClicked;
-        return this;
-    }
-
-    withRead(isRead: boolean) {
-        this.read = isRead;
-        return this;
-    }
-
-    withCreatedAt(creationTime: Date) {
-        this.createdAt = creationTime;
+    withReason(reason: PostNotificationReason) {
+        this.reason = reason;
         return this;
     }
 
     build() {
-        return new FamilyInNeedPostNotification(
+        return new CallForHelpPostNotification(
             this.notificationId,
             this.receiverId,
             this.postId,
@@ -74,4 +40,4 @@ class FamilyInNeedPostNotificationBuilder {
     }
 }
 
-export { FamilyInNeedPostNotificationBuilder };
+export { CallForHelpPostNotificationBuilder };

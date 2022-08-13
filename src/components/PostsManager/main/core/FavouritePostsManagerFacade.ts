@@ -18,7 +18,7 @@ import { GetFavouritePostsUseCaseRequest } from './usecases/GetFavouritePostsUse
 import { IsPostInFavouritesUseCase } from './usecases/IsPostInFavouritesUseCase/IsPostInFavouritesUseCase';
 import { IsPostInFavouritesUseCaseRequest } from './usecases/IsPostInFavouritesUseCase/IsPostInFavouritesUseCaseRequest';
 
-class FavouritePostsManager {
+class FavouritePostsManagerFacade {
     constructor(
         private readonly usersService: UsersService,
         private readonly donationPostRepository: DonationPostRepository,
@@ -64,4 +64,4 @@ class FavouritePostsManager {
     }
 }
 
-export { FavouritePostsManager };
+export { FavouritePostsManagerFacade };

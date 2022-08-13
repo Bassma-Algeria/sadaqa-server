@@ -3,6 +3,14 @@ import { Account } from '../../../Account';
 import { AccountId } from '../../../AccountId';
 import { PhoneNumber } from '../../../PhoneNumber';
 
+import { WilayaNumber } from '../../../WilayaNumber';
+import { AccountStatus } from '../../../AccountStatus';
+
+export interface AccountRepositoryFindManyFilters {
+    accountStatus: AccountStatus;
+    wilayaNumber: WilayaNumber;
+}
+
 export interface AccountRepository<A extends Account> {
     save(account: A): Promise<void>;
 
@@ -13,4 +21,6 @@ export interface AccountRepository<A extends Account> {
     findByEmail(email: Email): Promise<A | undefined>;
 
     findByPhoneNumber(phone: PhoneNumber): Promise<A | undefined>;
+
+    findMany(filters: AccountRepositoryFindManyFilters): Promise<A[]>;
 }

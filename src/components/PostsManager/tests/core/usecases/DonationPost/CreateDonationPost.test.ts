@@ -8,7 +8,7 @@ import { aDonationPostCreationRequest } from '../base/requests/aDonationPostCrea
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';
 
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
@@ -33,7 +33,7 @@ describe('Create Donation Post', () => {
         const postCreationBody = aDonationPostCreationRequest({ title: INVALID_TITLE });
 
         await expect(donationPostsManager.create(postCreationBody))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.SHORT_TITLE.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.SHORT_TITLE.en)
             .which.is.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -46,7 +46,7 @@ describe('Create Donation Post', () => {
         });
 
         await expect(donationPostsManager.create(postCreationBody))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_WILAYA_NUMBER.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_WILAYA_NUMBER.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -56,7 +56,7 @@ describe('Create Donation Post', () => {
         const postCreationBody = aDonationPostCreationRequest({ category: INVALID_CATEGORY });
 
         await expect(donationPostsManager.create(postCreationBody))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CATEGORY.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CATEGORY.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -67,7 +67,7 @@ describe('Create Donation Post', () => {
         const postCreationBody = aDonationPostCreationRequest({ publisherId: INVALID_ID });
 
         await expect(donationPostsManager.create(postCreationBody))
-            .to.eventually.be.rejectedWith(ExceptionsMessages.NOT_AUTHORIZED_TO_PUBLISH)
+            .to.eventually.be.rejectedWith(ExceptionMessages.NOT_AUTHORIZED_TO_PUBLISH)
             .and.to.be.an.instanceOf(AuthorizationException);
     });
 

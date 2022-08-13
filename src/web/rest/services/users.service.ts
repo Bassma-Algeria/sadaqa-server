@@ -14,7 +14,7 @@ import { AuthenticationManagerConfiguration } from '../../../components/Authenti
 
 @Injectable()
 class UsersService {
-    private readonly usersManager = UsersManagerConfiguration.aUsersManagerFacade();
+    private readonly usersManager = UsersManagerConfiguration.aUsersManager();
     private readonly authenticationManager =
         AuthenticationManagerConfiguration.anAuthenticationManager();
 

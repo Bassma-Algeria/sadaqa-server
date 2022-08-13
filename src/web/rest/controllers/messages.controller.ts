@@ -26,9 +26,9 @@ import { SendTextMessageDto } from './dtos/messages.dtos';
 
 import { MessagesService } from '../services/messages.service';
 
+import { TokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/TokenException';
 import { NotFoundException } from '../../../components/MessagesManager/main/core/domain/exceptions/NotFoundException';
 import { ValidationException } from '../../../components/MessagesManager/main/core/domain/exceptions/ValidationException';
-import { TokenException } from '../../../components/AuthenticationManager/main/core/domain/exception/TokenException';
 
 @ApiTags('messages')
 @Controller('/api/messages')

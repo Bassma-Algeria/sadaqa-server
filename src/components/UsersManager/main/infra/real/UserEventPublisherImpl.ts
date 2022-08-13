@@ -29,7 +29,7 @@ class UserEventPublisherImpl implements UserEventPublisher {
         });
     }
 
-    publishAssociationRegisteredEvent(payload: {
+    publishAssociationRegistered(payload: {
         associationAccount: AssociationAccount;
         associationDocs: AssociationDocs;
     }): void {
@@ -46,7 +46,7 @@ class UserEventPublisherImpl implements UserEventPublisher {
         });
     }
 
-    publishRegularUserRegisteredEvent(regularUser: RegularUserAccount): void {
+    publishRegularUserRegistered(regularUser: RegularUserAccount): void {
         this.eventBus.publish('REGULAR_USER_REGISTERED').withPayload({
             accountId: regularUser.accountId.value(),
             firstName: regularUser.firstName.value(),
@@ -60,7 +60,7 @@ class UserEventPublisherImpl implements UserEventPublisher {
         });
     }
 
-    publishUserLoginEvent(accountId: AccountId): void {
+    publishUserLogin(accountId: AccountId): void {
         this.eventBus.publish('USER_LOGIN').withPayload({ accountId: accountId.value() });
     }
 
@@ -76,7 +76,7 @@ class UserEventPublisherImpl implements UserEventPublisher {
         });
     }
 
-    publishUserGoOfflineEvent(accountId: AccountId): void {
+    publishUserGoOffline(accountId: AccountId): void {
         this.eventBus.publish('USER_GO_OFFLINE').withPayload({
             accountId: accountId.value(),
         });

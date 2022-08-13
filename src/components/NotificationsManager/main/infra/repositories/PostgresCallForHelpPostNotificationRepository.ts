@@ -2,12 +2,10 @@ import { PostId } from '../../core/domain/PostId';
 import { UserId } from '../../core/domain/UserId';
 import { NotificationId } from '../../core/domain/NotificationId';
 import { PostNotificationReason } from '../../core/domain/PostNotificationReason';
-import { FamilyInNeedPostNotification } from '../../core/domain/FamilyInNeedPostNotification';
+import { CallForHelpPostNotification } from '../../core/domain/CallForHelpPostNotification';
 
-import {
-    FamilyInNeedPostNotificationRepository,
-    FindManyFamilyInNeedPostNotificationRepository,
-} from '../../core/domain/services/repositories/FamilyInNeedPostNotificationRepository';
+import { FindManyFiltersNotificationRepository } from '../../core/domain/services/repositories/base/NotificationRepository';
+import { CallForHelpPostNotificationRepository } from '../../core/domain/services/repositories/CallForHelpPostNotificationRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
 
@@ -21,17 +19,17 @@ interface DBModel {
     createdAt: Date;
 }
 
-class PostgresFamilyInNeedPostNotificationRepository
-    implements FamilyInNeedPostNotificationRepository
+class PostgresCallForHelpPostNotificationRepository
+    implements CallForHelpPostNotificationRepository
 {
-    async save(notification: FamilyInNeedPostNotification): Promise<void> {
-        await prisma.familyInNeedPostNotification.create({ data: this.toDBModel(notification) });
+    async save(notification: CallForHelpPostNotification): Promise<void> {
+        await prisma.callForHelpPostNotification.create({ data: this.toDBModel(notification) });
     }
 
     async findMany(
-        filters: FindManyFamilyInNeedPostNotificationRepository,
-    ): Promise<FamilyInNeedPostNotification[]> {
-        const notifications = await prisma.familyInNeedPostNotification.findMany({
+        filters: FindManyFiltersNotificationRepository,
+    ): Promise<CallForHelpPostNotification[]> {
+        const notifications = await prisma.callForHelpPostNotification.findMany({
             where: {
                 receiverId: filters.receiverId.value(),
             },
@@ -40,7 +38,7 @@ class PostgresFamilyInNeedPostNotificationRepository
         return notifications.map(this.toEntity);
     }
 
-    private toDBModel(entity: FamilyInNeedPostNotification): DBModel {
+    private toDBModel(entity: CallForHelpPostNotification): DBModel {
         return {
             notificationId: entity.notificationId.value(),
             postId: entity.postId.value(),
@@ -53,7 +51,7 @@ class PostgresFamilyInNeedPostNotificationRepository
     }
 
     private toEntity(model: DBModel) {
-        return FamilyInNeedPostNotification.aBuilder()
+        return CallForHelpPostNotification.aBuilder()
             .withId(new NotificationId(model.notificationId))
             .withReceiverId(new UserId(model.receiverId))
             .withPostId(new PostId(model.postId))
@@ -65,4 +63,4 @@ class PostgresFamilyInNeedPostNotificationRepository
     }
 }
 
-export { PostgresFamilyInNeedPostNotificationRepository };
+export { PostgresCallForHelpPostNotificationRepository };

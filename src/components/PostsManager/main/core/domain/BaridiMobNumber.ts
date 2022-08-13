@@ -1,5 +1,5 @@
 import { MultiLanguagesValidationException } from './exceptions/MultiLanguagesValidationException';
-import { ExceptionsMessages } from './exceptions/ExceptionsMessages';
+import { ExceptionMessages } from './exceptions/ExceptionMessages';
 
 class BaridiMobNumber {
     private readonly ONLY_NUMBERS_REGEX = /^\d+$/;
@@ -11,7 +11,7 @@ class BaridiMobNumber {
 
         if (!this.isValidBaridiMobNumber(number))
             throw new MultiLanguagesValidationException(
-                ExceptionsMessages.INVALID_BARIDI_MOB_NUMBER,
+                ExceptionMessages.INVALID_BARIDI_MOB_NUMBER,
             );
 
         this._number = number;

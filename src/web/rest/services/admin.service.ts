@@ -6,7 +6,7 @@ import { UsersManagerConfiguration } from '../../../components/UsersManager/main
 
 @Injectable()
 class AdminService {
-    private readonly usersManager = UsersManagerConfiguration.aUsersManagerFacade();
+    private readonly usersManager = UsersManagerConfiguration.aUsersManager();
 
     async activateAssociation(
         adminPassword: string,

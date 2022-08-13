@@ -9,7 +9,7 @@ import { UsersManagerConfiguration } from '../../../components/UsersManager/main
 @Injectable()
 class MessagesService {
     private readonly messagesManager = MessagesManagerConfiguration.aMessagesManager();
-    private readonly usersManager = UsersManagerConfiguration.aUsersManagerFacade();
+    private readonly usersManager = UsersManagerConfiguration.aUsersManager();
 
     private readonly authenticationManager =
         AuthenticationManagerConfiguration.anAuthenticationManager();

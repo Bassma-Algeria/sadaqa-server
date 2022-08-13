@@ -15,7 +15,7 @@ import { anAddToFavouriteRequest } from '../base/requests/anAddToFavouriteReques
 import { aDonationPostCreationRequest } from '../base/requests/aDonationPostCreationRequest';
 
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../../../main/core/domain/exceptions/ValidationException';
 
 describe('Add To Favourite Posts', () => {
@@ -44,7 +44,7 @@ describe('Add To Favourite Posts', () => {
                 anAddToFavouriteRequest({ userId: NOT_EXISTING_USER_ID }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.USER_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_EXIST)
             .and.be.and.instanceOf(ValidationException);
     });
 
@@ -58,7 +58,7 @@ describe('Add To Favourite Posts', () => {
                 anAddToFavouriteRequest({ postId, postType: INVALID_POST_TYPE }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_POST_TYPE)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_POST_TYPE)
             .and.be.and.instanceOf(ValidationException);
     });
 
@@ -70,7 +70,7 @@ describe('Add To Favourite Posts', () => {
                 anAddToFavouriteRequest({ postId, postType: 'donation-request' }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_EXIST)
             .and.be.and.instanceOf(ValidationException);
     });
 

@@ -10,7 +10,7 @@ import { aCallForHelpPostCreationRequest } from '../base/requests/aCallForHelpPo
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';
 
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
-import { ExceptionsMessages } from '../../../../main/core/domain/exceptions/ExceptionsMessages';
+import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../../../main/core/domain/exceptions/ValidationException';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
@@ -38,7 +38,7 @@ describe('Update Call For Help Post', () => {
         await expect(
             callForHelpPostsManager.update(anEditCallForHelpPostRequest({ postId: NOT_EXIST })),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_NOT_FOUND)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .and.to.be.an.instanceOf(NotFoundException);
     });
 
@@ -51,7 +51,7 @@ describe('Update Call For Help Post', () => {
                 anEditCallForHelpPostRequest({ userId: NOT_PUBLISHER, postId }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.NOT_AUTHORIZED_TO_EDIT)
+            .to.eventually.be.rejectedWith(ExceptionMessages.NOT_AUTHORIZED_TO_EDIT)
             .and.to.be.an.instanceOf(AuthorizationException);
     });
 
@@ -65,7 +65,7 @@ describe('Update Call For Help Post', () => {
                 anEditCallForHelpPostRequest({ title: SHORT_TITLE, postId }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.SHORT_TITLE.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.SHORT_TITLE.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -81,7 +81,7 @@ describe('Update Call For Help Post', () => {
                 anEditCallForHelpPostRequest({ wilayaNumber: NOT_EXISTING_WILAYA, userId, postId }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_WILAYA_NUMBER.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_WILAYA_NUMBER.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -95,7 +95,7 @@ describe('Update Call For Help Post', () => {
                 anEditCallForHelpPostRequest({ ccp: INVALID_CCP, userId, postId }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CCP.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CCP.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -109,7 +109,7 @@ describe('Update Call For Help Post', () => {
                 anEditCallForHelpPostRequest({ ccpKey: INVALID_CCP_KEY, userId, postId }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_CCP.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_CCP.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -137,7 +137,7 @@ describe('Update Call For Help Post', () => {
                 }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.INVALID_BARIDI_MOB_NUMBER.en)
+            .to.eventually.be.rejectedWith(ExceptionMessages.INVALID_BARIDI_MOB_NUMBER.en)
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
@@ -276,7 +276,7 @@ describe('Update Call For Help Post', () => {
                 }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionsMessages.POST_PICTURE_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_PICTURE_NOT_EXIST)
             .and.to.be.an.instanceOf(ValidationException);
     });
 

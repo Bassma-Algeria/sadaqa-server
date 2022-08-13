@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 
 import { CreateNewFamilyInNeedPostNotificationUseCaseRequest } from '../../../../../main/core/usecases/CreateNotificationUseCases/CreatePostNotificationsUseCases/CreateNewFamilyInNeedPostNotificationUseCase/CreateNewFamilyInNeedPostNotificationUseCaseRequest';
 
-const aCreateNewDonationPostNotificationRequest = (
+const aCreateNewFamilyInNeedPostNotificationRequest = (
     request?: Partial<CreateNewFamilyInNeedPostNotificationUseCaseRequest>,
 ): CreateNewFamilyInNeedPostNotificationUseCaseRequest => {
     return {
@@ -13,4 +13,4 @@ const aCreateNewDonationPostNotificationRequest = (
     };
 };
 
-export { aCreateNewDonationPostNotificationRequest };
+export { aCreateNewFamilyInNeedPostNotificationRequest };
