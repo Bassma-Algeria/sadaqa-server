@@ -109,9 +109,19 @@ interface AssociationAccountInfoEdited {
 }
 
 interface PostNotificationPayload {
-    postId: string;
+    notificationId: string;
     receiverId: string;
+    postId: string;
     reason: string;
+    createdAt: Date;
+}
+
+interface TextMessageNotificationPayload {
+    notificationId: string;
+    receiverId: string;
+    messageContent: string;
+    messageSenderId: string;
+    createdAt: Date;
 }
 
 export interface Events {
@@ -152,6 +162,7 @@ export interface Events {
     USER_STOP_TYPING: { userId: string; receiverId: string };
     USER_START_TYPING: { userId: string; receiverId: string };
 
+    NEW_TEXT_MESSAGE_NOTIFICATION: TextMessageNotificationPayload;
     NEW_DONATION_POST_NOTIFICATION: PostNotificationPayload;
     NEW_CALL_FOR_HELP_POST_NOTIFICATION: PostNotificationPayload;
     NEW_FAMILY_IN_NEED_POST_NOTIFICATION: PostNotificationPayload;

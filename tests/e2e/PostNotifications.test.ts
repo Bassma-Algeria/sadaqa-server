@@ -13,7 +13,7 @@ import { createCallForHelpPost } from './base/operations/posts/call-for-help/cre
 import { createFamilyInNeedPost } from './base/operations/posts/family-in-need/createFamilyInNeed';
 import { createDonationRequest } from './base/operations/posts/donation-request/createDonationRequest';
 
-describe('Notifications', () => {
+describe('Post Notifications', () => {
     let app: INestApplication;
     let server: any;
 

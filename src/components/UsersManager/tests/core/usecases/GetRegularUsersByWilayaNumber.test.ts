@@ -36,13 +36,13 @@ describe('Get Regular Users By Wilaya numbers', () => {
         const secondUser = aRegularUserRegistrationRequest({
             wilayaNumber: firstUser.wilayaNumber,
         });
-        const { accountId: account1 } = await usersManager.registerRegularUser(firstUser);
-        const { accountId: account2 } = await usersManager.registerRegularUser(secondUser);
+        await usersManager.registerRegularUser(firstUser);
+        await usersManager.registerRegularUser(secondUser);
 
         const list = await usersManager.getRegularUsersInWilaya({
             wilayaNumber: firstUser.wilayaNumber,
         });
- 
+
         expect(list).to.have.lengthOf(2);
     });
 });

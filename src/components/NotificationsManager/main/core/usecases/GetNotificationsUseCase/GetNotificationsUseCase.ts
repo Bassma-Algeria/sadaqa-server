@@ -21,6 +21,9 @@ import { DonationRequestPostNotificationDtoMapper } from '../_common_/dtos/Donat
 
 import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../domain/exceptions/ValidationException';
+import { TextMessageNotificationRepository } from '../../domain/services/repositories/TextMessageNotificationRepository';
+import { TextMessageNotification } from '../../domain/TextMessageNotification';
+import { TextMessageNotificationDtoMapper } from '../_common_/dtos/TextMessageNotificationDtoMapper';
 
 class GetNotificationsUseCase
     implements UseCase<GetNotificationsUseCaseRequest, GetNotificationsUseCaseResponse>
@@ -28,6 +31,7 @@ class GetNotificationsUseCase
     private readonly PAGE_LIMIT = 10;
 
     constructor(
+        private readonly textMessageNotificationRepository: TextMessageNotificationRepository,
         private readonly donationPostNotificationRepository: DonationPostNotificationRepository,
         private readonly callForHelpPostNotificationRepository: CallForHelpPostNotificationRepository,
         private readonly familyInNeedPostNotificationRepository: FamilyInNeedPostNotificationRepository,
@@ -38,6 +42,10 @@ class GetNotificationsUseCase
         request: GetNotificationsUseCaseRequest,
     ): Promise<GetNotificationsUseCaseResponse> {
         const { page, receiverId } = this.getFrom(request);
+
+        const textMessageNotifications = await this.textMessageNotificationRepository.findMany({
+            receiverId,
+        });
 
         const donationPostNotifications = await this.donationPostNotificationRepository.findMany({
             receiverId,
@@ -53,6 +61,7 @@ class GetNotificationsUseCase
             await this.callForHelpPostNotificationRepository.findMany({ receiverId });
 
         const notifications = [
+            ...textMessageNotifications,
             ...donationPostNotifications,
             ...callForHelpPostNotifications,
             ...familyInNeedPostNotifications,
@@ -101,6 +110,9 @@ class GetNotificationsUseCase
 
         if (notification instanceof DonationRequestPostNotification)
             return DonationRequestPostNotificationDtoMapper.toDto(notification);
+
+        if (notification instanceof TextMessageNotification)
+            return TextMessageNotificationDtoMapper.toDto(notification);
 
         throw new Error('notification type not exist');
     }

@@ -26,3 +26,9 @@ eventBus.subscribeTo('CALL_FOR_HELP_POST_CREATED').by(payload => {
         payload,
     );
 });
+
+eventBus.subscribeTo('TEXT_MESSAGE_SENT').by(payload => {
+    NotificationsManagerConfiguration.aNotificationsManager().createTextMessageNotification(
+        payload,
+    );
+});

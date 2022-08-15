@@ -13,6 +13,7 @@ import { NotificationsManagerFacade } from '../../../../main/NotificationsManage
 
 import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
+import { PostgresTextMessageNotificationRepository } from '../../../../main/infra/repositories/PostgresTextMessageNotificationRepository';
 
 interface Depedencies {
     postsService: PostsService;
@@ -34,6 +35,7 @@ const aNotificationsManager = (dependencies?: Partial<Depedencies>) => {
         dependencies?.usersService || instance(usersServiceMock),
         new UuidNotificationIdGenerator(),
         new NotificationEventPublisherImpl(EventBus.getInstance()),
+        new PostgresTextMessageNotificationRepository(),
         new PostgresDonationPostNotificationRepository(),
         new PostgresCallForHelpPostNotificationRepository(),
         new PostgresFamilyInNeedPostNotificationRepository(),

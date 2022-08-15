@@ -30,6 +30,8 @@ const EndPoints = {
         `/api/posts/favourite?postType=${postType}&postId=${id}`,
 
     GET_NOTIFICATIONS: `/api/notifications`,
+
+    SEND_TEXT_MESSAGE: `/api/messages/text`,
 };
 
 export { EndPoints };

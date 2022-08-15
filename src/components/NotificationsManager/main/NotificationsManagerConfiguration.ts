@@ -12,6 +12,7 @@ import { NotificationsManagerFacade } from './NotificationsManagerFacade';
 import { EventBus } from '../../_shared_/event-bus/EventBus';
 import { PostsManagerConfiguration } from '../../PostsManager/main/PostsManagerConfiguration';
 import { UsersManagerConfiguration } from '../../UsersManager/main/UsersManagerConfiguration';
+import { PostgresTextMessageNotificationRepository } from './infra/repositories/PostgresTextMessageNotificationRepository';
 
 class NotificationsManagerConfiguration {
     static aNotificationsManager() {
@@ -23,6 +24,7 @@ class NotificationsManagerConfiguration {
             new UsersServiceImpl(UsersManagerConfiguration.aUsersManager()),
             new UuidNotificationIdGenerator(),
             new NotificationEventPublisherImpl(EventBus.getInstance()),
+            new PostgresTextMessageNotificationRepository(),
             new PostgresDonationPostNotificationRepository(),
             new PostgresCallForHelpPostNotificationRepository(),
             new PostgresFamilyInNeedPostNotificationRepository(),

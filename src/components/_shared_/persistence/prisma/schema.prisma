@@ -148,3 +148,13 @@ model CallForHelpPostNotification {
   read           Boolean
   createdAt      DateTime
 }
+
+model TextMessageNotification {
+  notificationId  String   @id
+  receiverId      String
+  messageSenderId String
+  messageContent  String
+  clicked         Boolean
+  read            Boolean
+  createdAt       DateTime
+}

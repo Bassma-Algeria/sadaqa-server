@@ -1,3 +1,4 @@
+import { TextMessageNotificationDto } from '../_common_/dtos/TextMessageNotificationDto';
 import { DonationPostNotificationDto } from '../_common_/dtos/DonationPostNotificationDto';
 import { CallForHelpPostNotificationDto } from '../_common_/dtos/CallForHelpPostNotificationDto';
 import { FamilyInNeedPostNotificationDto } from '../_common_/dtos/FamilyInNeedPostNotificationDto';
@@ -12,5 +13,6 @@ export interface GetNotificationsUseCaseResponse {
         | DonationRequestPostNotificationDto
         | FamilyInNeedPostNotificationDto
         | CallForHelpPostNotificationDto
+        | TextMessageNotificationDto
     )[];
 }

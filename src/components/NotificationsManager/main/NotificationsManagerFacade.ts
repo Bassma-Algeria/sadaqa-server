@@ -2,6 +2,7 @@ import { PostsService } from './core/domain/services/PostsService';
 import { UsersService } from './core/domain/services/UsersService';
 import { NotificationIdGenerator } from './core/domain/services/NotificationIdGenerator';
 import { NotificationEventPublisher } from './core/domain/services/NotificationEventPublisher';
+import { TextMessageNotificationRepository } from './core/domain/services/repositories/TextMessageNotificationRepository';
 import { DonationPostNotificationRepository } from './core/domain/services/repositories/DonationPostNotificationRepository';
 import { CallForHelpPostNotificationRepository } from './core/domain/services/repositories/CallForHelpPostNotificationRepository';
 import { FamilyInNeedPostNotificationRepository } from './core/domain/services/repositories/FamilyInNeedPostNotificationRepository';
@@ -22,12 +23,16 @@ import { CreateNewFamilyInNeedPostNotificationUseCaseRequest } from './core/usec
 import { CreateNewCallForHelpPostNotificationUseCase } from './core/usecases/CreateNotificationUseCases/CreatePostNotificationsUseCases/CreateNewCallForHelpPostNotificationUseCase/CreateNewCallForHelpPostNotificationUseCase';
 import { CreateNewCallForHelpPostNotificationUseCaseRequest } from './core/usecases/CreateNotificationUseCases/CreatePostNotificationsUseCases/CreateNewCallForHelpPostNotificationUseCase/CreateNewCallForHelpPostNotificationUseCaseRequest';
 
+import { CreateTextMessageNotificationUseCase } from './core/usecases/CreateNotificationUseCases/CreateMessageNotificationUseCases/CreateTextMessageNotificationUseCase/CreateTextMessageNotificationUseCase';
+import { CreateTextMessageNotificationUseCaseRequest } from './core/usecases/CreateNotificationUseCases/CreateMessageNotificationUseCases/CreateTextMessageNotificationUseCase/CreateTextMessageNotificationUseCaseRequest';
+
 class NotificationsManagerFacade {
     constructor(
         private readonly postsService: PostsService,
         private readonly usersService: UsersService,
         private readonly notificationIdGenerator: NotificationIdGenerator,
         private readonly notificationEventPublisher: NotificationEventPublisher,
+        private readonly textMessageNotificationRepository: TextMessageNotificationRepository,
         private readonly donationPostNotificationRepository: DonationPostNotificationRepository,
         private readonly callForHelpPostNotificationRepository: CallForHelpPostNotificationRepository,
         private readonly familyInNeedPostNotificationRepository: FamilyInNeedPostNotificationRepository,
@@ -78,8 +83,17 @@ class NotificationsManagerFacade {
         ).handle(request);
     }
 
+    createTextMessageNotification(request: CreateTextMessageNotificationUseCaseRequest) {
+        return new CreateTextMessageNotificationUseCase(
+            this.notificationIdGenerator,
+            this.notificationEventPublisher,
+            this.textMessageNotificationRepository,
+        ).handle(request);
+    }
+
     getNotifications(request: GetNotificationsUseCaseRequest) {
         return new GetNotificationsUseCase(
+            this.textMessageNotificationRepository,
             this.donationPostNotificationRepository,
             this.callForHelpPostNotificationRepository,
             this.familyInNeedPostNotificationRepository,
