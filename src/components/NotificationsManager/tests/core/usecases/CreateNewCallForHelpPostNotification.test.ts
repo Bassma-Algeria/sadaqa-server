@@ -71,6 +71,24 @@ describe('New Call for Help Post Notification', () => {
         expect(notifications[0].notification.clicked).to.equal(false);
     });
 
+    it('given a new call for help post notification creation request, when creating a new notification, then number of unread notification for the receiver should increase', async () => {
+        const userId = faker.datatype.uuid();
+        when(usersServiceMock.getIdsOfUsersInWilaya(anything())).thenResolve([new UserId(userId)]);
+
+        const { total: totalBefore } = await notificationsManager.getNumberOfUnreadNotification({
+            receiverId: userId,
+        });
+
+        const request = aCreateNewCallForHelpPostNotificationRequest();
+        await notificationsManager.createNewCallForHelpPostNotification(request);
+
+        const { total: totalAfter } = await notificationsManager.getNumberOfUnreadNotification({
+            receiverId: userId,
+        });
+
+        expect(totalAfter).to.equal(totalBefore + 1);
+    });
+
     it('given a new call for help post notification creation request, when the publisher of that call for help is an user in the same wilaya, then should not notify him', async () => {
         const userId = faker.datatype.uuid();
         when(usersServiceMock.getIdsOfUsersInWilaya(anything())).thenResolve([new UserId(userId)]);

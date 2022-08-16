@@ -4,7 +4,10 @@ import { NotificationId } from '../../core/domain/NotificationId';
 import { PostNotificationReason } from '../../core/domain/PostNotificationReason';
 import { DonationRequestPostNotification } from '../../core/domain/DonationRequestPostNotification';
 
-import { FindManyFiltersNotificationRepository } from '../../core/domain/services/repositories/base/NotificationRepository';
+import {
+    CountFiltersNotificationRepository,
+    FindManyFiltersNotificationRepository,
+} from '../../core/domain/services/repositories/base/NotificationRepository';
 import { DonationRequestPostNotificationRepository } from '../../core/domain/services/repositories/DonationRequestPostNotificationRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
@@ -26,6 +29,24 @@ class PostgresDonationRequestPostNotificationRepository
         await prisma.donationRequestPostNotification.create({ data: this.toDBModel(notification) });
     }
 
+    async update(notification: DonationRequestPostNotification): Promise<void> {
+        await prisma.donationRequestPostNotification.update({
+            data: this.toDBModel(notification),
+            where: { notificationId: notification.notificationId.value() },
+        });
+    }
+
+    async findById(
+        notificationId: NotificationId,
+    ): Promise<DonationRequestPostNotification | undefined> {
+        const notification = await prisma.donationRequestPostNotification.findUnique({
+            where: { notificationId: notificationId.value() },
+        });
+
+        if (notification) return this.toEntity(notification);
+        return undefined;
+    }
+
     async findMany(
         filters: FindManyFiltersNotificationRepository,
     ): Promise<DonationRequestPostNotification[]> {
@@ -36,6 +57,15 @@ class PostgresDonationRequestPostNotificationRepository
         });
 
         return notifications.map(this.toEntity);
+    }
+
+    async count(filters: CountFiltersNotificationRepository): Promise<number> {
+        return await prisma.donationRequestPostNotification.count({
+            where: {
+                receiverId: filters.receiverId.value(),
+                read: filters.read,
+            },
+        });
     }
 
     private toDBModel(entity: DonationRequestPostNotification): DBModel {

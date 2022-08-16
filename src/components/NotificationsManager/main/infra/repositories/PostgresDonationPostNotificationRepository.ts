@@ -4,7 +4,10 @@ import { NotificationId } from '../../core/domain/NotificationId';
 import { PostNotificationReason } from '../../core/domain/PostNotificationReason';
 import { DonationPostNotification } from '../../core/domain/DonationPostNotification';
 
-import { FindManyFiltersNotificationRepository } from '../../core/domain/services/repositories/base/NotificationRepository';
+import {
+    CountFiltersNotificationRepository,
+    FindManyFiltersNotificationRepository,
+} from '../../core/domain/services/repositories/base/NotificationRepository';
 import { DonationPostNotificationRepository } from '../../core/domain/services/repositories/DonationPostNotificationRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
@@ -24,6 +27,22 @@ class PostgresDonationPostNotificationRepository implements DonationPostNotifica
         await prisma.donationPostNotification.create({ data: this.toDBModel(notification) });
     }
 
+    async update(notification: DonationPostNotification): Promise<void> {
+        await prisma.donationPostNotification.update({
+            data: this.toDBModel(notification),
+            where: { notificationId: notification.notificationId.value() },
+        });
+    }
+
+    async findById(notificationId: NotificationId): Promise<DonationPostNotification | undefined> {
+        const notification = await prisma.donationPostNotification.findUnique({
+            where: { notificationId: notificationId.value() },
+        });
+
+        if (notification) return this.toEntity(notification);
+        return undefined;
+    }
+
     async findMany(
         filters: FindManyFiltersNotificationRepository,
     ): Promise<DonationPostNotification[]> {
@@ -34,6 +53,15 @@ class PostgresDonationPostNotificationRepository implements DonationPostNotifica
         });
 
         return notifications.map(this.toEntity);
+    }
+
+    async count(filters: CountFiltersNotificationRepository): Promise<number> {
+        return await prisma.donationPostNotification.count({
+            where: {
+                receiverId: filters.receiverId.value(),
+                read: filters.read,
+            },
+        });
     }
 
     private toDBModel(entity: DonationPostNotification): DBModel {

@@ -15,11 +15,11 @@ abstract class Notification {
         readonly createdAt: Date,
     ) {}
 
-    isRead() {
+    makeRead() {
         return this.aBuilderFromThis().withRead(true).build();
     }
 
-    isClicked() {
+    makeClicked() {
         return this.aBuilderFromThis().withClicked(true).build();
     }
 }

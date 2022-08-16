@@ -16,6 +16,32 @@ class NotificationsService {
 
         return await this.notificationsManager.getNotifications({ receiverId: userId });
     }
+
+    async getNumberOfUnreadNotifications(accessToken: string) {
+        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+
+        return await this.notificationsManager.getNumberOfUnreadNotification({
+            receiverId: userId,
+        });
+    }
+
+    async makeNotificationRead(accessToken: string, notificationId: string) {
+        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+
+        return await this.notificationsManager.makeNotificationRead({
+            notificationId,
+            userId,
+        });
+    }
+
+    async makeNotificationClicked(accessToken: string, notificationId: string) {
+        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+
+        return await this.notificationsManager.makeNotificationClicked({
+            notificationId,
+            userId,
+        });
+    }
 }
 
 export { NotificationsService };

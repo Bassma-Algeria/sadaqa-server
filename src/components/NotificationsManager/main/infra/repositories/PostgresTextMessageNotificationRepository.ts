@@ -2,7 +2,10 @@ import { UserId } from '../../core/domain/UserId';
 import { NotificationId } from '../../core/domain/NotificationId';
 import { TextMessageNotification } from '../../core/domain/TextMessageNotification';
 
-import { FindManyFiltersNotificationRepository } from '../../core/domain/services/repositories/base/NotificationRepository';
+import {
+    CountFiltersNotificationRepository,
+    FindManyFiltersNotificationRepository,
+} from '../../core/domain/services/repositories/base/NotificationRepository';
 import { TextMessageNotificationRepository } from '../../core/domain/services/repositories/TextMessageNotificationRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
@@ -22,6 +25,22 @@ class PostgresTextMessageNotificationRepository implements TextMessageNotificati
         await prisma.textMessageNotification.create({ data: this.toDBModel(notification) });
     }
 
+    async update(notification: TextMessageNotification): Promise<void> {
+        await prisma.textMessageNotification.update({
+            data: this.toDBModel(notification),
+            where: { notificationId: notification.notificationId.value() },
+        });
+    }
+
+    async findById(notificationId: NotificationId): Promise<TextMessageNotification | undefined> {
+        const notification = await prisma.textMessageNotification.findUnique({
+            where: { notificationId: notificationId.value() },
+        });
+
+        if (notification) return this.toEntity(notification);
+        return undefined;
+    }
+
     async findMany(
         filters: FindManyFiltersNotificationRepository,
     ): Promise<TextMessageNotification[]> {
@@ -32,6 +51,15 @@ class PostgresTextMessageNotificationRepository implements TextMessageNotificati
         });
 
         return notifications.map(this.toEntity);
+    }
+
+    async count(filters: CountFiltersNotificationRepository): Promise<number> {
+        return await prisma.textMessageNotification.count({
+            where: {
+                receiverId: filters.receiverId.value(),
+                read: filters.read,
+            },
+        });
     }
 
     private toDBModel(entity: TextMessageNotification): DBModel {

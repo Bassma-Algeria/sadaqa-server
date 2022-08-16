@@ -162,9 +162,11 @@ export interface Events {
     USER_STOP_TYPING: { userId: string; receiverId: string };
     USER_START_TYPING: { userId: string; receiverId: string };
 
-    NEW_TEXT_MESSAGE_NOTIFICATION: TextMessageNotificationPayload;
+    NOTIFICATION_READ: { notificationId: string };
+    NOTIFICATION_CLICKED: { notificationId: string };
     NEW_DONATION_POST_NOTIFICATION: PostNotificationPayload;
     NEW_CALL_FOR_HELP_POST_NOTIFICATION: PostNotificationPayload;
+    NEW_TEXT_MESSAGE_NOTIFICATION: TextMessageNotificationPayload;
     NEW_FAMILY_IN_NEED_POST_NOTIFICATION: PostNotificationPayload;
     NEW_DONATION_REQUEST_POST_NOTIFICATION: PostNotificationPayload;
 }

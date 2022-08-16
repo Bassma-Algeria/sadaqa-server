@@ -4,7 +4,10 @@ import { NotificationId } from '../../core/domain/NotificationId';
 import { PostNotificationReason } from '../../core/domain/PostNotificationReason';
 import { CallForHelpPostNotification } from '../../core/domain/CallForHelpPostNotification';
 
-import { FindManyFiltersNotificationRepository } from '../../core/domain/services/repositories/base/NotificationRepository';
+import {
+    CountFiltersNotificationRepository,
+    FindManyFiltersNotificationRepository,
+} from '../../core/domain/services/repositories/base/NotificationRepository';
 import { CallForHelpPostNotificationRepository } from '../../core/domain/services/repositories/CallForHelpPostNotificationRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
@@ -26,6 +29,24 @@ class PostgresCallForHelpPostNotificationRepository
         await prisma.callForHelpPostNotification.create({ data: this.toDBModel(notification) });
     }
 
+    async update(notification: CallForHelpPostNotification): Promise<void> {
+        await prisma.callForHelpPostNotification.update({
+            data: this.toDBModel(notification),
+            where: { notificationId: notification.notificationId.value() },
+        });
+    }
+
+    async findById(
+        notificationId: NotificationId,
+    ): Promise<CallForHelpPostNotification | undefined> {
+        const notification = await prisma.callForHelpPostNotification.findUnique({
+            where: { notificationId: notificationId.value() },
+        });
+
+        if (notification) return this.toEntity(notification);
+        return undefined;
+    }
+
     async findMany(
         filters: FindManyFiltersNotificationRepository,
     ): Promise<CallForHelpPostNotification[]> {
@@ -36,6 +57,15 @@ class PostgresCallForHelpPostNotificationRepository
         });
 
         return notifications.map(this.toEntity);
+    }
+
+    async count(filters: CountFiltersNotificationRepository): Promise<number> {
+        return await prisma.callForHelpPostNotification.count({
+            where: {
+                receiverId: filters.receiverId.value(),
+                read: filters.read,
+            },
+        });
     }
 
     private toDBModel(entity: CallForHelpPostNotification): DBModel {

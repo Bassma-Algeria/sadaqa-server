@@ -2,7 +2,7 @@ import { CreateTextMessageNotificationUseCaseRequest } from '../../../../../main
 import { faker } from '@faker-js/faker';
 
 const aCreateTextMessageNotificationRequest = (
-    request?: CreateTextMessageNotificationUseCaseRequest,
+    request?: Partial<CreateTextMessageNotificationUseCaseRequest>,
 ): CreateTextMessageNotificationUseCaseRequest => {
     return {
         messageId: faker.datatype.uuid(),

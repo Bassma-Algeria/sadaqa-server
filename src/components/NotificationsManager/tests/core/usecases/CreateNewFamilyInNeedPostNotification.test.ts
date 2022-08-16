@@ -71,6 +71,24 @@ describe('New Family in Need Post Notification', () => {
         expect(notifications[0].notification.clicked).to.equal(false);
     });
 
+    it('given a new family in need post notification creation request, when creating a new notification, then number of unread notification for the receiver should increase', async () => {
+        const userId = faker.datatype.uuid();
+        when(usersServiceMock.getIdsOfUsersInWilaya(anything())).thenResolve([new UserId(userId)]);
+
+        const { total: totalBefore } = await notificationsManager.getNumberOfUnreadNotification({
+            receiverId: userId,
+        });
+
+        const request = aCreateNewFamilyInNeedPostNotificationRequest();
+        await notificationsManager.createNewFamilyInNeedPostNotification(request);
+
+        const { total: totalAfter } = await notificationsManager.getNumberOfUnreadNotification({
+            receiverId: userId,
+        });
+
+        expect(totalAfter).to.equal(totalBefore + 1);
+    });
+
     it('given a new family in need post notification creation request, when the publisher of that family in need is an user in the same wilaya, then should not notify him', async () => {
         const userId = faker.datatype.uuid();
         when(usersServiceMock.getIdsOfUsersInWilaya(anything())).thenResolve([new UserId(userId)]);

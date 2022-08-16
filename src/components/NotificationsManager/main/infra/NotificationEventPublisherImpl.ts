@@ -6,9 +6,22 @@ import { DonationRequestPostNotification } from '../core/domain/DonationRequestP
 
 import { EventBus } from '../../../_shared_/event-bus/EventBus';
 import { TextMessageNotification } from '../core/domain/TextMessageNotification';
+import { Notification } from '../core/domain/Notification';
 
 class NotificationEventPublisherImpl implements NotificationEventPublisher {
     constructor(private readonly eventBus: EventBus) {}
+
+    notificationRead(notification: Notification): void {
+        this.eventBus.publish('NOTIFICATION_READ').withPayload({
+            notificationId: notification.notificationId.value(),
+        });
+    }
+
+    notificationClicked(notification: Notification): void {
+        this.eventBus.publish('NOTIFICATION_CLICKED').withPayload({
+            notificationId: notification.notificationId.value(),
+        });
+    }
 
     newDonationPostNotificationCreated(notification: DonationPostNotification) {
         this.eventBus.publish('NEW_DONATION_POST_NOTIFICATION').withPayload({

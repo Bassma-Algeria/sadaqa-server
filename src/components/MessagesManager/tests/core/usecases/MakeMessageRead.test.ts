@@ -21,7 +21,7 @@ describe('Make Message Read', () => {
             .and.to.be.an.instanceof(ValidationException);
     });
 
-    it('given a make message read request, then the message should exsit', async () => {
+    it('given a make message read request, then the message should exist', async () => {
         await expect(
             messagesManager.makeMessageRead({ messageId: 'NOT_EXIST', userId: 'SOME_USER' }),
         )

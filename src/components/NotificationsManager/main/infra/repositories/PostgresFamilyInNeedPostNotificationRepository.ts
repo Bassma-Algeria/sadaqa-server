@@ -4,7 +4,10 @@ import { NotificationId } from '../../core/domain/NotificationId';
 import { PostNotificationReason } from '../../core/domain/PostNotificationReason';
 import { FamilyInNeedPostNotification } from '../../core/domain/FamilyInNeedPostNotification';
 
-import { FindManyFiltersNotificationRepository } from '../../core/domain/services/repositories/base/NotificationRepository';
+import {
+    CountFiltersNotificationRepository,
+    FindManyFiltersNotificationRepository,
+} from '../../core/domain/services/repositories/base/NotificationRepository';
 import { FamilyInNeedPostNotificationRepository } from '../../core/domain/services/repositories/FamilyInNeedPostNotificationRepository';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
@@ -26,6 +29,24 @@ class PostgresFamilyInNeedPostNotificationRepository
         await prisma.familyInNeedPostNotification.create({ data: this.toDBModel(notification) });
     }
 
+    async update(notification: FamilyInNeedPostNotification): Promise<void> {
+        await prisma.familyInNeedPostNotification.update({
+            data: this.toDBModel(notification),
+            where: { notificationId: notification.notificationId.value() },
+        });
+    }
+
+    async findById(
+        notificationId: NotificationId,
+    ): Promise<FamilyInNeedPostNotification | undefined> {
+        const notification = await prisma.familyInNeedPostNotification.findUnique({
+            where: { notificationId: notificationId.value() },
+        });
+
+        if (notification) return this.toEntity(notification);
+        return undefined;
+    }
+
     async findMany(
         filters: FindManyFiltersNotificationRepository,
     ): Promise<FamilyInNeedPostNotification[]> {
@@ -36,6 +57,15 @@ class PostgresFamilyInNeedPostNotificationRepository
         });
 
         return notifications.map(this.toEntity);
+    }
+
+    async count(filters: CountFiltersNotificationRepository): Promise<number> {
+        return await prisma.familyInNeedPostNotification.count({
+            where: {
+                receiverId: filters.receiverId.value(),
+                read: filters.read,
+            },
+        });
     }
 
     private toDBModel(entity: FamilyInNeedPostNotification): DBModel {

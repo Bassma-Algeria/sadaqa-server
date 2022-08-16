@@ -143,6 +143,25 @@ describe('New Donation post notification', () => {
         expect(notifications[0].notification.clicked).to.equal(false);
     });
 
+    it('given a new donation post notification creation request, when creating a new notification, then number of unread notification for the receiver should increase', async () => {
+        const userId = faker.datatype.uuid();
+        when(postsServiceMock.getPublishersOfDonationRequestsThatMatch(anything())).thenResolve([
+            new UserId(userId),
+        ]);
+        const { total: totalBefore } = await notificationsManager.getNumberOfUnreadNotification({
+            receiverId: userId,
+        });
+
+        const request = aCreateNewDonationPostNotificationRequest();
+        await notificationsManager.createNewDonationPostNotification(request);
+
+        const { total: totalAfter } = await notificationsManager.getNumberOfUnreadNotification({
+            receiverId: userId,
+        });
+
+        expect(totalAfter).to.equal(totalBefore + 1);
+    });
+
     it('given a new donation post notification creation request, when the publisher of that donation have a donation requests matches the new donation, then should not notify him', async () => {
         const userId = faker.datatype.uuid();
         when(postsServiceMock.getPublishersOfDonationRequestsThatMatch(anything())).thenResolve([

@@ -25,6 +25,14 @@ import { CreateNewCallForHelpPostNotificationUseCaseRequest } from './core/useca
 
 import { CreateTextMessageNotificationUseCase } from './core/usecases/CreateNotificationUseCases/CreateMessageNotificationUseCases/CreateTextMessageNotificationUseCase/CreateTextMessageNotificationUseCase';
 import { CreateTextMessageNotificationUseCaseRequest } from './core/usecases/CreateNotificationUseCases/CreateMessageNotificationUseCases/CreateTextMessageNotificationUseCase/CreateTextMessageNotificationUseCaseRequest';
+import { GetNumberOfUnreadNotificationsUseCaseRequest } from './core/usecases/GetNumberOfUnreadNotificationsUseCase/GetNumberOfUnreadNotificationsUseCaseRequest';
+import { GetNumberOfUnreadNotificationsUseCase } from './core/usecases/GetNumberOfUnreadNotificationsUseCase/GetNumberOfUnreadNotificationsUseCase';
+import { MakeNotificationReadUseCaseRequest } from './core/usecases/MakeNotificationReadUseCase/MakeNotificationReadUseCaseRequest';
+import { MakeNotificationReadUseCase } from './core/usecases/MakeNotificationReadUseCase/MakeNotificationReadUseCase';
+import { GetNotificationTypeByIdUseCase } from './core/usecases/GetNotificationTypeByIdUseCase/GetNotificationTypeByIdUseCase';
+import { GetNotificationTypeByIdUseCaseRequest } from './core/usecases/GetNotificationTypeByIdUseCase/GetNotificationTypeByIdUseCaseRequest';
+import { MakeNotificationClickedUseCaseRequest } from './core/usecases/NotificationClickedUseCase/MakeNotificationClickedUseCaseRequest';
+import { MakeNotificationClickedUseCase } from './core/usecases/NotificationClickedUseCase/MakeNotificationClickedUseCase';
 
 class NotificationsManagerFacade {
     constructor(
@@ -100,6 +108,67 @@ class NotificationsManagerFacade {
             this.donationRequestPostNotificationRepository,
         ).handle(request);
     }
+
+    getNumberOfUnreadNotification(request: GetNumberOfUnreadNotificationsUseCaseRequest) {
+        return new GetNumberOfUnreadNotificationsUseCase(
+            this.textMessageNotificationRepository,
+            this.donationPostNotificationRepository,
+            this.callForHelpPostNotificationRepository,
+            this.familyInNeedPostNotificationRepository,
+            this.donationRequestPostNotificationRepository,
+        ).handle(request);
+    }
+
+    async makeNotificationRead(request: MakeNotificationReadUseCaseRequest) {
+        const { type } = await this.getNotificationType(request);
+
+        return new MakeNotificationReadUseCase(
+            this.notificationEventPublisher,
+            this.getRepositoryDependsOnType(type),
+        ).handle(request);
+    }
+
+    async makeNotificationClicked(request: MakeNotificationClickedUseCaseRequest) {
+        const { type } = await this.getNotificationType(request);
+
+        return new MakeNotificationClickedUseCase(
+            this.notificationEventPublisher,
+            this.getRepositoryDependsOnType(type),
+        ).handle(request);
+    }
+
+    private getNotificationType(request: GetNotificationTypeByIdUseCaseRequest) {
+        return new GetNotificationTypeByIdUseCase(
+            this.textMessageNotificationRepository,
+            this.donationPostNotificationRepository,
+            this.callForHelpPostNotificationRepository,
+            this.familyInNeedPostNotificationRepository,
+            this.donationRequestPostNotificationRepository,
+        ).handle(request);
+    }
+
+    private getRepositoryDependsOnType(notificationType: string) {
+        switch (notificationType) {
+            case 'NEW_TEXT_MESSAGE':
+                return this.textMessageNotificationRepository;
+
+            case 'NEW_DONATION_POST':
+                return this.donationPostNotificationRepository;
+
+            case 'NEW_DONATION_REQUEST_POST':
+                return this.donationRequestPostNotificationRepository;
+
+            case 'NEW_FAMILY_IN_NEED_POST':
+                return this.familyInNeedPostNotificationRepository;
+
+            case 'NEW_CALL_FOR_HELP_POST':
+                return this.callForHelpPostNotificationRepository;
+
+            default:
+                throw new Error('type not supported');
+        }
+    }
 }
+
 
 export { NotificationsManagerFacade };

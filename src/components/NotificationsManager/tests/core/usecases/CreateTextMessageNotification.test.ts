@@ -6,13 +6,13 @@ import { spy } from 'sinon';
 import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Create Text Message Notification', () => {
-    const notificationManager = aNotificationsManager();
+    const notificationsManager = aNotificationsManager();
 
     it('given a create text message notification request, then should send a notification to the receiver of that message', async () => {
         const textMessage = aCreateTextMessageNotificationRequest();
-        await notificationManager.createTextMessageNotification(textMessage);
+        await notificationsManager.createTextMessageNotification(textMessage);
 
-        const { list } = await notificationManager.getNotifications({
+        const { list } = await notificationsManager.getNotifications({
             receiverId: textMessage.receiverId,
         });
 
@@ -23,9 +23,9 @@ describe('Create Text Message Notification', () => {
 
     it('given a create text message notification request, when creating a new notification, then register the creation time', async () => {
         const textMessage = aCreateTextMessageNotificationRequest();
-        await notificationManager.createTextMessageNotification(textMessage);
+        await notificationsManager.createTextMessageNotification(textMessage);
 
-        const { list } = await notificationManager.getNotifications({
+        const { list } = await notificationsManager.getNotifications({
             receiverId: textMessage.receiverId,
         });
 
@@ -37,9 +37,9 @@ describe('Create Text Message Notification', () => {
 
     it('given a create text message notification request, when creating a new notification, then initialize the clicked and read to be false', async () => {
         const textMessage = aCreateTextMessageNotificationRequest();
-        await notificationManager.createTextMessageNotification(textMessage);
+        await notificationsManager.createTextMessageNotification(textMessage);
 
-        const { list } = await notificationManager.getNotifications({
+        const { list } = await notificationsManager.getNotifications({
             receiverId: textMessage.receiverId,
         });
 
@@ -47,12 +47,28 @@ describe('Create Text Message Notification', () => {
         expect(list[0].notification.clicked).to.equal(false);
     });
 
+    it('given a create text message notification request, when creating a new notification, then number of unread notification for the receiver should increase', async () => {
+        const textMessage = aCreateTextMessageNotificationRequest();
+
+        const { total: totalBefore } = await notificationsManager.getNumberOfUnreadNotification({
+            receiverId: textMessage.receiverId,
+        });
+
+        await notificationsManager.createTextMessageNotification(textMessage);
+
+        const { total: totalAfter } = await notificationsManager.getNumberOfUnreadNotification({
+            receiverId: textMessage.receiverId,
+        });
+
+        expect(totalAfter).to.equal(totalBefore + 1);
+    });
+
     it('given a create text message notification request, when creating the notification, should publish an event to the global event bus', async () => {
         const mockFn = spy();
         EventBus.getInstance().subscribeTo('NEW_TEXT_MESSAGE_NOTIFICATION').by(mockFn);
 
         const textMessage = aCreateTextMessageNotificationRequest();
-        await notificationManager.createTextMessageNotification(textMessage);
+        await notificationsManager.createTextMessageNotification(textMessage);
 
         expect(mockFn.calledOnce).to.equal(true);
 
