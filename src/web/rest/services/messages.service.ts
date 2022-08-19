@@ -50,6 +50,12 @@ class MessagesService {
 
         return await this.messagesManager.makeMessageRead({ ...request, userId });
     }
+
+    async getUnreadMessagesNumber(accessToken: string) {
+        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+
+        return await this.messagesManager.getUnreadMessagesNumber({ receiverId: userId });
+    }
 }
 
 export { MessagesService };

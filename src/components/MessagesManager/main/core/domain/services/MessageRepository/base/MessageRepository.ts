@@ -20,5 +20,7 @@ export interface MessageRepository<M extends Message> {
 
     findLatestMessagesWithEveryUser(userId: UserId): Promise<M[]>;
 
-    count(filters: { between: UserId; and: UserId }): Promise<number>;
+    countAllInConversation(filters: { between: UserId; and: UserId }): Promise<number>;
+
+    countPerReceiver(filters: { receiverId: UserId; read?: boolean }): Promise<number>;
 }

@@ -30,11 +30,12 @@ const EndPoints = {
         `/api/posts/favourite?postType=${postType}&postId=${id}`,
 
     GET_NOTIFICATIONS: `/api/notifications`,
-    GET_TOTAL_UNREAD_NOTIFICATION: '/api/notifications/total-unread',
+    GET_TOTAL_UNREAD_NOTIFICATIONS: '/api/notifications/total-unread',
     MAKE_NOTIFICATION_READ: (id: string) => `/api/notifications/${id}/read`,
     MAKE_NOTIFICATION_CLICKED: (id: string) => `/api/notifications/${id}/clicked`,
 
     SEND_TEXT_MESSAGE: `/api/messages/text`,
+    GET_TOTAL_UNREAD_MESSAGES: '/api/messages/total-unread',
 };
 
 export { EndPoints };

@@ -105,6 +105,19 @@ class MessagesController {
         }
     }
 
+    @Get('total-unread')
+    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiOkResponse({ description: 'unread messages returned' })
+    @ApiUnauthorizedResponse({ description: 'invalid access token' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async getUnreadMessagesNumber(@Headers('Authorisation') accessToken: string) {
+        try {
+            return await this.messagesService.getUnreadMessagesNumber(accessToken);
+        } catch (e) {
+            MessagesController.handleError(e);
+        }
+    }
+
     private static handleError(e: unknown) {
         if (e instanceof TokenException)
             throw new HttpException({ error: 'Not Authorized' }, HttpStatus.UNAUTHORIZED);

@@ -111,11 +111,9 @@ abstract class UpdatePostUseCase {
             return picturesToKeep.some(pic => pic.equals(picture));
         }
 
-        for (const pictureInPost of post.pictures) {
-            if (!picturesToKeepContains(pictureInPost)) {
+        for (const pictureInPost of post.pictures)
+            if (!picturesToKeepContains(pictureInPost))
                 await this.picturesManager.delete(pictureInPost);
-            }
-        }
     }
 
     protected async updatePost(post: Post) {
@@ -127,4 +125,4 @@ abstract class UpdatePostUseCase {
     }
 }
 
-export { UpdatePostUseCase };
+export {UpdatePostUseCase};

@@ -20,6 +20,8 @@ import { UsersService } from './core/domain/services/UsersService';
 import { MessageIdGenerator } from './core/domain/services/MessageIdGenerator';
 import { TextMessageRepository } from './core/domain/services/MessageRepository/TextMessageRepository';
 import { TextMessageEventPublisher } from './core/domain/services/MessageEventPublisher/TextMessageEventPublisher';
+import { GetUnreadMessagesNumberUseCaseRequest } from './core/usecases/GetUnreadMessageNumberUseCase/GetUnreadMessagesNumberUseCaseRequest';
+import { GetUnreadMessagesNumberUseCase } from './core/usecases/GetUnreadMessageNumberUseCase/GetUnreadMessagesNumberUseCase';
 
 class MessagesManagerFacade {
     constructor(
@@ -59,6 +61,10 @@ class MessagesManagerFacade {
 
     userStopTyping(request: UserStopTypingUseCaseRequest) {
         return new UserStopTypingUseCase(this.textMessageEventPublisher).handle(request);
+    }
+
+    getUnreadMessagesNumber(request: GetUnreadMessagesNumberUseCaseRequest) {
+        return new GetUnreadMessagesNumberUseCase(this.textMessageRepository).handle(request);
     }
 }
 

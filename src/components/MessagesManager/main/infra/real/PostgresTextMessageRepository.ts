@@ -65,13 +65,22 @@ class PostgresTextMessageRepository implements TextMessageRepository {
         return messages.map(this.toEntity);
     }
 
-    async count(filters: { between: UserId; and: UserId }): Promise<number> {
+    async countAllInConversation(filters: { between: UserId; and: UserId }): Promise<number> {
         return await prisma.textMessage.count({
             where: {
                 OR: [
                     { receiverId: filters.and.value(), senderId: filters.between.value() },
                     { receiverId: filters.between.value(), senderId: filters.and.value() },
                 ],
+            },
+        });
+    }
+
+    async countPerReceiver(filters: { receiverId: UserId; read?: boolean }) {
+        return await prisma.textMessage.count({
+            where: {
+                receiverId: filters.receiverId.value(),
+                read: filters.read,
             },
         });
     }

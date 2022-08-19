@@ -20,7 +20,7 @@ class GetConversationUseCase
         const filters = this.getFiltersFrom(request);
 
         const textMessages = await this.textMessageRepository.findMany(filters);
-        const totalTextMessages = await this.textMessageRepository.count(filters);
+        const totalTextMessages = await this.textMessageRepository.countAllInConversation(filters);
 
         return {
             messages: textMessages.map(TextMessageDtoMapper.toDto),

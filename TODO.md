@@ -8,6 +8,10 @@
 
 - add the ability to return posts per publisherId
 
+- add the check if notification already read / clicked
+
+- return the account type from the login
+
 - always start from e2e test, then go into the acceptance tests
 
 - change the search of the posts to full text search

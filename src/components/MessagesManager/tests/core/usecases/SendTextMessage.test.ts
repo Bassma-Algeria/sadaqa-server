@@ -131,6 +131,22 @@ describe('Send Text Message', () => {
         expect(id1).to.not.equal(id2).and.to.not.equal(id3);
     });
 
+    it('given a text message sending request, when the message is sent, then the number of unread message for the receiver should increse', async () => {
+        const message = aSendTextMessageRequest();
+
+        const { total: totalBefore } = await messagesManager.getUnreadMessagesNumber({
+            receiverId: message.receiverId,
+        });
+
+        await messagesManager.sendTextMessage(message);
+
+        const { total: totalAfter } = await messagesManager.getUnreadMessagesNumber({
+            receiverId: message.receiverId,
+        });
+
+        expect(totalAfter).to.equal(totalBefore + 1);
+    });
+
     it('given a text message sending request, when everything is ok, then should publish the message sent event in the global event bus', async () => {
         const mockFn = spy();
         EventBus.getInstance().subscribeTo('TEXT_MESSAGE_SENT').by(mockFn);
