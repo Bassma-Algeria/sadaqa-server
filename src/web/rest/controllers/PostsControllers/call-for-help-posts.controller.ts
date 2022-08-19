@@ -46,7 +46,7 @@ class CallForHelpPostsController {
     @Post('call-for-help')
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post created successfully' })
     @ApiBadRequestResponse({ description: 'error in the form body data' })
     @ApiForbiddenResponse({ description: 'a regular user try to add a call for help' })
@@ -56,7 +56,7 @@ class CallForHelpPostsController {
     async create(
         @Body() body: CreateCallForHelpDto,
         @UploadedFiles() pictures: Array<Express.Multer.File>,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
         @Headers('Accept-Language') language: SupportedLanguages,
     ) {
         try {
@@ -73,7 +73,7 @@ class CallForHelpPostsController {
     @Put('call-for-help/:postId')
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post updated successfully' })
     @ApiBadRequestResponse({ description: 'error in the form body data' })
     @ApiForbiddenResponse({ description: 'not the owner of the post' })
@@ -85,7 +85,7 @@ class CallForHelpPostsController {
         @Body() body: UpdateCallForHelpDto,
         @Param('postId') postId: string,
         @UploadedFiles() newPics: Array<Express.Multer.File>,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
         @Headers('Accept-Language') language: SupportedLanguages,
     ) {
         try {
@@ -104,7 +104,7 @@ class CallForHelpPostsController {
     }
 
     @Put('call-for-help/:postId/toggle-enabling')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post status updated successfully' })
     @ApiForbiddenResponse({ description: 'the user is not the owner of the post' })
     @ApiNotFoundResponse({ description: 'target post not found' })
@@ -112,7 +112,7 @@ class CallForHelpPostsController {
     @ApiInternalServerErrorResponse({ description: 'server error' })
     async toggleEnabling(
         @Param('postId') postId: string,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.postsService.toggleEnablingStatus(accessToken, { postId });
@@ -122,13 +122,13 @@ class CallForHelpPostsController {
     }
 
     @Delete('call-for-help/:postId')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post deleted successfully' })
     @ApiForbiddenResponse({ description: 'the user is not the owner of the post' })
     @ApiNotFoundResponse({ description: 'target post not found' })
     @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async delete(@Param('postId') postId: string, @Headers('Authorisation') accessToken: string) {
+    async delete(@Param('postId') postId: string, @Headers('Authorization') accessToken: string) {
         try {
             return await this.postsService.delete(accessToken, { postId });
         } catch (e) {

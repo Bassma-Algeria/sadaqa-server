@@ -5,7 +5,7 @@ const editAssociationInfo = async (server: any, info: any, token: string) => {
     await request(server)
         .put(EndPoints.EDIT_ASSOCIATION_INFO)
         .send(info)
-        .set('Authorisation', token);
+        .set('Authorization', token);
 };
 
 export { editAssociationInfo };

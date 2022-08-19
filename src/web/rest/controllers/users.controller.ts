@@ -79,12 +79,12 @@ class UsersController {
     }
 
     @Get('regular-user/me')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'user found' })
     @ApiNotFoundResponse({ description: 'user not found' })
     @ApiUnauthorizedResponse({ description: 'the access token is not valid' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getAuthenticatedRegularUser(@Headers('Authorisation') accessToken: string) {
+    async getAuthenticatedRegularUser(@Headers('Authorization') accessToken: string) {
         try {
             return await this.usersService.getAuthenticatedRegularUser(accessToken);
         } catch (e) {
@@ -128,12 +128,12 @@ class UsersController {
     }
 
     @Get('/associations/me')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'association found' })
     @ApiNotFoundResponse({ description: 'association not found' })
     @ApiUnauthorizedResponse({ description: 'the access token is not valid' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getAuthenticatedAssociation(@Headers('Authorisation') accessToken: string) {
+    async getAuthenticatedAssociation(@Headers('Authorization') accessToken: string) {
         try {
             return await this.usersService.getAuthenticatedAssociation(accessToken);
         } catch (e) {
@@ -154,7 +154,7 @@ class UsersController {
     }
 
     @Put('associations/info')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'association info edited' })
     @ApiNotFoundResponse({ description: 'association not found' })
     @ApiBadRequestResponse({ description: 'error in the body form data' })
@@ -162,7 +162,7 @@ class UsersController {
     @ApiInternalServerErrorResponse({ description: 'internal server error' })
     async editAssociationInfo(
         @Body() body: EditAssociationInfoDto,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.usersService.editAssociationInfo(accessToken, body);
@@ -172,7 +172,7 @@ class UsersController {
     }
 
     @Put('associations/credentials')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'association credentials edited' })
     @ApiNotFoundResponse({ description: 'association not found' })
     @ApiBadRequestResponse({ description: 'error in the body form data' })
@@ -180,7 +180,7 @@ class UsersController {
     @ApiInternalServerErrorResponse({ description: 'internal server error' })
     async editAssociationCredentials(
         @Body() body: EditCredentialsDto,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.usersService.editAssociationCredentials(accessToken, body);
@@ -190,7 +190,7 @@ class UsersController {
     }
 
     @Put('regular-user/info')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'regular user info edited' })
     @ApiNotFoundResponse({ description: 'regular user not found' })
     @ApiBadRequestResponse({ description: 'error in the body form data' })
@@ -198,7 +198,7 @@ class UsersController {
     @ApiInternalServerErrorResponse({ description: 'internal server error' })
     async editRegularUserInfo(
         @Body() body: EditRegularUserInfoDto,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.usersService.editRegularUserInfo(accessToken, body);
@@ -208,7 +208,7 @@ class UsersController {
     }
 
     @Put('regular-user/credentials')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'regular user credentials edited' })
     @ApiNotFoundResponse({ description: 'regular user not found' })
     @ApiBadRequestResponse({ description: 'error in the body form data' })
@@ -216,7 +216,7 @@ class UsersController {
     @ApiInternalServerErrorResponse({ description: 'internal server error' })
     async editRegularUserCredentials(
         @Body() body: EditCredentialsDto,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.usersService.editRegularUserCredentials(accessToken, body);

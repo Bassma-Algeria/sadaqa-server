@@ -8,7 +8,7 @@ import { registerRegularUser } from './base/operations/users/registerRegularUser
 import { getRegularUserByToken } from './base/operations/users/getRegularUserByToken';
 import { getTotalUnreadMessages } from './base/operations/messages/getTotalUnreadMessages';
 
-describe('Get Total Unread Messages', function () {
+describe('Get Total Unread Messages', () => {
     let app: INestApplication;
     let server: any;
 

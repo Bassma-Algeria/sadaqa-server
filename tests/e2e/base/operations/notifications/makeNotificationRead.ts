@@ -5,7 +5,7 @@ import { EndPoints } from '../../Endpoints';
 const makeNotificationRead = async (server: any, token: string, id: string) => {
     const { body } = await request(server)
         .put(EndPoints.MAKE_NOTIFICATION_READ(id))
-        .set('Authorisation', token);
+        .set('Authorization', token);
 
     return body;
 };

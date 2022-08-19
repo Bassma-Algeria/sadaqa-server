@@ -9,7 +9,7 @@ const sendTextMessage = async (server: any, accessToken: string, body?: any) => 
     await request(server)
         .post(EndPoints.SEND_TEXT_MESSAGE)
         .send(message)
-        .set('Authorisation', accessToken);
+        .set('Authorization', accessToken);
 
     return { message };
 };

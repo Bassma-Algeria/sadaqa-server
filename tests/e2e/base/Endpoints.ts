@@ -2,6 +2,7 @@ const EndPoints = {
     EDIT_REGULAR_USER_INFO: '/api/users/regular-user/info',
     GET_REGULAR_USER_BY_TOKEN: '/api/users/regular-user/me',
     REGISTER_REGULAR_USER: '/api/users/regular-user/register',
+    LOGIN: '/api/users/login',
 
     EDIT_ASSOCIATION_INFO: '/api/users/associations/info',
     GET_ASSOCIATION_BY_TOKEN: '/api/users/associations/me',

@@ -19,12 +19,12 @@ class UsersService {
         AuthenticationManagerConfiguration.anAuthenticationManager();
 
     async login(loginBody: LoginUseCaseRequest) {
-        const { accountId } = await this.usersManager.login(loginBody);
+        const { accountId, type } = await this.usersManager.login(loginBody);
         const { accessToken } = await this.authenticationManager.generateAccessToken({
             userId: accountId,
         });
 
-        return { accessToken };
+        return { type, accessToken };
     }
 
     async registerRegularUser(registrationBody: RegisterRegularUserUseCaseRequest) {

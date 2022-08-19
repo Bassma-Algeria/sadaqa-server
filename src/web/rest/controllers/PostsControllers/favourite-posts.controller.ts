@@ -24,13 +24,13 @@ class FavouritePostsController {
     constructor(private readonly favouritePostsService: FavouritePostsService) {}
 
     @Post('favourite')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post added to favourite successfully' })
     @ApiNotFoundResponse({ description: 'target post not found' })
     @ApiBadRequestResponse({ description: 'error in the post type' })
     @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async add(@Body() body: CreateFavouritePostDto, @Headers('Authorisation') accessToken: string) {
+    async add(@Body() body: CreateFavouritePostDto, @Headers('Authorization') accessToken: string) {
         try {
             return await this.favouritePostsService.add(accessToken, body);
         } catch (e) {
@@ -41,7 +41,7 @@ class FavouritePostsController {
     @Delete('favourite/:postType/:postId')
     @ApiParam({ name: 'postId', description: 'the post id' })
     @ApiParam({ name: 'postType', description: 'the post type', enum: PostType.POST_TYPES })
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post deleted from favourite successfully' })
     @ApiNotFoundResponse({ description: 'target post not found' })
     @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
@@ -49,7 +49,7 @@ class FavouritePostsController {
     async delete(
         @Param('postId') postId: string,
         @Param('postType') postType: string,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.favouritePostsService.delete(accessToken, { postId, postType });
@@ -59,11 +59,11 @@ class FavouritePostsController {
     }
 
     @Get('favourite')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post added to favourite successfully' })
     @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getAll(@Headers('Authorisation') accessToken: string) {
+    async getAll(@Headers('Authorization') accessToken: string) {
         try {
             return await this.favouritePostsService.getAll(accessToken);
         } catch (e) {
@@ -74,7 +74,7 @@ class FavouritePostsController {
     @Get('favourite/isFavourite/:postType/:postId')
     @ApiParam({ name: 'postId', description: 'the post id' })
     @ApiParam({ name: 'postType', description: 'the post type', enum: PostType.POST_TYPES })
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post deleted from favourite successfully' })
     @ApiBadRequestResponse({ description: 'error in the post type' })
     @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
@@ -82,7 +82,7 @@ class FavouritePostsController {
     async isFavourite(
         @Param('postId') postId: string,
         @Param('postType') postType: string,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.favouritePostsService.isFavourite(accessToken, { postId, postType });

@@ -9,7 +9,7 @@ const createDonation = async (server: any, accessToken: string, body?: any) => {
     } = await request(server)
         .post(EndPoints.NEW_DONATION)
         .field(donationInfo)
-        .set('Authorisation', accessToken);
+        .set('Authorization', accessToken);
 
     return { postId, donationInfo };
 };

@@ -45,7 +45,7 @@ class DonationPostsController {
     @Post('donation')
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post created successfully' })
     @ApiBadRequestResponse({ description: 'error in the form body data' })
     @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
@@ -54,7 +54,7 @@ class DonationPostsController {
     async create(
         @Body() body: CreateDonationDto,
         @UploadedFiles() pictures: Array<Express.Multer.File>,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
         @Headers('Accept-Language') language: SupportedLanguages,
     ) {
         try {
@@ -71,7 +71,7 @@ class DonationPostsController {
     @Put('donation/:postId')
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post updated successfully' })
     @ApiBadRequestResponse({ description: 'error in the form body data' })
     @ApiNotFoundResponse({ description: 'target post not found' })
@@ -83,7 +83,7 @@ class DonationPostsController {
         @Body() body: UpdateDonationDto,
         @Param('postId') postId: string,
         @UploadedFiles() newPics: Array<Express.Multer.File>,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
         @Headers('Accept-Language') language: SupportedLanguages,
     ) {
         try {
@@ -102,7 +102,7 @@ class DonationPostsController {
     }
 
     @Put('donation/:postId/toggle-enabling')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post status updated successfully' })
     @ApiForbiddenResponse({ description: 'the user is not the owner of the post' })
     @ApiNotFoundResponse({ description: 'target post not found' })
@@ -110,7 +110,7 @@ class DonationPostsController {
     @ApiInternalServerErrorResponse({ description: 'server error' })
     async toggleEnabling(
         @Param('postId') postId: string,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.postsService.toggleEnablingStatus(accessToken, { postId });
@@ -120,13 +120,13 @@ class DonationPostsController {
     }
 
     @Delete('donation/:postId')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post deleted successfully' })
     @ApiForbiddenResponse({ description: 'the user is not the owner of the post' })
     @ApiNotFoundResponse({ description: 'target post not found' })
     @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async delete(@Param('postId') postId: string, @Headers('Authorisation') accessToken: string) {
+    async delete(@Param('postId') postId: string, @Headers('Authorization') accessToken: string) {
         try {
             return await this.postsService.delete(accessToken, { postId });
         } catch (e) {

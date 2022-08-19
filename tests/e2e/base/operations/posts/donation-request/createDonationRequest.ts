@@ -15,7 +15,7 @@ const createDonationRequest = async (
     } = await request(server)
         .post(EndPoints.NEW_DONATION_REQUEST)
         .field(donationRequestInfo)
-        .set('Authorisation', accessToken);
+        .set('Authorization', accessToken);
 
     return { postId, donationRequestInfo };
 };

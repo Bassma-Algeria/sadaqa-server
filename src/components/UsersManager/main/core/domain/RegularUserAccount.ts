@@ -5,6 +5,7 @@ import { LastName } from './LastName';
 import { AccountId } from './AccountId';
 import { FirstName } from './FirstName';
 import { PhoneNumber } from './PhoneNumber';
+import { AccountType } from './AccountType';
 import { WilayaNumber } from './WilayaNumber';
 import { AccountStatus } from './AccountStatus';
 
@@ -22,7 +23,16 @@ class RegularUserAccount extends Account {
         readonly status: AccountStatus,
         readonly createdAt: Date,
     ) {
-        super(accountId, phoneNumber, wilayaNumber, email, password, status, createdAt);
+        super(
+            accountId,
+            phoneNumber,
+            wilayaNumber,
+            email,
+            password,
+            AccountType.REGULAR_USER,
+            status,
+            createdAt,
+        );
     }
 
     static aBuilder() {

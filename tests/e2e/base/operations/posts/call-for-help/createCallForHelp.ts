@@ -10,7 +10,7 @@ const createCallForHelpPost = async (app: any, token: string, body?: any) => {
     } = await request(app)
         .post(EndPoints.NEW_CALL_FOR_HELP)
         .field(callForHelpInfo)
-        .set('Authorisation', token);
+        .set('Authorization', token);
 
     return { postId, callForHelpInfo };
 };

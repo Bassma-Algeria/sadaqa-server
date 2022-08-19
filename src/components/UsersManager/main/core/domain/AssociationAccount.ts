@@ -3,6 +3,7 @@ import { Account } from './Account';
 import { Password } from './Password';
 import { AccountId } from './AccountId';
 import { PhoneNumber } from './PhoneNumber';
+import { AccountType } from './AccountType';
 import { WilayaNumber } from './WilayaNumber';
 import { AccountStatus } from './AccountStatus';
 import { AssociationName } from './AssociationName';
@@ -20,7 +21,16 @@ class AssociationAccount extends Account {
         readonly status: AccountStatus,
         readonly createdAt: Date,
     ) {
-        super(accountId, phoneNumber, wilayaNumber, email, password, status, createdAt);
+        super(
+            accountId,
+            phoneNumber,
+            wilayaNumber,
+            email,
+            password,
+            AccountType.ASSOCIATION,
+            status,
+            createdAt,
+        );
     }
 
     static aBuilder() {

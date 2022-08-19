@@ -13,30 +13,32 @@ import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 describe('Login & Registration', () => {
     const usersManager = aUsersManagerFacade();
 
-    it('should be able to create a regular user account, and login with the same credentials', async () => {
+    it('should be able to create a regular user account, and login with the same credentials, and return the account type', async () => {
         const user = aRegularUserRegistrationRequest();
 
         const { accountId: idFromSignup } = await usersManager.registerRegularUser(user);
-        const { accountId: idFromLogin } = await usersManager.login({
+        const { accountId: idFromLogin, type } = await usersManager.login({
             email: user.email,
             password: user.password,
         });
 
         expect(idFromLogin).to.equal(idFromSignup);
+        expect(type).to.equal('REGULAR_USER');
     });
 
-    it('should be able to create an association account, and login with the same credentials', async () => {
+    it('should be able to create an association account, and login with the same credentials, and return the account type', async () => {
         const association = anAssociationRegistrationRequest();
 
         const { accountId: idFromRegistration } = await usersManager.registerAssociation(
             association,
         );
-        const { accountId: idFromLogin } = await usersManager.login({
+        const { accountId: idFromLogin, type } = await usersManager.login({
             email: association.email,
             password: association.password,
         });
 
         expect(idFromRegistration).to.equal(idFromLogin);
+        expect(type).to.equal('ASSOCIATION');
     });
 
     it('should not have an association account with the same email as a user account', async () => {
@@ -75,7 +77,7 @@ describe('Login & Registration', () => {
 
         await expect(
             usersManager.login({ email: `  ${email.toUpperCase()}`, password }),
-        ).to.eventually.deep.equal({ accountId });
+        ).to.eventually.have.property('accountId', accountId);
     });
 
     it('should be able to login with the password have some white spaces in left and right', async () => {
@@ -83,7 +85,7 @@ describe('Login & Registration', () => {
 
         await expect(
             usersManager.login({ email, password: ` ${password}  ` }),
-        ).to.eventually.deep.equal({ accountId });
+        ).to.eventually.have.property('accountId', accountId);
     });
 
     it('should publish a user login event when login successfully', async () => {

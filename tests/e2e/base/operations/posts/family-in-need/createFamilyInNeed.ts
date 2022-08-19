@@ -11,7 +11,7 @@ const createFamilyInNeedPost = async (app: any, token: string, body?: any) => {
     } = await request(app)
         .post(EndPoints.NEW_FAMILY_IN_NEED)
         .field(familyInNeedInfo)
-        .set('Authorisation', token);
+        .set('Authorization', token);
 
     return { postId, familyInNeedInfo };
 };

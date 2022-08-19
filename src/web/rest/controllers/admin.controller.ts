@@ -26,14 +26,14 @@ class AdminController {
 
     @Put('associations/:accountId/activate')
     @HttpCode(204)
-    @ApiHeader({ name: 'Authorisation', description: 'the admin password' })
+    @ApiHeader({ name: 'Authorization', description: 'the admin password' })
     @ApiResponse({ description: 'association activated successfully', status: 204 })
     @ApiNotFoundResponse({ description: 'no association found' })
-    @ApiUnauthorizedResponse({ description: 'wrong Authorisation header' })
+    @ApiUnauthorizedResponse({ description: 'wrong Authorization header' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
     async activateAssociation(
         @Param('accountId') accountId: string,
-        @Headers('Authorisation') adminPassword: string,
+        @Headers('Authorization') adminPassword: string,
     ) {
         try {
             return await this.adminService.activateAssociation(adminPassword, { accountId });

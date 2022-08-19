@@ -20,11 +20,11 @@ class NotificationsController {
     constructor(private readonly notificationsService: NotificationsService) {}
 
     @Get('/')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'notification returned successfully' })
     @ApiUnauthorizedResponse({ description: 'invalid access token' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getNotifications(@Headers('Authorisation') accessToken: string) {
+    async getNotifications(@Headers('Authorization') accessToken: string) {
         try {
             return await this.notificationsService.getNotifications(accessToken);
         } catch (e) {
@@ -33,11 +33,11 @@ class NotificationsController {
     }
 
     @Get('/total-unread')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'total unread notifications returned successfully' })
     @ApiUnauthorizedResponse({ description: 'invalid access token' })
     @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getTotalUnread(@Headers('Authorisation') accessToken: string) {
+    async getTotalUnread(@Headers('Authorization') accessToken: string) {
         try {
             return await this.notificationsService.getNumberOfUnreadNotifications(accessToken);
         } catch (e) {
@@ -46,7 +46,7 @@ class NotificationsController {
     }
 
     @Put('/:notificationId/read')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'total unread notifications returned successfully' })
     @ApiNotFoundResponse({ description: 'notification not found' })
     @ApiForbiddenResponse({ description: 'not the receiver of the notification' })
@@ -54,7 +54,7 @@ class NotificationsController {
     @ApiInternalServerErrorResponse({ description: 'server error' })
     async makeRead(
         @Param('notificationId') id: string,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.notificationsService.makeNotificationRead(accessToken, id);
@@ -64,7 +64,7 @@ class NotificationsController {
     }
 
     @Put('/:notificationId/clicked')
-    @ApiHeader({ name: 'Authorisation', description: 'the access token' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'total unread notifications returned successfully' })
     @ApiNotFoundResponse({ description: 'notification not found' })
     @ApiForbiddenResponse({ description: 'not the receiver of the notification' })
@@ -72,7 +72,7 @@ class NotificationsController {
     @ApiInternalServerErrorResponse({ description: 'server error' })
     async makeClicked(
         @Param('notificationId') id: string,
-        @Headers('Authorisation') accessToken: string,
+        @Headers('Authorization') accessToken: string,
     ) {
         try {
             return await this.notificationsService.makeNotificationClicked(accessToken, id);

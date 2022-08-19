@@ -4,7 +4,7 @@ import { EndPoints } from '../../Endpoints';
 const getNotifications = async (server: any, accessToken: string) => {
     const { body } = await request(server)
         .get(EndPoints.GET_NOTIFICATIONS)
-        .set('Authorisation', accessToken);
+        .set('Authorization', accessToken);
 
     return body;
 };

@@ -24,28 +24,29 @@ class LoginUseCase implements UseCase<LoginUseCaseRequest, LoginUseCaseResponse>
     async handle(request: LoginUseCaseRequest): Promise<LoginUseCaseResponse> {
         const { password: passwordFromRequest, email } = this.getFrom(request);
 
-        const { password: realPassword, accountId } =
-            await this.findTargetAccountAndThrowIfNotExist(email);
+        const {
+            accountId,
+            accountType,
+            password: realPassword,
+        } = await this.findAccountByEmailThrowIfNotFound(email);
 
         await this.checkIfPasswordsMatchAndThrowIfNot(passwordFromRequest, realPassword);
 
         this.usersEventBus.publishUserLogin(accountId);
 
-        return { accountId: accountId.value() };
+        return { accountId: accountId.value(), type: accountType };
     }
 
     private getFrom(request: LoginUseCaseRequest) {
         return { email: new Email(request.email), password: new Password(request.password) };
     }
 
-    private async findTargetAccountAndThrowIfNotExist(email: Email) {
+    private async findAccountByEmailThrowIfNotFound(email: Email) {
         const regularUser = await this.regularUserAccountRepository.findByEmail(email);
-        if (regularUser)
-            return { accountId: regularUser.accountId, password: regularUser.password };
+        if (regularUser) return regularUser;
 
         const association = await this.associationAccountRepository.findByEmail(email);
-        if (association)
-            return { accountId: association.accountId, password: association.password };
+        if (association) return association;
 
         throw new MultiLanguagesValidationException(ExceptionMessages.WRONG_CREDENTIALS);
     }

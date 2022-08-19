@@ -10,7 +10,7 @@ const deleteFromFavourite = async (
 ) => {
     await request(server)
         .delete(EndPoints.DELETE_FROM_FAVOURITE(postType, postId))
-        .set('Authorisation', token);
+        .set('Authorization', token);
 };
 
 export { deleteFromFavourite };

@@ -5,7 +5,7 @@ const addToFavourite = async (server: any, postType: string, postId: string, tok
     await request(server)
         .post(EndPoints.ADD_TO_FAVOURITE)
         .send({ postType, postId })
-        .set('Authorisation', token);
+        .set('Authorization', token);
 };
 
 export { addToFavourite };
