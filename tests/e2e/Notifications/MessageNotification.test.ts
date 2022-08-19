@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import { INestApplication } from '@nestjs/common';
 
-import { cleanupDB, startNestTestingApp } from './base/SetupNestE2E';
+import { cleanupDB, startNestTestingApp } from '../base/SetupNestE2E';
 
-import { sendTextMessage } from './base/operations/messages/sendTextMessage';
-import { createDonation } from './base/operations/posts/donation/createDonation';
-import { registerRegularUser } from './base/operations/users/registerRegularUser';
-import { getDonationById } from './base/operations/posts/donation/getDonationById';
-import { getNotifications } from './base/operations/notifications/getNotifications';
-import { getRegularUserByToken } from './base/operations/users/getRegularUserByToken';
+import { sendTextMessage } from '../base/operations/messages/sendTextMessage';
+import { createDonation } from '../base/operations/posts/donation/createDonation';
+import { registerRegularUser } from '../base/operations/users/registerRegularUser';
+import { getDonationById } from '../base/operations/posts/donation/getDonationById';
+import { getNotifications } from '../base/operations/notifications/getNotifications';
+import { getRegularUserByToken } from '../base/operations/users/getRegularUserByToken';
 
 describe('Message Notification', () => {
     let app: INestApplication;

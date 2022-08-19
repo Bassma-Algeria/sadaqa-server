@@ -55,6 +55,15 @@ class PostgresCallForHelpPostRepository implements CallForHelpPostRepository {
         });
     }
 
+    async findManyByPublisherId(id: UserId): Promise<CallForHelpPost[]> {
+        const posts = await prisma.callForHelpPost.findMany({
+            orderBy: { createdAt: 'desc' },
+            where: { publisherId: id.value() },
+        });
+
+        return posts.map(this.toEntity);
+    }
+
     async findMany({
         wilayaNumber,
         pageLimit,

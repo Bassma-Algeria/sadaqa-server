@@ -1,5 +1,6 @@
 import { Post } from '../../../Post';
 import { PostId } from '../../../PostId';
+import { UserId } from '../../../UserId';
 import { WilayaNumber } from '../../../WilayaNumber';
 
 export interface PostRepositoryFindManyFilters {
@@ -28,6 +29,8 @@ export interface PostRepository<P extends Post> {
     delete(post: P): Promise<void>;
 
     findById(id: PostId): Promise<P | undefined>;
+
+    findManyByPublisherId(id: UserId): Promise<P[]>;
 
     findMany(filters: PostRepositoryFindManyFilters): Promise<P[]>;
 

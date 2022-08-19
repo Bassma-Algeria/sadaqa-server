@@ -7,6 +7,7 @@ import {
     ApiInternalServerErrorResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
+    ApiOperation,
     ApiQuery,
     ApiTags,
     ApiUnauthorizedResponse,
@@ -27,8 +28,7 @@ import {
 // eslint-disable-next-line node/no-extraneous-import
 import { Express } from 'express';
 import { FilesInterceptor } from '@nestjs/platform-express';
-
-import { PostsController } from './base/posts.controller';
+import { handlePostsException } from './base/handlePostsException';
 
 import { SupportedLanguages } from '../../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesValidationException';
 
@@ -39,11 +39,65 @@ import {
 import { CallForHelpPostsService } from '../../services/PostsServices/call-for-help-posts.service';
 
 @ApiTags('posts')
-@Controller('/api/posts')
+@Controller('/api/posts/call-for-help')
 class CallForHelpPostsController {
     constructor(private readonly postsService: CallForHelpPostsService) {}
 
-    @Post('call-for-help')
+    @Get('/')
+    @ApiOperation({ description: 'get call for help posts list' })
+    @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
+    @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })
+    @ApiOkResponse({ description: 'posts found' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async getList(@Query('page') page: number, @Query('wilayaNumber') wilayaNumber: number) {
+        try {
+            return await this.postsService.getList({
+                page: Number(page),
+                wilayaNumber: Number(wilayaNumber),
+            });
+        } catch (e) {
+            handlePostsException(e);
+        }
+    }
+
+    @Get('/search')
+    @ApiOperation({ description: 'search for call for help posts' })
+    @ApiQuery({ name: 'q', description: 'search keyword', required: true })
+    @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
+    @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })
+    @ApiOkResponse({ description: 'posts found' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async search(
+        @Query('q') keyword: string,
+        @Query('page') page: number,
+        @Query('wilayaNumber') wilayaNumber: number,
+    ) {
+        try {
+            return await this.postsService.search({
+                keyword,
+                page: Number(page),
+                wilayaNumber: Number(wilayaNumber),
+            });
+        } catch (e) {
+            handlePostsException(e);
+        }
+    }
+
+    @Get('/:postId')
+    @ApiOperation({ description: 'get call for help post by id' })
+    @ApiOkResponse({ description: 'post found' })
+    @ApiNotFoundResponse({ description: 'target post not found' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async getById(@Param('postId') postId: string) {
+        try {
+            return await this.postsService.getById({ postId });
+        } catch (e) {
+            handlePostsException(e);
+        }
+    }
+
+    @Post('/')
+    @ApiOperation({ description: 'create call for help post' })
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
@@ -66,11 +120,12 @@ class CallForHelpPostsController {
                 pictures: pictures.map(pic => pic.buffer),
             });
         } catch (e) {
-            PostsController.handleException(e, language);
+            handlePostsException(e, language);
         }
     }
 
-    @Put('call-for-help/:postId')
+    @Put('/:postId')
+    @ApiOperation({ description: 'update call for help post' })
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
@@ -99,11 +154,14 @@ class CallForHelpPostsController {
                 },
             });
         } catch (e) {
-            PostsController.handleException(e, language);
+            handlePostsException(e, language);
         }
     }
 
-    @Put('call-for-help/:postId/toggle-enabling')
+    @Put('/:postId/toggle-enabling')
+    @ApiOperation({
+        description: 'toggle call for help post enabling status between DISABLED & ENABLED',
+    })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post status updated successfully' })
     @ApiForbiddenResponse({ description: 'the user is not the owner of the post' })
@@ -117,11 +175,12 @@ class CallForHelpPostsController {
         try {
             return await this.postsService.toggleEnablingStatus(accessToken, { postId });
         } catch (e) {
-            PostsController.handleException(e);
+            handlePostsException(e);
         }
     }
 
-    @Delete('call-for-help/:postId')
+    @Delete('/:postId')
+    @ApiOperation({ description: 'delete call for help post' })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post deleted successfully' })
     @ApiForbiddenResponse({ description: 'the user is not the owner of the post' })
@@ -132,57 +191,7 @@ class CallForHelpPostsController {
         try {
             return await this.postsService.delete(accessToken, { postId });
         } catch (e) {
-            PostsController.handleException(e);
-        }
-    }
-
-    @Get('call-for-help/search')
-    @ApiQuery({ name: 'q', description: 'search keyword', required: true })
-    @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
-    @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })
-    @ApiOkResponse({ description: 'posts found' })
-    @ApiInternalServerErrorResponse({ description: 'server error' })
-    async search(
-        @Query('q') keyword: string,
-        @Query('page') page: number,
-        @Query('wilayaNumber') wilayaNumber: number,
-    ) {
-        try {
-            return await this.postsService.search({
-                keyword,
-                page: Number(page),
-                wilayaNumber: Number(wilayaNumber),
-            });
-        } catch (e) {
-            PostsController.handleException(e);
-        }
-    }
-
-    @Get('call-for-help/:postId')
-    @ApiOkResponse({ description: 'post found' })
-    @ApiNotFoundResponse({ description: 'target post not found' })
-    @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getById(@Param('postId') postId: string) {
-        try {
-            return await this.postsService.getById({ postId });
-        } catch (e) {
-            PostsController.handleException(e);
-        }
-    }
-
-    @Get('call-for-help')
-    @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
-    @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })
-    @ApiOkResponse({ description: 'posts found' })
-    @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getList(@Query('page') page: number, @Query('wilayaNumber') wilayaNumber: number) {
-        try {
-            return await this.postsService.getList({
-                page: Number(page),
-                wilayaNumber: Number(wilayaNumber),
-            });
-        } catch (e) {
-            PostsController.handleException(e);
+            handlePostsException(e);
         }
     }
 }

@@ -52,6 +52,15 @@ class PostgresDonationPostRepository implements DonationPostRepository {
         else return this.toEntity(dbModel);
     }
 
+    async findManyByPublisherId(id: UserId): Promise<DonationPost[]> {
+        const posts = await prisma.donationPost.findMany({
+            orderBy: { createdAt: 'desc' },
+            where: { publisherId: id.value() },
+        });
+
+        return posts.map(this.toEntity);
+    }
+
     async findMany(filters: DonationPostRepositoryFindManyFilters): Promise<DonationPost[]> {
         const numOfPostsToSkip = (filters.page - 1) * filters.pageLimit;
 

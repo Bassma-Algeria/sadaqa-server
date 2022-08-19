@@ -4,16 +4,12 @@
     - when there nothing that specify either we get the disabled posts, or not, then only return the enabled ones
     - when the requester specify that he want also the disabled, then we return everything
 
-- add the user statistics,
+- add the user statistics
 
 - add the ability to return posts per publisherId
 
 - add the check if notification already read / clicked
 
-- return the account type from the login
-
-- always start from e2e test, then go into the acceptance tests
+- delete favourite post when the target post deleted
 
 - change the search of the posts to full text search
-
-- 

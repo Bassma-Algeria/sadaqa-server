@@ -27,6 +27,9 @@ import { GetPostByIdUseCaseRequest } from './usecases/GetPostByIdUseCase/GetPost
 import { SearchForPostsUseCase } from './usecases/SearchForPostsUseCase/SearchForPostsUseCase';
 import { SearchForPostsUseCaseRequest } from './usecases/SearchForPostsUseCase/SearchForPostsUseCaseRequest';
 
+import { GetPostsByPublisherUseCase } from './usecases/GetPostsByPublisherUseCase/GetPostsByPublisherUseCase';
+import { GetPostsByPublisherUseCaseRequest } from './usecases/GetPostsByPublisherUseCase/GetPostsByPublisherUseCaseRequest';
+
 import { CallForHelpPostDto } from './usecases/_common_/dtos/CallForHelpPostDto';
 import { CallForHelpPostDtoMapper } from './usecases/_common_/dtos/CallForHelpPostDtoMapper';
 
@@ -72,6 +75,14 @@ class CallForHelpPostsManagerFacade {
             CallForHelpPostDtoMapper.getInstance(),
             this.callForHelpPostRepository,
         ).handle(request) as Promise<CallForHelpPostDto>;
+    }
+
+    getByPublisherId(request: GetPostsByPublisherUseCaseRequest) {
+        return new GetPostsByPublisherUseCase(
+            this.usersService,
+            CallForHelpPostDtoMapper.getInstance(),
+            this.callForHelpPostRepository,
+        ).handle(request) as Promise<{ list: CallForHelpPostDto[] }>;
     }
 
     getList(request?: GetCallForHelpPostsListUseCaseRequest) {

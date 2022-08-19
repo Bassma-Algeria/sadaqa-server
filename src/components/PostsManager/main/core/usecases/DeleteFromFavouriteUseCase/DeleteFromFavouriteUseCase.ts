@@ -8,10 +8,10 @@ import { FavouritePost } from '../../domain/FavouritePost';
 import { FavouritePostBuilder } from '../../domain/FavouritePostBuilder';
 
 import { FavouritePostRepository } from '../../domain/services/PostRepository/FavouritePostRepository';
+import { FavouritePostEventPublisher } from '../../domain/services/PostEventPublisher/FavouritePostEventPublisher';
 
 import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../domain/exceptions/ValidationException';
-import { FavouritePostEventPublisher } from '../../domain/services/PostEventPublisher/FavouritePostEventPublisher';
 
 class DeleteFromFavouriteUseCase implements UseCase<DeleteFromFavouriteUseCaseRequest, void> {
     constructor(

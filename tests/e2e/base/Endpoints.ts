@@ -9,6 +9,8 @@ const EndPoints = {
     REGISTER_ASSOCIATION: '/api/users/associations/register',
     ACTIVATE_ASSOCIATION: (id: string) => `/admin/associations/${id}/activate`,
 
+    GET_POSTS_BY_PUBLISHER_ID: (id: string) => `/api/posts/publisher/${id}`,
+
     NEW_DONATION: '/api/posts/donation',
     GET_DONATIONS: `/api/posts/donation`,
     GET_DONATION: (id: string) => `/api/posts/donation/${id}`,

@@ -54,6 +54,15 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
         });
     }
 
+    async findManyByPublisherId(id: UserId): Promise<FamilyInNeedPost[]> {
+        const posts = await prisma.familyInNeedPost.findMany({
+            orderBy: { createdAt: 'desc' },
+            where: { publisherId: id.value() },
+        });
+
+        return posts.map(this.toEntity);
+    }
+
     async findMany({
         wilayaNumber,
         pageLimit,

@@ -7,6 +7,7 @@ import {
     ApiInternalServerErrorResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
+    ApiOperation,
     ApiQuery,
     ApiTags,
     ApiUnauthorizedResponse,
@@ -28,8 +29,8 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 // eslint-disable-next-line node/no-extraneous-import
 import { Express } from 'express';
+import { handlePostsException } from './base/handlePostsException';
 
-import { PostsController } from './base/posts.controller';
 import { CreateDonationDto, UpdateDonationDto } from '../dtos/PostsDtos/donation-posts.dtos';
 
 import { SupportedLanguages } from '../../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesValidationException';
@@ -38,11 +39,76 @@ import { DonationPostsService } from '../../services/PostsServices/donation-post
 import { DonationCategory } from '../../../../components/PostsManager/main/core/domain/DonationCategory';
 
 @ApiTags('posts')
-@Controller('/api/posts')
+@Controller('/api/posts/donation')
 class DonationPostsController {
     constructor(private readonly postsService: DonationPostsService) {}
 
-    @Post('donation')
+    @Get('/')
+    @ApiOperation({ description: 'get donation posts list' })
+    @ApiQuery({
+        name: 'category',
+        description: 'donation category',
+        enum: DonationCategory.SUPPORTED_CATEGORIES,
+    })
+    @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
+    @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })
+    @ApiOkResponse({ description: 'posts found' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async getList(
+        @Query('page') page: number,
+        @Query('category') category: string,
+        @Query('wilayaNumber') wilayaNumber: number,
+    ) {
+        try {
+            return await this.postsService.getList({
+                category,
+                page: Number(page),
+                wilayaNumber: Number(wilayaNumber),
+            });
+        } catch (e) {
+            handlePostsException(e);
+        }
+    }
+
+    @Get('/search')
+    @ApiOperation({ description: 'search for donation posts' })
+    @ApiQuery({ name: 'q', description: 'search keyword', required: true })
+    @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
+    @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })
+    @ApiOkResponse({ description: 'posts found' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async search(
+        @Query('q') keyword: string,
+        @Query('page') page: number,
+        @Query('wilayaNumber') wilayaNumber: number,
+    ) {
+        try {
+            return await this.postsService.search({
+                keyword,
+                page: Number(page),
+                wilayaNumber: Number(wilayaNumber),
+            });
+        } catch (e) {
+            console.log(e);
+            handlePostsException(e);
+        }
+    }
+
+    @Get('/:postId')
+    @ApiOperation({ description: 'get donation post by id' })
+    @ApiOkResponse({ description: 'post found' })
+    @ApiNotFoundResponse({ description: 'target post not found' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async getById(@Param('postId') postId: string) {
+        try {
+            return await this.postsService.getById({ postId });
+        } catch (e) {
+            handlePostsException(e);
+        }
+    }
+
+    @Post('/')
+    @ApiOperation({ description: 'create donation post' })
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
@@ -64,11 +130,12 @@ class DonationPostsController {
                 pictures: pictures.map(pic => pic.buffer),
             });
         } catch (e) {
-            PostsController.handleException(e, language);
+            handlePostsException(e, language);
         }
     }
 
-    @Put('donation/:postId')
+    @Put('/:postId')
+    @ApiOperation({ description: 'update donation post' })
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
@@ -97,11 +164,14 @@ class DonationPostsController {
                 },
             });
         } catch (e) {
-            PostsController.handleException(e, language);
+            handlePostsException(e, language);
         }
     }
 
-    @Put('donation/:postId/toggle-enabling')
+    @Put('/:postId/toggle-enabling')
+    @ApiOperation({
+        description: 'toggle donation post enabling status between ENABLED & DISABLED',
+    })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post status updated successfully' })
     @ApiForbiddenResponse({ description: 'the user is not the owner of the post' })
@@ -115,11 +185,12 @@ class DonationPostsController {
         try {
             return await this.postsService.toggleEnablingStatus(accessToken, { postId });
         } catch (e) {
-            PostsController.handleException(e);
+            handlePostsException(e);
         }
     }
 
-    @Delete('donation/:postId')
+    @Delete('/:postId')
+    @ApiOperation({ description: 'delete donation post' })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post deleted successfully' })
     @ApiForbiddenResponse({ description: 'the user is not the owner of the post' })
@@ -130,68 +201,7 @@ class DonationPostsController {
         try {
             return await this.postsService.delete(accessToken, { postId });
         } catch (e) {
-            PostsController.handleException(e);
-        }
-    }
-
-    @Get('donation/search')
-    @ApiQuery({ name: 'q', description: 'search keyword', required: true })
-    @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
-    @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })
-    @ApiOkResponse({ description: 'posts found' })
-    @ApiInternalServerErrorResponse({ description: 'server error' })
-    async search(
-        @Query('q') keyword: string,
-        @Query('page') page: number,
-        @Query('wilayaNumber') wilayaNumber: number,
-    ) {
-        try {
-            return await this.postsService.search({
-                keyword,
-                page: Number(page),
-                wilayaNumber: Number(wilayaNumber),
-            });
-        } catch (e) {
-            console.log(e);
-            PostsController.handleException(e);
-        }
-    }
-
-    @Get('donation/:postId')
-    @ApiOkResponse({ description: 'post found' })
-    @ApiNotFoundResponse({ description: 'target post not found' })
-    @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getById(@Param('postId') postId: string) {
-        try {
-            return await this.postsService.getById({ postId });
-        } catch (e) {
-            PostsController.handleException(e);
-        }
-    }
-
-    @Get('donation')
-    @ApiQuery({
-        name: 'category',
-        description: 'donation category',
-        enum: DonationCategory.SUPPORTED_CATEGORIES,
-    })
-    @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
-    @ApiQuery({ name: 'wilayaNumber', description: 'posts wilaya, default: all', required: false })
-    @ApiOkResponse({ description: 'posts found' })
-    @ApiInternalServerErrorResponse({ description: 'server error' })
-    async getList(
-        @Query('page') page: number,
-        @Query('category') category: string,
-        @Query('wilayaNumber') wilayaNumber: number,
-    ) {
-        try {
-            return await this.postsService.getList({
-                category,
-                page: Number(page),
-                wilayaNumber: Number(wilayaNumber),
-            });
-        } catch (e) {
-            PostsController.handleException(e);
+            handlePostsException(e);
         }
     }
 }

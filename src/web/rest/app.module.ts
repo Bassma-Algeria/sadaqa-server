@@ -5,6 +5,7 @@ import { UsersController } from './controllers/users.controller';
 import { RegionsController } from './controllers/regions.controller';
 import { MessagesController } from './controllers/messages.controller';
 import { NotificationsController } from './controllers/notifications.controller';
+import { PostsController } from './controllers/PostsControllers/posts.controller';
 import { DonationPostsController } from './controllers/PostsControllers/donation-posts.controller';
 import { FavouritePostsController } from './controllers/PostsControllers/favourite-posts.controller';
 import { CallForHelpPostsController } from './controllers/PostsControllers/call-for-help-posts.controller';
@@ -15,6 +16,7 @@ import { AdminService } from './services/admin.service';
 import { UsersService } from './services/users.service';
 import { RegionsService } from './services/regions.service';
 import { MessagesService } from './services/messages.service';
+import { PostsService } from './services/PostsServices/posts.service';
 import { NotificationsService } from './services/notifications.service';
 import { DonationPostsService } from './services/PostsServices/donation-posts.service';
 import { FavouritePostsService } from './services/PostsServices/favourite-posts.service';
@@ -28,26 +30,40 @@ import '../../components/eventsRegistration';
     imports: [],
     controllers: [
         UsersController,
-        CallForHelpPostsController,
+
+        PostsController,
         DonationPostsController,
-        DonationRequestPostsController,
+        CallForHelpPostsController,
         FamilyInNeedPostsController,
+        DonationRequestPostsController,
+
         FavouritePostsController,
-        RegionsController,
+
         AdminController,
+
+        RegionsController,
+
         MessagesController,
+
         NotificationsController,
     ],
     providers: [
         UsersService,
-        CallForHelpPostsService,
+
+        PostsService,
         DonationPostsService,
-        DonationRequestPostsService,
+        CallForHelpPostsService,
         FamilyInNeedPostsService,
+        DonationRequestPostsService,
+
         FavouritePostsService,
-        RegionsService,
+
         AdminService,
+
+        RegionsService,
+
         MessagesService,
+
         NotificationsService,
     ],
 })

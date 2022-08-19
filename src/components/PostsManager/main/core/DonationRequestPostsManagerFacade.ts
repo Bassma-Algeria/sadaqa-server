@@ -29,6 +29,9 @@ import { DonationRequestPostDtoMapper } from './usecases/_common_/dtos/DonationR
 import { SearchForPostsUseCase } from './usecases/SearchForPostsUseCase/SearchForPostsUseCase';
 import { SearchForPostsUseCaseRequest } from './usecases/SearchForPostsUseCase/SearchForPostsUseCaseRequest';
 
+import { GetPostsByPublisherUseCase } from './usecases/GetPostsByPublisherUseCase/GetPostsByPublisherUseCase';
+import { GetPostsByPublisherUseCaseRequest } from './usecases/GetPostsByPublisherUseCase/GetPostsByPublisherUseCaseRequest';
+
 class DonationRequestPostsManagerFacade {
     constructor(
         private readonly usersService: UsersService,
@@ -71,6 +74,14 @@ class DonationRequestPostsManagerFacade {
             DonationRequestPostDtoMapper.getInstance(),
             this.donationRequestPostRepository,
         ).handle(request) as Promise<DonationRequestPostDto>;
+    }
+
+    getByPublisherId(request: GetPostsByPublisherUseCaseRequest) {
+        return new GetPostsByPublisherUseCase(
+            this.usersService,
+            DonationRequestPostDtoMapper.getInstance(),
+            this.donationRequestPostRepository,
+        ).handle(request) as Promise<{ list: DonationRequestPostDto[] }>;
     }
 
     getList(request?: GetDonationRequestPostsListUseCaseRequest) {

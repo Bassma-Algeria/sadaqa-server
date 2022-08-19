@@ -28,6 +28,8 @@ import { FamilyInNeedPostDtoMapper } from './usecases/_common_/dtos/FamilyInNeed
 
 import { SearchForPostsUseCase } from './usecases/SearchForPostsUseCase/SearchForPostsUseCase';
 import { SearchForPostsUseCaseRequest } from './usecases/SearchForPostsUseCase/SearchForPostsUseCaseRequest';
+import { GetPostsByPublisherUseCaseRequest } from './usecases/GetPostsByPublisherUseCase/GetPostsByPublisherUseCaseRequest';
+import { GetPostsByPublisherUseCase } from './usecases/GetPostsByPublisherUseCase/GetPostsByPublisherUseCase';
 
 class FamilyInNeedPostsManagerFacade {
     constructor(
@@ -71,6 +73,14 @@ class FamilyInNeedPostsManagerFacade {
             FamilyInNeedPostDtoMapper.getInstance(),
             this.familyInNeedPostRepository,
         ).handle(request) as Promise<FamilyInNeedPostDto>;
+    }
+
+    getByPublisherId(request: GetPostsByPublisherUseCaseRequest) {
+        return new GetPostsByPublisherUseCase(
+            this.usersService,
+            FamilyInNeedPostDtoMapper.getInstance(),
+            this.familyInNeedPostRepository,
+        ).handle(request) as Promise<{ list: FamilyInNeedPostDto[] }>;
     }
 
     getList(request?: GetFamilyInNeedPostsListUseCaseRequest) {

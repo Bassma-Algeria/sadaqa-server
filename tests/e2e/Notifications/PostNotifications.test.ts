@@ -1,17 +1,17 @@
 import { expect } from 'chai';
 import { INestApplication } from '@nestjs/common';
 
-import { cleanupDB, startNestTestingApp } from './base/SetupNestE2E';
+import { cleanupDB, startNestTestingApp } from '../base/SetupNestE2E';
 
-import { createDonation } from './base/operations/posts/donation/createDonation';
-import { registerRegularUser } from './base/operations/users/registerRegularUser';
-import { registerAssociation } from './base/operations/users/registerAssociation';
-import { getNotifications } from './base/operations/notifications/getNotifications';
-import { getAssociationByToken } from './base/operations/users/getAssociationByToken';
-import { activateAssociationAccount } from './base/operations/users/activateAssociationAccount';
-import { createCallForHelpPost } from './base/operations/posts/call-for-help/createCallForHelp';
-import { createFamilyInNeedPost } from './base/operations/posts/family-in-need/createFamilyInNeed';
-import { createDonationRequest } from './base/operations/posts/donation-request/createDonationRequest';
+import { createDonation } from '../base/operations/posts/donation/createDonation';
+import { registerRegularUser } from '../base/operations/users/registerRegularUser';
+import { registerAssociation } from '../base/operations/users/registerAssociation';
+import { getNotifications } from '../base/operations/notifications/getNotifications';
+import { getAssociationByToken } from '../base/operations/users/getAssociationByToken';
+import { activateAssociationAccount } from '../base/operations/users/activateAssociationAccount';
+import { createCallForHelpPost } from '../base/operations/posts/call-for-help/createCallForHelp';
+import { createFamilyInNeedPost } from '../base/operations/posts/family-in-need/createFamilyInNeed';
+import { createDonationRequest } from '../base/operations/posts/donation-request/createDonationRequest';
 
 describe('Post Notifications', () => {
     let app: INestApplication;
