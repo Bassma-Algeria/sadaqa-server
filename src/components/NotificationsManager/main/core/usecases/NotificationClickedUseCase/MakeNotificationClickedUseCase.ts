@@ -10,6 +10,7 @@ import { NotificationRepository } from '../../domain/services/repositories/base/
 
 import { NotFoundException } from '../../domain/exceptions/NotFoundException';
 import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
+import { ValidationException } from '../../domain/exceptions/ValidationException';
 import { AuthorizationException } from '../../domain/exceptions/AuthorizationException';
 
 class MakeNotificationClickedUseCase
@@ -26,6 +27,7 @@ class MakeNotificationClickedUseCase
         const notification = await this.findNotificationByIdThrowIfNotFound(notificationId);
 
         this.checkIfRequesterIsNotifictionReceiverThrowIfNot(notification, userId);
+        await this.checkIfNotificationAlreadyClickedThrowIfSo(notification);
 
         const updatedNotification = notification.makeClicked();
 
@@ -57,6 +59,11 @@ class MakeNotificationClickedUseCase
             throw new AuthorizationException(
                 ExceptionMessages.YOUR_ARE_NOT_THE_NOTIFICATION_RECEIVER,
             );
+    }
+
+    private async checkIfNotificationAlreadyClickedThrowIfSo(notification: Notification) {
+        if (notification.clicked)
+            throw new ValidationException(ExceptionMessages.NOTIFICATION_ALREADY_CLICKED);
     }
 
     private async updateNotification(notification: Notification) {

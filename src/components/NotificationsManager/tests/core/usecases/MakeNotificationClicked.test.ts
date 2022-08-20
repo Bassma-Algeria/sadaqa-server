@@ -18,6 +18,7 @@ import { aCreateNewDonationRequestPostNotificationRequest } from './base/request
 
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../main/core/domain/exceptions/NotFoundException';
+import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 import { AuthorizationException } from '../../../main/core/domain/exceptions/AuthorizationException';
 
 import { EventBus } from '../../../../_shared_/event-bus/EventBus';
@@ -161,7 +162,29 @@ describe('Make Notification Clicked', () => {
         expect(notificationsAfter[0].notification.clicked).to.equal(true);
     });
 
-    it('given a make notification clicked request, then after updating the clicked status of the notification, should publish an event to the global event bus', async () => {
+    it('given a notification already clicked, then when send a mek notification clicked request, then should fail', async () => {
+        const receiverId = faker.datatype.uuid();
+
+        await createNewFamilyInNeedPostNotification(receiverId);
+
+        const { list } = await notificationsManager.getNotifications({ receiverId });
+
+        await notificationsManager.makeNotificationClicked({
+            notificationId: list[0].notification.notificationId,
+            userId: receiverId,
+        });
+
+        await expect(
+            notificationsManager.makeNotificationClicked({
+                notificationId: list[0].notification.notificationId,
+                userId: receiverId,
+            }),
+        )
+            .to.eventually.be.rejectedWith(ExceptionMessages.NOTIFICATION_ALREADY_CLICKED)
+            .and.to.be.an.instanceof(ValidationException);
+    });
+
+    it('given a make notification clicked request, then after updating the clicked status of the notification, should publish an event to the globale event bus', async () => {
         const mockFn = spy();
         EventBus.getInstance().subscribeTo('NOTIFICATION_CLICKED').by(mockFn);
 

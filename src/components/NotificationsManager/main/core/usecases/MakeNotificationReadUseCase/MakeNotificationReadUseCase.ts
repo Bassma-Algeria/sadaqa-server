@@ -10,6 +10,7 @@ import { NotificationRepository } from '../../domain/services/repositories/base/
 
 import { NotFoundException } from '../../domain/exceptions/NotFoundException';
 import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
+import { ValidationException } from '../../domain/exceptions/ValidationException';
 import { AuthorizationException } from '../../domain/exceptions/AuthorizationException';
 
 class MakeNotificationReadUseCase implements UseCase<MakeNotificationReadUseCaseRequest, void> {
@@ -24,6 +25,7 @@ class MakeNotificationReadUseCase implements UseCase<MakeNotificationReadUseCase
         const notification = await this.findNotificationByIdThrowIfNotFound(notificationId);
 
         this.checkIfRequesterIsNotifictionReceiverThrowIfNot(notification, userId);
+        await this.checkIfNotificationAlreadyReadThrowIfSo(notification);
 
         const updatedNotification = notification.makeRead();
 
@@ -55,6 +57,11 @@ class MakeNotificationReadUseCase implements UseCase<MakeNotificationReadUseCase
             throw new AuthorizationException(
                 ExceptionMessages.YOUR_ARE_NOT_THE_NOTIFICATION_RECEIVER,
             );
+    }
+
+    private async checkIfNotificationAlreadyReadThrowIfSo(notification: Notification) {
+        if (notification.read)
+            throw new ValidationException(ExceptionMessages.NOTIFICATION_ALREADY_READ);
     }
 
     private async updateNotification(notification: Notification) {

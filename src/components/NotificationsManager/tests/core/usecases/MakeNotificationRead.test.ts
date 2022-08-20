@@ -18,6 +18,7 @@ import { aCreateNewDonationRequestPostNotificationRequest } from './base/request
 
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../main/core/domain/exceptions/NotFoundException';
+import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 import { AuthorizationException } from '../../../main/core/domain/exceptions/AuthorizationException';
 
 import { EventBus } from '../../../../_shared_/event-bus/EventBus';
@@ -159,6 +160,28 @@ describe('Make Notification Read', () => {
         });
 
         expect(notificationsAfter[0].notification.read).to.equal(true);
+    });
+
+    it('given a notification already read, then when send a make notification read request, then should fail', async () => {
+        const receiverId = faker.datatype.uuid();
+
+        await createNewFamilyInNeedPostNotification(receiverId);
+
+        const { list } = await notificationsManager.getNotifications({ receiverId });
+
+        await notificationsManager.makeNotificationRead({
+            notificationId: list[0].notification.notificationId,
+            userId: receiverId,
+        });
+
+        await expect(
+            notificationsManager.makeNotificationRead({
+                notificationId: list[0].notification.notificationId,
+                userId: receiverId,
+            }),
+        )
+            .to.eventually.be.rejectedWith(ExceptionMessages.NOTIFICATION_ALREADY_READ)
+            .and.to.be.an.instanceof(ValidationException);
     });
 
     it('given a make notification read request, then after updating the read status of the notification, should publish an event to the globale event bus', async () => {

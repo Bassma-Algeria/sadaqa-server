@@ -4,8 +4,6 @@
     - when there nothing that specify either we get the disabled posts, or not, then only return the enabled ones
     - when the requester specify that he want also the disabled, then we return everything
 
-- add the user statistics
-
 - add the check if notification already read / clicked
 
 - delete favourite post when the target post deleted
