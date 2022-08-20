@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { INestApplication } from '@nestjs/common';
 
-import { cleanupDB, startNestTestingApp } from './base/SetupNestE2E';
+import { startNestTestingApp } from './base/SetupNestE2E';
 
 import { registerRegularUser } from './base/operations/users/registerRegularUser';
 import { getDonationRequests } from './base/operations/posts/donation-request/getDonationRequests';
@@ -15,10 +15,6 @@ describe('User Create an Account and Publish a Donation Request Another User Fou
     before(async () => {
         app = await startNestTestingApp();
         server = app.getHttpServer();
-    });
-
-    beforeEach(async () => {
-        await cleanupDB();
     });
 
     after(async () => {

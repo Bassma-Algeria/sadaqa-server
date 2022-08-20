@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { INestApplication } from '@nestjs/common';
 
-import { cleanupDB, startNestTestingApp } from './base/SetupNestE2E';
+import { startNestTestingApp } from './base/SetupNestE2E';
 
 import { login } from './base/operations/users/login';
 import { registerRegularUser } from './base/operations/users/registerRegularUser';
@@ -14,10 +14,6 @@ describe('Authentication', () => {
     before(async () => {
         app = await startNestTestingApp();
         server = app.getHttpServer();
-    });
-
-    beforeEach(async () => {
-        await cleanupDB();
     });
 
     after(async () => {

@@ -6,8 +6,9 @@ import {
 } from '../../../../../components/PostsManager/main/core/domain/exceptions/MultiLanguagesValidationException';
 import { NotFoundException } from '../../../../../components/PostsManager/main/core/domain/exceptions/NotFoundException';
 import { ValidationException } from '../../../../../components/PostsManager/main/core/domain/exceptions/ValidationException';
-import { TokenException } from '../../../../../components/AuthenticationManager/main/core/domain/exception/TokenException';
 import { AuthorizationException } from '../../../../../components/PostsManager/main/core/domain/exceptions/AuthorizationException';
+
+import { TokenException } from '../../../../../components/AuthenticationManager/main/core/domain/exception/TokenException';
 
 function handlePostsException(e: unknown, language?: SupportedLanguages): never {
     if (e instanceof MultiLanguagesValidationException)

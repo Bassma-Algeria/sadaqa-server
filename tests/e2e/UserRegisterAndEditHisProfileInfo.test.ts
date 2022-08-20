@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { INestApplication } from '@nestjs/common';
 
-import { cleanupDB, startNestTestingApp } from './base/SetupNestE2E';
+import { startNestTestingApp } from './base/SetupNestE2E';
 
 import { registerRegularUser } from './base/operations/users/registerRegularUser';
 import { editRegularUserInfo } from './base/operations/users/editRegularUserInfo';
@@ -17,10 +17,6 @@ describe('User Register and Edit his info', () => {
     before(async () => {
         app = await startNestTestingApp();
         server = app.getHttpServer();
-    });
-
-    beforeEach(async () => {
-        await cleanupDB();
     });
 
     after(async () => {

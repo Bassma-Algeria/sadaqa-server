@@ -32,6 +32,8 @@ import { GetPostsByPublisherUseCaseRequest } from './usecases/GetPostsByPublishe
 
 import { CallForHelpPostDto } from './usecases/_common_/dtos/CallForHelpPostDto';
 import { CallForHelpPostDtoMapper } from './usecases/_common_/dtos/CallForHelpPostDtoMapper';
+import { GetPostsSummaryByPublisherUseCaseRequest } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCaseRequest';
+import { GetPostsSummaryByPublisherUseCase } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCase';
 
 class CallForHelpPostsManagerFacade {
     constructor(
@@ -83,6 +85,14 @@ class CallForHelpPostsManagerFacade {
             CallForHelpPostDtoMapper.getInstance(),
             this.callForHelpPostRepository,
         ).handle(request) as Promise<{ list: CallForHelpPostDto[] }>;
+    }
+
+    getSummaryByPublisherId(request: GetPostsSummaryByPublisherUseCaseRequest) {
+        return new GetPostsSummaryByPublisherUseCase(
+            this.usersService,
+            CallForHelpPostDtoMapper.getInstance(),
+            this.callForHelpPostRepository,
+        ).handle(request);
     }
 
     getList(request?: GetCallForHelpPostsListUseCaseRequest) {

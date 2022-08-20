@@ -28,7 +28,7 @@ class GetAccountsByWilayaNumberUseCase
         const filters = this.getFiltersFrom(request);
 
         const accounts = await this.accountRepository.findMany(filters);
- 
+
         return accounts.map(this.AccountDtoMapper.toDto);
     }
 

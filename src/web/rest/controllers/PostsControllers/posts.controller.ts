@@ -1,12 +1,14 @@
 import {
+    ApiHeader,
     ApiInternalServerErrorResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
     ApiParam,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Headers, Param } from '@nestjs/common';
 
 import { handlePostsException } from './base/handlePostsException';
 
@@ -26,6 +28,21 @@ class PostsController {
     async getByPublisherId(@Param('publisherId') publisherId: string) {
         try {
             return await this.postsService.getPostsByPublisher(publisherId);
+        } catch (e) {
+            handlePostsException(e);
+        }
+    }
+
+    @Get('/me/summary')
+    @ApiOperation({ description: 'get posts summary of the auth user' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token' })
+    @ApiOkResponse({ description: 'posts summary found' })
+    @ApiNotFoundResponse({ description: 'publisher not exist' })
+    @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async getBySummaryOfAuthUser(@Headers('Authorization') accessToken: string) {
+        try {
+            return await this.postsService.getPostsSummaryOfAuthUser(accessToken);
         } catch (e) {
             handlePostsException(e);
         }

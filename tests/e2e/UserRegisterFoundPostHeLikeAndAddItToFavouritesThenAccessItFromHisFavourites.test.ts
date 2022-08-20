@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { INestApplication } from '@nestjs/common';
 
-import { cleanupDB, startNestTestingApp } from './base/SetupNestE2E';
+import { startNestTestingApp } from './base/SetupNestE2E';
 
 import { getDonations } from './base/operations/posts/donation/getDonations';
 import { getFavourites } from './base/operations/posts/favourite/getFavourites';
@@ -16,10 +16,6 @@ describe('User Register, found a post he like, he add it to his favourites then 
     before(async () => {
         app = await startNestTestingApp();
         server = app.getHttpServer();
-    });
-
-    beforeEach(async () => {
-        await cleanupDB();
     });
 
     after(async () => {

@@ -81,7 +81,9 @@ class PostgresDonationPostRepository implements DonationPostRepository {
         const total = await prisma.donationPost.count({
             where: {
                 category: filters.category?.value(),
+                publisherId: filters?.publisherId?.value(),
                 wilayaNumber: filters.wilayaNumber?.value(),
+                status: filters?.status,
             },
         });
 

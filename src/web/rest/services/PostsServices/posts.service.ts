@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PostsManagerConfiguration } from '../../../../components/PostsManager/main/PostsManagerConfiguration';
+import { AuthenticationManagerConfiguration } from '../../../../components/AuthenticationManager/main/AuthenticationManagerConfiguration';
 
 @Injectable()
 class PostsService {
+    private readonly authenticationManager =
+        AuthenticationManagerConfiguration.anAuthenticationManager();
+
     private readonly donationPostsManager = PostsManagerConfiguration.aDonationPostsManager();
     private readonly callForHelpPostsManager = PostsManagerConfiguration.aCallForHelpPostsManager();
 
@@ -23,6 +27,25 @@ class PostsService {
             publisherId,
         });
         const { list: callForHelp } = await this.callForHelpPostsManager.getByPublisherId({
+            publisherId,
+        });
+
+        return { donation, donationRequest, familyInNeed, callForHelp };
+    }
+
+    async getPostsSummaryOfAuthUser(accessToken: string) {
+        const { userId: publisherId } = await this.authenticationManager.decodeAccessToken({
+            accessToken,
+        });
+
+        const donation = await this.donationPostsManager.getSummaryByPublisherId({ publisherId });
+        const donationRequest = await this.donationRequestPostsManager.getSummaryByPublisherId({
+            publisherId,
+        });
+        const familyInNeed = await this.familyInNeedPostsManager.getSummaryByPublisherId({
+            publisherId,
+        });
+        const callForHelp = await this.callForHelpPostsManager.getSummaryByPublisherId({
             publisherId,
         });
 

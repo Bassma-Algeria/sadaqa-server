@@ -82,7 +82,11 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
 
     async count(filters?: PostRepositoryCountFilters): Promise<number> {
         const total = await prisma.familyInNeedPost.count({
-            where: { wilayaNumber: filters?.wilayaNumber?.value() },
+            where: {
+                wilayaNumber: filters?.wilayaNumber?.value(),
+                publisherId: filters?.publisherId?.value(),
+                status: filters?.status,
+            },
         });
 
         return total;

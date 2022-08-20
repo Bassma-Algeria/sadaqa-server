@@ -1,6 +1,7 @@
 import { Post } from '../../../Post';
 import { PostId } from '../../../PostId';
 import { UserId } from '../../../UserId';
+import { PostStatus } from '../../../PostStatus';
 import { WilayaNumber } from '../../../WilayaNumber';
 
 export interface PostRepositoryFindManyFilters {
@@ -11,6 +12,8 @@ export interface PostRepositoryFindManyFilters {
 
 export interface PostRepositoryCountFilters {
     wilayaNumber?: WilayaNumber;
+    status?: PostStatus;
+    publisherId?: UserId;
 }
 
 export interface PostRepositorySearchFilters extends PostRepositoryFindManyFilters {

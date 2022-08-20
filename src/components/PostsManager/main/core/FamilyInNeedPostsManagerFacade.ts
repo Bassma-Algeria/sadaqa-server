@@ -28,8 +28,12 @@ import { FamilyInNeedPostDtoMapper } from './usecases/_common_/dtos/FamilyInNeed
 
 import { SearchForPostsUseCase } from './usecases/SearchForPostsUseCase/SearchForPostsUseCase';
 import { SearchForPostsUseCaseRequest } from './usecases/SearchForPostsUseCase/SearchForPostsUseCaseRequest';
-import { GetPostsByPublisherUseCaseRequest } from './usecases/GetPostsByPublisherUseCase/GetPostsByPublisherUseCaseRequest';
+
 import { GetPostsByPublisherUseCase } from './usecases/GetPostsByPublisherUseCase/GetPostsByPublisherUseCase';
+import { GetPostsByPublisherUseCaseRequest } from './usecases/GetPostsByPublisherUseCase/GetPostsByPublisherUseCaseRequest';
+
+import { GetPostsSummaryByPublisherUseCase } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCase';
+import { GetPostsSummaryByPublisherUseCaseRequest } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCaseRequest';
 
 class FamilyInNeedPostsManagerFacade {
     constructor(
@@ -81,6 +85,14 @@ class FamilyInNeedPostsManagerFacade {
             FamilyInNeedPostDtoMapper.getInstance(),
             this.familyInNeedPostRepository,
         ).handle(request) as Promise<{ list: FamilyInNeedPostDto[] }>;
+    }
+
+    getSummaryByPublisherId(request: GetPostsSummaryByPublisherUseCaseRequest) {
+        return new GetPostsSummaryByPublisherUseCase(
+            this.usersService,
+            FamilyInNeedPostDtoMapper.getInstance(),
+            this.familyInNeedPostRepository,
+        ).handle(request);
     }
 
     getList(request?: GetFamilyInNeedPostsListUseCaseRequest) {

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { INestApplication } from '@nestjs/common';
 
-import { cleanupDB, startNestTestingApp } from './base/SetupNestE2E';
+import { startNestTestingApp } from './base/SetupNestE2E';
 
 import { sendTextMessage } from './base/operations/messages/sendTextMessage';
 import { registerRegularUser } from './base/operations/users/registerRegularUser';
@@ -17,10 +17,6 @@ describe('Change Notification Status (read & clicked)', () => {
     before(async () => {
         app = await startNestTestingApp();
         server = app.getHttpServer();
-    });
-
-    beforeEach(async () => {
-        await cleanupDB();
     });
 
     after(async () => {

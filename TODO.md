@@ -6,10 +6,10 @@
 
 - add the user statistics
 
-- add the ability to return posts per publisherId
-
 - add the check if notification already read / clicked
 
 - delete favourite post when the target post deleted
 
-- change the search of the posts to full text search
+- move the ability to publish a post to the domain
+
+- re-check the GetAccountsByWilayaNumberUseCase in UsersManager

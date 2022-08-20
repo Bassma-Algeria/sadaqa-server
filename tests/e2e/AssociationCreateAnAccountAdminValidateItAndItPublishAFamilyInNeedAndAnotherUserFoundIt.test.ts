@@ -28,7 +28,9 @@ describe('Association Create An Account Admin Validate It And It Publish a Famil
 
     it('should pass with no problem', async () => {
         const { accessToken } = await registerAssociation(server);
-        const { info: { accountId } } = await getAssociationByToken(server, accessToken);
+        const {
+            info: { accountId },
+        } = await getAssociationByToken(server, accessToken);
 
         await activateAssociationAccount(server, accountId);
 
@@ -40,6 +42,4 @@ describe('Association Create An Account Admin Validate It And It Publish a Famil
         expect(list[0]).to.deep.equal(familyInNeedPost);
         expect(list[0]).to.have.property('publisherId', accountId);
     });
-
-
 });

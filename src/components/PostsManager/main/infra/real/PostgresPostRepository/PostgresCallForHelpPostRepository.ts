@@ -89,6 +89,8 @@ class PostgresCallForHelpPostRepository implements CallForHelpPostRepository {
         const total = await prisma.callForHelpPost.count({
             where: {
                 wilayaNumber: filters?.wilayaNumber?.value(),
+                publisherId: filters?.publisherId?.value(),
+                status: filters?.status,
             },
         });
 

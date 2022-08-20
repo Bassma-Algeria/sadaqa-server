@@ -10,6 +10,7 @@ const EndPoints = {
     ACTIVATE_ASSOCIATION: (id: string) => `/admin/associations/${id}/activate`,
 
     GET_POSTS_BY_PUBLISHER_ID: (id: string) => `/api/posts/publisher/${id}`,
+    GET_POSTS_SUMMARY: `/api/posts/me/summary`,
 
     NEW_DONATION: '/api/posts/donation',
     GET_DONATIONS: `/api/posts/donation`,
@@ -21,6 +22,8 @@ const EndPoints = {
 
     NEW_FAMILY_IN_NEED: '/api/posts/family-in-need',
     GET_FAMILIES_IN_NEED: '/api/posts/family-in-need',
+    TOGGLE_FAMILY_IN_NEED_ENABLING: (id: string) =>
+        `/api/posts/family-in-need/${id}/toggle-enabling`,
     GET_FAMILY_IN_NEED: (id: string) => `/api/posts/family-in-need/${id}`,
 
     NEW_CALL_FOR_HELP: '/api/posts/call-for-help',
