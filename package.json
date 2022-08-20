@@ -16,9 +16,10 @@
     "test:media": "mocha 'src/components/MediaManager/**/*.test.ts'",
     "test:messages": "mocha 'src/components/MessagesManager/**/*.test.ts'",
     "test:notifications": "mocha 'src/components/NotificationsManager/**/*.test.ts'",
+    "test:logger": "mocha 'src/components/Logger/**/*.test.ts'",
     "test:event-bus": "mocha 'tests/event-bus/*.test.ts'",
     "test:e2e": "mocha 'tests/e2e/*.test.ts'",
-    "test": "npm run test:authentication && npm run test:users && npm run test:regions && npm run test:posts && npm run test:media && npm run test:messages && npm run test:notifications && npm run test:event-bus && npm run test:e2e",
+    "test": "npm run test:authentication && npm run test:users && npm run test:regions && npm run test:posts && npm run test:media && npm run test:messages && npm run test:notifications && npm run test:logger && npm run test:event-bus && npm run test:e2e",
     "lint": "eslint --ext .ts ."
   },
   "mocha": {

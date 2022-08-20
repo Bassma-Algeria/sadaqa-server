@@ -1,0 +1,3 @@
+class EmailsManagerFacade {}
+
+export { EmailsManagerFacade };
