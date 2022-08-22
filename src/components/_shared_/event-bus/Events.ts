@@ -56,7 +56,6 @@ interface AssociationRegisteredPayload {
     readonly wilayaNumber: number;
     readonly phoneNumber: string;
     readonly email: string;
-    readonly password: string;
     readonly status: string;
     readonly createdAt: Date;
     readonly associationDocs: Buffer[];
@@ -70,7 +69,6 @@ interface RegularUserRegisteredPayload {
     readonly phoneNumber: string;
     readonly email: string;
     readonly status: string;
-    readonly password: string;
     readonly createdAt: Date;
 }
 
@@ -124,6 +122,12 @@ interface TextMessageNotificationPayload {
     createdAt: Date;
 }
 
+interface AssociationApprovalEmailPayload {
+    sender: string;
+    receiver: string;
+    associationId: string;
+}
+
 export interface Events {
     USER_LOGIN: { accountId: string };
     ASSOCIATION_REGISTERED: AssociationRegisteredPayload;
@@ -169,4 +173,6 @@ export interface Events {
     NEW_TEXT_MESSAGE_NOTIFICATION: TextMessageNotificationPayload;
     NEW_FAMILY_IN_NEED_POST_NOTIFICATION: PostNotificationPayload;
     NEW_DONATION_REQUEST_POST_NOTIFICATION: PostNotificationPayload;
+
+    ASSOCIATION_APPROVAL_EMAIL_SENT: AssociationApprovalEmailPayload;
 }

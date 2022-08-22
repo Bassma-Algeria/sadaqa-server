@@ -1,5 +1,6 @@
 import { EventBus } from './_shared_/event-bus/EventBus';
 import { NotificationsManagerConfiguration } from './NotificationsManager/main/NotificationsManagerConfiguration';
+import { EmailsManagerConfiguration } from './EmailsManager/main/EmailsManagerConfiguration';
 
 const eventBus = EventBus.getInstance();
 
@@ -31,4 +32,8 @@ eventBus.subscribeTo('TEXT_MESSAGE_SENT').by(payload => {
     NotificationsManagerConfiguration.aNotificationsManager().createTextMessageNotification(
         payload,
     );
+});
+
+eventBus.subscribeTo('ASSOCIATION_REGISTERED').by(payload => {
+    EmailsManagerConfiguration.anEmailsManager().sendAssociationApprovalEmail(payload);
 });

@@ -4,10 +4,11 @@
     - when there nothing that specify either we get the disabled posts, or not, then only return the enabled ones
     - when the requester specify that he want also the disabled, then we return everything
 
-- add the check if notification already read / clicked
-
 - delete favourite post when the target post deleted
 
 - move the ability to publish a post to the domain
 
 - re-check the GetAccountsByWilayaNumberUseCase in UsersManager
+
+- add the ability to signal a user/post as a spam
+- add the ability to share posts

@@ -1,11 +1,11 @@
 import os from 'os';
+import path from 'path';
 import * as fs from 'node:fs/promises';
 
 import { ErrorLog } from '../core/domain/ErrorLog';
 import { InformationLog } from '../core/domain/InformationLog';
 
 import { LogService } from '../core/domain/services/LogService';
-import path from 'path';
 
 class LogServiceImpl implements LogService {
     private readonly INFO_LOG_FILE = path.join(__dirname, '../../logs/info.log');

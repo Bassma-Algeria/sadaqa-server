@@ -37,7 +37,6 @@ class UserEventPublisherImpl implements UserEventPublisher {
             accountId: payload.associationAccount.accountId.value(),
             wilayaNumber: payload.associationAccount.wilayaNumber.value(),
             associationName: payload.associationAccount.associationName.value(),
-            password: payload.associationAccount.password.value(),
             phoneNumber: payload.associationAccount.phoneNumber.value(),
             email: payload.associationAccount.email.value(),
             status: payload.associationAccount.status,
@@ -55,7 +54,6 @@ class UserEventPublisherImpl implements UserEventPublisher {
             phoneNumber: regularUser.phoneNumber.value(),
             email: regularUser.email.value(),
             status: regularUser.status,
-            password: regularUser.password.value(),
             createdAt: regularUser.createdAt,
         });
     }
