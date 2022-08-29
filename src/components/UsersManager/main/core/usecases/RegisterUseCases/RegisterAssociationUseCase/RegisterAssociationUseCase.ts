@@ -57,7 +57,7 @@ class RegisterAssociationUseCase
             associationDocs,
         });
 
-        return { accountId: associationAccount.accountId.value() };
+        return { accountId: associationAccount.getAccountId().value() };
     }
 
     protected getAccountBuilder() {
@@ -65,7 +65,7 @@ class RegisterAssociationUseCase
     }
 
     protected getInitialAccountStatus() {
-        return AccountStatus.DISABLED;
+        return AccountStatus.WAITING_FOR_ADMIN_VALIDATION;
     }
 }
 

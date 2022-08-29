@@ -50,7 +50,8 @@ abstract class RegisterUseCase {
             .withEmail(email)
             .withPassword(encryptedPassword)
             .withCreatedAt(this.now())
-            .withStatus(this.getInitialAccountStatus());
+            .withStatus(this.getInitialAccountStatus())
+            .withProfilePicture(null);
     }
 
     private getFrom(request: RegisterUseCaseRequest) {

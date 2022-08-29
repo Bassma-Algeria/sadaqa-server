@@ -11,7 +11,7 @@ class AssociationAccountBuilder extends AccountBuilder {
 
         if (!account) return;
 
-        this.associationName = account.associationName;
+        this.associationName = account.getAssociationName();
     }
 
     withName(name: AssociationName) {
@@ -27,6 +27,7 @@ class AssociationAccountBuilder extends AccountBuilder {
             this.wilayaNumber,
             this.email,
             this.password,
+            this.profilePicture,
             this.status,
             this.createdAt,
         );

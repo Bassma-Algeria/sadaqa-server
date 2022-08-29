@@ -1,5 +1,6 @@
 import { WilayasRepository } from './core/domain/services/WilayasRepository';
 import { GetAllWilayasUseCase } from './core/usecases/GetAllWilayasUseCase/GetAllWilayasUseCase';
+
 import { GetWilayaUseCase } from './core/usecases/GetWilayaUseCase/GetWilayaUseCase';
 import { GetWilayaUseCaseRequest } from './core/usecases/GetWilayaUseCase/GetWilayaUseCaseRequest';
 

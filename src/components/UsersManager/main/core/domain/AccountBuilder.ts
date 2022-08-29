@@ -5,6 +5,7 @@ import { AccountId } from './AccountId';
 import { PhoneNumber } from './PhoneNumber';
 import { WilayaNumber } from './WilayaNumber';
 import { AccountStatus } from './AccountStatus';
+import { ProfilePicture } from './ProfilePicture';
 
 abstract class AccountBuilder {
     abstract build(): Account;
@@ -15,18 +16,20 @@ abstract class AccountBuilder {
     protected email!: Email;
     protected password!: Password;
     protected status!: AccountStatus;
+    protected profilePicture!: ProfilePicture | null;
     protected createdAt!: Date;
 
     protected constructor(account?: Account) {
         if (!account) return;
 
-        this.accountId = account.accountId;
-        this.wilayaNumber = account.wilayaNumber;
-        this.phoneNumber = account.phoneNumber;
-        this.email = account.email;
-        this.password = account.password;
-        this.status = account.status;
-        this.createdAt = account.createdAt;
+        this.accountId = account.getAccountId();
+        this.wilayaNumber = account.getWilayaNumber();
+        this.phoneNumber = account.getPhoneNumber();
+        this.email = account.getEmail();
+        this.password = account.getPassword();
+        this.status = account.getAccountStatus();
+        this.profilePicture = account.getProfilePicture();
+        this.createdAt = account.getCreationDate();
     }
 
     withAccountId(id: AccountId) {
@@ -61,6 +64,11 @@ abstract class AccountBuilder {
 
     withCreatedAt(creationTime: Date) {
         this.createdAt = creationTime;
+        return this;
+    }
+
+    withProfilePicture(picture: ProfilePicture | null) {
+        this.profilePicture = picture;
         return this;
     }
 }

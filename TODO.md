@@ -10,5 +10,7 @@
 
 - re-check the GetAccountsByWilayaNumberUseCase in UsersManager
 
-- add the ability to signal a user/post as a spam
 - add the ability to share posts
+- add the ability to signal a user/post as a spam
+
+- email attachments not sent correctly

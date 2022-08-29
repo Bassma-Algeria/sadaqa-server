@@ -19,6 +19,7 @@
     "test:logger": "mocha 'src/components/Logger/**/*.test.ts'",
     "test:event-bus": "mocha 'tests/event-bus/*.test.ts'",
     "test:e2e": "mocha 'tests/e2e/*.test.ts'",
+    "test:all": "mocha 'src/components/**/*.test.ts'",
     "test": "npm run test:authentication && npm run test:users && npm run test:regions && npm run test:posts && npm run test:media && npm run test:messages && npm run test:notifications && npm run test:logger && npm run test:event-bus && npm run test:e2e",
     "lint": "eslint --ext .ts ."
   },

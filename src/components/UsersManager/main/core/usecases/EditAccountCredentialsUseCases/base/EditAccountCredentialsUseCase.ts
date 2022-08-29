@@ -5,7 +5,6 @@ import { Account } from '../../../domain/Account';
 import { Password } from '../../../domain/Password';
 import { AccountId } from '../../../domain/AccountId';
 import { AccountBuilder } from '../../../domain/AccountBuilder';
-
 import { PasswordEncryptor } from '../../../domain/services/PasswordEncryptor';
 import { UserEventPublisher } from '../../../domain/services/UserEventPublisher';
 import { AssociationAccountRepository } from '../../../domain/services/AccountRepository/AssociationAccountRepository';
@@ -36,8 +35,8 @@ abstract class EditAccountCredentialsUseCase {
 
         if (!account) throw new NotFoundException(ExceptionMessages.ACCOUNT_NOT_FOUND);
 
-        await this.checkIfEmailAlreadyUsedThrowIfSo(email, account.email);
-        await this.checkIfPasswordMatchThrowIfNot(oldPassword, account.password);
+        await this.checkIfEmailAlreadyUsedThrowIfSo(email, account);
+        await this.checkIfPasswordMatchThrowIfNot(oldPassword, account.getPassword());
 
         const encryptedNewPassword = await this.encrypt(newPassword);
 
@@ -56,14 +55,14 @@ abstract class EditAccountCredentialsUseCase {
         };
     }
 
-    private async checkIfEmailAlreadyUsedThrowIfSo(givenEmail: Email, targetAccountEmail: Email) {
+    private async checkIfEmailAlreadyUsedThrowIfSo(givenEmail: Email, targetAccount: Account) {
         const user = await this.regularUserAccountRepository.findByEmail(givenEmail);
         const association = await this.associationAccountRepository.findByEmail(givenEmail);
 
-        if (user && !user.email.equals(targetAccountEmail))
+        if (user && !user.haveSamePhoneNumberAs(targetAccount))
             throw new MultiLanguagesValidationException(ExceptionMessages.EMAIL_ALREADY_USED);
 
-        if (association && !association.email.equals(targetAccountEmail))
+        if (association && !association.haveSameEmailAs(targetAccount))
             throw new MultiLanguagesValidationException(ExceptionMessages.EMAIL_ALREADY_USED);
     }
 
@@ -80,8 +79,8 @@ abstract class EditAccountCredentialsUseCase {
         return this.passwordEncryptor.encrypt(password);
     }
 
-    protected publishAccountCredentialsEdited(accountId: AccountId) {
-        this.userEventPublisher.publishAccountCredentialsEdited(accountId);
+    protected publishAccountCredentialsEdited(account: Account) {
+        this.userEventPublisher.publishAccountCredentialsEdited(account);
     }
 }
 

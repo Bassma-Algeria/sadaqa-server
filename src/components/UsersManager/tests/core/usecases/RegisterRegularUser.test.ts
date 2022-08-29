@@ -103,6 +103,15 @@ describe('Register Regular User', () => {
         expect(firstId).to.not.equal(secondId);
     });
 
+    it('given an association registration requests, when the registration complete, the association should not have a profile picture', async () => {
+        const { accountId } = await usersManager.registerRegularUser(
+            aRegularUserRegistrationRequest(),
+        );
+
+        const { profilePicture } = await usersManager.getRegularUserById({ accountId });
+        expect(profilePicture).to.equal(null);
+    });
+
     it('should publish an association registered event when the association is registered', async () => {
         const mockFn = spy();
         EventBus.getInstance().subscribeTo('REGULAR_USER_REGISTERED').by(mockFn);

@@ -10,12 +10,12 @@ class AssociationAccountDtoMapper extends AccountDtoMapper<AssociationAccount> {
     static getInstance() {
         return this.instance;
     }
-     
+
     toDto(account: AssociationAccount): AssociationAccountDto {
         return {
             ...super.toDto(account),
 
-            associationName: account.associationName.value(),
+            associationName: account.getAssociationName().value(),
         };
     }
 }

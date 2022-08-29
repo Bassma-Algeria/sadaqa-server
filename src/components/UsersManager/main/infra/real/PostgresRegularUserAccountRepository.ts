@@ -12,6 +12,7 @@ import { RegularUserAccount } from '../../core/domain/RegularUserAccount';
 
 import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
 import { AccountRepositoryFindManyFilters } from '../../core/domain/services/AccountRepository/base/AccountRepository';
+import { ProfilePicture } from '../../core/domain/ProfilePicture';
 
 interface AccountDBModel {
     accountId: string;
@@ -21,6 +22,7 @@ interface AccountDBModel {
     phoneNumber: string;
     email: string;
     password: string;
+    profilePicture: string | null;
     status: string;
     createdAt: Date;
 }
@@ -32,7 +34,7 @@ class PostgresRegularUserAccountRepository implements RegularUserAccountReposito
 
     async update(account: RegularUserAccount): Promise<void> {
         await prisma.regularUserAccount.update({
-            where: { accountId: account.accountId.value() },
+            where: { accountId: account.getAccountId().value() },
             data: this.toDBModel(account),
         });
     }
@@ -79,31 +81,33 @@ class PostgresRegularUserAccountRepository implements RegularUserAccountReposito
         await prisma.regularUserAccount.deleteMany();
     }
 
-    private toDBModel(user: RegularUserAccount): AccountDBModel {
+    private toDBModel(account: RegularUserAccount): AccountDBModel {
         return {
-            status: user.status,
-            accountId: user.accountId.value(),
-            firstName: user.firstName.value(),
-            lastName: user.lastName.value(),
-            email: user.email.value(),
-            password: user.password.value(),
-            phoneNumber: user.phoneNumber.value(),
-            wilayaNumber: user.wilayaNumber.value(),
-            createdAt: user.createdAt,
+            accountId: account.getAccountId().value(),
+            phoneNumber: account.getPhoneNumber().value(),
+            wilayaNumber: account.getWilayaNumber().value(),
+            firstName: account.getFirstName().value(),
+            lastName: account.getLastName().value(),
+            profilePicture: account.getProfilePicture() ? account.getProfilePicture()!.url() : null,
+            status: account.getAccountStatus(),
+            email: account.getEmail().value(),
+            password: account.getPassword().value(),
+            createdAt: account.getCreationDate(),
         };
     }
 
-    private toDomainEntity(account: AccountDBModel): RegularUserAccount {
+    private toDomainEntity(dbModel: AccountDBModel): RegularUserAccount {
         return new RegularUserAccount(
-            new AccountId(account.accountId),
-            new FirstName(account.firstName),
-            new LastName(account.lastName),
-            new WilayaNumber(account.wilayaNumber),
-            new PhoneNumber(account.phoneNumber),
-            new Email(account.email),
-            new Password(account.password),
-            account.status as AccountStatus,
-            account.createdAt,
+            new AccountId(dbModel.accountId),
+            new FirstName(dbModel.firstName),
+            new LastName(dbModel.lastName),
+            new WilayaNumber(dbModel.wilayaNumber),
+            new PhoneNumber(dbModel.phoneNumber),
+            new Email(dbModel.email),
+            new Password(dbModel.password),
+            dbModel.status as AccountStatus,
+            dbModel.profilePicture ? new ProfilePicture(dbModel.profilePicture) : null,
+            dbModel.createdAt,
         );
     }
 }

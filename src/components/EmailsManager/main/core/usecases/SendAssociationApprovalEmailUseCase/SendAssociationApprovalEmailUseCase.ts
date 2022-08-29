@@ -54,7 +54,7 @@ class SendAssociationApprovalEmailUseCase
         const attachments = new EmailAttachments();
 
         for (const associationDoc of request.associationDocs)
-            attachments.add({ name: 'Association Document', value: associationDoc });
+            attachments.add({ name: 'Association Document.png', value: associationDoc });
 
         return attachments;
     }

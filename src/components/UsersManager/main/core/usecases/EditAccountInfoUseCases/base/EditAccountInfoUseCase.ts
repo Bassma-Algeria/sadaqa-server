@@ -7,6 +7,7 @@ import { WilayaNumber } from '../../../domain/WilayaNumber';
 import { AccountBuilder } from '../../../domain/AccountBuilder';
 
 import { WilayasService } from '../../../domain/services/WilayasService';
+import { PicturesManager } from '../../../domain/services/PicturesManager';
 import { RegularUserAccountRepository } from '../../../domain/services/AccountRepository/RegularUserAccountRepository';
 import { AssociationAccountRepository } from '../../../domain/services/AccountRepository/AssociationAccountRepository';
 
@@ -21,10 +22,11 @@ abstract class EditAccountInfoUseCase {
 
     protected constructor(
         protected readonly wilayasService: WilayasService,
+        protected readonly picturesManager: PicturesManager,
         protected readonly regularUserAccountRepository: RegularUserAccountRepository,
         protected readonly associationAccountRepository: AssociationAccountRepository,
     ) {}
- 
+
     async validateDataAndGetBasicAccountBuilderFrom(request: EditAccountInfoUseCaseRequest) {
         const { wilayaNumber, phoneNumber, accountId } = await this.getFrom(request);
 
@@ -32,11 +34,14 @@ abstract class EditAccountInfoUseCase {
 
         const account = await this.findTargetAccountByIdThrowIfNotExist(accountId);
 
-        await this.checkIfPhoneNumberUsedThrowIfSo(phoneNumber, account.phoneNumber);
+        await this.checkIfPhoneNumberUsedThrowIfSo(phoneNumber, account);
 
-        return this.getAccountBuilderFrom(account)
-            .withWilayaNumber(wilayaNumber)
-            .withPhone(phoneNumber);
+        return {
+            targetAccount: account,
+            accountBuilder: this.getAccountBuilderFrom(account)
+                .withWilayaNumber(wilayaNumber)
+                .withPhone(phoneNumber),
+        };
     }
 
     private async getFrom(request: EditAccountInfoUseCaseRequest) {
@@ -61,18 +66,15 @@ abstract class EditAccountInfoUseCase {
         return account;
     }
 
-    private async checkIfPhoneNumberUsedThrowIfSo(
-        givenPhone: PhoneNumber,
-        targetUserPhone: PhoneNumber,
-    ) {
+    private async checkIfPhoneNumberUsedThrowIfSo(givenPhone: PhoneNumber, targetAccount: Account) {
         const user = await this.regularUserAccountRepository.findByPhoneNumber(givenPhone);
-        if (user && !user.phoneNumber.equals(targetUserPhone))
+        if (user && !user.haveSamePhoneNumberAs(targetAccount))
             throw new MultiLanguagesValidationException(
                 ExceptionMessages.PHONE_NUMBER_ALREADY_USED,
             );
 
         const association = await this.associationAccountRepository.findByPhoneNumber(givenPhone);
-        if (association && !association.phoneNumber.equals(targetUserPhone))
+        if (association && !association.haveSamePhoneNumberAs(targetAccount))
             throw new MultiLanguagesValidationException(
                 ExceptionMessages.PHONE_NUMBER_ALREADY_USED,
             );

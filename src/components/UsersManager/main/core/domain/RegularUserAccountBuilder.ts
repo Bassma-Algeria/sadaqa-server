@@ -12,8 +12,8 @@ class RegularUserAccountBuilder extends AccountBuilder {
 
         if (!account) return;
 
-        this.firstName = account.firstName;
-        this.lastName = account.lastName;
+        this.firstName = account.getFirstName();
+        this.lastName = account.getLastName();
     }
 
     withFirstName(firstName: FirstName) {
@@ -36,6 +36,7 @@ class RegularUserAccountBuilder extends AccountBuilder {
             this.email,
             this.password,
             this.status,
+            this.profilePicture,
             this.createdAt,
         );
     }

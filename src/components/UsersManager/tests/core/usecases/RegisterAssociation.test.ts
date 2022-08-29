@@ -129,6 +129,25 @@ describe('Register Association', () => {
             .and.to.be.an.instanceOf(MultiLanguagesValidationException);
     });
 
+    it('given an association registration requests, when the registration complete, the association should not have a profile picture', async () => {
+        const { accountId } = await usersManager.registerAssociation(
+            anAssociationRegistrationRequest(),
+        );
+
+        const { profilePicture } = await usersManager.getAssociationById({ accountId });
+        expect(profilePicture).to.equal(null);
+    });
+
+    it('given an association registration requests, when the registration complete, the association should be waiting for admin validation', async () => {
+        const { accountId } = await usersManager.registerAssociation(
+            anAssociationRegistrationRequest(),
+        );
+
+        const { status } = await usersManager.getAssociationById({ accountId });
+
+        expect(status).to.equal('WAITING_FOR_ADMIN_VALIDATION');
+    });
+
     it('should publish an association registered event when the association is registered', async () => {
         const mockFn = spy();
         EventBus.getInstance().subscribeTo('ASSOCIATION_REGISTERED').by(mockFn);

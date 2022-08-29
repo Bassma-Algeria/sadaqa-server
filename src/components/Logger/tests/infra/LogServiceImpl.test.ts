@@ -5,9 +5,10 @@ import readline from 'readline';
 import { faker } from '@faker-js/faker';
 import * as fsPromise from 'node:fs/promises';
 
-import { InformationLog } from '../../main/core/domain/InformationLog';
-import { LogServiceImpl } from '../../main/infra/LogServiceImpl';
 import { ErrorLog } from '../../main/core/domain/ErrorLog';
+import { InformationLog } from '../../main/core/domain/InformationLog';
+
+import { LogServiceImpl } from '../../main/infra/LogServiceImpl';
 
 describe('Log Service Impl', () => {
     const logService = new LogServiceImpl();

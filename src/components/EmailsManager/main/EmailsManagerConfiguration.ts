@@ -17,7 +17,7 @@ class EmailsManagerConfiguration {
     private static getEmailService() {
         const env = process.env.NODE_ENV;
 
-        if (env === 'production') return new NodemailerEmailService();
+        if (env !== 'production') return new NodemailerEmailService();
         else return new FakeEmailService();
     }
 }

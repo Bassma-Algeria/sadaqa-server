@@ -33,7 +33,7 @@ class EditAssociationAccountCredentialsUseCase
         const editedAccount = await this.validateDataAndGetEditedAccountFrom(request);
 
         await this.associationAccountRepository.update(editedAccount as AssociationAccount);
-        this.publishAccountCredentialsEdited(editedAccount.accountId);
+        this.publishAccountCredentialsEdited(editedAccount);
     }
 
     protected findAccountById(id: AccountId) {

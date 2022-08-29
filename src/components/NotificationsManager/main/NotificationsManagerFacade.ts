@@ -165,7 +165,7 @@ class NotificationsManagerFacade {
                 return this.callForHelpPostNotificationRepository;
 
             default:
-                throw new Error('type not supported');
+                throw new Error('type not supported' + notificationType);
         }
     }
 }

@@ -54,7 +54,7 @@ class RegisterRegularUserUseCase
 
         this.userEventPublisher.publishRegularUserRegistered(regularUser);
 
-        return { accountId: regularUser.accountId.value() };
+        return { accountId: regularUser.getAccountId().value() };
     }
 
     protected getAccountBuilder() {
@@ -62,7 +62,7 @@ class RegisterRegularUserUseCase
     }
 
     protected getInitialAccountStatus() {
-        return AccountStatus.ENABLED;
+        return AccountStatus.ACTIVE;
     }
 }
 

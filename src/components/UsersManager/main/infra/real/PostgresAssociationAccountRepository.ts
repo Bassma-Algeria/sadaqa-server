@@ -6,11 +6,13 @@ import { AccountId } from '../../core/domain/AccountId';
 import { PhoneNumber } from '../../core/domain/PhoneNumber';
 import { WilayaNumber } from '../../core/domain/WilayaNumber';
 import { AccountStatus } from '../../core/domain/AccountStatus';
+import { ProfilePicture } from '../../core/domain/ProfilePicture';
 import { AssociationName } from '../../core/domain/AssociationName';
 import { AssociationAccount } from '../../core/domain/AssociationAccount';
 
-import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
 import { AccountRepositoryFindManyFilters } from '../../core/domain/services/AccountRepository/base/AccountRepository';
+
+import { prisma } from '../../../../_shared_/persistence/prisma/PrismaClient';
 
 interface DBModel {
     accountId: string;
@@ -20,6 +22,7 @@ interface DBModel {
     email: string;
     password: string;
     status: string;
+    profilePicture: string | null;
     createdAt: Date;
 }
 
@@ -31,7 +34,7 @@ class PostgresAssociationAccountRepository implements AssociationAccountReposito
     async update(account: AssociationAccount): Promise<void> {
         await prisma.associationAccount.update({
             data: this.toDBModel(account),
-            where: { accountId: account.accountId.value() },
+            where: { accountId: account.getAccountId().value() },
         });
     }
 
@@ -79,14 +82,15 @@ class PostgresAssociationAccountRepository implements AssociationAccountReposito
 
     private toDBModel(account: AssociationAccount): DBModel {
         return {
-            accountId: account.accountId.value(),
-            associationName: account.associationName.value(),
-            phoneNumber: account.phoneNumber.value(),
-            email: account.email.value(),
-            password: account.password.value(),
-            wilayaNumber: account.wilayaNumber.value(),
-            status: account.status,
-            createdAt: account.createdAt,
+            accountId: account.getAccountId().value(),
+            phoneNumber: account.getPhoneNumber().value(),
+            wilayaNumber: account.getWilayaNumber().value(),
+            associationName: account.getAssociationName().value(),
+            profilePicture: account.getProfilePicture() ? account.getProfilePicture()!.url() : null,
+            status: account.getAccountStatus(),
+            email: account.getEmail().value(),
+            password: account.getPassword().value(),
+            createdAt: account.getCreationDate(),
         };
     }
 
@@ -98,6 +102,7 @@ class PostgresAssociationAccountRepository implements AssociationAccountReposito
             new WilayaNumber(dbModel.wilayaNumber),
             new Email(dbModel.email),
             new Password(dbModel.password),
+            dbModel.profilePicture ? new ProfilePicture(dbModel.profilePicture) : null,
             dbModel.status as AccountStatus,
             dbModel.createdAt,
         );

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 class LoginDto {
     @ApiProperty()
@@ -63,6 +63,13 @@ class EditAssociationInfoDto {
 
     @ApiProperty()
     phoneNumber!: string;
+
+    @ApiPropertyOptional({
+        description:
+            "a real pic, or the url of the old pic, or don't send it at all, this will delete the profile picture if exist",
+        oneOf: [{ type: 'string' }, { type: 'string', format: 'binary' }],
+    })
+    profilePicture?: string;
 }
 
 class EditRegularUserInfoDto {
@@ -77,6 +84,13 @@ class EditRegularUserInfoDto {
 
     @ApiProperty()
     phoneNumber!: string;
+
+    @ApiPropertyOptional({
+        description:
+            "a real pic, or the url of the old pic, or don't send it at all, this will delete the profile picture if exist",
+        oneOf: [{ type: 'string' }, { type: 'string', format: 'binary' }],
+    })
+    profilePicture?: string;
 }
 
 class EditCredentialsDto {

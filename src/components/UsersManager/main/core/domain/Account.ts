@@ -5,6 +5,8 @@ import { PhoneNumber } from './PhoneNumber';
 import { AccountType } from './AccountType';
 import { WilayaNumber } from './WilayaNumber';
 import { AccountStatus } from './AccountStatus';
+import { ProfilePicture } from './ProfilePicture';
+import { NewProfilePicture, ProfilePictureUpdater } from './ProfilePictureUpdater';
 
 import { AccountBuilder } from './AccountBuilder';
 
@@ -12,18 +14,83 @@ abstract class Account {
     protected abstract aBuilderFromThis(): AccountBuilder;
 
     protected constructor(
-        readonly accountId: AccountId,
-        readonly phoneNumber: PhoneNumber,
-        readonly wilayaNumber: WilayaNumber,
-        readonly email: Email,
-        readonly password: Password,
-        readonly accountType: AccountType,
-        readonly status: AccountStatus,
-        readonly createdAt: Date,
+        protected accountId: AccountId,
+        protected phoneNumber: PhoneNumber,
+        protected wilayaNumber: WilayaNumber,
+        protected email: Email,
+        protected password: Password,
+        protected accountType: AccountType,
+        protected status: AccountStatus,
+        protected profilePicture: ProfilePicture | null,
+        protected createdAt: Date,
     ) {}
 
-    enable() {
-        return this.aBuilderFromThis().withStatus(AccountStatus.ENABLED).build();
+    getAccountId() {
+        return this.accountId;
+    }
+
+    getPhoneNumber() {
+        return this.phoneNumber;
+    }
+
+    getWilayaNumber() {
+        return this.wilayaNumber;
+    }
+
+    getEmail() {
+        return this.email;
+    }
+
+    getPassword() {
+        return this.password;
+    }
+
+    getAccountType() {
+        return this.accountType;
+    }
+
+    getAccountStatus() {
+        return this.status;
+    }
+
+    getProfilePicture() {
+        return this.profilePicture;
+    }
+
+    getCreationDate() {
+        return this.createdAt;
+    }
+
+    activate() {
+        this.status = AccountStatus.ACTIVE;
+    }
+
+    haveSamePhoneNumberAs(account: Account) {
+        return this.phoneNumber.equals(account.phoneNumber);
+    }
+
+    haveSameEmailAs(account: Account) {
+        return this.email.equals(account.email);
+    }
+
+    updateProfilePicture(newPicture: NewProfilePicture) {
+        return {
+            using: async (pictureUpdater: ProfilePictureUpdater) => {
+                await pictureUpdater.update(this, newPicture);
+            },
+        };
+    }
+
+    removeProfilePicture() {
+        this.profilePicture = null;
+    }
+
+    setProfilePicture(picture: ProfilePicture) {
+        this.profilePicture = picture;
+    }
+
+    haveProfilePicture() {
+        return this.profilePicture !== null;
     }
 }
 

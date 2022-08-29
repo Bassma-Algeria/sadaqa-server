@@ -24,17 +24,13 @@ class LoginUseCase implements UseCase<LoginUseCaseRequest, LoginUseCaseResponse>
     async handle(request: LoginUseCaseRequest): Promise<LoginUseCaseResponse> {
         const { password: passwordFromRequest, email } = this.getFrom(request);
 
-        const {
-            accountId,
-            accountType,
-            password: realPassword,
-        } = await this.findAccountByEmailThrowIfNotFound(email);
+        const account = await this.findAccountByEmailThrowIfNotFound(email);
 
-        await this.checkIfPasswordsMatchAndThrowIfNot(passwordFromRequest, realPassword);
+        await this.checkIfPasswordsMatchAndThrowIfNot(passwordFromRequest, account.getPassword());
 
-        this.usersEventBus.publishUserLogin(accountId);
+        this.usersEventBus.publishUserLogin(account);
 
-        return { accountId: accountId.value(), type: accountType };
+        return { accountId: account.getAccountId().value(), type: account.getAccountType() };
     }
 
     private getFrom(request: LoginUseCaseRequest) {

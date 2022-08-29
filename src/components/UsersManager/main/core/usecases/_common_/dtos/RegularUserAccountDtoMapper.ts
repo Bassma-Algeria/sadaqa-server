@@ -5,7 +5,6 @@ import { AccountDtoMapper } from './base/AccountDtoMapper';
 import { RegularUserAccount } from '../../../domain/RegularUserAccount';
 
 class RegularUserAccountDtoMapper extends AccountDtoMapper<RegularUserAccount> {
-
     private static instance = new RegularUserAccountDtoMapper();
 
     static getInstance() {
@@ -16,8 +15,8 @@ class RegularUserAccountDtoMapper extends AccountDtoMapper<RegularUserAccount> {
         return {
             ...super.toDto(account),
 
-            firstName: account.firstName.value(),
-            lastName: account.lastName.value(),
+            firstName: account.getFirstName().value(),
+            lastName: account.getLastName().value(),
         };
     }
 }

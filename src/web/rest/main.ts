@@ -8,6 +8,7 @@ const bootstrapNestApp = async () => {
     const config = new DocumentBuilder()
         .setTitle('SADAQA REST API')
         .setVersion('1.0.0')
+        .addBearerAuth({ name: 'access-token', type: 'http' })
         .addTag('users')
         .addTag('posts')
         .addTag('admin')

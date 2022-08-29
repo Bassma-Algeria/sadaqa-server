@@ -1,6 +1,7 @@
 import { EventBus } from './_shared_/event-bus/EventBus';
-import { NotificationsManagerConfiguration } from './NotificationsManager/main/NotificationsManagerConfiguration';
+
 import { EmailsManagerConfiguration } from './EmailsManager/main/EmailsManagerConfiguration';
+import { NotificationsManagerConfiguration } from './NotificationsManager/main/NotificationsManagerConfiguration';
 
 const eventBus = EventBus.getInstance();
 

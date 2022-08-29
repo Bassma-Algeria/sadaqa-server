@@ -36,7 +36,7 @@ class GetAccountsByWilayaNumberUseCase
         request: GetAccountsByWilayaNumberUseCaseRequest,
     ): AccountRepositoryFindManyFilters {
         const wilayaNumber = new WilayaNumber(request.wilayaNumber);
-        const accountStatus = AccountStatus.ENABLED;
+        const accountStatus = AccountStatus.ACTIVE;
 
         return { wilayaNumber, accountStatus };
     }

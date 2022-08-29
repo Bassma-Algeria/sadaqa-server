@@ -1,5 +1,6 @@
 import {
     ApiBadRequestResponse,
+    ApiBearerAuth,
     ApiConsumes,
     ApiCreatedResponse,
     ApiHeader,
@@ -19,11 +20,12 @@ import {
     Param,
     Post,
     Put,
+    UploadedFile,
     UploadedFiles,
     UseInterceptors,
 } from '@nestjs/common';
 import { Express } from 'express';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 import {
     EditAssociationInfoDto,
@@ -79,6 +81,7 @@ class UsersController {
     }
 
     @Get('regular-user/me')
+    @ApiBearerAuth()
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'user found' })
     @ApiNotFoundResponse({ description: 'user not found' })
@@ -128,6 +131,7 @@ class UsersController {
     }
 
     @Get('/associations/me')
+    @ApiBearerAuth()
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'association found' })
     @ApiNotFoundResponse({ description: 'association not found' })
@@ -136,7 +140,7 @@ class UsersController {
     async getAuthenticatedAssociation(@Headers('Authorization') accessToken: string) {
         try {
             return await this.usersService.getAuthenticatedAssociation(accessToken);
-        } catch (e) {
+        } catch (e: unknown) {
             UsersController.handleError(e);
         }
     }
@@ -154,24 +158,36 @@ class UsersController {
     }
 
     @Put('associations/info')
+    @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
+    @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiOkResponse({ description: 'association info edited' })
     @ApiNotFoundResponse({ description: 'association not found' })
     @ApiBadRequestResponse({ description: 'error in the body form data' })
     @ApiUnauthorizedResponse({ description: 'the access token is not valid' })
     @ApiInternalServerErrorResponse({ description: 'internal server error' })
+    @UseInterceptors(FileInterceptor('profilePicture'))
     async editAssociationInfo(
         @Body() body: EditAssociationInfoDto,
+        @UploadedFile() profilePicture: Express.Multer.File,
         @Headers('Authorization') accessToken: string,
+        @Headers('Accept-Language') language: SupportedLanguages,
     ) {
         try {
-            return await this.usersService.editAssociationInfo(accessToken, body);
+            return await this.usersService.editAssociationInfo(accessToken, {
+                ...body,
+                wilayaNumber: Number(body.wilayaNumber),
+                profilePicture: profilePicture
+                    ? { buffer: profilePicture.buffer, filename: profilePicture.originalname }
+                    : body.profilePicture || null,
+            });
         } catch (e) {
-            UsersController.handleError(e);
+            UsersController.handleError(e, language);
         }
     }
 
     @Put('associations/credentials')
+    @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'association credentials edited' })
     @ApiNotFoundResponse({ description: 'association not found' })
@@ -181,33 +197,46 @@ class UsersController {
     async editAssociationCredentials(
         @Body() body: EditCredentialsDto,
         @Headers('Authorization') accessToken: string,
+        @Headers('Accept-Language') language: SupportedLanguages,
     ) {
         try {
             return await this.usersService.editAssociationCredentials(accessToken, body);
         } catch (e) {
-            UsersController.handleError(e);
+            UsersController.handleError(e, language);
         }
     }
 
     @Put('regular-user/info')
+    @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
+    @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiOkResponse({ description: 'regular user info edited' })
     @ApiNotFoundResponse({ description: 'regular user not found' })
     @ApiBadRequestResponse({ description: 'error in the body form data' })
     @ApiUnauthorizedResponse({ description: 'the access token is not valid' })
     @ApiInternalServerErrorResponse({ description: 'internal server error' })
+    @UseInterceptors(FileInterceptor('profilePicture'))
     async editRegularUserInfo(
         @Body() body: EditRegularUserInfoDto,
+        @UploadedFile() profilePicture: Express.Multer.File,
         @Headers('Authorization') accessToken: string,
+        @Headers('Accept-Language') language: SupportedLanguages,
     ) {
         try {
-            return await this.usersService.editRegularUserInfo(accessToken, body);
+            return await this.usersService.editRegularUserInfo(accessToken, {
+                ...body,
+                wilayaNumber: Number(body.wilayaNumber),
+                profilePicture: profilePicture
+                    ? { buffer: profilePicture.buffer, filename: profilePicture.originalname }
+                    : body.profilePicture || null,
+            });
         } catch (e) {
-            UsersController.handleError(e);
+            UsersController.handleError(e, language);
         }
     }
 
     @Put('regular-user/credentials')
+    @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'regular user credentials edited' })
     @ApiNotFoundResponse({ description: 'regular user not found' })
@@ -217,11 +246,12 @@ class UsersController {
     async editRegularUserCredentials(
         @Body() body: EditCredentialsDto,
         @Headers('Authorization') accessToken: string,
+        @Headers('Accept-Language') language: SupportedLanguages,
     ) {
         try {
             return await this.usersService.editRegularUserCredentials(accessToken, body);
         } catch (e) {
-            UsersController.handleError(e);
+            UsersController.handleError(e, language);
         }
     }
 

@@ -34,7 +34,7 @@ describe('Get Associations By Wilaya numbers', () => {
         const association = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(association);
 
-        await usersManager.enableAssociationAccount({ accountId });
+        await usersManager.activateAssociationAccount({ accountId });
 
         const list = await usersManager.getAssociationsInWilaya({
             wilayaNumber: association.wilayaNumber,
@@ -52,8 +52,8 @@ describe('Get Associations By Wilaya numbers', () => {
         const { accountId: account1 } = await usersManager.registerAssociation(firstAssociation);
         const { accountId: account2 } = await usersManager.registerAssociation(secondAssociation);
 
-        await usersManager.enableAssociationAccount({ accountId: account1 });
-        await usersManager.enableAssociationAccount({ accountId: account2 });
+        await usersManager.activateAssociationAccount({ accountId: account1 });
+        await usersManager.activateAssociationAccount({ accountId: account2 });
 
         const list = await usersManager.getAssociationsInWilaya({
             wilayaNumber: firstAssociation.wilayaNumber,

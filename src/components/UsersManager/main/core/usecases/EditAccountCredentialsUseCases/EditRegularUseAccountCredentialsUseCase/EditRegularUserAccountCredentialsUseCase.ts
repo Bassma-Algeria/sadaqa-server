@@ -5,7 +5,6 @@ import { AccountId } from '../../../domain/AccountId';
 import { RegularUserAccount } from '../../../domain/RegularUserAccount';
 
 import { EditAccountCredentialsUseCase } from '../base/EditAccountCredentialsUseCase';
-
 import { PasswordEncryptor } from '../../../domain/services/PasswordEncryptor';
 import { UserEventPublisher } from '../../../domain/services/UserEventPublisher';
 import { RegularUserAccountRepository } from '../../../domain/services/AccountRepository/RegularUserAccountRepository';
@@ -33,7 +32,7 @@ class EditRegularUserAccountCredentialsUseCase
         const editedAccount = await this.validateDataAndGetEditedAccountFrom(request);
 
         await this.regularUserAccountRepository.update(editedAccount as RegularUserAccount);
-        this.publishAccountCredentialsEdited(editedAccount.accountId);
+        this.publishAccountCredentialsEdited(editedAccount);
     }
 
     protected findAccountById(id: AccountId) {

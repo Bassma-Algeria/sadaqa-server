@@ -1,4 +1,4 @@
-import { AccountId } from '../../core/domain/AccountId';
+import { Account } from '../../core/domain/Account';
 import { AssociationDocs } from '../../core/domain/AssociationDocs';
 import { RegularUserAccount } from '../../core/domain/RegularUserAccount';
 import { AssociationAccount } from '../../core/domain/AssociationAccount';
@@ -6,26 +6,27 @@ import { AssociationAccount } from '../../core/domain/AssociationAccount';
 import { UserEventPublisher } from '../../core/domain/services/UserEventPublisher';
 
 import { EventBus } from '../../../../_shared_/event-bus/EventBus';
+import { AccountId } from '../../core/domain/AccountId';
 
 class UserEventPublisherImpl implements UserEventPublisher {
     constructor(private readonly eventBus: EventBus) {}
 
     publishAssociationAccountInfoEdited(account: AssociationAccount): void {
         this.eventBus.publish('ASSOCIATION_ACCOUNT_INFO_EDITED').withPayload({
-            accountId: account.accountId.value(),
-            associationName: account.associationName.value(),
-            wilayaNumber: account.wilayaNumber.value(),
-            phoneNumber: account.phoneNumber.value(),
+            accountId: account.getAccountId().value(),
+            associationName: account.getAssociationName().value(),
+            wilayaNumber: account.getWilayaNumber().value(),
+            phoneNumber: account.getPhoneNumber().value(),
         });
     }
 
-    publishRegularUserAccountInfoEdited(regularUser: RegularUserAccount): void {
+    publishRegularUserAccountInfoEdited(account: RegularUserAccount): void {
         this.eventBus.publish('REGULAR_USER_ACCOUNT_INFO_EDITED').withPayload({
-            accountId: regularUser.accountId.value(),
-            firstName: regularUser.firstName.value(),
-            lastName: regularUser.lastName.value(),
-            wilayaNumber: regularUser.wilayaNumber.value(),
-            phoneNumber: regularUser.phoneNumber.value(),
+            accountId: account.getAccountId().value(),
+            firstName: account.getFirstName().value(),
+            lastName: account.getLastName().value(),
+            wilayaNumber: account.getWilayaNumber().value(),
+            phoneNumber: account.getPhoneNumber().value(),
         });
     }
 
@@ -34,49 +35,51 @@ class UserEventPublisherImpl implements UserEventPublisher {
         associationDocs: AssociationDocs;
     }): void {
         this.eventBus.publish('ASSOCIATION_REGISTERED').withPayload({
-            accountId: payload.associationAccount.accountId.value(),
-            wilayaNumber: payload.associationAccount.wilayaNumber.value(),
-            associationName: payload.associationAccount.associationName.value(),
-            phoneNumber: payload.associationAccount.phoneNumber.value(),
-            email: payload.associationAccount.email.value(),
-            status: payload.associationAccount.status,
-            createdAt: payload.associationAccount.createdAt,
+            accountId: payload.associationAccount.getAccountId().value(),
+            associationName: payload.associationAccount.getAssociationName().value(),
+            wilayaNumber: payload.associationAccount.getWilayaNumber().value(),
+            phoneNumber: payload.associationAccount.getPhoneNumber().value(),
+            email: payload.associationAccount.getEmail().value(),
+            status: payload.associationAccount.getAccountStatus(),
+            createdAt: payload.associationAccount.getCreationDate(),
             associationDocs: payload.associationDocs.docs(),
         });
     }
 
     publishRegularUserRegistered(regularUser: RegularUserAccount): void {
         this.eventBus.publish('REGULAR_USER_REGISTERED').withPayload({
-            accountId: regularUser.accountId.value(),
-            firstName: regularUser.firstName.value(),
-            lastName: regularUser.lastName.value(),
-            wilayaNumber: regularUser.wilayaNumber.value(),
-            phoneNumber: regularUser.phoneNumber.value(),
-            email: regularUser.email.value(),
-            status: regularUser.status,
-            createdAt: regularUser.createdAt,
+            accountId: regularUser.getAccountId().value(),
+            firstName: regularUser.getFirstName().value(),
+            lastName: regularUser.getLastName().value(),
+            wilayaNumber: regularUser.getWilayaNumber().value(),
+            phoneNumber: regularUser.getPhoneNumber().value(),
+            email: regularUser.getEmail().value(),
+            status: regularUser.getAccountStatus(),
+            createdAt: regularUser.getCreationDate(),
         });
     }
 
-    publishUserLogin(accountId: AccountId): void {
-        this.eventBus.publish('USER_LOGIN').withPayload({ accountId: accountId.value() });
+    publishUserLogin(account: Account): void {
+        this.eventBus
+            .publish('USER_LOGIN')
+            .withPayload({ accountId: account.getAccountId().value() });
     }
 
-    publishAccountCredentialsEdited(accountId: AccountId) {
+    publishAccountCredentialsEdited(account: Account) {
         this.eventBus
             .publish('ACCOUNT_CREDENTIALS_EDITED')
-            .withPayload({ accountId: accountId.value() });
+            .withPayload({ accountId: account.getAccountId().value() });
     }
 
-    publishUserBecameOnlineEvent(accountId: AccountId): void {
+    publishUserBecameOnlineEvent(id: AccountId): void {
         this.eventBus.publish('USER_BECAME_ONLINE').withPayload({
-            accountId: accountId.value(),
+            accountId: id.value(),
         });
     }
 
-    publishUserGoOffline(accountId: AccountId): void {
+    publishUserGoOffline(id: AccountId): void {
         this.eventBus.publish('USER_GO_OFFLINE').withPayload({
-            accountId: accountId.value(),
+            accountId: id.value(),
         });
     }
 }

@@ -45,6 +45,9 @@ const ExceptionMessages = {
     },
     INVALID_ACCOUNT_ID: 'invalid account id',
     ACCOUNT_NOT_FOUND: 'user not found',
+    PROFILE_PIC_SENT_NOT_THE_OLD_PIC: 'profile picture sent is not the old picture',
+    INVALID_PROFILE_PICTURE: 'profile picture url is not valid',
+    NO_PROFILE_PICTURE_TO_DELETE: 'no profile picture to delete',
 };
 
 export { ExceptionMessages };

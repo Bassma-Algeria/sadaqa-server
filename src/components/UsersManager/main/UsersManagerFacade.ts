@@ -2,6 +2,7 @@ import { RegularUserAccount } from './core/domain/RegularUserAccount';
 import { AssociationAccount } from './core/domain/AssociationAccount';
 
 import { WilayasService } from './core/domain/services/WilayasService';
+import { PicturesManager } from './core/domain/services/PicturesManager';
 import { PasswordEncryptor } from './core/domain/services/PasswordEncryptor';
 import { AccountIdGenerator } from './core/domain/services/AccountIdGenerator';
 import { UserEventPublisher } from './core/domain/services/UserEventPublisher';
@@ -17,8 +18,8 @@ import { RegisterRegularUserUseCaseRequest } from './core/usecases/RegisterUseCa
 import { RegisterAssociationUseCase } from './core/usecases/RegisterUseCases/RegisterAssociationUseCase/RegisterAssociationUseCase';
 import { RegisterAssociationUseCaseRequest } from './core/usecases/RegisterUseCases/RegisterAssociationUseCase/RegisterAssociationUseCaseRequest';
 
-import { EnableAssociationAccountUseCase } from './core/usecases/EnableAssociationAccountUseCase/EnableAssociationAccountUseCase';
-import { EnableAssociationAccountUseCaseRequest } from './core/usecases/EnableAssociationAccountUseCase/EnableAssociationAccountUseCaseRequest';
+import { ActivateAssociationAccountUseCase } from './core/usecases/ActivateAssociationAccountUseCase/ActivateAssociationAccountUseCase';
+import { ActivateAssociationAccountUseCaseRequest } from './core/usecases/ActivateAssociationAccountUseCase/ActivateAssociationAccountUseCaseRequest';
 
 import { GetAccountByIdUseCase } from './core/usecases/GetAccountByIdUseCase/GetAccountByIdUseCase';
 import { GetAccountByIdUseCaseRequest } from './core/usecases/GetAccountByIdUseCase/GetAccountByIdUseCaseRequest';
@@ -44,17 +45,19 @@ import { UserBecameOnlineUseCase } from './core/usecases/UserBecameOnlineUseCase
 import { UserGoOfflineUseCase } from './core/usecases/UserGoOfflineUseCase/UserGoOfflineUseCase';
 import { UserGoOfflineUseCaseRequest } from './core/usecases/UserGoOfflineUseCase/UserGoOfflineUseCaseRequest';
 
+import { GetAccountsByWilayaNumberUseCase } from './core/usecases/GetAccountsByWilayaNumberUseCase/GetAccountsByWilayaNumberUseCase';
+import { GetAccountsByWilayaNumberUseCaseRequest } from './core/usecases/GetAccountsByWilayaNumberUseCase/GetAccountsByWilayaNumberUseCaseRequest';
+
 import { RegularUserAccountDto } from './core/usecases/_common_/dtos/RegularUserAccountDto';
 import { RegularUserAccountDtoMapper } from './core/usecases/_common_/dtos/RegularUserAccountDtoMapper';
 
 import { AssociationAccountDto } from './core/usecases/_common_/dtos/AssociationAccountDto';
 import { AssociationAccountDtoMapper } from './core/usecases/_common_/dtos/AssociationAccountDtoMapper';
-import { GetAccountsByWilayaNumberUseCaseRequest } from './core/usecases/GetAccountsByWilayaNumberUseCase/GetAccountsByWilayaNumberUseCaseRequest';
-import { GetAccountsByWilayaNumberUseCase } from './core/usecases/GetAccountsByWilayaNumberUseCase/GetAccountsByWilayaNumberUseCase';
 
 class UsersManagerFacade {
     constructor(
         private readonly wilayasService: WilayasService,
+        private readonly picturesManager: PicturesManager,
         private readonly passwordEncryptor: PasswordEncryptor,
         private readonly accountIdGenerator: AccountIdGenerator,
         private readonly userEventPublisher: UserEventPublisher,
@@ -108,8 +111,8 @@ class UsersManagerFacade {
         ).handle(request) as Promise<AssociationAccountDto>;
     }
 
-    enableAssociationAccount(request: EnableAssociationAccountUseCaseRequest) {
-        return new EnableAssociationAccountUseCase(this.associationAccountRepository).handle(
+    activateAssociationAccount(request: ActivateAssociationAccountUseCaseRequest) {
+        return new ActivateAssociationAccountUseCase(this.associationAccountRepository).handle(
             request,
         );
     }
@@ -135,6 +138,7 @@ class UsersManagerFacade {
     editRegularUserAccountInfo(request: EditRegularUserAccountInfoUseCaseRequest) {
         return new EditRegularUserAccountInfoUseCase(
             this.wilayasService,
+            this.picturesManager,
             this.userEventPublisher,
             this.regularUserAccountRepository,
             this.associationAccountRepository,
@@ -144,6 +148,7 @@ class UsersManagerFacade {
     editAssociationAccountInfo(request: EditAssociationAccountInfoUseCaseRequest) {
         return new EditAssociationAccountInfoUseCase(
             this.wilayasService,
+            this.picturesManager,
             this.userEventPublisher,
             this.regularUserAccountRepository,
             this.associationAccountRepository,

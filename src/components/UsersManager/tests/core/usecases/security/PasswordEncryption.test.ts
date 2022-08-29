@@ -13,6 +13,7 @@ import { WilayasService } from '../../../../main/core/domain/services/WilayasSer
 
 import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 
+import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
 import { UuidAccountIdGenerator } from '../../../../main/infra/real/UuidAccountIdGenerator';
 import { UserEventPublisherImpl } from '../../../../main/infra/real/UserEventPublisherImpl';
 import { BcryptPasswordEncryptor } from '../../../../main/infra/real/BcryptPasswordEncryptor';
@@ -33,6 +34,7 @@ describe('Password Encryption', () => {
 
     const usersManager = new UsersManagerFacade(
         instance(wilayasServiceMock),
+        new FakePicturesManager(),
         passwordEncryptor,
         new UuidAccountIdGenerator(),
         new UserEventPublisherImpl(EventBus.getInstance()),

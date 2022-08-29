@@ -10,6 +10,7 @@ const anEditAssociationInfoRequest = (
         associationName: faker.lorem.word(3),
         wilayaNumber: faker.datatype.number({ min: 1, max: 58 }),
         phoneNumber: faker.phone.number('06 ## ## ## ##'),
+        profilePicture: null,
         ...request,
     };
 };

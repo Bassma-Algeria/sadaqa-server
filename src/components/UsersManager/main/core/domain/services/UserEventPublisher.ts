@@ -1,16 +1,17 @@
+import { Account } from '../Account';
 import { AccountId } from '../AccountId';
 import { AssociationDocs } from '../AssociationDocs';
 import { AssociationAccount } from '../AssociationAccount';
 import { RegularUserAccount } from '../RegularUserAccount';
 
 export interface UserEventPublisher {
-    publishUserLogin(accountId: AccountId): void;
+    publishUserLogin(account: Account): void;
 
     publishUserBecameOnlineEvent(accountId: AccountId): void;
 
     publishUserGoOffline(accountId: AccountId): void;
 
-    publishAccountCredentialsEdited(accountId: AccountId): void;
+    publishAccountCredentialsEdited(account: Account): void;
 
     publishRegularUserRegistered(regularUser: RegularUserAccount): void;
 

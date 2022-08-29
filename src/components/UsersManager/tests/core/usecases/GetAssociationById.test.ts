@@ -21,15 +21,6 @@ describe('Get Association By Id', () => {
         expect(associationFounded.wilayaNumber).to.equal(association.wilayaNumber);
     });
 
-    it('the association should be inactive when first created', async () => {
-        const { accountId } = await usersManager.registerAssociation(
-            anAssociationRegistrationRequest(),
-        );
-
-        const { status } = await usersManager.getAssociationById({ accountId });
-
-        expect(status).to.equal('DISABLED');
-    });
 
     it('should throw a not found exception when no association found with the provided id', async () => {
         const NOT_EXISTING_ID = faker.datatype.uuid();

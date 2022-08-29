@@ -8,7 +8,9 @@ import { EmailService } from '../../core/domain/services/EmailService';
 class NodemailerEmailService implements EmailService {
     async sendEmail(email: Email): Promise<void> {
         const transporter = nodemailer.createTransport({
-            host: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
             auth: {
                 user: email.getSenderEmail(),
                 pass: email.getSenderPassword(),

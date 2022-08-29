@@ -8,20 +8,22 @@ import { PhoneNumber } from './PhoneNumber';
 import { AccountType } from './AccountType';
 import { WilayaNumber } from './WilayaNumber';
 import { AccountStatus } from './AccountStatus';
+import { ProfilePicture } from './ProfilePicture';
 
 import { RegularUserAccountBuilder } from './RegularUserAccountBuilder';
 
 class RegularUserAccount extends Account {
     constructor(
-        readonly accountId: AccountId,
-        readonly firstName: FirstName,
-        readonly lastName: LastName,
-        readonly wilayaNumber: WilayaNumber,
-        readonly phoneNumber: PhoneNumber,
-        readonly email: Email,
-        readonly password: Password,
-        readonly status: AccountStatus,
-        readonly createdAt: Date,
+        protected accountId: AccountId,
+        protected firstName: FirstName,
+        protected lastName: LastName,
+        protected wilayaNumber: WilayaNumber,
+        protected phoneNumber: PhoneNumber,
+        protected email: Email,
+        protected password: Password,
+        protected status: AccountStatus,
+        protected profilePicture: ProfilePicture | null,
+        protected createdAt: Date,
     ) {
         super(
             accountId,
@@ -31,8 +33,17 @@ class RegularUserAccount extends Account {
             password,
             AccountType.REGULAR_USER,
             status,
+            profilePicture,
             createdAt,
         );
+    }
+
+    getFirstName() {
+        return this.firstName;
+    }
+
+    getLastName() {
+        return this.lastName;
     }
 
     static aBuilder() {

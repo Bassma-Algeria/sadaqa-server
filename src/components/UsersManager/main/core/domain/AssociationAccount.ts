@@ -6,20 +6,22 @@ import { PhoneNumber } from './PhoneNumber';
 import { AccountType } from './AccountType';
 import { WilayaNumber } from './WilayaNumber';
 import { AccountStatus } from './AccountStatus';
+import { ProfilePicture } from './ProfilePicture';
 import { AssociationName } from './AssociationName';
 
 import { AssociationAccountBuilder } from './AssociationAccountBuilder';
 
 class AssociationAccount extends Account {
     constructor(
-        readonly accountId: AccountId,
-        readonly associationName: AssociationName,
-        readonly phoneNumber: PhoneNumber,
-        readonly wilayaNumber: WilayaNumber,
-        readonly email: Email,
-        readonly password: Password,
-        readonly status: AccountStatus,
-        readonly createdAt: Date,
+        protected accountId: AccountId,
+        protected associationName: AssociationName,
+        protected phoneNumber: PhoneNumber,
+        protected wilayaNumber: WilayaNumber,
+        protected email: Email,
+        protected password: Password,
+        protected profilePicture: ProfilePicture | null,
+        protected status: AccountStatus,
+        protected createdAt: Date,
     ) {
         super(
             accountId,
@@ -29,8 +31,13 @@ class AssociationAccount extends Account {
             password,
             AccountType.ASSOCIATION,
             status,
+            profilePicture,
             createdAt,
         );
+    }
+
+    getAssociationName() {
+        return this.associationName;
     }
 
     static aBuilder() {

@@ -6,7 +6,10 @@ import { LastName } from '../../../domain/LastName';
 import { FirstName } from '../../../domain/FirstName';
 import { AccountId } from '../../../domain/AccountId';
 import { RegularUserAccount } from '../../../domain/RegularUserAccount';
+import { PicturesManager } from '../../../domain/services/PicturesManager';
 import { RegularUserAccountBuilder } from '../../../domain/RegularUserAccountBuilder';
+
+import { ProfilePictureUpdater } from '../../../domain/ProfilePictureUpdater';
 
 import { EditAccountInfoUseCase } from '../base/EditAccountInfoUseCase';
 
@@ -27,17 +30,23 @@ class EditRegularUserAccountInfoUseCase
 {
     constructor(
         protected readonly wilayasService: WilayasService,
+        protected readonly picturesManager: PicturesManager,
         protected readonly userEventPublisher: UserEventPublisher,
         protected readonly regularUserAccountRepository: RegularUserAccountRepository,
         protected readonly associationAccountRepository: AssociationAccountRepository,
     ) {
-        super(wilayasService, regularUserAccountRepository, associationAccountRepository);
+        super(
+            wilayasService,
+            picturesManager,
+            regularUserAccountRepository,
+            associationAccountRepository,
+        );
     }
 
     async handle(
         request: EditRegularUserAccountInfoUseCaseRequest,
     ): Promise<EditRegularUserAccountInfoUseCaseResponse> {
-        const accountBuilder = await this.validateDataAndGetBasicAccountBuilderFrom(request);
+        const { accountBuilder } = await this.validateDataAndGetBasicAccountBuilderFrom(request);
 
         const lastName = new LastName(request.lastName);
         const firstName = new FirstName(request.firstName);
@@ -46,6 +55,10 @@ class EditRegularUserAccountInfoUseCase
             .withFirstName(firstName)
             .withLastName(lastName)
             .build();
+
+        await editedAccount
+            .updateProfilePicture(request.profilePicture)
+            .using(new ProfilePictureUpdater(this.picturesManager));
 
         await this.regularUserAccountRepository.update(editedAccount);
 

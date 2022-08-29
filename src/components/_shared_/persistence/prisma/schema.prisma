@@ -18,15 +18,16 @@ model Wilaya {
 }
 
 model RegularUserAccount {
-  accountId    String   @id
-  firstName    String
-  lastName     String
-  wilayaNumber Int
-  phoneNumber  String   @unique
-  email        String   @unique
-  password     String
-  status       String
-  createdAt    DateTime
+  accountId      String   @id
+  firstName      String
+  lastName       String
+  wilayaNumber   Int
+  phoneNumber    String   @unique
+  email          String   @unique
+  password       String
+  status         String
+  profilePicture String?
+  createdAt      DateTime
 }
 
 model AssociationAccount {
@@ -35,6 +36,7 @@ model AssociationAccount {
   wilayaNumber    Int
   phoneNumber     String   @unique
   email           String   @unique
+  profilePicture  String?
   password        String
   status          String
   createdAt       DateTime
