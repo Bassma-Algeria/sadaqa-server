@@ -11,7 +11,7 @@ import { InformationLog } from '../../main/core/domain/InformationLog';
 import { LogServiceImpl } from '../../main/infra/LogServiceImpl';
 
 describe('Log Service Impl', () => {
-    const logService = new LogServiceImpl();
+    const logService = LogServiceImpl.instance();
 
     const INFO_LOG_FILES_DIR = path.join(__dirname, '../../logs/info.log');
     const ERROR_LOG_FILES_DIR = path.join(__dirname, '../../logs/error.log');

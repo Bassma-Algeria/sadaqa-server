@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { anything, instance, mock, when } from 'ts-mockito';
 
@@ -11,8 +10,6 @@ import { WilayasService } from '../../../../main/core/domain/services/WilayasSer
 import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
-
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 
 describe('Create Donation Post', () => {
     const mockUsersService = mock<UsersService>();
@@ -94,18 +91,6 @@ describe('Create Donation Post', () => {
         const { postId: id3 } = await donationPostsManager.create(aDonationPostCreationRequest());
 
         expect(id1).to.not.equal(id2).to.not.equal(id3);
-    });
-
-    it('should publish a NEW_DONATION_POST_CREATED event when everything complete correctly', async () => {
-        const mockFunction = spy();
-        EventBus.getInstance().subscribeTo('DONATION_POST_CREATED').by(mockFunction);
-
-        const donationPost = aDonationPostCreationRequest();
-        await donationPostsManager.create(donationPost);
-
-        expect(mockFunction.calledOnce).to.equal(true);
-        expect(mockFunction.args[0][0]).to.have.property('category', donationPost.category);
-        expect(mockFunction.args[0][0]).to.have.property('publisherId', donationPost.publisherId);
     });
 
     it('given a donation post creation request, when every think is ok, then the status of the post should be ENABLED', async () => {

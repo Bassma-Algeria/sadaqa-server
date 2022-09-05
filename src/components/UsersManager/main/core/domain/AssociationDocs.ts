@@ -2,9 +2,9 @@ import { MultiLanguagesValidationException } from './exceptions/MultiLanguagesVa
 import { ExceptionMessages } from './exceptions/ExceptionMessages';
 
 class AssociationDocs {
-    private readonly _docs: Buffer[];
+    private readonly _docs: { buffer: Buffer; filename: string }[];
 
-    constructor(docs: Buffer[]) {
+    constructor(docs: { buffer: Buffer; filename: string }[]) {
         if (!docs.length)
             throw new MultiLanguagesValidationException(ExceptionMessages.NO_ASSOCIATION_DOCS);
 

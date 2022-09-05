@@ -4,17 +4,26 @@ import { ActivateAssociationAccountUseCaseRequest } from '../../../components/Us
 
 import { UsersManagerConfiguration } from '../../../components/UsersManager/main/UsersManagerConfiguration';
 
+import { Service } from './base/base.service';
+
 @Injectable()
-class AdminService {
+class AdminService extends Service {
     private readonly usersManager = UsersManagerConfiguration.aUsersManager();
 
     async activateAssociation(
         adminPassword: string,
         request: ActivateAssociationAccountUseCaseRequest,
     ) {
-        if (adminPassword !== process.env.ADMIN_PASSWORD) throw new InvalidAdminPasswordException();
+        try {
+            if (adminPassword !== process.env.ADMIN_PASSWORD)
+                throw new InvalidAdminPasswordException();
 
-        return this.usersManager.activateAssociationAccount(request);
+            return await this.usersManager.activateAssociationAccount(request);
+        } catch (e) {
+            await this.logError('Error while activating association', e);
+
+            throw e;
+        }
     }
 }
 

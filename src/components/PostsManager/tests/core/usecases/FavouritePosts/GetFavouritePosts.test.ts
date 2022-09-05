@@ -22,7 +22,7 @@ describe('Get Favourite Posts', () => {
         const NOT_EXISTING_USER_ID = faker.datatype.uuid();
 
         await expect(postsManager.getFavouritePosts({ userId: NOT_EXISTING_USER_ID }))
-            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_FOUND)
             .and.be.and.instanceOf(AuthorizationException);
     });
 });

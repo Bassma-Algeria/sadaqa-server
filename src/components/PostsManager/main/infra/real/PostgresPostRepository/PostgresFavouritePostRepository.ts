@@ -37,6 +37,15 @@ class PostgresFavouritePostRepository implements FavouritePostRepository {
         });
     }
 
+    async deleteMany(args: { postId: PostId; postType: PostType }): Promise<void> {
+        await prisma.favouritePost.deleteMany({
+            where: {
+                postId: args.postId.value(),
+                postType: args.postType.value(),
+            },
+        });
+    }
+
     private toEntity(model: DBModel) {
         return FavouritePostBuilder.aBuilder()
             .withPostType(new PostType(model.postType))

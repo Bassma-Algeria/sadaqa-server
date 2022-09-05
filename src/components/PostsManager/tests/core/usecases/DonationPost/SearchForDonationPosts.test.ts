@@ -44,6 +44,20 @@ describe('Search For Donation Posts', () => {
         expect(list[0]).to.have.property('postId', postId);
     });
 
+    it('given a search for donation posts request, then the result list should contains only the enabled posts', async () => {
+        const description = faker.lorem.words(30);
+
+        const request = aDonationPostCreationRequest({ description });
+        const { postId } = await donationPostsManager.create(request);
+
+        await donationPostsManager.toggleEnablingStatus({ postId, userId: request.publisherId });
+
+        const keyword = description.split(' ')[20];
+        const { list } = await donationPostsManager.search({ keyword });
+
+        expect(list).to.have.lengthOf(0);
+    });
+
     it('given a search for donation posts request, when there is a wilayaNumber filter, then the should show only the posts in that wilaya', async () => {
         const description = faker.lorem.words(30);
         const { postId } = await donationPostsManager.create(

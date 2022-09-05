@@ -44,6 +44,27 @@ describe('Search For Call For Help Posts', () => {
         expect(list[0]).to.have.property('postId', postId);
     });
 
+    it('given a search for call for help posts request, then the should only return the enabled posts', async () => {
+        const description = faker.lorem.words(30);
+
+        const request1 = aCallForHelpPostCreationRequest({ description });
+        const request2 = aCallForHelpPostCreationRequest({ description });
+
+        const { postId: id1 } = await callForHelpPostsManager.create(request1);
+        const { postId: id2 } = await callForHelpPostsManager.create(request2);
+
+        await callForHelpPostsManager.toggleEnablingStatus({
+            postId: id1,
+            userId: request1.publisherId,
+        });
+
+        const keyword = description.split(' ')[20];
+        const { list } = await callForHelpPostsManager.search({ keyword });
+
+        expect(list).to.have.lengthOf(1);
+        expect(list[0]).to.have.property('postId', id2);
+    });
+
     it('given a search for call for help posts request, when there is a wilayaNumber filter, then the should show only the posts in that wilaya', async () => {
         const description = faker.lorem.words(30);
         const { postId } = await callForHelpPostsManager.create(

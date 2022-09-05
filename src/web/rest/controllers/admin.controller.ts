@@ -8,6 +8,7 @@ import {
     Put,
 } from '@nestjs/common';
 import {
+    ApiBearerAuth,
     ApiHeader,
     ApiInternalServerErrorResponse,
     ApiNotFoundResponse,
@@ -25,6 +26,7 @@ class AdminController {
     constructor(private readonly adminService: AdminService) {}
 
     @Put('associations/:accountId/activate')
+    @ApiBearerAuth()
     @HttpCode(204)
     @ApiHeader({ name: 'Authorization', description: 'the admin password' })
     @ApiResponse({ description: 'association activated successfully', status: 204 })

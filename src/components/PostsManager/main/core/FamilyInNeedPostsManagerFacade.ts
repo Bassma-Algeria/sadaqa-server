@@ -2,6 +2,8 @@ import { UsersService } from './domain/services/UsersService';
 import { WilayasService } from './domain/services/WilayasService';
 import { PicturesManager } from './domain/services/PicturesManager';
 import { PostIdGenerator } from './domain/services/PostIdGenerator';
+import { PostShareRepository } from './domain/services/PostRepository/PostShareRepository';
+import { FavouritePostRepository } from './domain/services/PostRepository/FavouritePostRepository';
 import { FamilyInNeedPostRepository } from './domain/services/PostRepository/FamilyInNeedPostRepository';
 import { FamilyInNeedPostEventPublisher } from './domain/services/PostEventPublisher/FamilyInNeedPostEventPublisher';
 
@@ -35,12 +37,17 @@ import { GetPostsByPublisherUseCaseRequest } from './usecases/GetPostsByPublishe
 import { GetPostsSummaryByPublisherUseCase } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCase';
 import { GetPostsSummaryByPublisherUseCaseRequest } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCaseRequest';
 
+import { SharePostUseCase } from './usecases/SharePostUseCase/SharePostUseCase';
+import { SharePostUseCaseRequest } from './usecases/SharePostUseCase/SharePostUseCaseRequest';
+
 class FamilyInNeedPostsManagerFacade {
     constructor(
         private readonly usersService: UsersService,
         private readonly wilayasService: WilayasService,
         private readonly picturesManager: PicturesManager,
         private readonly postIdGenerator: PostIdGenerator,
+        private readonly postShareRepository: PostShareRepository,
+        private readonly favouritePostRepository: FavouritePostRepository,
         private readonly familyInNeedPostRepository: FamilyInNeedPostRepository,
         private readonly familyInNeedPostEventPublisher: FamilyInNeedPostEventPublisher,
     ) {}
@@ -103,6 +110,7 @@ class FamilyInNeedPostsManagerFacade {
         return new DeletePostUseCase(
             this.familyInNeedPostRepository,
             this.familyInNeedPostEventPublisher,
+            this.favouritePostRepository,
         ).handle(request);
     }
 
@@ -116,6 +124,15 @@ class FamilyInNeedPostsManagerFacade {
             end: boolean;
             list: FamilyInNeedPostDto[];
         }>;
+    }
+
+    share(request: SharePostUseCaseRequest) {
+        return new SharePostUseCase(
+            this.usersService,
+            this.familyInNeedPostRepository,
+            this.postShareRepository,
+            this.familyInNeedPostEventPublisher,
+        ).handle(request);
     }
 }
 

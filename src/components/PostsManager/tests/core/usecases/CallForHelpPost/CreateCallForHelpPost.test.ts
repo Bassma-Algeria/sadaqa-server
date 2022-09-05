@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 import { anything, instance, mock, when } from 'ts-mockito';
@@ -12,8 +11,6 @@ import { WilayasService } from '../../../../main/core/domain/services/WilayasSer
 import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../../../main/core/domain/exceptions/AuthorizationException';
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
-
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
 
 describe('Create Call For Help Post', () => {
     const mockUsersService = mock<UsersService>();
@@ -146,19 +143,6 @@ describe('Create Call For Help Post', () => {
         );
 
         expect(id1).to.not.equal(id2).and.to.not.equal(id3);
-    });
-
-    it('given a call for help creation request, should publish a new call for help post created event', async () => {
-        const mockFun = spy();
-
-        EventBus.getInstance().subscribeTo('CALL_FOR_HELP_POST_CREATED').by(mockFun);
-
-        const request = aCallForHelpPostCreationRequest();
-        await callForHelpPostsManager.create(request);
-
-        expect(mockFun.calledOnce).to.equal(true);
-        expect(mockFun.args[0][0]).to.have.property('publisherId', request.publisherId);
-        expect(mockFun.args[0][0]).to.have.property('wilayaNumber', request.wilayaNumber);
     });
 
     it('given a call for help creation request, when every think is ok, then the status of the post should be ENABLED', async () => {

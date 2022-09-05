@@ -53,6 +53,17 @@ describe('Get Donations Posts List', () => {
         expect(list).to.have.lengthOf(2);
     });
 
+    it('should not get the disabled donations', async () => {
+        const request = aDonationPostCreationRequest();
+        const { postId } = await postsManager.create(aDonationPostCreationRequest(request));
+
+        await postsManager.toggleEnablingStatus({ postId, userId: request.publisherId });
+
+        const { list } = await postsManager.getList();
+
+        expect(list).to.have.lengthOf(0);
+    });
+
     it('as a user, i should be able to get donations for a specific category, in a specific wilaya', async () => {
         const foodDonationAtWilaya1 = aDonationPostCreationRequest({
             wilayaNumber: 1,

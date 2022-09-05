@@ -1,6 +1,9 @@
 import { anything, instance, mock, when } from 'ts-mockito';
 
 import { PostsService } from '../../../../main/core/domain/services/PostsService';
+import { UsersService } from '../../../../main/core/domain/services/UsersService';
+import { NotificationsManagerFacade } from '../../../../main/NotificationsManagerFacade';
+import { PostgresTextMessageNotificationRepository } from '../../../../main/infra/repositories/PostgresTextMessageNotificationRepository';
 
 import { UuidNotificationIdGenerator } from '../../../../main/infra/UuidNotificationIdGenerator';
 import { NotificationEventPublisherImpl } from '../../../../main/infra/NotificationEventPublisherImpl';
@@ -9,11 +12,7 @@ import { PostgresCallForHelpPostNotificationRepository } from '../../../../main/
 import { PostgresFamilyInNeedPostNotificationRepository } from '../../../../main/infra/repositories/PostgresFamilyInNeedPostNotificationRepository';
 import { PostgresDonationRequestPostNotificationRepository } from '../../../../main/infra/repositories/PostgresDonationRequestPostNotificationRepository';
 
-import { NotificationsManagerFacade } from '../../../../main/NotificationsManagerFacade';
-
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
-import { UsersService } from '../../../../main/core/domain/services/UsersService';
-import { PostgresTextMessageNotificationRepository } from '../../../../main/infra/repositories/PostgresTextMessageNotificationRepository';
+import { InMemoryEventBus } from '../../../../../EventBus/main/InMemoryEventBus';
 
 interface Depedencies {
     postsService: PostsService;
@@ -34,7 +33,7 @@ const aNotificationsManager = (dependencies?: Partial<Depedencies>) => {
         dependencies?.postsService || instance(postsServiceMock),
         dependencies?.usersService || instance(usersServiceMock),
         new UuidNotificationIdGenerator(),
-        new NotificationEventPublisherImpl(EventBus.getInstance()),
+        new NotificationEventPublisherImpl(InMemoryEventBus.instance()),
         new PostgresTextMessageNotificationRepository(),
         new PostgresDonationPostNotificationRepository(),
         new PostgresCallForHelpPostNotificationRepository(),

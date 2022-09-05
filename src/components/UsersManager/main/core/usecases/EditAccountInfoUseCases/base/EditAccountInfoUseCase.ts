@@ -14,6 +14,7 @@ import { AssociationAccountRepository } from '../../../domain/services/AccountRe
 import { ExceptionMessages } from '../../../domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../domain/exceptions/NotFoundException';
 import { MultiLanguagesValidationException } from '../../../domain/exceptions/MultiLanguagesValidationException';
+import { ValidationException } from '../../../domain/exceptions/ValidationException';
 
 abstract class EditAccountInfoUseCase {
     protected abstract findAccountById(id: AccountId): Promise<Account | undefined>;
@@ -30,10 +31,10 @@ abstract class EditAccountInfoUseCase {
     async validateDataAndGetBasicAccountBuilderFrom(request: EditAccountInfoUseCaseRequest) {
         const { wilayaNumber, phoneNumber, accountId } = await this.getFrom(request);
 
-        await this.checkIfWilayaExistThrowIfNot(wilayaNumber);
-
         const account = await this.findTargetAccountByIdThrowIfNotExist(accountId);
 
+        await this.checkIfEligibleToEditThrowIfNot(account);
+        await this.checkIfWilayaExistThrowIfNot(wilayaNumber);
         await this.checkIfPhoneNumberUsedThrowIfSo(phoneNumber, account);
 
         return {
@@ -52,10 +53,9 @@ abstract class EditAccountInfoUseCase {
         return { accountId, phoneNumber, wilayaNumber };
     }
 
-    private async checkIfWilayaExistThrowIfNot(wilayaNumber: WilayaNumber) {
-        const isExist = await this.wilayasService.isExist(wilayaNumber);
-        if (!isExist)
-            throw new MultiLanguagesValidationException(ExceptionMessages.INVALID_WILAYA_NUMBER);
+    private checkIfEligibleToEditThrowIfNot(account: Account) {
+        if (!account.canEditGeneralInfo())
+            throw new ValidationException(ExceptionMessages.CANNOT_EDIT_ACCOUNT_INFO);
     }
 
     private async findTargetAccountByIdThrowIfNotExist(accountId: AccountId) {
@@ -64,6 +64,12 @@ abstract class EditAccountInfoUseCase {
         if (!account) throw new NotFoundException(ExceptionMessages.ACCOUNT_NOT_FOUND);
 
         return account;
+    }
+
+    private async checkIfWilayaExistThrowIfNot(wilayaNumber: WilayaNumber) {
+        const isExist = await this.wilayasService.isExist(wilayaNumber);
+        if (!isExist)
+            throw new MultiLanguagesValidationException(ExceptionMessages.INVALID_WILAYA_NUMBER);
     }
 
     private async checkIfPhoneNumberUsedThrowIfSo(givenPhone: PhoneNumber, targetAccount: Account) {

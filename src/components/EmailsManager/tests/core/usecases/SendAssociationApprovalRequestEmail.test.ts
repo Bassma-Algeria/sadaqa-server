@@ -5,11 +5,11 @@ import { anything, instance, mock, reset, when } from 'ts-mockito';
 
 import { anEmailsManager } from './base/anEmailsManager';
 
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
-
 import { EmailService } from '../../../main/core/domain/services/EmailService';
 
 import { SendAssociationApprovalEmailUseCaseRequest } from '../../../main/core/usecases/SendAssociationApprovalEmailUseCase/SendAssociationApprovalEmailUseCaseRequest';
+
+import { InMemoryEventBus } from '../../../../EventBus/main/InMemoryEventBus';
 
 describe('Send Association Approval Request Email', () => {
     const emailServiceMock = mock<EmailService>();
@@ -23,7 +23,7 @@ describe('Send Association Approval Request Email', () => {
 
     it('given a new send association approval email request, when sending the email, should publish a notification to the global event bus', async () => {
         const mockFn = spy();
-        EventBus.getInstance().subscribeTo('ASSOCIATION_APPROVAL_EMAIL_SENT').by(mockFn);
+        InMemoryEventBus.instance().subscribeTo('ASSOCIATION_APPROVAL_EMAIL_SENT').by(mockFn);
 
         const association = anAssociationApprovalEmailRequest();
         await emailsManager.sendAssociationApprovalEmail(association);
@@ -34,7 +34,7 @@ describe('Send Association Approval Request Email', () => {
 
     it('given a new send association approval email request, then should send an email to the admin: yasser', async () => {
         const mockFn = spy();
-        EventBus.getInstance().subscribeTo('ASSOCIATION_APPROVAL_EMAIL_SENT').by(mockFn);
+        InMemoryEventBus.instance().subscribeTo('ASSOCIATION_APPROVAL_EMAIL_SENT').by(mockFn);
 
         await emailsManager.sendAssociationApprovalEmail(anAssociationApprovalEmailRequest());
 

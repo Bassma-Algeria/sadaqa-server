@@ -3,10 +3,10 @@ import { Post } from './Post';
 import { Title } from './Title';
 import { PostId } from './PostId';
 import { UserId } from './UserId';
-import { Picture } from './Picture';
 import { PostStatus } from './PostStatus';
 import { Description } from './Description';
 import { WilayaNumber } from './WilayaNumber';
+import { PostPictures } from './PostPictures';
 
 abstract class PostBuilder {
     abstract build(): Post;
@@ -15,7 +15,7 @@ abstract class PostBuilder {
     protected title!: Title;
     protected description!: Description;
     protected wilayaNumber!: WilayaNumber;
-    protected pictures!: Picture[];
+    protected pictures!: PostPictures;
     protected publisherId!: UserId;
     protected status!: PostStatus;
     protected createdAt!: Date;
@@ -23,14 +23,14 @@ abstract class PostBuilder {
     protected constructor(post?: Post) {
         if (!post) return;
 
-        this.postId = post.postId;
-        this.title = post.title;
-        this.description = post.description;
-        this.wilayaNumber = post.wilayaNumber;
-        this.publisherId = post.publisherId;
-        this.status = post.status;
-        this.pictures = post.pictures;
-        this.createdAt = post.createdAt;
+        this.postId = post.getPostId();
+        this.title = post.getTitle();
+        this.description = post.getDescription();
+        this.wilayaNumber = post.getWilayaNumber();
+        this.publisherId = post.getPublisherId();
+        this.status = post.getStatus();
+        this.pictures = post.getPictures();
+        this.createdAt = post.getCreationTime();
     }
 
     withPostId(id: PostId) {
@@ -53,7 +53,7 @@ abstract class PostBuilder {
         return this;
     }
 
-    withPictures(pictures: Picture[]) {
+    withPictures(pictures: PostPictures) {
         this.pictures = pictures;
         return this;
     }

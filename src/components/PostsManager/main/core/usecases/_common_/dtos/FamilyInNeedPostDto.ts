@@ -1,7 +1,6 @@
 import { PostDto } from './base/PostDto';
 
 export interface FamilyInNeedPostDto extends PostDto {
-    readonly ccp?: string;
-    readonly ccpKey?: string;
-    readonly baridiMobNumber?: string;
+    readonly ccp: { number: string; key: string } | null;
+    readonly baridiMobNumber: string | null;
 }

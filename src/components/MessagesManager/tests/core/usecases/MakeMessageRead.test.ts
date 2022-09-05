@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 
 import { aMessagesManager } from './base/aMessagesManager';
@@ -7,8 +6,6 @@ import { aSendTextMessageRequest } from './base/requests/aSendTextMessageRequest
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../main/core/domain/exceptions/NotFoundException';
 import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Make Message Read', () => {
     const messagesManager = aMessagesManager();
@@ -52,23 +49,5 @@ describe('Make Message Read', () => {
         await expect(messagesManager.makeMessageRead({ messageId, userId: message.receiverId }))
             .to.eventually.be.rejectedWith(ExceptionMessages.MESSAGE_ALREADY_READ)
             .and.to.be.an.instanceof(ValidationException);
-    });
-
-    it('given a make message read request, when everything is ok, then should publish a message read event to the global event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('MESSAGE_READ').by(mockFn);
-
-        const message = aSendTextMessageRequest();
-        const { messageId } = await messagesManager.sendTextMessage(message);
-
-        await messagesManager.makeMessageRead({ messageId, userId: message.receiverId });
-
-        const { messages } = await messagesManager.getConversation({
-            between: message.senderId,
-            and: message.receiverId,
-        });
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.have.property('messageId', messages[0].message.messageId);
     });
 });

@@ -1,6 +1,7 @@
-import { EmailEventPublisher } from '../../core/domain/services/EmailEventPublisher';
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 import { Email } from '../../core/domain/Email';
+import { EmailEventPublisher } from '../../core/domain/services/EmailEventPublisher';
+
+import { EventBus } from '../../../../EventBus/main/EventBus';
 
 class EmailEventPublisherImpl implements EmailEventPublisher {
     constructor(private readonly eventBus: EventBus) {}

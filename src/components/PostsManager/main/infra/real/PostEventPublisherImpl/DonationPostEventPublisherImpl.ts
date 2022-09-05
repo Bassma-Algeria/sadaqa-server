@@ -1,7 +1,8 @@
+import { PostShare } from '../../../core/domain/PostShare';
 import { DonationPost } from '../../../core/domain/DonationPost';
 import { DonationPostEventPublisher } from '../../../core/domain/services/PostEventPublisher/DonationPostEventPublisher';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { EventBus } from '../../../../../EventBus/main/EventBus';
 
 class DonationPostEventPublisherImpl implements DonationPostEventPublisher {
     constructor(private readonly eventBus: EventBus) {}
@@ -20,22 +21,20 @@ class DonationPostEventPublisherImpl implements DonationPostEventPublisher {
 
     publishEnablingStatusToggled(post: DonationPost): void {
         this.eventBus
-            .publish('DONATION_REQUEST_POST_ENABLING_STATUS_TOGGLED')
+            .publish('DONATION_POST_ENABLING_STATUS_TOGGLED')
             .withPayload(this.toPayload(post));
     }
 
+    publishPostShared(share: PostShare) {
+        this.eventBus.publish('DONATION_POST_SHARED').withPayload({
+            postId: share.state.postId,
+            userId: share.state.userId,
+            shareTime: share.state.createdAt,
+        });
+    }
+
     private toPayload(post: DonationPost) {
-        return {
-            title: post.title.value(),
-            postId: post.postId.value(),
-            category: post.category.value(),
-            publisherId: post.publisherId.value(),
-            description: post.description.value(),
-            wilayaNumber: post.wilayaNumber.value(),
-            status: post.status,
-            pictures: post.pictures.map(pic => pic.url()),
-            createdAt: post.createdAt,
-        };
+        return post.state;
     }
 }
 

@@ -16,13 +16,7 @@ class FamilyInNeedPostDtoMapper extends PostDtoMapper<FamilyInNeedPost> {
     }
 
     toDto(post: FamilyInNeedPost): FamilyInNeedPostDto {
-        return {
-            ...super.toDto(post),
-
-            ccp: post.ccp?.number(),
-            ccpKey: post.ccp?.key(),
-            baridiMobNumber: post.baridiMobNumber?.value(),
-        };
+        return post.state;
     }
 }
 

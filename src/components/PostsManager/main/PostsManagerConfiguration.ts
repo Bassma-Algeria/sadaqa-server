@@ -2,6 +2,7 @@ import { UsersServiceImpl } from './infra/real/UsersServiceImpl';
 import { WilayasServiceImpl } from './infra/real/WilayasServiceImpl';
 import { PicturesManagerImpl } from './infra/real/PicturesManagerImpl';
 import { UuidPostIdGenerator } from './infra/real/UuidPostIdGenerator';
+import { PostgresPostShareRepository } from './infra/real/PostgresPostRepository/PostgresPostShareRepository';
 import { PostgresDonationPostRepository } from './infra/real/PostgresPostRepository/PostgresDonationPostRepository';
 import { DonationPostEventPublisherImpl } from './infra/real/PostEventPublisherImpl/DonationPostEventPublisherImpl';
 import { FavouritePostEventPublisherImpl } from './infra/real/PostEventPublisherImpl/FavouritePostEventPublisherImpl';
@@ -18,8 +19,9 @@ import { FavouritePostsManagerFacade } from './core/FavouritePostsManagerFacade'
 import { CallForHelpPostsManagerFacade } from './core/CallForHelpPostsManagerFacade';
 import { FamilyInNeedPostsManagerFacade } from './core/FamilyInNeedPostsManagerFacade';
 import { DonationRequestPostsManagerFacade } from './core/DonationRequestPostsManagerFacade';
+import { GeneralPostOperationsManagerFacade } from './core/GeneralPostOperationsManagerFacade';
 
-import { EventBus } from '../../_shared_/event-bus/EventBus';
+import { InMemoryEventBus } from '../../EventBus/main/InMemoryEventBus';
 import { MediaManagerConfiguration } from '../../MediaManager/main/MediaManagerConfiguration';
 import { UsersManagerConfiguration } from '../../UsersManager/main/UsersManagerConfiguration';
 import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsManagerConfiguration';
@@ -31,8 +33,10 @@ class PostsManagerConfiguration {
             new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
+            new PostgresPostShareRepository(),
+            new PostgresFavouritePostRepository(),
             new PostgresCallForHelpPostRepository(),
-            new CallForHelpPostEventPublisherImpl(EventBus.getInstance()),
+            new CallForHelpPostEventPublisherImpl(InMemoryEventBus.instance()),
         );
     }
 
@@ -42,8 +46,10 @@ class PostsManagerConfiguration {
             new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
+            new PostgresPostShareRepository(),
+            new PostgresFavouritePostRepository(),
             new PostgresFamilyInNeedPostRepository(),
-            new FamilyInNeedPostEventPublisherImpl(EventBus.getInstance()),
+            new FamilyInNeedPostEventPublisherImpl(InMemoryEventBus.instance()),
         );
     }
 
@@ -53,8 +59,10 @@ class PostsManagerConfiguration {
             new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
+            new PostgresPostShareRepository(),
             new PostgresDonationPostRepository(),
-            new DonationPostEventPublisherImpl(EventBus.getInstance()),
+            new PostgresFavouritePostRepository(),
+            new DonationPostEventPublisherImpl(InMemoryEventBus.instance()),
         );
     }
 
@@ -64,8 +72,10 @@ class PostsManagerConfiguration {
             new WilayasServiceImpl(RegionsManagerConfiguration.aRegionsManagerFacade()),
             new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new UuidPostIdGenerator(),
+            new PostgresPostShareRepository(),
+            new PostgresFavouritePostRepository(),
             new PostgresDonationRequestPostRepository(),
-            new DonationRequestPostEventPublisherImpl(EventBus.getInstance()),
+            new DonationRequestPostEventPublisherImpl(InMemoryEventBus.instance()),
         );
     }
 
@@ -76,9 +86,13 @@ class PostsManagerConfiguration {
             new PostgresFavouritePostRepository(),
             new PostgresCallForHelpPostRepository(),
             new PostgresFamilyInNeedPostRepository(),
-            new FavouritePostEventPublisherImpl(EventBus.getInstance()),
+            new FavouritePostEventPublisherImpl(InMemoryEventBus.instance()),
             new PostgresDonationRequestPostRepository(),
         );
+    }
+
+    static aGeneralPostOperationsManager() {
+        return new GeneralPostOperationsManagerFacade(new PostgresPostShareRepository());
     }
 }
 

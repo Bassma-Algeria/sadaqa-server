@@ -31,9 +31,8 @@ interface FamilyInNeedPostPayload {
     readonly publisherId: string;
     readonly createdAt: Date;
     readonly status: string;
-    readonly ccp?: string;
-    readonly ccpKey?: string;
-    readonly baridiMobNumber?: string;
+    readonly ccp: { number: string; key: string } | null;
+    readonly baridiMobNumber: string | null;
 }
 
 interface CallForHelpPostPayload {
@@ -45,9 +44,8 @@ interface CallForHelpPostPayload {
     readonly publisherId: string;
     readonly createdAt: Date;
     readonly status: string;
-    readonly ccp?: string;
-    readonly ccpKey?: string;
-    readonly baridiMobNumber?: string;
+    readonly ccp: { number: string; key: string } | null;
+    readonly baridiMobNumber: string | null;
 }
 
 interface AssociationRegisteredPayload {
@@ -58,7 +56,7 @@ interface AssociationRegisteredPayload {
     readonly email: string;
     readonly status: string;
     readonly createdAt: Date;
-    readonly associationDocs: Buffer[];
+    readonly associationDocs: { buffer: Buffer; filename: string }[];
 }
 
 interface RegularUserRegisteredPayload {
@@ -128,31 +126,41 @@ interface AssociationApprovalEmailPayload {
     associationId: string;
 }
 
+interface PostSharedPayload {
+    postId: string;
+    userId: string | null;
+    shareTime: Date;
+}
+
 export interface Events {
     USER_LOGIN: { accountId: string };
     ASSOCIATION_REGISTERED: AssociationRegisteredPayload;
     REGULAR_USER_REGISTERED: RegularUserRegisteredPayload;
-    REGULAR_USER_ACCOUNT_INFO_EDITED: RegularUserAccountInfoEdited;
     ASSOCIATION_ACCOUNT_INFO_EDITED: AssociationAccountInfoEdited;
+    REGULAR_USER_ACCOUNT_INFO_EDITED: RegularUserAccountInfoEdited;
     ACCOUNT_CREDENTIALS_EDITED: { accountId: string };
     USER_GO_OFFLINE: { accountId: string };
     USER_BECAME_ONLINE: { accountId: string };
 
+    DONATION_POST_SHARED: PostSharedPayload;
     DONATION_POST_CREATED: DonationPayload;
     DONATION_POST_UPDATED: DonationPayload;
     DONATION_POST_DELETED: DonationPayload;
     DONATION_POST_ENABLING_STATUS_TOGGLED: DonationPayload;
 
+    FAMILY_IN_NEED_POST_SHARED: PostSharedPayload;
     FAMILY_IN_NEED_POST_CREATED: FamilyInNeedPostPayload;
     FAMILY_IN_NEED_POST_UPDATED: FamilyInNeedPostPayload;
     FAMILY_IN_NEED_POST_DELETED: FamilyInNeedPostPayload;
     FAMILY_IN_NEED_POST_ENABLING_STATUS_TOGGLED: FamilyInNeedPostPayload;
 
+    CALL_FOR_HELP_POST_SHARED: PostSharedPayload;
     CALL_FOR_HELP_POST_CREATED: CallForHelpPostPayload;
     CALL_FOR_HELP_POST_UPDATED: CallForHelpPostPayload;
     CALL_FOR_HELP_POST_DELETED: CallForHelpPostPayload;
     CALL_FOR_HELP_POST_ENABLING_STATUS_TOGGLED: CallForHelpPostPayload;
 
+    DONATION_REQUEST_POST_SHARED: PostSharedPayload;
     DONATION_REQUEST_POST_CREATED: DonationRequestPayload;
     DONATION_REQUEST_POST_UPDATED: DonationRequestPayload;
     DONATION_REQUEST_POST_DELETED: DonationRequestPayload;
@@ -161,8 +169,8 @@ export interface Events {
     POST_ADDED_TO_FAVOURITE: FavouritePostPayload;
     POST_DELETED_FROM_FAVOURITE: FavouritePostPayload;
 
-    TEXT_MESSAGE_SENT: TextMessageSentPayload;
     MESSAGE_READ: MessageReadPayload;
+    TEXT_MESSAGE_SENT: TextMessageSentPayload;
     USER_STOP_TYPING: { userId: string; receiverId: string };
     USER_START_TYPING: { userId: string; receiverId: string };
 

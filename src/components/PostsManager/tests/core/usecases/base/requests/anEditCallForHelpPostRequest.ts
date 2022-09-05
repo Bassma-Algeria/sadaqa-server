@@ -15,7 +15,10 @@ const anEditCallForHelpPostRequest = (
     baridiMobNumber: faker.phone.number('00799999############').toString(),
     pictures: {
         old: [],
-        new: Array.from({ length: 4 }).map(() => Buffer.from(faker.image.image())),
+        new: Array.from({ length: 4 }).map(() => ({
+            buffer: Buffer.from(faker.datatype.string(40)),
+            filename: faker.system.fileName(),
+        })),
     },
     ...request,
 });

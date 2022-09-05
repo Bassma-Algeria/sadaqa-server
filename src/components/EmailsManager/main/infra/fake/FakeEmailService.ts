@@ -7,7 +7,7 @@ import { EmailService } from '../../core/domain/services/EmailService';
 
 class FakeEmailService implements EmailService {
     async sendEmail(email: Email): Promise<void> {
-        // this email is generated using "https://ethereal.email/create"
+        // this email is generated using "https://ethereal.email"
         const transporter = nodemailer.createTransport({
             host: 'smtp.ethereal.email',
             port: 587,

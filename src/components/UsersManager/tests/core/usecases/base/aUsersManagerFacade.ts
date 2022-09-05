@@ -14,7 +14,7 @@ import { InMemoryOnlineUserRepository } from '../../../../main/infra/real/InMemo
 import { PostgresAssociationAccountRepository } from '../../../../main/infra/real/PostgresAssociationAccountRepository';
 import { PostgresRegularUserAccountRepository } from '../../../../main/infra/real/PostgresRegularUserAccountRepository';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { InMemoryEventBus } from '../../../../../EventBus/main/InMemoryEventBus';
 
 interface Dependencies {
     readonly wilayasService?: WilayasService;
@@ -31,7 +31,7 @@ const aUsersManagerFacade = (dependencies?: Dependencies) => {
         dependencies?.picturesManager || new FakePicturesManager(),
         new BcryptPasswordEncryptor(),
         new UuidAccountIdGenerator(),
-        new UserEventPublisherImpl(EventBus.getInstance()),
+        new UserEventPublisherImpl(InMemoryEventBus.instance()),
         new InMemoryOnlineUserRepository(),
         new PostgresRegularUserAccountRepository(),
         new PostgresAssociationAccountRepository(),

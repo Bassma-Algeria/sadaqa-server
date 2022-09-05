@@ -2,6 +2,8 @@ import { UsersService } from './domain/services/UsersService';
 import { WilayasService } from './domain/services/WilayasService';
 import { PicturesManager } from './domain/services/PicturesManager';
 import { PostIdGenerator } from './domain/services/PostIdGenerator';
+import { SharePostUseCase } from './usecases/SharePostUseCase/SharePostUseCase';
+import { FavouritePostRepository } from './domain/services/PostRepository/FavouritePostRepository';
 import { DonationRequestPostRepository } from './domain/services/PostRepository/DonationRequestPostRepository';
 import { DonationRequestPostEventPublisher } from './domain/services/PostEventPublisher/DonationRequestPostEventPublisher';
 
@@ -35,12 +37,17 @@ import { GetPostsByPublisherUseCaseRequest } from './usecases/GetPostsByPublishe
 import { GetPostsSummaryByPublisherUseCase } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCase';
 import { GetPostsSummaryByPublisherUseCaseRequest } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCaseRequest';
 
+import { PostShareRepository } from './domain/services/PostRepository/PostShareRepository';
+import { SharePostUseCaseRequest } from './usecases/SharePostUseCase/SharePostUseCaseRequest';
+
 class DonationRequestPostsManagerFacade {
     constructor(
         private readonly usersService: UsersService,
         private readonly wilayasService: WilayasService,
         private readonly picturesManager: PicturesManager,
         private readonly postIdGenerator: PostIdGenerator,
+        private readonly postShareRepository: PostShareRepository,
+        private readonly favouritePostRepository: FavouritePostRepository,
         private readonly donationRequestPostRepository: DonationRequestPostRepository,
         private readonly donationRequestPostEventPublisher: DonationRequestPostEventPublisher,
     ) {}
@@ -105,6 +112,7 @@ class DonationRequestPostsManagerFacade {
         return new DeletePostUseCase(
             this.donationRequestPostRepository,
             this.donationRequestPostEventPublisher,
+            this.favouritePostRepository,
         ).handle(request);
     }
 
@@ -118,6 +126,15 @@ class DonationRequestPostsManagerFacade {
             end: boolean;
             list: DonationRequestPostDto[];
         }>;
+    }
+
+    share(request: SharePostUseCaseRequest) {
+        return new SharePostUseCase(
+            this.usersService,
+            this.donationRequestPostRepository,
+            this.postShareRepository,
+            this.donationRequestPostEventPublisher,
+        ).handle(request);
     }
 }
 

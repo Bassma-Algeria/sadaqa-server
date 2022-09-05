@@ -7,12 +7,14 @@ import { PicturesManager } from '../../../../main/core/domain/services/PicturesM
 import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
 import { UuidPostIdGenerator } from '../../../../main/infra/real/UuidPostIdGenerator';
 
+import { PostgresPostShareRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresPostShareRepository';
 import { PostgresDonationPostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresDonationPostRepository';
 import { DonationPostEventPublisherImpl } from '../../../../main/infra/real/PostEventPublisherImpl/DonationPostEventPublisherImpl';
+import { PostgresFavouritePostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresFavouritePostRepository';
 
 import { DonationPostsManagerFacade } from '../../../../main/core/DonationPostsManagerFacade';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { InMemoryEventBus } from '../../../../../EventBus/main/InMemoryEventBus';
 
 interface Dependencies {
     usersService: UsersService;
@@ -34,8 +36,10 @@ const aDonationPostsManager = (dependencies?: Partial<Dependencies>) => {
         dependencies?.wilayasService || instance(mockWilayasService),
         dependencies?.picturesManager || new FakePicturesManager(),
         new UuidPostIdGenerator(),
+        new PostgresPostShareRepository(),
         new PostgresDonationPostRepository(),
-        new DonationPostEventPublisherImpl(EventBus.getInstance()),
+        new PostgresFavouritePostRepository(),
+        new DonationPostEventPublisherImpl(InMemoryEventBus.instance()),
     );
 };
 

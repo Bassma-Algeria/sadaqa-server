@@ -6,6 +6,7 @@ import { UserId } from '../../../domain/UserId';
 import { PostStatus } from '../../../domain/PostStatus';
 import { Description } from '../../../domain/Description';
 import { PostBuilder } from '../../../domain/PostBuilder';
+import { PostPictures } from '../../../domain/PostPictures';
 import { WilayaNumber } from '../../../domain/WilayaNumber';
 
 import { UsersService } from '../../../domain/services/UsersService';
@@ -84,8 +85,8 @@ abstract class CreatePostUseCase {
         return publisherId;
     }
 
-    private uploadPicturesFrom(request: CreatePostUseCaseRequest) {
-        return this.picturesManager.upload(request.pictures);
+    private async uploadPicturesFrom(request: CreatePostUseCaseRequest) {
+        return new PostPictures(await this.picturesManager.upload(request.pictures));
     }
 
     private getRandomPostId() {

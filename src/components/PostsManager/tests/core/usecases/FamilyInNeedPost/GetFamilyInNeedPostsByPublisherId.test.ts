@@ -28,7 +28,7 @@ describe('Get Family in Need Posts List by publisher id', () => {
         const PUBLISHER_NOT_EXIST = faker.datatype.uuid();
 
         await expect(postsManager.getByPublisherId({ publisherId: PUBLISHER_NOT_EXIST }))
-            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_FOUND)
             .and.to.be.an.instanceof(NotFoundException);
     });
     it('given a user who have no family in need posts, when trying to get the posts that user publish, then return an empty list', async () => {

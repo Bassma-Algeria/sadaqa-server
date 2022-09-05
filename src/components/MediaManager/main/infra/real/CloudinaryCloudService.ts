@@ -11,20 +11,18 @@ class CloudinaryCloudService implements CloudService {
     }
 
     async uploadPicture(picture: PictureToUpload): Promise<PictureUrl> {
-        const image = this.formatBase64ImageDataIntoUploadableString(
-            picture.buffer.toString('base64'),
-        );
+        const image = this.formatBase64ImageDataIntoUploadableString(picture);
 
-        const { secure_url } = await cloudinary.uploader.upload(image, {
+        const { secure_url: url } = await cloudinary.uploader.upload(image, {
             recource_type: 'image',
             folder: 'sadaqa',
         });
 
-        return new PictureUrl(secure_url);
+        return new PictureUrl(url);
     }
 
-    private formatBase64ImageDataIntoUploadableString(base64: string) {
-        return `data:image/png;base64,${base64}`;
+    private formatBase64ImageDataIntoUploadableString(picture: PictureToUpload) {
+        return `data:${picture.mimeType()};base64,${picture.base64()}`;
     }
 
     async deletePicture(picUrl: PictureUrl): Promise<void> {

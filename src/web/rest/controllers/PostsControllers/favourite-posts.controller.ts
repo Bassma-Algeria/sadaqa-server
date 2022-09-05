@@ -1,5 +1,6 @@
 import {
     ApiBadRequestResponse,
+    ApiBearerAuth,
     ApiCreatedResponse,
     ApiHeader,
     ApiInternalServerErrorResponse,
@@ -26,6 +27,7 @@ class FavouritePostsController {
     constructor(private readonly favouritePostsService: FavouritePostsService) {}
 
     @Get('/')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'get all favourite posts of auth user' })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post added to favourite successfully' })
@@ -40,6 +42,7 @@ class FavouritePostsController {
     }
 
     @Post('/')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'add a post to favourites' })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiCreatedResponse({ description: 'post added to favourite successfully' })
@@ -56,6 +59,7 @@ class FavouritePostsController {
     }
 
     @Delete('/:postType/:postId')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'delete a post from favourites' })
     @ApiParam({ name: 'postId', description: 'the post id' })
     @ApiParam({ name: 'postType', description: 'the post type', enum: PostType.POST_TYPES })
@@ -77,6 +81,7 @@ class FavouritePostsController {
     }
 
     @Get('/isFavourite/:postType/:postId')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'check if a post in favourites' })
     @ApiParam({ name: 'postId', description: 'the post id' })
     @ApiParam({ name: 'postType', description: 'the post type', enum: PostType.POST_TYPES })

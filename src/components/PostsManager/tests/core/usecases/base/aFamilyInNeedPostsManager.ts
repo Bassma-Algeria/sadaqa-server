@@ -5,14 +5,17 @@ import { WilayasService } from '../../../../main/core/domain/services/WilayasSer
 import { PicturesManager } from '../../../../main/core/domain/services/PicturesManager';
 
 import { UuidPostIdGenerator } from '../../../../main/infra/real/UuidPostIdGenerator';
+
+import { PostgresPostShareRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresPostShareRepository';
+import { PostgresFavouritePostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresFavouritePostRepository';
 import { FamilyInNeedPostEventPublisherImpl } from '../../../../main/infra/real/PostEventPublisherImpl/FamilyInNeedPostEventPublisherImpl';
+import { PostgresFamilyInNeedPostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresFamilyInNeedPostRepository';
 
 import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
 
 import { FamilyInNeedPostsManagerFacade } from '../../../../main/core/FamilyInNeedPostsManagerFacade';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
-import { PostgresFamilyInNeedPostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresFamilyInNeedPostRepository';
+import { InMemoryEventBus } from '../../../../../EventBus/main/InMemoryEventBus';
 
 interface Dependencies {
     usersService: UsersService;
@@ -34,8 +37,10 @@ const aFamilyInNeedPostsManager = (dependencies?: Partial<Dependencies>) => {
         dependencies?.wilayasService || instance(mockWilayasService),
         dependencies?.picturesManager || new FakePicturesManager(),
         new UuidPostIdGenerator(),
+        new PostgresPostShareRepository(),
+        new PostgresFavouritePostRepository(),
         new PostgresFamilyInNeedPostRepository(),
-        new FamilyInNeedPostEventPublisherImpl(EventBus.getInstance()),
+        new FamilyInNeedPostEventPublisherImpl(InMemoryEventBus.instance()),
     );
 };
 

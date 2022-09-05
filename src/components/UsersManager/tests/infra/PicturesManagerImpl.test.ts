@@ -25,7 +25,7 @@ describe('Pictures Manager Impl', () => {
         };
         await picturesManager.uploadProfilePicture(picture);
 
-        verify(mediaManagerMock.uploadPicture(deepEqual({ picture: picture.buffer }))).once();
+        verify(mediaManagerMock.uploadPicture(deepEqual(picture))).once();
     });
 
     it('should delegate the delete to the media manager', async () => {

@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 import { anything, instance, mock, when } from 'ts-mockito';
@@ -10,8 +9,6 @@ import { WilayasService } from '../../../main/core/domain/services/WilayasServic
 
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { MultiLanguagesValidationException } from '../../../main/core/domain/exceptions/MultiLanguagesValidationException';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Register Association', () => {
     const wilayasServiceMock = mock<WilayasService>();
@@ -146,17 +143,5 @@ describe('Register Association', () => {
         const { status } = await usersManager.getAssociationById({ accountId });
 
         expect(status).to.equal('WAITING_FOR_ADMIN_VALIDATION');
-    });
-
-    it('should publish an association registered event when the association is registered', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('ASSOCIATION_REGISTERED').by(mockFn);
-
-        const { accountId } = await usersManager.registerAssociation(
-            anAssociationRegistrationRequest(),
-        );
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.have.property('accountId', accountId);
     });
 });

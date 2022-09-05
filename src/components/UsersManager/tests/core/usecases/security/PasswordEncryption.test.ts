@@ -11,8 +11,6 @@ import { AccountId } from '../../../../main/core/domain/AccountId';
 
 import { WilayasService } from '../../../../main/core/domain/services/WilayasService';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
-
 import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
 import { UuidAccountIdGenerator } from '../../../../main/infra/real/UuidAccountIdGenerator';
 import { UserEventPublisherImpl } from '../../../../main/infra/real/UserEventPublisherImpl';
@@ -22,6 +20,8 @@ import { PostgresRegularUserAccountRepository } from '../../../../main/infra/rea
 import { PostgresAssociationAccountRepository } from '../../../../main/infra/real/PostgresAssociationAccountRepository';
 
 import { UsersManagerFacade } from '../../../../main/UsersManagerFacade';
+
+import { InMemoryEventBus } from '../../../../../EventBus/main/InMemoryEventBus';
 
 describe('Password Encryption', () => {
     const wilayasServiceMock = mock<WilayasService>();
@@ -37,7 +37,7 @@ describe('Password Encryption', () => {
         new FakePicturesManager(),
         passwordEncryptor,
         new UuidAccountIdGenerator(),
-        new UserEventPublisherImpl(EventBus.getInstance()),
+        new UserEventPublisherImpl(InMemoryEventBus.instance()),
         new InMemoryOnlineUserRepository(),
         regularUserAccountRepository,
         associationAccountRepository,
@@ -86,6 +86,8 @@ describe('Password Encryption', () => {
 
         const regularUser = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(regularUser);
+
+        await usersManager.activateAssociationAccount({ accountId });
 
         await usersManager.editAssociationAccountCredentials(
             anEditAccountCredentialsRequest({

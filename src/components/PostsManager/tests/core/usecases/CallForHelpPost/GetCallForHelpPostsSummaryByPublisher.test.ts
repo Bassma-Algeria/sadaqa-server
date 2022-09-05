@@ -28,7 +28,7 @@ describe('Get Call For Help Posts Summary By Publisher', () => {
         const NOT_EXIST = faker.datatype.uuid();
 
         await expect(postsManager.getSummaryByPublisherId({ publisherId: NOT_EXIST }))
-            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_FOUND)
             .and.to.be.an.instanceof(NotFoundException);
     });
 

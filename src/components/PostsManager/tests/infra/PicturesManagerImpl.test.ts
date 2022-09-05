@@ -19,12 +19,15 @@ describe('Pictures Manager Impl', () => {
     });
 
     it('should delegate the uploading of the pictures to the media manager', async () => {
-        const pics = Array.from({ length: 3 }).map(() => Buffer.from(faker.datatype.string(40)));
+        const pics = Array.from({ length: 3 }).map(() => ({
+            buffer: Buffer.from(faker.datatype.string(40)),
+            filename: faker.system.fileName(),
+        }));
 
         await picturesManager.upload(pics);
 
         pics.forEach(picture => {
-            verify(mediaManagerMock.uploadPicture(deepEqual({ picture }))).once();
+            verify(mediaManagerMock.uploadPicture(deepEqual(picture))).once();
         });
     });
 

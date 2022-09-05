@@ -92,6 +92,14 @@ abstract class Account {
     haveProfilePicture() {
         return this.profilePicture !== null;
     }
+
+    canEditCredentials() {
+        return this.status === AccountStatus.ACTIVE;
+    }
+
+    canEditGeneralInfo() {
+        return this.status === AccountStatus.ACTIVE;
+    }
 }
 
 export { Account };

@@ -1,16 +1,10 @@
-- add e2e test to the admin end points (validate the Authorization)
-
-- when getting the posts list, take into account the enabling status, the rules are:
-    - when there nothing that specify either we get the disabled posts, or not, then only return the enabled ones
-    - when the requester specify that he want also the disabled, then we return everything
-
-- delete favourite post when the target post deleted
-
-- move the ability to publish a post to the domain
-
-- re-check the GetAccountsByWilayaNumberUseCase in UsersManager
-
-- add the ability to share posts
 - add the ability to signal a user/post as a spam
 
-- email attachments not sent correctly
+- add the tests for the event published by the use cases
+    - why I remove them : I was referencing the event bus instance directly in the tests and that makes the tests really
+      coupled to the event bus, I when I decide that I have to change the event bus class, I found myself in a
+      situation where I have to pass by all the tests in all the modules to change the eventbus used there, so I took
+      the decision to delete the tests that were referencing the event bus, and add them later, but make sure to
+      test them properly by mocking the domain event publisher interface in the use cases tests, and test the event
+      publisher implementation on Its own in the infra layer and always mock the EventBus interface and NEVER reference
+      the event bus directly 

@@ -4,5 +4,5 @@ export interface SendAssociationApprovalEmailUseCaseRequest {
     wilayaNumber: number;
     phoneNumber: string;
     email: string;
-    associationDocs: Buffer[];
+    associationDocs: { buffer: Buffer; filename: string }[];
 }

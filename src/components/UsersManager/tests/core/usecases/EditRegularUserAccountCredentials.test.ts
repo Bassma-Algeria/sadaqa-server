@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 
@@ -10,8 +9,6 @@ import { anAssociationRegistrationRequest } from './base/requests/anAssociationR
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../main/core/domain/exceptions/NotFoundException';
 import { MultiLanguagesValidationException } from '../../../main/core/domain/exceptions/MultiLanguagesValidationException';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Edit Regular User Account Credentials', () => {
     const usersManager = aUsersManagerFacade();
@@ -151,21 +148,5 @@ describe('Edit Regular User Account Credentials', () => {
         });
 
         expect(idFromLogin).to.equal(accountId);
-    });
-
-    it('given an edit regular account credentials request, when the credentials are edited successfully then publish a credentials edited event to the global event bus', async () => {
-        const mockFn = spy();
-
-        EventBus.getInstance().subscribeTo('ACCOUNT_CREDENTIALS_EDITED').by(mockFn);
-
-        const regularUser = aRegularUserRegistrationRequest();
-        const { accountId } = await usersManager.registerRegularUser(regularUser);
-
-        await usersManager.editRegularUserAccountCredentials(
-            anEditAccountCredentialsRequest({ accountId, oldPassword: regularUser.password }),
-        );
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.deep.equal({ accountId });
     });
 });

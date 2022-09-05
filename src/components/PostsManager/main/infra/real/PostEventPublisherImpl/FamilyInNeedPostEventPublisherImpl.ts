@@ -1,7 +1,8 @@
+import { PostShare } from '../../../core/domain/PostShare';
 import { FamilyInNeedPost } from '../../../core/domain/FamilyInNeedPost';
 import { FamilyInNeedPostEventPublisher } from '../../../core/domain/services/PostEventPublisher/FamilyInNeedPostEventPublisher';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { EventBus } from '../../../../../EventBus/main/EventBus';
 
 class FamilyInNeedPostEventPublisherImpl implements FamilyInNeedPostEventPublisher {
     constructor(private readonly eventBus: EventBus) {}
@@ -24,20 +25,16 @@ class FamilyInNeedPostEventPublisherImpl implements FamilyInNeedPostEventPublish
             .withPayload(this.toPayload(post));
     }
 
+    publishPostShared(share: PostShare) {
+        this.eventBus.publish('FAMILY_IN_NEED_POST_SHARED').withPayload({
+            postId: share.state.postId,
+            userId: share.state.userId,
+            shareTime: share.state.createdAt,
+        });
+    }
+
     private toPayload(post: FamilyInNeedPost) {
-        return {
-            postId: post.postId.value(),
-            title: post.title.value(),
-            description: post.description.value(),
-            publisherId: post.publisherId.value(),
-            wilayaNumber: post.wilayaNumber.value(),
-            pictures: post.pictures.map(pic => pic.url()),
-            ccp: post.ccp?.number(),
-            status: post.status,
-            ccpKey: post.ccp?.key(),
-            baridiMobNumber: post.baridiMobNumber?.value(),
-            createdAt: post.createdAt,
-        };
+        return post.state;
     }
 }
 

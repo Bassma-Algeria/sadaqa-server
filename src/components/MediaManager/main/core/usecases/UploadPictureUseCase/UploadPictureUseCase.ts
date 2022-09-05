@@ -11,29 +11,28 @@ import { PictureCompressor } from '../../domain/services/PictureCompressor';
 class UploadPictureUseCase
     implements UseCase<UploadPictureUseCaseRequest, UploadPictureUseCaseResponse>
 {
+    private IMAGE_SIZE_THRESHOLD_IN_MG = 0.2;
+
     constructor(
         private readonly cloudService: CloudService,
         private readonly pictureCompressor: PictureCompressor,
     ) {}
 
     async handle(request: UploadPictureUseCaseRequest): Promise<UploadPictureUseCaseResponse> {
-        let picture = new PictureToUpload(request.picture);
+        let picture = new PictureToUpload(request.filename, request.buffer);
 
-        const size = await this.sizeof(picture);
-
-        if (this.isBiggerOrEqualToHalfOneMegaByte(size)) picture = await this.compress(picture);
+        if (this.isPicSizeBiggerOrEqualSizeThreshold(picture))
+            picture = await this.compress(picture);
 
         const url = await this.upload(picture);
 
         return { url: url.value() };
     }
 
-    private sizeof(picture: PictureToUpload) {
-        return new FileSize(Buffer.byteLength(picture.buffer));
-    }
+    private isPicSizeBiggerOrEqualSizeThreshold(picture: PictureToUpload) {
+        const size = new FileSize(picture.sizeInBytes());
 
-    private isBiggerOrEqualToHalfOneMegaByte(size: FileSize) {
-        return size.inMegaBytes() >= 0.5;
+        return size.inMegaBytes() >= this.IMAGE_SIZE_THRESHOLD_IN_MG;
     }
 
     private compress(picture: PictureToUpload): PictureToUpload | PromiseLike<PictureToUpload> {

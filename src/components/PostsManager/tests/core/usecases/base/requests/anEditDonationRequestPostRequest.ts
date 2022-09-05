@@ -29,7 +29,10 @@ const anEditDonationRequestPostRequest = (
     category: CATEGORIES[faker.datatype.number({ min: 0, max: CATEGORIES.length - 1 })],
     pictures: {
         old: [],
-        new: Array.from({ length: 4 }).map(() => Buffer.from(faker.image.image())),
+        new: Array.from({ length: 4 }).map(() => ({
+            buffer: Buffer.from(faker.datatype.string(40)),
+            filename: faker.system.fileName(),
+        })),
     },
     ...request,
 });

@@ -14,7 +14,7 @@ const anAssociationRegistrationRequest = (
         email: faker.internet.email(),
         password,
         confirmPassword: password,
-        associationDocs: [Buffer.alloc(10)],
+        associationDocs: [{ filename: faker.system.fileName(), buffer: Buffer.alloc(10) }],
         ...request,
     };
 };

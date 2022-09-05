@@ -16,13 +16,7 @@ class CallForHelpPostDtoMapper extends PostDtoMapper<CallForHelpPost> {
     }
 
     toDto(post: CallForHelpPost): CallForHelpPostDto {
-        return {
-            ...super.toDto(post),
-
-            ccp: post.ccp?.number(),
-            ccpKey: post.ccp?.key(),
-            baridiMobNumber: post.baridiMobNumber?.value(),
-        };
+        return post.state;
     }
 }
 

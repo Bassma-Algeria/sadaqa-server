@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { anything, instance, mock, when } from 'ts-mockito';
 
@@ -8,8 +7,6 @@ import { aRegularUserRegistrationRequest } from './base/requests/aRegularUserReg
 import { WilayasService } from '../../../main/core/domain/services/WilayasService';
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { MultiLanguagesValidationException } from '../../../main/core/domain/exceptions/MultiLanguagesValidationException';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Register Regular User', () => {
     const wilayasServiceMock = mock<WilayasService>();
@@ -110,17 +107,5 @@ describe('Register Regular User', () => {
 
         const { profilePicture } = await usersManager.getRegularUserById({ accountId });
         expect(profilePicture).to.equal(null);
-    });
-
-    it('should publish an association registered event when the association is registered', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('REGULAR_USER_REGISTERED').by(mockFn);
-
-        const { accountId } = await usersManager.registerRegularUser(
-            aRegularUserRegistrationRequest(),
-        );
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.have.property('accountId', accountId);
     });
 });

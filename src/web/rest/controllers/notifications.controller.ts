@@ -1,6 +1,7 @@
 import { NotificationsService } from '../services/notifications.service';
 import { Controller, Get, Headers, HttpException, HttpStatus, Param, Put } from '@nestjs/common';
 import {
+    ApiBearerAuth,
     ApiForbiddenResponse,
     ApiHeader,
     ApiInternalServerErrorResponse,
@@ -20,6 +21,7 @@ class NotificationsController {
     constructor(private readonly notificationsService: NotificationsService) {}
 
     @Get('/')
+    @ApiBearerAuth()
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'notification returned successfully' })
     @ApiUnauthorizedResponse({ description: 'invalid access token' })
@@ -33,6 +35,7 @@ class NotificationsController {
     }
 
     @Get('/total-unread')
+    @ApiBearerAuth()
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'total unread notifications returned successfully' })
     @ApiUnauthorizedResponse({ description: 'invalid access token' })
@@ -46,6 +49,7 @@ class NotificationsController {
     }
 
     @Put('/:notificationId/read')
+    @ApiBearerAuth()
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'total unread notifications returned successfully' })
     @ApiNotFoundResponse({ description: 'notification not found' })
@@ -64,6 +68,7 @@ class NotificationsController {
     }
 
     @Put('/:notificationId/clicked')
+    @ApiBearerAuth()
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'total unread notifications returned successfully' })
     @ApiNotFoundResponse({ description: 'notification not found' })

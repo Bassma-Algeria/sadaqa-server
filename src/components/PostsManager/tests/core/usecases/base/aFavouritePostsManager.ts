@@ -11,7 +11,7 @@ import { PostgresDonationRequestPostRepository } from '../../../../main/infra/re
 
 import { FavouritePostsManagerFacade } from '../../../../main/core/FavouritePostsManagerFacade';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { InMemoryEventBus } from '../../../../../EventBus/main/InMemoryEventBus';
 
 interface Dependencies {
     usersService: UsersService;
@@ -29,7 +29,7 @@ const aFavouritePostsManager = (dependencies?: Partial<Dependencies>) => {
         new PostgresFavouritePostRepository(),
         new PostgresCallForHelpPostRepository(),
         new PostgresFamilyInNeedPostRepository(),
-        new FavouritePostEventPublisherImpl(EventBus.getInstance()),
+        new FavouritePostEventPublisherImpl(InMemoryEventBus.instance()),
         new PostgresDonationRequestPostRepository(),
     );
 };

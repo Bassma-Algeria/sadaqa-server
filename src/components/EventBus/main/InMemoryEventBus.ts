@@ -1,19 +1,21 @@
 import { Events } from './Events';
+import { AllEventsSubscriber, EventBus, EventSubscriber } from './EventBus';
 
 type Subscribers = {
-    [Key in keyof Events]: Array<(payload: Events[Key]) => void>;
+    [Key in keyof Events]: EventSubscriber<Key>[];
 };
 
-class EventBus {
-    private static readonly eventBus = new EventBus();
+class InMemoryEventBus implements EventBus {
+    private static readonly eventBus = new InMemoryEventBus();
 
-    static getInstance() {
-        return EventBus.eventBus;
+    static instance() {
+        return InMemoryEventBus.eventBus;
     }
 
     private constructor() {}
 
     private readonly subscribers: Partial<Subscribers> = {};
+    private readonly subscribersToAll: AllEventsSubscriber<any>[] = [];
 
     subscribeTo<E extends keyof Events>(event: E) {
         return {
@@ -25,11 +27,19 @@ class EventBus {
         };
     }
 
+    subscribeToAllEvents() {
+        return {
+            by: (subscriber: AllEventsSubscriber<any>) => {
+                this.subscribersToAll.push(subscriber);
+            },
+        };
+    }
+
     unsubscribeFrom<E extends keyof Events>(event: E) {
         return {
-            by: (unsubscriber: (payload: Events[E]) => void) => {
+            by: (target: (payload: Events[E]) => void) => {
                 this.subscribers[event] = this.subscribers[event]?.filter(
-                    subscriber => subscriber !== unsubscriber,
+                    subscriber => subscriber !== target,
                 ) as Subscribers[E];
             },
         };
@@ -39,9 +49,10 @@ class EventBus {
         return {
             withPayload: (payload: Events[E]) => {
                 this.subscribers[event]?.forEach(subscriber => subscriber(payload));
+                this.subscribersToAll.map(subscriber => subscriber(event, payload));
             },
         };
     }
 }
 
-export { EventBus };
+export { InMemoryEventBus };

@@ -1,14 +1,5 @@
-import { FamilyInNeedPostRepository } from '../../../core/domain/services/PostRepository/FamilyInNeedPostRepository';
-
-import { CCP } from '../../../core/domain/CCP';
-import { Title } from '../../../core/domain/Title';
 import { PostId } from '../../../core/domain/PostId';
 import { UserId } from '../../../core/domain/UserId';
-import { Picture } from '../../../core/domain/Picture';
-import { PostStatus } from '../../../core/domain/PostStatus';
-import { Description } from '../../../core/domain/Description';
-import { WilayaNumber } from '../../../core/domain/WilayaNumber';
-import { BaridiMobNumber } from '../../../core/domain/BaridiMobNumber';
 
 import { FamilyInNeedPost } from '../../../core/domain/FamilyInNeedPost';
 
@@ -18,6 +9,7 @@ import {
     PostRepositorySearchCountFilters,
     PostRepositorySearchFilters,
 } from '../../../core/domain/services/PostRepository/base/PostRepository';
+import { FamilyInNeedPostRepository } from '../../../core/domain/services/PostRepository/FamilyInNeedPostRepository';
 
 import { prisma } from '../../../../../_shared_/persistence/prisma/PrismaClient';
 
@@ -49,7 +41,7 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
 
     async update(post: FamilyInNeedPost): Promise<void> {
         await prisma.familyInNeedPost.update({
-            where: { postId: post.postId.value() },
+            where: { postId: post.state.postId },
             data: this.toDBModel(post),
         });
     }
@@ -63,37 +55,34 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
         return posts.map(this.toEntity);
     }
 
-    async findMany({
-        wilayaNumber,
-        pageLimit,
-        page,
-    }: PostRepositoryFindManyFilters): Promise<FamilyInNeedPost[]> {
-        const numOfPostsToSkip = (page - 1) * pageLimit;
+    async findMany(filters: PostRepositoryFindManyFilters): Promise<FamilyInNeedPost[]> {
+        const numOfPostsToSkip = (filters.page - 1) * filters.pageLimit;
 
         const posts = await prisma.familyInNeedPost.findMany({
-            where: { wilayaNumber: wilayaNumber?.value() },
+            where: {
+                status: filters.status,
+                wilayaNumber: filters.wilayaNumber?.value(),
+            },
             orderBy: { createdAt: 'desc' },
             skip: numOfPostsToSkip,
-            take: pageLimit,
+            take: filters.pageLimit,
         });
 
         return posts.map(post => this.toEntity(post));
     }
 
     async count(filters?: PostRepositoryCountFilters): Promise<number> {
-        const total = await prisma.familyInNeedPost.count({
+        return await prisma.familyInNeedPost.count({
             where: {
                 wilayaNumber: filters?.wilayaNumber?.value(),
                 publisherId: filters?.publisherId?.value(),
                 status: filters?.status,
             },
         });
-
-        return total;
     }
 
     async delete(post: FamilyInNeedPost): Promise<void> {
-        await prisma.familyInNeedPost.delete({ where: { postId: post.postId.value() } });
+        await prisma.familyInNeedPost.delete({ where: { postId: post.state.postId } });
     }
 
     async search(filters: PostRepositorySearchFilters): Promise<FamilyInNeedPost[]> {
@@ -103,6 +92,7 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
             skip: numOfPostsToSkip,
             take: filters.pageLimit,
             where: {
+                status: filters.status,
                 wilayaNumber: filters.wilayaNumber?.value(),
                 OR: [
                     { title: { contains: filters.keyword } },
@@ -136,35 +126,25 @@ class PostgresFamilyInNeedPostRepository implements FamilyInNeedPostRepository {
     }
 
     private toEntity(model: DBModel): FamilyInNeedPost {
-        return FamilyInNeedPost.aBuilder()
-            .withPostId(new PostId(model.postId))
-            .withTitle(new Title(model.title))
-            .withDescription(new Description(model.description))
-            .withWilayaNumber(new WilayaNumber(model.wilayaNumber))
-            .withPublisherId(new UserId(model.publisherId))
-            .withPictures(model.pictures.map(pic => new Picture(pic)))
-            .withCCP(model.ccp ? new CCP(model.ccp, model.ccpKey!) : undefined)
-            .withStatus(model.status as PostStatus)
-            .withBaridiMobNumber(
-                model.baridiMobNumber ? new BaridiMobNumber(model.baridiMobNumber) : undefined,
-            )
-            .withCreatedAt(model.createdAt)
-            .build();
+        return FamilyInNeedPost.fromState({
+            ...model,
+            ccp: model.ccp ? { number: model.ccp, key: model.ccpKey! } : null,
+        });
     }
 
     private toDBModel(post: FamilyInNeedPost): DBModel {
         return {
-            postId: post.postId.value(),
-            title: post.title.value(),
-            description: post.description.value(),
-            publisherId: post.publisherId.value(),
-            wilayaNumber: post.wilayaNumber.value(),
-            pictures: post.pictures.map(pic => pic.url()),
-            ccp: post.ccp?.number() || null,
-            ccpKey: post.ccp?.key() || null,
-            baridiMobNumber: post.baridiMobNumber?.value() || null,
-            status: post.status,
-            createdAt: post.createdAt,
+            postId: post.state.postId,
+            title: post.state.title,
+            description: post.state.description,
+            wilayaNumber: post.state.wilayaNumber,
+            publisherId: post.state.publisherId,
+            pictures: post.state.pictures,
+            status: post.state.status,
+            createdAt: post.state.createdAt,
+            ccp: post.state.ccp ? post.state.ccp.number : null,
+            ccpKey: post.state.ccp ? post.state.ccp.key : null,
+            baridiMobNumber: post.state.baridiMobNumber ? post.state.baridiMobNumber : null,
         };
     }
 }

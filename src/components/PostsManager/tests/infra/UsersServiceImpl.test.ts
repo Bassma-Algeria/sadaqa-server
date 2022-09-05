@@ -46,7 +46,7 @@ describe('UsersServiceImpl', () => {
 
     it('should return false when the association is found but the account is not validated yet (not active)', async () => {
         when(usersManagerMock.getAssociationById(anything())).thenResolve({
-            status: 'DISABLED',
+            status: 'ANYTHING_RATHER_THAN_ACTIVE',
         } as any);
 
         await expect(
@@ -56,7 +56,7 @@ describe('UsersServiceImpl', () => {
 
     it('should return true when the association is found and the account is validated', async () => {
         when(usersManagerMock.getAssociationById(anything())).thenResolve({
-            status: 'ENABLED',
+            status: 'ACTIVE',
         } as any);
 
         await expect(

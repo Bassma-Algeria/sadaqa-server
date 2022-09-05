@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 
@@ -9,9 +8,8 @@ import { anAssociationRegistrationRequest } from './base/requests/anAssociationR
 
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../main/core/domain/exceptions/NotFoundException';
+import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 import { MultiLanguagesValidationException } from '../../../main/core/domain/exceptions/MultiLanguagesValidationException';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Edit Association Account Credentials', () => {
     const usersManager = aUsersManagerFacade();
@@ -28,11 +26,26 @@ describe('Edit Association Account Credentials', () => {
             .and.to.be.an.instanceOf(NotFoundException);
     });
 
+    it('given an association that is still not approved by the admin, when trying to edit the association account credentials, then should fail', async () => {
+        const association = anAssociationRegistrationRequest();
+        const { accountId } = await usersManager.registerAssociation(association);
+
+        await expect(
+            usersManager.editAssociationAccountCredentials(
+                anEditAccountCredentialsRequest({ accountId }),
+            ),
+        )
+            .to.eventually.be.rejectedWith(ExceptionMessages.CANNOT_EDIT_ACCOUNT_CREDENTIALS)
+            .and.to.be.an.instanceOf(ValidationException);
+    });
+
     it('given a wrong old password, when trying to edit the association account credentials, then should fail', async () => {
         const WRONG_PASSWORD = faker.datatype.string(10);
         const { accountId } = await usersManager.registerAssociation(
             anAssociationRegistrationRequest(),
         );
+
+        await usersManager.activateAssociationAccount({ accountId });
 
         await expect(
             usersManager.editAssociationAccountCredentials(
@@ -49,6 +62,8 @@ describe('Edit Association Account Credentials', () => {
             anAssociationRegistrationRequest(),
         );
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         await expect(
             usersManager.editAssociationAccountCredentials(
                 anEditAccountCredentialsRequest({ accountId, email: INCORRECT_EMAIL }),
@@ -63,6 +78,8 @@ describe('Edit Association Account Credentials', () => {
         const { accountId } = await usersManager.registerAssociation(
             anAssociationRegistrationRequest(),
         );
+
+        await usersManager.activateAssociationAccount({ accountId });
 
         await expect(
             usersManager.editAssociationAccountCredentials(
@@ -79,6 +96,8 @@ describe('Edit Association Account Credentials', () => {
 
         const association = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(association);
+
+        await usersManager.activateAssociationAccount({ accountId });
 
         await expect(
             usersManager.editAssociationAccountCredentials(
@@ -100,6 +119,8 @@ describe('Edit Association Account Credentials', () => {
         const association = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(association);
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         await expect(
             usersManager.editAssociationAccountCredentials(
                 anEditAccountCredentialsRequest({
@@ -116,6 +137,8 @@ describe('Edit Association Account Credentials', () => {
     it('given an edit association account credentials request with correct values and a new email, then should change the account email', async () => {
         const association = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(association);
+
+        await usersManager.activateAssociationAccount({ accountId });
 
         const NEW_EMAIL = faker.internet.email();
         await usersManager.editAssociationAccountCredentials(
@@ -135,6 +158,8 @@ describe('Edit Association Account Credentials', () => {
         const association = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(association);
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         const NEW_PASSWORD = faker.internet.password(10);
         await usersManager.editAssociationAccountCredentials(
             anEditAccountCredentialsRequest({
@@ -151,21 +176,5 @@ describe('Edit Association Account Credentials', () => {
         });
 
         expect(idFromLogin).to.equal(accountId);
-    });
-
-    it('given an edit association account credentials request, when the credentials are edited successfully then publish a credentials edited event to the global event bus', async () => {
-        const mockFn = spy();
-
-        EventBus.getInstance().subscribeTo('ACCOUNT_CREDENTIALS_EDITED').by(mockFn);
-
-        const association = anAssociationRegistrationRequest();
-        const { accountId } = await usersManager.registerAssociation(association);
-
-        await usersManager.editAssociationAccountCredentials(
-            anEditAccountCredentialsRequest({ accountId, oldPassword: association.password }),
-        );
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.deep.equal({ accountId });
     });
 });

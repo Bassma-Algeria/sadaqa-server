@@ -44,7 +44,7 @@ describe('Add To Favourite Posts', () => {
                 anAddToFavouriteRequest({ userId: NOT_EXISTING_USER_ID }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_FOUND)
             .and.be.and.instanceOf(ValidationException);
     });
 
@@ -70,7 +70,7 @@ describe('Add To Favourite Posts', () => {
                 anAddToFavouriteRequest({ postId, postType: 'donation-request' }),
             ),
         )
-            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .and.be.and.instanceOf(ValidationException);
     });
 

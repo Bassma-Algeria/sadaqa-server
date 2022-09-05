@@ -6,7 +6,10 @@ import { PictureCompressor } from '../../core/domain/services/PictureCompressor'
 
 class FakeImageCompressor implements PictureCompressor {
     async minify(): Promise<PictureToUpload> {
-        return new PictureToUpload(Buffer.from(faker.image.image()));
+        return new PictureToUpload(
+            faker.system.commonFileName('.png'),
+            Buffer.from(faker.image.image()),
+        );
     }
 }
 

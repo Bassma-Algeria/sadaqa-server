@@ -19,7 +19,7 @@ class UsersServiceImpl implements UsersService {
                 accountId: publisherId.value(),
             });
 
-            return status === 'ENABLED';
+            return status === 'ACTIVE';
         } catch {
             return false;
         }

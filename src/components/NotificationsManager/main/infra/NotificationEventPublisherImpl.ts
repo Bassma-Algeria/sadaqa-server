@@ -1,12 +1,12 @@
+import { Notification } from '../core/domain/Notification';
+import { TextMessageNotification } from '../core/domain/TextMessageNotification';
 import { DonationPostNotification } from '../core/domain/DonationPostNotification';
 import { CallForHelpPostNotification } from '../core/domain/CallForHelpPostNotification';
 import { FamilyInNeedPostNotification } from '../core/domain/FamilyInNeedPostNotification';
 import { NotificationEventPublisher } from '../core/domain/services/NotificationEventPublisher';
 import { DonationRequestPostNotification } from '../core/domain/DonationRequestPostNotification';
 
-import { EventBus } from '../../../_shared_/event-bus/EventBus';
-import { TextMessageNotification } from '../core/domain/TextMessageNotification';
-import { Notification } from '../core/domain/Notification';
+import { EventBus } from '../../../EventBus/main/EventBus';
 
 class NotificationEventPublisherImpl implements NotificationEventPublisher {
     constructor(private readonly eventBus: EventBus) {}

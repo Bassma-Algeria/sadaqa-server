@@ -52,7 +52,7 @@ class UpdateFamilyInNeedPostUseCase
     }
 
     private getCCPFrom(request: UpdateFamilyInNeedPostUseCaseRequest) {
-        let ccp: CCP | undefined;
+        let ccp: CCP | null = null;
 
         if (request.ccp || request.ccpKey) {
             ccp = new CCP(request.ccp!, request.ccpKey!);
@@ -62,7 +62,7 @@ class UpdateFamilyInNeedPostUseCase
     }
 
     private getBaridiMobNumberFrom(request: UpdateFamilyInNeedPostUseCaseRequest) {
-        let baridiMobNumber: BaridiMobNumber | undefined;
+        let baridiMobNumber: BaridiMobNumber | null = null;
 
         if (request.baridiMobNumber) {
             baridiMobNumber = new BaridiMobNumber(request.baridiMobNumber);

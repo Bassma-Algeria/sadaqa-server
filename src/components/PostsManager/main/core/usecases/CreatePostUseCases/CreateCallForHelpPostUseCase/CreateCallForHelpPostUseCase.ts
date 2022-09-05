@@ -57,11 +57,11 @@ class CreateCallForHelpPostUseCase
 
         this.publishPostCreatedEvent(post);
 
-        return { postId: post.postId.value() };
+        return { postId: post.state.postId };
     }
 
     private getCCPFrom(request: CreateCallForHelpPostUseCaseRequest) {
-        let ccp: CCP | undefined;
+        let ccp: CCP | null = null;
 
         if (request.ccp || request.ccpKey) {
             ccp = new CCP(request.ccp!, request.ccpKey!);
@@ -71,7 +71,7 @@ class CreateCallForHelpPostUseCase
     }
 
     private getBaridiMobNumberFrom(request: CreateCallForHelpPostUseCaseRequest) {
-        let baridiMobNumber: BaridiMobNumber | undefined;
+        let baridiMobNumber: BaridiMobNumber | null = null;
 
         if (request.baridiMobNumber) {
             baridiMobNumber = new BaridiMobNumber(request.baridiMobNumber);

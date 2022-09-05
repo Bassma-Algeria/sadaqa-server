@@ -19,7 +19,7 @@ describe('Get Regular Users By Wilaya numbers', () => {
         expect(list).to.have.lengthOf(0);
     });
 
-    it('given a get regular users by wilaya request, when there is an enabled regular user in that wilaya, then return it', async () => {
+    it('given a get regular users by wilaya request, when there is an regular user in that wilaya, then return it', async () => {
         const regularUser = aRegularUserRegistrationRequest();
         const { accountId } = await usersManager.registerRegularUser(regularUser);
 
@@ -31,7 +31,7 @@ describe('Get Regular Users By Wilaya numbers', () => {
         expect(list[0].accountId).to.equal(accountId);
     });
 
-    it('given a get regular users by wilaya request, when there more than one enabled regular user in that wilaya, then return all of them', async () => {
+    it('given a get regular users by wilaya request, when there more than one regular user in that wilaya, then return all of them', async () => {
         const firstUser = aRegularUserRegistrationRequest();
         const secondUser = aRegularUserRegistrationRequest({
             wilayaNumber: firstUser.wilayaNumber,

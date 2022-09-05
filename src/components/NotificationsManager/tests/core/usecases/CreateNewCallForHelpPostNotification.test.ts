@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 import { anything, instance, mock, when } from 'ts-mockito';
@@ -9,8 +8,6 @@ import { aCreateNewCallForHelpPostNotificationRequest } from './base/requests/aC
 import { UserId } from '../../../main/core/domain/UserId';
 
 import { UsersService } from '../../../main/core/domain/services/UsersService';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('New Call for Help Post Notification', () => {
     const usersServiceMock = mock<UsersService>();
@@ -101,41 +98,5 @@ describe('New Call for Help Post Notification', () => {
         });
 
         expect(notifications).to.have.lengthOf(0);
-    });
-
-    it('given a new call for help post notification creation request, for every notification created, should publish an event to the global event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('NEW_CALL_FOR_HELP_POST_NOTIFICATION').by(mockFn);
-
-        const userId1 = faker.datatype.uuid();
-        const userId2 = faker.datatype.uuid();
-        when(usersServiceMock.getIdsOfUsersInWilaya(anything())).thenResolve([
-            new UserId(userId1),
-            new UserId(userId2),
-        ]);
-
-        const request = aCreateNewCallForHelpPostNotificationRequest();
-        await notificationsManager.createNewCallForHelpPostNotification(request);
-
-        expect(mockFn.calledTwice).to.equal(true);
-
-        expect(mockFn.args[0][0]).to.have.property('receiverId', userId1);
-        expect(mockFn.args[0][0]).to.have.property('postId', request.postId);
-
-        expect(mockFn.args[1][0]).to.have.property('receiverId', userId2);
-        expect(mockFn.args[1][0]).to.have.property('postId', request.postId);
-    });
-
-    it("given a new call for help post notification creation request, when there is no users found in the same wilaya as the post, then don't send notifications to anyone", async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('NEW_CALL_FOR_HELP_POST_NOTIFICATION').by(mockFn);
-
-        when(usersServiceMock.getIdsOfUsersInWilaya(anything())).thenResolve([]);
-
-        await notificationsManager.createNewCallForHelpPostNotification(
-            aCreateNewCallForHelpPostNotificationRequest(),
-        );
-
-        expect(mockFn.called).to.equal(false);
     });
 });

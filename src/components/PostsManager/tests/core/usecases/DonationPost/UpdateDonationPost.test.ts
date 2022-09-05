@@ -2,6 +2,8 @@ import { spy } from 'sinon';
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 import { anything, instance, mock, when } from 'ts-mockito';
+
+import { aDonationPostsManager } from '../base/aDonationPostsManager';
 import { anEditDonationPostRequest } from '../base/requests/anEditDonationPostRequest';
 import { aDonationPostCreationRequest } from '../base/requests/aDonationPostCreationRequest';
 
@@ -14,9 +16,6 @@ import { AuthorizationException } from '../../../../main/core/domain/exceptions/
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
 import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
-
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
-import { aDonationPostsManager } from '../base/aDonationPostsManager';
 
 describe('Update Donation Post', () => {
     const picturesManager = new FakePicturesManager();
@@ -135,7 +134,10 @@ describe('Update Donation Post', () => {
 
         const { pictures: picturesBeforeUpdate } = await donationPostsManager.getById({ postId });
 
-        const NEW_PICTURES = Array.from({ length: 1 }).map(() => Buffer.from(faker.image.image()));
+        const NEW_PICTURES = Array.from({ length: 1 }).map(() => ({
+            buffer: Buffer.from(faker.datatype.string(40)),
+            filename: faker.system.fileName(),
+        }));
 
         await donationPostsManager.update(
             anEditDonationPostRequest({
@@ -160,7 +162,10 @@ describe('Update Donation Post', () => {
 
         const { pictures: picturesBeforeUpdate } = await donationPostsManager.getById({ postId });
 
-        const NEW_PICTURES = Array.from({ length: 1 }).map(() => Buffer.from(faker.image.image()));
+        const NEW_PICTURES = Array.from({ length: 1 }).map(() => ({
+            buffer: Buffer.from(faker.datatype.string(40)),
+            filename: faker.system.fileName(),
+        }));
         const OLD_PICTURES_TO_KEEP = picturesBeforeUpdate.slice(0, 1);
         const OLD_PICTURES_TO_REMOVE = picturesBeforeUpdate.slice(1);
 
@@ -243,22 +248,6 @@ describe('Update Donation Post', () => {
         const updated = await donationPostsManager.getById({ postId });
 
         expect(updated).to.deep.equal(returned);
-    });
-
-    it('given an update donation post request, when the post updated, then should publish a post updated event to the global event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('DONATION_POST_UPDATED').by(mockFn);
-
-        const { userId, postId } = await createDonationPost();
-
-        await donationPostsManager.update(
-            anEditDonationPostRequest({
-                userId,
-                postId,
-            }),
-        );
-
-        expect(mockFn.calledOnce).to.equal(true);
     });
 
     async function createDonationPost() {

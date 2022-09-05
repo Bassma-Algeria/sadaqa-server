@@ -2,6 +2,7 @@ import { EventBus } from './_shared_/event-bus/EventBus';
 
 import { EmailsManagerConfiguration } from './EmailsManager/main/EmailsManagerConfiguration';
 import { NotificationsManagerConfiguration } from './NotificationsManager/main/NotificationsManagerConfiguration';
+import { LoggerConfiguration } from './Logger/main/LoggerConfiguration';
 
 const eventBus = EventBus.getInstance();
 
@@ -37,4 +38,13 @@ eventBus.subscribeTo('TEXT_MESSAGE_SENT').by(payload => {
 
 eventBus.subscribeTo('ASSOCIATION_REGISTERED').by(payload => {
     EmailsManagerConfiguration.anEmailsManager().sendAssociationApprovalEmail(payload);
+});
+
+eventBus.subscribeToAllEvents().by((ev, payload) => {
+    if (ev === 'ASSOCIATION_REGISTERED') {
+        // @ts-ignore
+        delete payload.associationDocs;
+    }
+
+    LoggerConfiguration.aLogger().info({ message: ev, payload });
 });

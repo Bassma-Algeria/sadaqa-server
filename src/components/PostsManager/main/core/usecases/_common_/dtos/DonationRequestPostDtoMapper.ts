@@ -15,11 +15,7 @@ class DonationRequestPostDtoMapper extends PostDtoMapper<DonationRequestPost> {
     }
 
     toDto(post: DonationRequestPost): DonationRequestPostDto {
-        return {
-            ...super.toDto(post),
-
-            category: post.category.value(),
-        };
+        return post.state;
     }
 }
 

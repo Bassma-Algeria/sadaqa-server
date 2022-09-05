@@ -7,33 +7,59 @@ import { DeleteFromFavouriteUseCaseRequest } from '../../../../components/PostsM
 import { PostsManagerConfiguration } from '../../../../components/PostsManager/main/PostsManagerConfiguration';
 import { AuthenticationManagerConfiguration } from '../../../../components/AuthenticationManager/main/AuthenticationManagerConfiguration';
 
+import { Service } from '../base/base.service';
+
 @Injectable()
-class FavouritePostsService {
+class FavouritePostsService extends Service {
     private readonly favouritePostsManager = PostsManagerConfiguration.aFavouritePostsManager();
     private readonly authenticationManager =
         AuthenticationManagerConfiguration.anAuthenticationManager();
 
     async add(accessToken: string, request: Omit<AddToFavouritePostsUseCaseRequest, 'userId'>) {
-        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
-        return this.favouritePostsManager.addToFavourite({ ...request, userId });
+        try {
+            const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+            return await this.favouritePostsManager.addToFavourite({ ...request, userId });
+        } catch (e) {
+            await this.logError('Error while adding post to favourite', e);
+
+            throw e;
+        }
     }
 
     async delete(accessToken: string, request: Omit<DeleteFromFavouriteUseCaseRequest, 'userId'>) {
-        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
-        return this.favouritePostsManager.deleteFromFavourite({ ...request, userId });
+        try {
+            const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+            return await this.favouritePostsManager.deleteFromFavourite({ ...request, userId });
+        } catch (e) {
+            await this.logError('Error while deleting post from favourite', e);
+
+            throw e;
+        }
     }
 
     async getAll(accessToken: string) {
-        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
-        return this.favouritePostsManager.getFavouritePosts({ userId });
+        try {
+            const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+            return await this.favouritePostsManager.getFavouritePosts({ userId });
+        } catch (e) {
+            await this.logError('Error while get favourite posts', e);
+
+            throw e;
+        }
     }
 
     async isFavourite(
         accessToken: string,
         request: Omit<IsPostInFavouritesUseCaseRequest, 'userId'>,
     ) {
-        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
-        return this.favouritePostsManager.isPostInFavourite({ userId, ...request });
+        try {
+            const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+            return await this.favouritePostsManager.isPostInFavourite({ userId, ...request });
+        } catch (e) {
+            await this.logError('Error while checking if post is in favourite', e);
+
+            throw e;
+        }
     }
 }
 

@@ -123,7 +123,10 @@ class UsersController {
             return await this.usersService.registerAssociation({
                 ...body,
                 wilayaNumber: Number(body.wilayaNumber),
-                associationDocs: docs.map(doc => doc.buffer),
+                associationDocs: docs.map(doc => ({
+                    buffer: doc.buffer,
+                    filename: doc.originalname,
+                })),
             });
         } catch (e) {
             UsersController.handleError(e, language);
@@ -158,6 +161,7 @@ class UsersController {
     }
 
     @Put('associations/info')
+    @ApiBearerAuth()
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
@@ -187,6 +191,7 @@ class UsersController {
     }
 
     @Put('associations/credentials')
+    @ApiBearerAuth()
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'association credentials edited' })
@@ -207,6 +212,7 @@ class UsersController {
     }
 
     @Put('regular-user/info')
+    @ApiBearerAuth()
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
@@ -236,6 +242,7 @@ class UsersController {
     }
 
     @Put('regular-user/credentials')
+    @ApiBearerAuth()
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'regular user credentials edited' })

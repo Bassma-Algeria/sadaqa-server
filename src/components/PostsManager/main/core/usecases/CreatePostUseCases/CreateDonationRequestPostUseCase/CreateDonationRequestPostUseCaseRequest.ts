@@ -1,8 +1,5 @@
-export interface CreateDonationRequestPostUseCaseRequest {
-    readonly title: string;
-    readonly description: string;
-    readonly wilayaNumber: number;
-    readonly publisherId: string;
+import { CreatePostUseCaseRequest } from '../base/CreatePostUseCaseRequest';
+
+export interface CreateDonationRequestPostUseCaseRequest extends CreatePostUseCaseRequest {
     readonly category: string;
-    readonly pictures: Buffer[];
 }

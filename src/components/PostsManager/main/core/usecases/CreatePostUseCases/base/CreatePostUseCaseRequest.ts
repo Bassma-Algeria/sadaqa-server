@@ -3,5 +3,5 @@ export interface CreatePostUseCaseRequest {
     readonly description: string;
     readonly wilayaNumber: number;
     readonly publisherId: string;
-    readonly pictures: Buffer[];
+    readonly pictures: { buffer: Buffer; filename: string }[];
 }

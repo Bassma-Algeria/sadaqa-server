@@ -53,8 +53,8 @@ class SendAssociationApprovalEmailUseCase
     private getAssociationDocsAttachmentsFrom(request: SendAssociationApprovalEmailUseCaseRequest) {
         const attachments = new EmailAttachments();
 
-        for (const associationDoc of request.associationDocs)
-            attachments.add({ name: 'Association Document.png', value: associationDoc });
+        for (const { buffer, filename } of request.associationDocs)
+            attachments.add({ name: filename, value: buffer });
 
         return attachments;
     }

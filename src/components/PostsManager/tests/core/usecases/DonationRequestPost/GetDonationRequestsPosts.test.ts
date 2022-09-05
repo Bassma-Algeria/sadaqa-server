@@ -1,9 +1,11 @@
 import { expect } from 'chai';
+import { faker } from '@faker-js/faker';
 
 import { cleanData } from './base/cleanData';
-import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
+
 import { aDonationRequestPostsManager } from '../base/aDonationRequestPostsManager';
-import { faker } from '@faker-js/faker';
+import { aDonationRequestPostCreationRequest } from '../base/requests/aDonationRequestPostCreationRequest';
+
 import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { MultiLanguagesValidationException } from '../../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
@@ -49,6 +51,17 @@ describe('Get Donation Requests Posts', () => {
         const { list } = await postsManager.getList();
 
         expect(list).to.have.lengthOf(2);
+    });
+
+    it('should not get the disabled posts', async () => {
+        const request = aDonationRequestPostCreationRequest({ category: 'food' });
+        const { postId } = await postsManager.create(request);
+
+        await postsManager.toggleEnablingStatus({ postId, userId: request.publisherId });
+
+        const { list } = await postsManager.getList();
+
+        expect(list).to.have.lengthOf(0);
     });
 
     it('as a user, i should be able to get donations requests for a specific category, in a specific wilaya', async () => {

@@ -12,6 +12,7 @@ import { RegularUserAccountRepository } from '../../../domain/services/AccountRe
 
 import { NotFoundException } from '../../../domain/exceptions/NotFoundException';
 import { ExceptionMessages } from '../../../domain/exceptions/ExceptionMessages';
+import { ValidationException } from '../../../domain/exceptions/ValidationException';
 import { MultiLanguagesValidationException } from '../../../domain/exceptions/MultiLanguagesValidationException';
 
 abstract class EditAccountCredentialsUseCase {
@@ -34,6 +35,8 @@ abstract class EditAccountCredentialsUseCase {
         const account = await this.findAccountById(accountId);
 
         if (!account) throw new NotFoundException(ExceptionMessages.ACCOUNT_NOT_FOUND);
+        if (!account.canEditCredentials())
+            throw new ValidationException(ExceptionMessages.CANNOT_EDIT_ACCOUNT_CREDENTIALS);
 
         await this.checkIfEmailAlreadyUsedThrowIfSo(email, account);
         await this.checkIfPasswordMatchThrowIfNot(oldPassword, account.getPassword());

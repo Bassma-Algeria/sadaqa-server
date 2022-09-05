@@ -5,24 +5,24 @@ import { PostBuilder } from './PostBuilder';
 import { CallForHelpPost } from './CallForHelpPost';
 
 class CallForHelpPostBuilder extends PostBuilder {
-    private ccp: CCP | undefined;
-    private baridiMobNumber: BaridiMobNumber | undefined;
+    private ccp: CCP | null = null;
+    private baridiMobNumber: BaridiMobNumber | null = null;
 
     constructor(post?: CallForHelpPost) {
         super(post);
 
         if (!post) return;
 
-        this.ccp = post.ccp;
-        this.baridiMobNumber = post.baridiMobNumber;
+        this.ccp = post.getCCP();
+        this.baridiMobNumber = post.getBaridiMobNumber();
     }
 
-    withCCP(ccp: CCP | undefined) {
+    withCCP(ccp: CCP | null) {
         this.ccp = ccp;
         return this;
     }
 
-    withBaridiMobNumber(baridiMobNumber: BaridiMobNumber | undefined) {
+    withBaridiMobNumber(baridiMobNumber: BaridiMobNumber | null) {
         this.baridiMobNumber = baridiMobNumber;
         return this;
     }

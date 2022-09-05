@@ -11,8 +11,6 @@ import { UsersService } from '../../../main/core/domain/services/UsersService';
 
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
-import { spy } from 'sinon';
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Send Text Message', () => {
     const mockUsersService = mock<UsersService>();
@@ -145,20 +143,5 @@ describe('Send Text Message', () => {
         });
 
         expect(totalAfter).to.equal(totalBefore + 1);
-    });
-
-    it('given a text message sending request, when everything is ok, then should publish the message sent event in the global event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('TEXT_MESSAGE_SENT').by(mockFn);
-
-        const message = aSendTextMessageRequest();
-        await messagesManager.sendTextMessage(message);
-        const { messages } = await messagesManager.getConversation({
-            between: message.senderId,
-            and: message.receiverId,
-        });
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.have.property('messageId', messages[0].message.messageId);
     });
 });

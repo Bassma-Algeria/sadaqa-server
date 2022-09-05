@@ -5,14 +5,15 @@ import { WilayasService } from '../../../../main/core/domain/services/WilayasSer
 import { PicturesManager } from '../../../../main/core/domain/services/PicturesManager';
 
 import { UuidPostIdGenerator } from '../../../../main/infra/real/UuidPostIdGenerator';
+import { PostgresFavouritePostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresFavouritePostRepository';
 import { PostgresCallForHelpPostRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresCallForHelpPostRepository';
 import { CallForHelpPostEventPublisherImpl } from '../../../../main/infra/real/PostEventPublisherImpl/CallForHelpPostEventPublisherImpl';
 
 import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
 
 import { CallForHelpPostsManagerFacade } from '../../../../main/core/CallForHelpPostsManagerFacade';
-
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { PostgresPostShareRepository } from '../../../../main/infra/real/PostgresPostRepository/PostgresPostShareRepository';
+import { InMemoryEventBus } from '../../../../../EventBus/main/InMemoryEventBus';
 
 interface Dependencies {
     usersService: UsersService;
@@ -33,9 +34,12 @@ const aCallForHelpPostsManager = (dependencies?: Partial<Dependencies>) => {
         dependencies?.usersService || instance(mockUsersService),
         dependencies?.wilayasService || instance(mockWilayasService),
         dependencies?.picturesManager || new FakePicturesManager(),
+
         new UuidPostIdGenerator(),
+        new PostgresPostShareRepository(),
+        new PostgresFavouritePostRepository(),
         new PostgresCallForHelpPostRepository(),
-        new CallForHelpPostEventPublisherImpl(EventBus.getInstance()),
+        new CallForHelpPostEventPublisherImpl(InMemoryEventBus.instance()),
     );
 };
 

@@ -1,9 +1,9 @@
+import { UserId } from '../../core/domain/UserId';
 import { TextMessage } from '../../core/domain/TextMessage';
 
 import { TextMessageEventPublisher } from '../../core/domain/services/MessageEventPublisher/TextMessageEventPublisher';
 
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
-import { UserId } from '../../core/domain/UserId';
+import { EventBus } from '../../../../EventBus/main/EventBus';
 
 class TextMessageEventPublisherImpl implements TextMessageEventPublisher {
     constructor(private readonly eventBus: EventBus) {}

@@ -1,13 +1,6 @@
 import { DonationRequestPost } from '../../../core/domain/DonationRequestPost';
-
-import { Title } from '../../../core/domain/Title';
 import { PostId } from '../../../core/domain/PostId';
 import { UserId } from '../../../core/domain/UserId';
-import { Picture } from '../../../core/domain/Picture';
-import { PostStatus } from '../../../core/domain/PostStatus';
-import { Description } from '../../../core/domain/Description';
-import { WilayaNumber } from '../../../core/domain/WilayaNumber';
-import { DonationCategory } from '../../../core/domain/DonationCategory';
 
 import {
     DonationRequestPostRepository,
@@ -41,7 +34,7 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
 
     async update(post: DonationRequestPost): Promise<void> {
         await prisma.donationRequestPost.update({
-            where: { postId: post.postId.value() },
+            where: { postId: post.state.postId },
             data: this.toDBModel(post),
         });
     }
@@ -71,6 +64,7 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
 
         const dbModels = await prisma.donationRequestPost.findMany({
             where: {
+                status: filters.status,
                 category: filters.category?.value(),
                 wilayaNumber: filters.wilayaNumber?.value(),
             },
@@ -83,7 +77,7 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
     }
 
     async count(filters: DonationRequestPostRepositoryCountFilters): Promise<number> {
-        const total = await prisma.donationRequestPost.count({
+        return await prisma.donationRequestPost.count({
             where: {
                 wilayaNumber: filters.wilayaNumber?.value(),
                 publisherId: filters?.publisherId?.value(),
@@ -91,12 +85,10 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
                 status: filters?.status,
             },
         });
-
-        return total;
     }
 
     async delete(post: DonationRequestPost): Promise<void> {
-        await prisma.donationRequestPost.delete({ where: { postId: post.postId.value() } });
+        await prisma.donationRequestPost.delete({ where: { postId: post.state.postId } });
     }
 
     async search(filters: PostRepositorySearchFilters): Promise<DonationRequestPost[]> {
@@ -106,6 +98,7 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
             skip: numOfPostsToSkip,
             take: filters.pageLimit,
             where: {
+                status: filters.status,
                 wilayaNumber: filters.wilayaNumber?.value(),
                 OR: [
                     { title: { contains: filters.keyword } },
@@ -140,30 +133,20 @@ class PostgresDonationRequestPostRepository implements DonationRequestPostReposi
 
     private toDBModel(post: DonationRequestPost): DBModel {
         return {
-            postId: post.postId.value(),
-            title: post.title.value(),
-            description: post.description.value(),
-            category: post.category.value(),
-            wilayaNumber: post.wilayaNumber.value(),
-            pictures: post.pictures.map(pic => pic.url()),
-            publisherId: post.publisherId.value(),
-            status: post.status,
-            createdAt: post.createdAt,
+            postId: post.state.postId,
+            title: post.state.title,
+            description: post.state.description,
+            wilayaNumber: post.state.wilayaNumber,
+            publisherId: post.state.publisherId,
+            pictures: post.state.pictures,
+            category: post.state.category,
+            status: post.state.status,
+            createdAt: post.state.createdAt,
         };
     }
 
     private toEntity(dbModel: DBModel) {
-        return DonationRequestPost.aBuilder()
-            .withPostId(new PostId(dbModel.postId))
-            .withTitle(new Title(dbModel.title))
-            .withDescription(new Description(dbModel.description))
-            .withCategory(new DonationCategory(dbModel.category))
-            .withWilayaNumber(new WilayaNumber(dbModel.wilayaNumber))
-            .withPictures(dbModel.pictures.map(url => new Picture(url)))
-            .withPublisherId(new UserId(dbModel.publisherId))
-            .withCreatedAt(dbModel.createdAt)
-            .withStatus(dbModel.status as PostStatus)
-            .build();
+        return DonationRequestPost.fromState(dbModel);
     }
 }
 

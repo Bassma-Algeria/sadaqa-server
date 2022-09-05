@@ -29,7 +29,7 @@ class TogglePostEnablingStatusUseCase
 
         const post = await this.findPostByIdThrowIfNotFound(postId);
 
-        if (!post.publisherId.equals(userId))
+        if (!post.publisherIs(userId))
             throw new AuthorizationException(ExceptionMessages.NOT_AUTHORIZED_TO_EDIT);
 
         const updatedPost = post.toggleEnablingStatus();
@@ -38,7 +38,7 @@ class TogglePostEnablingStatusUseCase
 
         this.publishEnablingStatusToggleEvent(updatedPost);
 
-        return { status: updatedPost.status };
+        return { status: updatedPost.state.status };
     }
 
     private getFrom(request: TogglePostEnablingStatusUseCaseRequest) {

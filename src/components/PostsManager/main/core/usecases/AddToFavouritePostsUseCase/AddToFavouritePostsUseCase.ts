@@ -57,7 +57,7 @@ class AddToFavouritePostsUseCase implements UseCase<AddToFavouritePostsUseCaseRe
     private async checkIfUserExistAndThrowIfNot(id: UserId) {
         const isExist = await this.usersService.isExist(id);
 
-        if (!isExist) throw new ValidationException(ExceptionMessages.USER_NOT_EXIST);
+        if (!isExist) throw new ValidationException(ExceptionMessages.USER_NOT_FOUND);
     }
 
     private async checkIfPostExistAndThrowIfNot(id: PostId, type: PostType) {
@@ -81,7 +81,7 @@ class AddToFavouritePostsUseCase implements UseCase<AddToFavouritePostsUseCaseRe
                 break;
         }
 
-        if (!isExist) throw new ValidationException(ExceptionMessages.POST_NOT_EXIST);
+        if (!isExist) throw new ValidationException(ExceptionMessages.POST_NOT_FOUND);
     }
 
     private async saveFavouritePost(post: FavouritePost) {

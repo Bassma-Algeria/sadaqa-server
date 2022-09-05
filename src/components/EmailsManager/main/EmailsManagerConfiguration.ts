@@ -1,23 +1,24 @@
 import { EmailsManagerFacade } from './EmailsManagerFacade';
 
+import { FakeEmailService } from './infra/fake/FakeEmailService';
+
 import { NodemailerEmailService } from './infra/real/NodemailerEmailService';
 import { EmailEventPublisherImpl } from './infra/real/EmailEventPublisherImpl';
 
-import { EventBus } from '../../_shared_/event-bus/EventBus';
-import { FakeEmailService } from './infra/fake/FakeEmailService';
+import { InMemoryEventBus } from '../../EventBus/main/InMemoryEventBus';
 
 class EmailsManagerConfiguration {
     static anEmailsManager() {
         return new EmailsManagerFacade(
             this.getEmailService(),
-            new EmailEventPublisherImpl(EventBus.getInstance()),
+            new EmailEventPublisherImpl(InMemoryEventBus.instance()),
         );
     }
 
     private static getEmailService() {
         const env = process.env.NODE_ENV;
 
-        if (env !== 'production') return new NodemailerEmailService();
+        if (env === 'production') return new NodemailerEmailService();
         else return new FakeEmailService();
     }
 }

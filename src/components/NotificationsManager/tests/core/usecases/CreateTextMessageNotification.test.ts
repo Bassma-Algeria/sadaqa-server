@@ -2,8 +2,6 @@ import { expect } from 'chai';
 
 import { aNotificationsManager } from './base/aNotificationsManager';
 import { aCreateTextMessageNotificationRequest } from './base/requests/aCreateTextMessageNotificationRequest';
-import { spy } from 'sinon';
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Create Text Message Notification', () => {
     const notificationsManager = aNotificationsManager();
@@ -61,17 +59,5 @@ describe('Create Text Message Notification', () => {
         });
 
         expect(totalAfter).to.equal(totalBefore + 1);
-    });
-
-    it('given a create text message notification request, when creating the notification, should publish an event to the global event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('NEW_TEXT_MESSAGE_NOTIFICATION').by(mockFn);
-
-        const textMessage = aCreateTextMessageNotificationRequest();
-        await notificationsManager.createTextMessageNotification(textMessage);
-
-        expect(mockFn.calledOnce).to.equal(true);
-
-        expect(mockFn.args[0][0]).to.have.property('receiverId', textMessage.receiverId);
     });
 });

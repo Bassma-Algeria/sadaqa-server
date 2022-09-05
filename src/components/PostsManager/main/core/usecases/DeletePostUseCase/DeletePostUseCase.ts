@@ -11,11 +11,13 @@ import { PostEventPublisher } from '../../domain/services/PostEventPublisher/bas
 import { NotFoundException } from '../../domain/exceptions/NotFoundException';
 import { ExceptionMessages } from '../../domain/exceptions/ExceptionMessages';
 import { AuthorizationException } from '../../domain/exceptions/AuthorizationException';
+import { FavouritePostRepository } from '../../domain/services/PostRepository/FavouritePostRepository';
 
 class DeletePostUseCase implements UseCase<DeletePostUseCaseRequest, void> {
     constructor(
         private readonly postRepository: PostRepository<Post>,
         private readonly postEventPublisher: PostEventPublisher<Post>,
+        private readonly favouritePostRepository: FavouritePostRepository,
     ) {}
 
     async handle(request: DeletePostUseCaseRequest): Promise<void> {
@@ -23,7 +25,7 @@ class DeletePostUseCase implements UseCase<DeletePostUseCaseRequest, void> {
 
         const post = await this.findPostByIdThrowIfNotFound(postId);
 
-        if (!post.publisherId.equals(userId))
+        if (!post.publisherIs(userId))
             throw new AuthorizationException(ExceptionMessages.NOT_AUTHORIZED_TO_DELETE);
 
         await this.delete(post);
@@ -44,6 +46,10 @@ class DeletePostUseCase implements UseCase<DeletePostUseCaseRequest, void> {
 
     private async delete(post: Post) {
         await this.postRepository.delete(post);
+        await this.favouritePostRepository.deleteMany({
+            postId: post.getPostId(),
+            postType: post.getPostType(),
+        });
     }
 
     private publishPostDeletedEvent(post: Post) {

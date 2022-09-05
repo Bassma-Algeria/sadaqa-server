@@ -1,7 +1,7 @@
 import { FavouritePost } from '../../../core/domain/FavouritePost';
 import { FavouritePostEventPublisher } from '../../../core/domain/services/PostEventPublisher/FavouritePostEventPublisher';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { EventBus } from '../../../../../EventBus/main/EventBus';
 
 class FavouritePostEventPublisherImpl implements FavouritePostEventPublisher {
     constructor(private readonly eventBus: EventBus) {}

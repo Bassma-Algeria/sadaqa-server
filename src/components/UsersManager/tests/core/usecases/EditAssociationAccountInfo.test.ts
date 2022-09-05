@@ -19,8 +19,6 @@ import { NotFoundException } from '../../../main/core/domain/exceptions/NotFound
 import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 import { MultiLanguagesValidationException } from '../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
-
 describe('Edit Association Account Info', () => {
     const mockWilayaService = mock<WilayasService>();
     const picturesManager = new FakePicturesManager();
@@ -45,11 +43,24 @@ describe('Edit Association Account Info', () => {
             .and.to.be.an.instanceOf(NotFoundException);
     });
 
+    it('given an association that is still not approved by the admin, when trying to edit the association account info, then should fail', async () => {
+        const association = anAssociationRegistrationRequest();
+        const { accountId } = await usersManager.registerAssociation(association);
+
+        await expect(
+            usersManager.editAssociationAccountInfo(anEditAssociationInfoRequest({ accountId })),
+        )
+            .to.eventually.be.rejectedWith(ExceptionMessages.CANNOT_EDIT_ACCOUNT_INFO)
+            .and.to.be.an.instanceOf(ValidationException);
+    });
+
     it('given an edit association account info, when the association name is short, then should fail', async () => {
         const SHORT_NAME = 'sl';
         const { accountId } = await usersManager.registerAssociation(
             anAssociationRegistrationRequest(),
         );
+
+        await usersManager.activateAssociationAccount({ accountId });
 
         await expect(
             usersManager.editAssociationAccountInfo(
@@ -64,6 +75,8 @@ describe('Edit Association Account Info', () => {
         const { accountId } = await usersManager.registerAssociation(
             anAssociationRegistrationRequest(),
         );
+
+        await usersManager.activateAssociationAccount({ accountId });
 
         when(mockWilayaService.isExist(anything())).thenResolve(false);
 
@@ -80,6 +93,7 @@ describe('Edit Association Account Info', () => {
         const { accountId } = await usersManager.registerAssociation(
             anAssociationRegistrationRequest(),
         );
+        await usersManager.activateAssociationAccount({ accountId });
 
         await expect(
             usersManager.editAssociationAccountInfo(
@@ -98,6 +112,8 @@ describe('Edit Association Account Info', () => {
             anAssociationRegistrationRequest(),
         );
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         await expect(
             usersManager.editAssociationAccountInfo(
                 anEditAssociationInfoRequest({ phoneNumber: anotherUser.phoneNumber, accountId }),
@@ -115,6 +131,8 @@ describe('Edit Association Account Info', () => {
             anAssociationRegistrationRequest(),
         );
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         await expect(
             usersManager.editAssociationAccountInfo(
                 anEditAssociationInfoRequest({ phoneNumber: association.phoneNumber, accountId }),
@@ -128,6 +146,8 @@ describe('Edit Association Account Info', () => {
         const user = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(user);
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         await expect(
             usersManager.editAssociationAccountInfo(
                 anEditAssociationInfoRequest({ phoneNumber: user.phoneNumber, accountId }),
@@ -140,6 +160,8 @@ describe('Edit Association Account Info', () => {
 
         const user = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(user);
+
+        await usersManager.activateAssociationAccount({ accountId });
 
         const request = anEditAssociationInfoRequest({
             accountId,
@@ -162,6 +184,8 @@ describe('Edit Association Account Info', () => {
         const user = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(user);
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         const firstUpdatedPicture = await addProfilePicture(accountId);
 
         const request = anEditAssociationInfoRequest({
@@ -182,6 +206,8 @@ describe('Edit Association Account Info', () => {
         const user = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(user);
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         await usersManager.editAssociationAccountInfo(
             anEditAssociationInfoRequest({ accountId, profilePicture: null }),
         );
@@ -200,6 +226,8 @@ describe('Edit Association Account Info', () => {
         const user = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(user);
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         const profilePicture = await addProfilePicture(accountId);
 
         await usersManager.editAssociationAccountInfo(
@@ -215,6 +243,8 @@ describe('Edit Association Account Info', () => {
     it('given an edit association account info, when the the profile picture sent is the old picture, then not update the pic', async () => {
         const user = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(user);
+
+        await usersManager.activateAssociationAccount({ accountId });
 
         const profilePicture = await addProfilePicture(accountId);
 
@@ -233,6 +263,8 @@ describe('Edit Association Account Info', () => {
         const user = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(user);
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         await addProfilePicture(accountId);
 
         await expect(
@@ -249,6 +281,8 @@ describe('Edit Association Account Info', () => {
             anAssociationRegistrationRequest(),
         );
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         const editedInfo = anEditAssociationInfoRequest({ accountId });
         await usersManager.editAssociationAccountInfo(editedInfo);
 
@@ -263,6 +297,8 @@ describe('Edit Association Account Info', () => {
             anAssociationRegistrationRequest(),
         );
 
+        await usersManager.activateAssociationAccount({ accountId });
+
         const returned = await usersManager.editAssociationAccountInfo(
             anEditAssociationInfoRequest({ accountId }),
         );
@@ -270,20 +306,6 @@ describe('Edit Association Account Info', () => {
         const editedUser = await usersManager.getAssociationById({ accountId });
 
         expect(editedUser).to.deep.equal(returned);
-    });
-
-    it('given an edit association account info, when everything is ok, then publish a association account info edited event to the global event bus', async () => {
-        const mockFn = spy();
-
-        EventBus.getInstance().subscribeTo('ASSOCIATION_ACCOUNT_INFO_EDITED').by(mockFn);
-
-        const { accountId } = await usersManager.registerAssociation(
-            anAssociationRegistrationRequest(),
-        );
-        await usersManager.editAssociationAccountInfo(anEditAssociationInfoRequest({ accountId }));
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.have.property('accountId', accountId);
     });
 
     async function addProfilePicture(accountId: string) {

@@ -52,7 +52,7 @@ class CreateDonationRequestPostUseCase
 
         this.publishPostCreatedEvent(post);
 
-        return { postId: post.postId.value() };
+        return { postId: post.state.postId };
     }
 
     protected getInitialPostStatus(): PostStatus {

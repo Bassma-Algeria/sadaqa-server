@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 import { anything, instance, mock, when } from 'ts-mockito';
@@ -10,8 +9,6 @@ import { UserId } from '../../../main/core/domain/UserId';
 
 import { UsersService } from '../../../main/core/domain/services/UsersService';
 import { PostsService } from '../../../main/core/domain/services/PostsService';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('New Donation Request Post Notification', () => {
     const postsServiceMock = mock<PostsService>();
@@ -187,40 +184,5 @@ describe('New Donation Request Post Notification', () => {
         });
 
         expect(notifications).to.have.lengthOf(0);
-    });
-
-    it('given a new donation request post notification creation request, for every notification created, should publish an event to the global event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('NEW_DONATION_REQUEST_POST_NOTIFICATION').by(mockFn);
-
-        const userId1 = faker.datatype.uuid();
-        const userId2 = faker.datatype.uuid();
-        when(usersServiceMock.getIdsOfUsersInWilaya(anything())).thenResolve([new UserId(userId1)]);
-        when(postsServiceMock.getPublishersOfDonationsThatMatch(anything())).thenResolve([
-            new UserId(userId2),
-        ]);
-
-        const request = aCreateNewDonationRequestPostNotificationRequest();
-        await notificationsManager.createNewDonationRequestPostNotification(request);
-
-        expect(mockFn.calledTwice).to.equal(true);
-
-        expect(mockFn.args[0][0]).to.have.property('receiverId', userId1);
-        expect(mockFn.args[0][0]).to.have.property('postId', request.postId);
-
-        expect(mockFn.args[1][0]).to.have.property('receiverId', userId2);
-        expect(mockFn.args[1][0]).to.have.property('postId', request.postId);
-    });
-
-    it("given a new donation request post notification creation request, when there is no donation request matches the new donation and no association in that wilaya, then don't send notifications to anyone", async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('NEW_DONATION_REQUEST_POST_NOTIFICATION').by(mockFn);
-
-        when(postsServiceMock.getPublishersOfDonationRequestsThatMatch(anything())).thenResolve([]);
-
-        const request = aCreateNewDonationRequestPostNotificationRequest();
-        await notificationsManager.createNewDonationRequestPostNotification(request);
-
-        expect(mockFn.called).to.equal(false);
     });
 });

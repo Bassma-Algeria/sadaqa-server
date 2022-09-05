@@ -11,11 +11,13 @@ import {
 } from '../../domain/services/PostRepository/base/PostRepository';
 
 import { PostDtoMapper } from '../_common_/dtos/base/PostDtoMapper';
+import { PostStatus } from '../../domain/PostStatus';
 
 class SearchForPostsUseCase
     implements UseCase<SearchForPostsUseCaseRequest, SearchForPostsUseCaseResponse>
 {
     private readonly PAGE_LIMIT = 20;
+    private readonly TARGET_POSTS_STATUS = PostStatus.ENABLED;
 
     constructor(
         private readonly postDtoMapper: PostDtoMapper<Post>,
@@ -44,10 +46,11 @@ class SearchForPostsUseCase
             : undefined;
 
         const keyword = request.keyword?.trim().toLowerCase();
+        const status = this.TARGET_POSTS_STATUS;
         const pageLimit = this.PAGE_LIMIT;
         const page = request.page || 1;
 
-        return { keyword, page, pageLimit, wilayaNumber };
+        return { keyword, page, status, pageLimit, wilayaNumber };
     }
 
     private isEndPage(page: number, total: number) {

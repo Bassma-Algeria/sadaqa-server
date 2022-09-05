@@ -7,6 +7,7 @@ import { WilayaNumber } from '../../../domain/WilayaNumber';
 
 import { Post } from '../../../domain/Post';
 import { PostBuilder } from '../../../domain/PostBuilder';
+import { PostPictures } from '../../../domain/PostPictures';
 
 import { NotFoundException } from '../../../domain/exceptions/NotFoundException';
 import { ExceptionMessages } from '../../../domain/exceptions/ExceptionMessages';
@@ -73,7 +74,7 @@ abstract class UpdatePostUseCase {
     }
 
     private checkIfPublisherIsEditRequesterThrowIfNot(post: Post, userId: UserId) {
-        if (!post.publisherId.equals(userId))
+        if (!post.publisherIs(userId))
             throw new AuthorizationException(ExceptionMessages.NOT_AUTHORIZED_TO_EDIT);
     }
 
@@ -98,7 +99,7 @@ abstract class UpdatePostUseCase {
 
         const newPictures = await this.picturesManager.upload(pictures.new);
 
-        return { pictures: [...oldPictures, ...newPictures] };
+        return { pictures: new PostPictures([...oldPictures, ...newPictures]) };
     }
 
     private async deletePostPicturesThatAreNotPresentInRequest(
@@ -111,7 +112,7 @@ abstract class UpdatePostUseCase {
             return picturesToKeep.some(pic => pic.equals(picture));
         }
 
-        for (const pictureInPost of post.pictures)
+        for (const pictureInPost of post.getPictures().iterator())
             if (!picturesToKeepContains(pictureInPost))
                 await this.picturesManager.delete(pictureInPost);
     }
@@ -125,4 +126,4 @@ abstract class UpdatePostUseCase {
     }
 }
 
-export {UpdatePostUseCase};
+export { UpdatePostUseCase };

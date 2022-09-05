@@ -57,7 +57,7 @@ class UpdateCallForHelpPostUseCase
     }
 
     private getCCPFrom(request: UpdateCallForHelpPostUseCaseRequest) {
-        let ccp: CCP | undefined;
+        let ccp: CCP | null = null;
 
         if (request.ccp || request.ccpKey) {
             ccp = new CCP(request.ccp!, request.ccpKey!);
@@ -67,7 +67,7 @@ class UpdateCallForHelpPostUseCase
     }
 
     private getBaridiMobNumberFrom(request: UpdateCallForHelpPostUseCaseRequest) {
-        let baridiMobNumber: BaridiMobNumber | undefined;
+        let baridiMobNumber: BaridiMobNumber | null = null;
 
         if (request.baridiMobNumber) {
             baridiMobNumber = new BaridiMobNumber(request.baridiMobNumber);

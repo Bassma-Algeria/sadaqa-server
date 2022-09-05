@@ -3,18 +3,18 @@ import { faker } from '@faker-js/faker';
 import { anything, instance, mock, when } from 'ts-mockito';
 
 import { aNotificationsManager } from './base/aNotificationsManager';
+import { aCreateNewDonationPostNotificationRequest } from './base/requests/aCreateNewDonationPostNotificationRequest';
+import { aCreateNewCallForHelpPostNotificationRequest } from './base/requests/aCreateNewCallForHelpPostNotificationRequest';
+import { aCreateNewFamilyInNeedPostNotificationRequest } from './base/requests/aCreateNewFamiyInNeedPostNotificationRequest';
+import { aCreateNewDonationRequestPostNotificationRequest } from './base/requests/aCreateNewDonationRequestPostNotificationRequest';
 
 import { UserId } from '../../../main/core/domain/UserId';
 
 import { PostsService } from '../../../main/core/domain/services/PostsService';
 import { UsersService } from '../../../main/core/domain/services/UsersService';
 
-import { aCreateNewDonationPostNotificationRequest } from './base/requests/aCreateNewDonationPostNotificationRequest';
-import { aCreateNewCallForHelpPostNotificationRequest } from './base/requests/aCreateNewCallForHelpPostNotificationRequest';
-import { aCreateNewFamilyInNeedPostNotificationRequest } from './base/requests/aCreateNewFamiyInNeedPostNotificationRequest';
-import { aCreateNewDonationRequestPostNotificationRequest } from './base/requests/aCreateNewDonationRequestPostNotificationRequest';
-import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
+import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 
 describe('Get Notifications', () => {
     const postsServiceMock = mock<PostsService>();

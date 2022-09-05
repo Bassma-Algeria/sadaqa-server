@@ -6,7 +6,7 @@ import { EmailEventPublisherImpl } from '../../../../main/infra/real/EmailEventP
 
 import { EmailsManagerFacade } from '../../../../main/EmailsManagerFacade';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { InMemoryEventBus } from '../../../../../EventBus/main/InMemoryEventBus';
 
 interface Dependencies {
     emailService: EmailService;
@@ -19,7 +19,7 @@ const anEmailsManager = (depends?: Dependencies) => {
 
     return new EmailsManagerFacade(
         depends?.emailService || instance(emailServiceMock),
-        new EmailEventPublisherImpl(EventBus.getInstance()),
+        new EmailEventPublisherImpl(InMemoryEventBus.instance()),
     );
 };
 

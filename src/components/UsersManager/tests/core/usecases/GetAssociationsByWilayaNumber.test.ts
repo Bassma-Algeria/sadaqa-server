@@ -19,22 +19,9 @@ describe('Get Associations By Wilaya numbers', () => {
         expect(list).to.have.lengthOf(0);
     });
 
-    it('given a get association by wilaya request, when there is an association in that wilaya but it is disabled, then return en empty list', async () => {
-        const association = anAssociationRegistrationRequest();
-        await usersManager.registerAssociation(association);
-
-        const list = await usersManager.getAssociationsInWilaya({
-            wilayaNumber: association.wilayaNumber,
-        });
-
-        expect(list).to.have.lengthOf(0);
-    });
-
-    it('given a get association by wilaya request, when there is an enabled association in that wilaya, then return it', async () => {
+    it('given a get association by wilaya request, when there is an association in that wilaya, then return it', async () => {
         const association = anAssociationRegistrationRequest();
         const { accountId } = await usersManager.registerAssociation(association);
-
-        await usersManager.activateAssociationAccount({ accountId });
 
         const list = await usersManager.getAssociationsInWilaya({
             wilayaNumber: association.wilayaNumber,
@@ -44,16 +31,13 @@ describe('Get Associations By Wilaya numbers', () => {
         expect(list[0].accountId).to.equal(accountId);
     });
 
-    it('given a get association by wilaya request, when there more than one enabled association in that wilaya, then return all of them', async () => {
+    it('given a get association by wilaya request, when there more than one association in that wilaya, then return all of them', async () => {
         const firstAssociation = anAssociationRegistrationRequest();
         const secondAssociation = anAssociationRegistrationRequest({
             wilayaNumber: firstAssociation.wilayaNumber,
         });
-        const { accountId: account1 } = await usersManager.registerAssociation(firstAssociation);
-        const { accountId: account2 } = await usersManager.registerAssociation(secondAssociation);
-
-        await usersManager.activateAssociationAccount({ accountId: account1 });
-        await usersManager.activateAssociationAccount({ accountId: account2 });
+        await usersManager.registerAssociation(firstAssociation);
+        await usersManager.registerAssociation(secondAssociation);
 
         const list = await usersManager.getAssociationsInWilaya({
             wilayaNumber: firstAssociation.wilayaNumber,

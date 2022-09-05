@@ -7,16 +7,16 @@ import { aUsersManagerFacade } from './base/aUsersManagerFacade';
 import { anEditRegularUserInfoRequest } from './base/requests/anEditRegularUserInfoRequest';
 import { aRegularUserRegistrationRequest } from './base/requests/aRegularUserRegistrationRequest';
 
+import { ProfilePicture } from '../../../main/core/domain/ProfilePicture';
+
 import { WilayasService } from '../../../main/core/domain/services/WilayasService';
+
+import { FakePicturesManager } from '../../../main/infra/fake/FakePicturesManager';
 
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../main/core/domain/exceptions/NotFoundException';
-import { MultiLanguagesValidationException } from '../../../main/core/domain/exceptions/MultiLanguagesValidationException';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
-import { ProfilePicture } from '../../../main/core/domain/ProfilePicture';
 import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
-import { FakePicturesManager } from '../../../main/infra/fake/FakePicturesManager';
+import { MultiLanguagesValidationException } from '../../../main/core/domain/exceptions/MultiLanguagesValidationException';
 
 describe('Edit Regular User Account Info', () => {
     const mockWilayaService = mock<WilayasService>();
@@ -283,20 +283,6 @@ describe('Edit Regular User Account Info', () => {
         const editedUser = await usersManager.getRegularUserById({ accountId });
 
         expect(editedUser).to.deep.equal(returned);
-    });
-
-    it('given an edit regular user account info, when everything is ok, then publish a regular user account info edited event to the global event bus', async () => {
-        const mockFn = spy();
-
-        EventBus.getInstance().subscribeTo('REGULAR_USER_ACCOUNT_INFO_EDITED').by(mockFn);
-
-        const { accountId } = await usersManager.registerRegularUser(
-            aRegularUserRegistrationRequest(),
-        );
-        await usersManager.editRegularUserAccountInfo(anEditRegularUserInfoRequest({ accountId }));
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.have.property('accountId', accountId);
     });
 
     async function addProfilePicture(accountId: string) {

@@ -11,7 +11,7 @@ class PicturesManagerImpl implements PicturesManager {
     }
 
     async uploadProfilePicture(pic: { buffer: Buffer; filename: string }): Promise<ProfilePicture> {
-        const { url } = await this.mediaManager.uploadPicture({ picture: pic.buffer });
+        const { url } = await this.mediaManager.uploadPicture(pic);
 
         return new ProfilePicture(url);
     }

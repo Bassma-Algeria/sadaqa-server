@@ -6,5 +6,6 @@ export interface PostDto {
     readonly publisherId: string;
     readonly pictures: string[];
     readonly status: string;
+    readonly type: string;
     readonly createdAt: Date;
 }

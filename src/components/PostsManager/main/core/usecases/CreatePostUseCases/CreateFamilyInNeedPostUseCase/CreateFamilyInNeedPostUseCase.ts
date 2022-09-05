@@ -57,11 +57,11 @@ class CreateFamilyInNeedPostUseCase
 
         this.publishPostCreatedEvent(post);
 
-        return { postId: post.postId.value() };
+        return { postId: post.state.postId };
     }
 
     private getCCPFrom(request: CreateFamilyInNeedPostUseCaseRequest) {
-        let ccp: CCP | undefined;
+        let ccp: CCP | null = null;
 
         if (request.ccp || request.ccpKey) {
             ccp = new CCP(request.ccp!, request.ccpKey!);
@@ -71,7 +71,7 @@ class CreateFamilyInNeedPostUseCase
     }
 
     private getBaridiMobNumberFrom(request: CreateFamilyInNeedPostUseCaseRequest) {
-        let baridiMobNumber: BaridiMobNumber | undefined;
+        let baridiMobNumber: BaridiMobNumber | null = null;
 
         if (request.baridiMobNumber) {
             baridiMobNumber = new BaridiMobNumber(request.baridiMobNumber);

@@ -25,6 +25,21 @@ describe('Get Call For Help Posts List', () => {
         expect(list[1].publisherId).to.equal(post1.publisherId);
     });
 
+    it('should not get the disabled call for help posts', async () => {
+        const post1 = aCallForHelpPostCreationRequest();
+        const post2 = aCallForHelpPostCreationRequest();
+
+        const { postId: id1 } = await postsManager.create(post1);
+        const { postId: id2 } = await postsManager.create(post2);
+
+        await postsManager.toggleEnablingStatus({ postId: id1, userId: post1.publisherId });
+
+        const { list } = await postsManager.getList();
+
+        expect(list.length).to.equal(1);
+        expect(list[0].postId).to.equal(id2);
+    });
+
     it('should get all the call for help posts page per page 20 one per time, ordered by creation time descending', async () => {
         await create30CallForHelp();
 

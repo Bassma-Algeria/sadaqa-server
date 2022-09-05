@@ -12,101 +12,175 @@ import { EditRegularUserAccountCredentialsUseCaseRequest } from '../../../compon
 import { UsersManagerConfiguration } from '../../../components/UsersManager/main/UsersManagerConfiguration';
 import { AuthenticationManagerConfiguration } from '../../../components/AuthenticationManager/main/AuthenticationManagerConfiguration';
 
+import { Service } from './base/base.service';
+
 @Injectable()
-class UsersService {
+class UsersService extends Service {
     private readonly usersManager = UsersManagerConfiguration.aUsersManager();
     private readonly authenticationManager =
         AuthenticationManagerConfiguration.anAuthenticationManager();
 
     async login(loginBody: LoginUseCaseRequest) {
-        const { accountId, type } = await this.usersManager.login(loginBody);
-        const { accessToken } = await this.authenticationManager.generateAccessToken({
-            userId: accountId,
-        });
+        try {
+            const { accountId, type } = await this.usersManager.login(loginBody);
+            const { accessToken } = await this.authenticationManager.generateAccessToken({
+                userId: accountId,
+            });
 
-        return { type, accessToken };
+            return { type, accessToken };
+        } catch (e) {
+            await this.logError('Error while login', e);
+
+            throw e;
+        }
     }
 
     async registerRegularUser(registrationBody: RegisterRegularUserUseCaseRequest) {
-        const { accountId } = await this.usersManager.registerRegularUser(registrationBody);
-        const { accessToken } = await this.authenticationManager.generateAccessToken({
-            userId: accountId,
-        });
+        try {
+            const { accountId } = await this.usersManager.registerRegularUser(registrationBody);
+            const { accessToken } = await this.authenticationManager.generateAccessToken({
+                userId: accountId,
+            });
 
-        return { accessToken };
+            return { accessToken };
+        } catch (e) {
+            await this.logError('Error while regular user registration', e);
+
+            throw e;
+        }
     }
 
     async getAuthenticatedRegularUser(accessToken: string) {
-        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+        try {
+            const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
 
-        return this.getRegularUserById({ accountId: userId });
+            return await this.getRegularUserById({ accountId: userId });
+        } catch (e) {
+            await this.logError('Error while getting auth regular user', e);
+
+            throw e;
+        }
     }
 
-    getRegularUserById(request: GetAccountByIdUseCaseRequest) {
-        return this.usersManager.getRegularUserById(request);
+    async getRegularUserById(request: GetAccountByIdUseCaseRequest) {
+        try {
+            return await this.usersManager.getRegularUserById(request);
+        } catch (e) {
+            await this.logError('Error while getting regular user by id', e);
+
+            throw e;
+        }
     }
 
     async registerAssociation(registrationBody: RegisterAssociationUseCaseRequest) {
-        const { accountId } = await this.usersManager.registerAssociation(registrationBody);
-        const { accessToken } = await this.authenticationManager.generateAccessToken({
-            userId: accountId,
-        });
+        try {
+            const { accountId } = await this.usersManager.registerAssociation(registrationBody);
+            const { accessToken } = await this.authenticationManager.generateAccessToken({
+                userId: accountId,
+            });
 
-        return { accessToken };
+            return { accessToken };
+        } catch (e) {
+            await this.logError('Error while association registration', e);
+
+            throw e;
+        }
     }
 
     async getAuthenticatedAssociation(accessToken: string) {
-        const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
+        try {
+            const { userId } = await this.authenticationManager.decodeAccessToken({ accessToken });
 
-        return this.getAssociationById({ accountId: userId });
+            return await this.getAssociationById({ accountId: userId });
+        } catch (e) {
+            await this.logError('Error while getting auth association', e);
+
+            throw e;
+        }
     }
 
     async getAssociationById(request: GetAccountByIdUseCaseRequest) {
-        return this.usersManager.getAssociationById(request);
+        try {
+            return await this.usersManager.getAssociationById(request);
+        } catch (e) {
+            await this.logError('Error while getting association by id', e);
+
+            throw e;
+        }
     }
 
     async editAssociationInfo(
         accessToken: string,
         request: Omit<EditAssociationAccountInfoUseCaseRequest, 'accountId'>,
     ) {
-        const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
-            accessToken,
-        });
+        try {
+            const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
+                accessToken,
+            });
 
-        return this.usersManager.editAssociationAccountInfo({ ...request, accountId });
+            return await this.usersManager.editAssociationAccountInfo({ ...request, accountId });
+        } catch (e) {
+            await this.logError('Error while editing association info', e);
+
+            throw e;
+        }
     }
 
     async editAssociationCredentials(
         accessToken: string,
         request: Omit<EditAssociationAccountCredentialsUseCaseRequest, 'accountId'>,
     ) {
-        const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
-            accessToken,
-        });
+        try {
+            const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
+                accessToken,
+            });
 
-        return this.usersManager.editAssociationAccountCredentials({ ...request, accountId });
+            return await this.usersManager.editAssociationAccountCredentials({
+                ...request,
+                accountId,
+            });
+        } catch (e) {
+            await this.logError('Error while editing association credentials', e);
+
+            throw e;
+        }
     }
 
     async editRegularUserInfo(
         accessToken: string,
         request: Omit<EditRegularUserAccountInfoUseCaseRequest, 'accountId'>,
     ) {
-        const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
-            accessToken,
-        });
+        try {
+            const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
+                accessToken,
+            });
 
-        return this.usersManager.editRegularUserAccountInfo({ ...request, accountId });
+            return await this.usersManager.editRegularUserAccountInfo({ ...request, accountId });
+        } catch (e) {
+            await this.logError('Error while editing regular user info', e);
+
+            throw e;
+        }
     }
 
     async editRegularUserCredentials(
         accessToken: string,
         request: Omit<EditRegularUserAccountCredentialsUseCaseRequest, 'accountId'>,
     ) {
-        const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
-            accessToken,
-        });
+        try {
+            const { userId: accountId } = await this.authenticationManager.decodeAccessToken({
+                accessToken,
+            });
 
-        return this.usersManager.editRegularUserAccountCredentials({ ...request, accountId });
+            return await this.usersManager.editRegularUserAccountCredentials({
+                ...request,
+                accountId,
+            });
+        } catch (e) {
+            await this.logError('Error while editing regular user credentials', e);
+
+            throw e;
+        }
     }
 }
 

@@ -40,7 +40,7 @@ class GetFavouritePostsUseCase
     async handle(
         request: GetFavouritePostsUseCaseRequest,
     ): Promise<GetFavouritePostsUseCaseResponse> {
-        const { userId } = await this.validateAndGetUserIdfrom(request);
+        const { userId } = await this.validateAndGetUserIdFrom(request);
 
         const favouritePosts = await this.getFavouritePostsBy(userId);
 
@@ -65,11 +65,11 @@ class GetFavouritePostsUseCase
         };
     }
 
-    private async validateAndGetUserIdfrom(request: GetFavouritePostsUseCaseRequest) {
+    private async validateAndGetUserIdFrom(request: GetFavouritePostsUseCaseRequest) {
         const userId = new UserId(request.userId);
 
         const isExist = await this.usersService.isExist(userId);
-        if (!isExist) throw new AuthorizationException(ExceptionMessages.USER_NOT_EXIST);
+        if (!isExist) throw new AuthorizationException(ExceptionMessages.USER_NOT_FOUND);
 
         return { userId };
     }

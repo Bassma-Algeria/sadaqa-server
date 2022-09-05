@@ -17,8 +17,6 @@ import { MultiLanguagesValidationException } from '../../../../main/core/domain/
 
 import { FakePicturesManager } from '../../../../main/infra/fake/FakePicturesManager';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
-
 describe('Update Family In Need Post', () => {
     const picturesManager = new FakePicturesManager();
     const mockWilayasService = mock<WilayasService>();
@@ -211,7 +209,10 @@ describe('Update Family In Need Post', () => {
             postId,
         });
 
-        const NEW_PICTURES = Array.from({ length: 1 }).map(() => Buffer.from(faker.image.image()));
+        const NEW_PICTURES = Array.from({ length: 1 }).map(() => ({
+            buffer: Buffer.from(faker.datatype.string(40)),
+            filename: faker.system.fileName(),
+        }));
 
         await familyInNeedPostsManager.update(
             anEditFamilyInNeedPostRequest({
@@ -240,7 +241,10 @@ describe('Update Family In Need Post', () => {
             postId,
         });
 
-        const NEW_PICTURES = Array.from({ length: 1 }).map(() => Buffer.from(faker.image.image()));
+        const NEW_PICTURES = Array.from({ length: 1 }).map(() => ({
+            buffer: Buffer.from(faker.datatype.string(40)),
+            filename: faker.system.fileName(),
+        }));
         const OLD_PICTURES_TO_KEEP = picturesBeforeUpdate.slice(0, 1);
         const OLD_PICTURES_TO_REMOVE = picturesBeforeUpdate.slice(1);
 
@@ -318,31 +322,12 @@ describe('Update Family In Need Post', () => {
         const { userId, postId } = await createFamilyInNeedPost();
 
         const returned = await familyInNeedPostsManager.update(
-            anEditFamilyInNeedPostRequest({
-                userId,
-                postId,
-            }),
+            anEditFamilyInNeedPostRequest({ userId, postId }),
         );
 
         const updated = await familyInNeedPostsManager.getById({ postId });
 
         expect(updated).to.deep.equal(returned);
-    });
-
-    it('given an update familyInNeed post request, when the post updated, then should publish a post updated event to the global event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('FAMILY_IN_NEED_POST_UPDATED').by(mockFn);
-
-        const { userId, postId } = await createFamilyInNeedPost();
-
-        await familyInNeedPostsManager.update(
-            anEditFamilyInNeedPostRequest({
-                userId,
-                postId,
-            }),
-        );
-
-        expect(mockFn.calledOnce).to.equal(true);
     });
 
     async function createFamilyInNeedPost() {

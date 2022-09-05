@@ -7,6 +7,7 @@ import { WilayaNumber } from '../../../WilayaNumber';
 export interface PostRepositoryFindManyFilters {
     page: number;
     pageLimit: number;
+    status?: PostStatus;
     wilayaNumber?: WilayaNumber;
 }
 

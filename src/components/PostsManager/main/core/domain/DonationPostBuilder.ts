@@ -10,7 +10,7 @@ class DonationPostBuilder extends PostBuilder {
         super(post);
 
         if (!post) return;
-        this.category = post.category;
+        this.category = post.getCategory();
     }
 
     withCategory(category: DonationCategory) {

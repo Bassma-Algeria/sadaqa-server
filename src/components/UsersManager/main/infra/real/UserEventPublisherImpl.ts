@@ -1,12 +1,12 @@
 import { Account } from '../../core/domain/Account';
+import { AccountId } from '../../core/domain/AccountId';
 import { AssociationDocs } from '../../core/domain/AssociationDocs';
 import { RegularUserAccount } from '../../core/domain/RegularUserAccount';
 import { AssociationAccount } from '../../core/domain/AssociationAccount';
 
 import { UserEventPublisher } from '../../core/domain/services/UserEventPublisher';
 
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
-import { AccountId } from '../../core/domain/AccountId';
+import { EventBus } from '../../../../EventBus/main/EventBus';
 
 class UserEventPublisherImpl implements UserEventPublisher {
     constructor(private readonly eventBus: EventBus) {}

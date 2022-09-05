@@ -4,5 +4,5 @@ export interface UpdatePostUseCaseRequest {
     readonly title: string;
     readonly description: string;
     readonly wilayaNumber: number;
-    readonly pictures: { new: Buffer[]; old: string[] };
+    readonly pictures: { new: { buffer: Buffer; filename: string }[]; old: string[] };
 }

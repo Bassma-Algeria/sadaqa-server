@@ -5,8 +5,7 @@ import { UuidMessageIdGenerator } from './infra/real/UuidMessageIdGenerator';
 import { PostgresTextMessageRepository } from './infra/real/PostgresTextMessageRepository';
 import { TextMessageEventPublisherImpl } from './infra/real/TextMessageEventPublisherImpl';
 
-import { EventBus } from '../../_shared_/event-bus/EventBus';
-
+import { InMemoryEventBus } from '../../EventBus/main/InMemoryEventBus';
 import { UsersManagerConfiguration } from '../../UsersManager/main/UsersManagerConfiguration';
 
 class MessagesManagerConfiguration {
@@ -15,7 +14,7 @@ class MessagesManagerConfiguration {
             new UsersServiceImpl(UsersManagerConfiguration.aUsersManager()),
             new UuidMessageIdGenerator(),
             new PostgresTextMessageRepository(),
-            new TextMessageEventPublisherImpl(EventBus.getInstance()),
+            new TextMessageEventPublisherImpl(InMemoryEventBus.instance()),
         );
     }
 }

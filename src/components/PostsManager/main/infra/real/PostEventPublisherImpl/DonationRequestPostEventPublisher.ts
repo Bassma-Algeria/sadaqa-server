@@ -1,7 +1,8 @@
+import { PostShare } from '../../../core/domain/PostShare';
 import { DonationRequestPost } from '../../../core/domain/DonationRequestPost';
 import { DonationRequestPostEventPublisher } from '../../../core/domain/services/PostEventPublisher/DonationRequestPostEventPublisher';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { EventBus } from '../../../../../EventBus/main/EventBus';
 
 class DonationRequestPostEventPublisherImpl implements DonationRequestPostEventPublisher {
     constructor(private readonly eventBus: EventBus) {}
@@ -24,18 +25,16 @@ class DonationRequestPostEventPublisherImpl implements DonationRequestPostEventP
             .withPayload(this.toPayload(post));
     }
 
+    publishPostShared(share: PostShare) {
+        this.eventBus.publish('DONATION_REQUEST_POST_SHARED').withPayload({
+            postId: share.state.postId,
+            userId: share.state.userId,
+            shareTime: share.state.createdAt,
+        });
+    }
+
     private toPayload(post: DonationRequestPost) {
-        return {
-            title: post.title.value(),
-            postId: post.postId.value(),
-            category: post.category.value(),
-            publisherId: post.publisherId.value(),
-            description: post.description.value(),
-            wilayaNumber: post.wilayaNumber.value(),
-            status: post.status,
-            pictures: post.pictures.map(pic => pic.url()),
-            createdAt: post.createdAt,
-        };
+        return post.state;
     }
 }
 

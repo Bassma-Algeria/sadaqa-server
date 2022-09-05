@@ -1,10 +1,7 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 
 import { aUsersManagerFacade } from './base/aUsersManagerFacade';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('User Online', () => {
     const usersManager = aUsersManagerFacade();
@@ -42,28 +39,5 @@ describe('User Online', () => {
         expect(listAfterHeGoOffline).to.not.contain(accountId);
 
         expect(listAfterHeGoOffline).to.have.lengthOf(listAfterHeBecameOnline.length - 1);
-    });
-
-    it('given a user became online, then should publish user became online event in the global event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('USER_BECAME_ONLINE').by(mockFn);
-
-        const accountId = faker.datatype.uuid();
-        await usersManager.userBecameOnline({ accountId });
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.have.property('accountId', accountId);
-    });
-
-    it('given a user go offline, then should publish user go offline event in the global event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('USER_GO_OFFLINE').by(mockFn);
-
-        const accountId = faker.datatype.uuid();
-        await usersManager.userBecameOnline({ accountId });
-        await usersManager.userGoOffline({ accountId });
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.have.property('accountId', accountId);
     });
 });

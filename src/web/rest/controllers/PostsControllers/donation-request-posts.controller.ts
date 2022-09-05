@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import {
     ApiBadRequestResponse,
+    ApiBearerAuth,
     ApiConsumes,
     ApiCreatedResponse,
     ApiForbiddenResponse,
@@ -109,6 +110,7 @@ class DonationRequestPostsController {
     }
 
     @Post('/')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'create donation request post' })
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
@@ -128,7 +130,7 @@ class DonationRequestPostsController {
             return await this.postsService.create(accessToken, {
                 ...body,
                 wilayaNumber: Number(body.wilayaNumber),
-                pictures: pictures.map(pic => pic.buffer),
+                pictures: pictures.map(pic => ({ buffer: pic.buffer, filename: pic.originalname })),
             });
         } catch (e) {
             handlePostsException(e, language);
@@ -136,6 +138,7 @@ class DonationRequestPostsController {
     }
 
     @Put('/:postId')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'update donation request post' })
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
@@ -161,7 +164,7 @@ class DonationRequestPostsController {
                 wilayaNumber: Number(body.wilayaNumber),
                 pictures: {
                     old: body.oldPictures,
-                    new: newPics.map(pic => pic.buffer),
+                    new: newPics.map(pic => ({ buffer: pic.buffer, filename: pic.originalname })),
                 },
             });
         } catch (e) {
@@ -170,6 +173,7 @@ class DonationRequestPostsController {
     }
 
     @Put('/:postId/toggle-enabling')
+    @ApiBearerAuth()
     @ApiOperation({
         description: 'toggle enabling status of a donation request post between ENABLED & DISABLED',
     })
@@ -190,7 +194,24 @@ class DonationRequestPostsController {
         }
     }
 
+    @Post('/:postId/share')
+    @ApiBearerAuth()
+    @ApiOperation({ description: 'add a share to the post' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token', required: false })
+    @ApiCreatedResponse({ description: 'post shared successfully' })
+    @ApiNotFoundResponse({ description: 'target post not found' })
+    @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async share(@Param('postId') postId: string, @Headers('Authorization') accessToken?: string) {
+        try {
+            return await this.postsService.share(accessToken, { postId });
+        } catch (e) {
+            handlePostsException(e);
+        }
+    }
+
     @Delete('/:postId')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'delete donation request post' })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post deleted successfully' })

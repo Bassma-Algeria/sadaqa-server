@@ -1,5 +1,6 @@
 import {
     ApiBadRequestResponse,
+    ApiBearerAuth,
     ApiConsumes,
     ApiCreatedResponse,
     ApiForbiddenResponse,
@@ -46,8 +47,9 @@ class DonationPostsController {
     @Get('/')
     @ApiOperation({ description: 'get donation posts list' })
     @ApiQuery({
+        required: false,
         name: 'category',
-        description: 'donation category',
+        description: 'donation category, default: all',
         enum: DonationCategory.SUPPORTED_CATEGORIES,
     })
     @ApiQuery({ name: 'page', description: 'number of page, default: 1', required: false })
@@ -108,6 +110,7 @@ class DonationPostsController {
     }
 
     @Post('/')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'create donation post' })
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
@@ -127,7 +130,7 @@ class DonationPostsController {
             return await this.postsService.create(accessToken, {
                 ...body,
                 wilayaNumber: Number(body.wilayaNumber),
-                pictures: pictures.map(pic => pic.buffer),
+                pictures: pictures.map(pic => ({ buffer: pic.buffer, filename: pic.originalname })),
             });
         } catch (e) {
             handlePostsException(e, language);
@@ -135,6 +138,7 @@ class DonationPostsController {
     }
 
     @Put('/:postId')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'update donation post' })
     @ApiConsumes('multipart/form-data')
     @ApiHeader({ name: 'Accept-Language', enum: ['ar', 'en'] })
@@ -160,7 +164,7 @@ class DonationPostsController {
                 wilayaNumber: Number(body.wilayaNumber),
                 pictures: {
                     old: body.oldPictures,
-                    new: newPics.map(pic => pic.buffer),
+                    new: newPics.map(pic => ({ buffer: pic.buffer, filename: pic.originalname })),
                 },
             });
         } catch (e) {
@@ -169,6 +173,7 @@ class DonationPostsController {
     }
 
     @Put('/:postId/toggle-enabling')
+    @ApiBearerAuth()
     @ApiOperation({
         description: 'toggle donation post enabling status between ENABLED & DISABLED',
     })
@@ -189,7 +194,24 @@ class DonationPostsController {
         }
     }
 
+    @Post('/:postId/share')
+    @ApiBearerAuth()
+    @ApiOperation({ description: 'add a share to the post' })
+    @ApiHeader({ name: 'Authorization', description: 'the access token', required: false })
+    @ApiCreatedResponse({ description: 'post shared successfully' })
+    @ApiNotFoundResponse({ description: 'target post not found' })
+    @ApiUnauthorizedResponse({ description: 'the access token provided not valid' })
+    @ApiInternalServerErrorResponse({ description: 'server error' })
+    async share(@Param('postId') postId: string, @Headers('Authorization') accessToken?: string) {
+        try {
+            return await this.postsService.share(accessToken, { postId });
+        } catch (e) {
+            handlePostsException(e);
+        }
+    }
+
     @Delete('/:postId')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'delete donation post' })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'post deleted successfully' })

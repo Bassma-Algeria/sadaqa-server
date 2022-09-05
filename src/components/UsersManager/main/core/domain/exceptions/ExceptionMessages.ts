@@ -48,6 +48,8 @@ const ExceptionMessages = {
     PROFILE_PIC_SENT_NOT_THE_OLD_PIC: 'profile picture sent is not the old picture',
     INVALID_PROFILE_PICTURE: 'profile picture url is not valid',
     NO_PROFILE_PICTURE_TO_DELETE: 'no profile picture to delete',
+    CANNOT_EDIT_ACCOUNT_CREDENTIALS: 'cannot edit the credentials of a non active account',
+    CANNOT_EDIT_ACCOUNT_INFO: 'cannot edit the info of a non active account',
 };
 
 export { ExceptionMessages };

@@ -1,9 +1,10 @@
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
+import { anything, instance, mock, when } from 'ts-mockito';
 
 import { aDonationPostsManager } from '../base/aDonationPostsManager';
 import { aDonationPostCreationRequest } from '../base/requests/aDonationPostCreationRequest';
-import { anything, instance, mock, when } from 'ts-mockito';
+
 import { UsersService } from '../../../../main/core/domain/services/UsersService';
 import { ExceptionMessages } from '../../../../main/core/domain/exceptions/ExceptionMessages';
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
@@ -26,7 +27,7 @@ describe('Get Donation Posts List by publisher id', () => {
         const PUBLISHER_NOT_EXIST = faker.datatype.uuid();
 
         await expect(postsManager.getByPublisherId({ publisherId: PUBLISHER_NOT_EXIST }))
-            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_EXIST)
+            .to.eventually.be.rejectedWith(ExceptionMessages.USER_NOT_FOUND)
             .and.to.be.an.instanceof(NotFoundException);
     });
 

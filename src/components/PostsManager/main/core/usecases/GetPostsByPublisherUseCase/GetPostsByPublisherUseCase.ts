@@ -36,7 +36,7 @@ class GetPostsByPublisherUseCase
 
     private async checkIfUserExistThrowIfNot(id: UserId) {
         const isExist = await this.usersService.isExist(id);
-        if (!isExist) throw new NotFoundException(ExceptionMessages.USER_NOT_EXIST);
+        if (!isExist) throw new NotFoundException(ExceptionMessages.USER_NOT_FOUND);
     }
 }
 

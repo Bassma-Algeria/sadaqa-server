@@ -2,13 +2,12 @@ import { Email } from '../../../Email';
 import { Account } from '../../../Account';
 import { AccountId } from '../../../AccountId';
 import { PhoneNumber } from '../../../PhoneNumber';
-
 import { WilayaNumber } from '../../../WilayaNumber';
 import { AccountStatus } from '../../../AccountStatus';
 
 export interface AccountRepositoryFindManyFilters {
-    accountStatus: AccountStatus;
     wilayaNumber: WilayaNumber;
+    accountStatus?: AccountStatus;
 }
 
 export interface AccountRepository<A extends Account> {

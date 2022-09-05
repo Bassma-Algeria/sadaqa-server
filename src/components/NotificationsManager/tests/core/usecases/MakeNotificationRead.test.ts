@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 import { anything, instance, mock, when } from 'ts-mockito';
@@ -20,8 +19,6 @@ import { ExceptionMessages } from '../../../main/core/domain/exceptions/Exceptio
 import { NotFoundException } from '../../../main/core/domain/exceptions/NotFoundException';
 import { ValidationException } from '../../../main/core/domain/exceptions/ValidationException';
 import { AuthorizationException } from '../../../main/core/domain/exceptions/AuthorizationException';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Make Notification Read', () => {
     const postsServiceMock = mock<PostsService>();
@@ -182,21 +179,6 @@ describe('Make Notification Read', () => {
         )
             .to.eventually.be.rejectedWith(ExceptionMessages.NOTIFICATION_ALREADY_READ)
             .and.to.be.an.instanceof(ValidationException);
-    });
-
-    it('given a make notification read request, then after updating the read status of the notification, should publish an event to the globale event bus', async () => {
-        const mockFn = spy();
-        EventBus.getInstance().subscribeTo('NOTIFICATION_READ').by(mockFn);
-
-        const receiverId = faker.datatype.uuid();
-        await createNewCallForHelpPostNotification(receiverId);
-        const { list } = await notificationsManager.getNotifications({ receiverId });
-
-        const notificationId = list[0].notification.notificationId;
-        await notificationsManager.makeNotificationRead({ notificationId, userId: receiverId });
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.have.property('notificationId', notificationId);
     });
 
     const createNewDonationPostNotification = async (receiverId: string) => {

@@ -9,8 +9,7 @@ import { InMemoryOnlineUserRepository } from './infra/real/InMemoryOnlineUserRep
 import { PostgresRegularUserAccountRepository } from './infra/real/PostgresRegularUserAccountRepository';
 import { PostgresAssociationAccountRepository } from './infra/real/PostgresAssociationAccountRepository';
 
-import { EventBus } from '../../_shared_/event-bus/EventBus';
-
+import { InMemoryEventBus } from '../../EventBus/main/InMemoryEventBus';
 import { MediaManagerConfiguration } from '../../MediaManager/main/MediaManagerConfiguration';
 import { RegionsManagerConfiguration } from '../../RegionsManager/main/RegionsManagerConfiguration';
 
@@ -21,7 +20,7 @@ class UsersManagerConfiguration {
             new PicturesManagerImpl(MediaManagerConfiguration.aMediaManagerFacade()),
             new BcryptPasswordEncryptor(),
             new UuidAccountIdGenerator(),
-            new UserEventPublisherImpl(EventBus.getInstance()),
+            new UserEventPublisherImpl(InMemoryEventBus.instance()),
             new InMemoryOnlineUserRepository(),
             new PostgresRegularUserAccountRepository(),
             new PostgresAssociationAccountRepository(),

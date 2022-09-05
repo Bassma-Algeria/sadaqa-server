@@ -1,8 +1,12 @@
 import { expect } from 'chai';
 import { faker } from '@faker-js/faker';
 
-import { aDeletePostRequest } from '../base/requests/aDeletePostRequest';
+import { aFavouritePostsManager } from '../base/aFavouritePostsManager';
 import { aFamilyInNeedPostsManager } from '../base/aFamilyInNeedPostsManager';
+
+import { aDeletePostRequest } from '../base/requests/aDeletePostRequest';
+import { anAddToFavouriteRequest } from '../base/requests/anAddToFavouriteRequest';
+import { anIsPostInFavouriteRequest } from '../base/requests/anIsPostInFavouriteRequest';
 import { aFamilyInNeedPostCreationRequest } from '../base/requests/aFamilyInNeedPostCreationRequest';
 
 import { NotFoundException } from '../../../../main/core/domain/exceptions/NotFoundException';
@@ -11,6 +15,7 @@ import { AuthorizationException } from '../../../../main/core/domain/exceptions/
 
 describe('Delete Family In Need Post', () => {
     const postsManager = aFamilyInNeedPostsManager();
+    const favouritePostsManager = aFavouritePostsManager();
 
     it('given a delete family in need request post request, when the post id is not an id of an existing post, then reject', async () => {
         const NOT_EXIST = faker.datatype.uuid();
@@ -38,5 +43,21 @@ describe('Delete Family In Need Post', () => {
         await expect(postsManager.getById({ postId }))
             .to.eventually.be.rejectedWith(ExceptionMessages.POST_NOT_FOUND)
             .and.to.be.an.instanceOf(NotFoundException);
+    });
+
+    it('given a delete family in need post request, when deleting the post, then should delete all the corresponding posts that are added to favourite', async () => {
+        const post = aFamilyInNeedPostCreationRequest();
+        const { postId } = await postsManager.create(post);
+
+        const favourite = anAddToFavouriteRequest({ postId, postType: 'family-in-need' });
+        await favouritePostsManager.addToFavourite(favourite);
+
+        await postsManager.delete({ postId, userId: post.publisherId });
+
+        const { isFavourite } = await favouritePostsManager.isPostInFavourite(
+            anIsPostInFavouriteRequest(favourite),
+        );
+
+        expect(isFavourite).to.equal(false);
     });
 });

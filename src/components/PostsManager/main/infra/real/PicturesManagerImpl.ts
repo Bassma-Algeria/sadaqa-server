@@ -6,11 +6,11 @@ import { MediaManagerFacade } from '../../../../MediaManager/main/MediaManagerFa
 class PicturesManagerImpl implements PicturesManager {
     constructor(private readonly mediaManager: MediaManagerFacade) {}
 
-    async upload(picsToUpload: Buffer[]): Promise<Picture[]> {
+    async upload(picsToUpload: { buffer: Buffer; filename: string }[]): Promise<Picture[]> {
         const pictures: Picture[] = [];
 
         for (const picture of picsToUpload) {
-            const { url } = await this.mediaManager.uploadPicture({ picture });
+            const { url } = await this.mediaManager.uploadPicture(picture);
 
             pictures.push(new Picture(url));
         }

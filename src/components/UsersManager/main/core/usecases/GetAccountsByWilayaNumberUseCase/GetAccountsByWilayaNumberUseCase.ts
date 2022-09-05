@@ -4,7 +4,6 @@ import { GetAccountsByWilayaNumberUseCaseResponse } from './GetAccountsByWilayaN
 
 import { Account } from '../../domain/Account';
 import { WilayaNumber } from '../../domain/WilayaNumber';
-import { AccountStatus } from '../../domain/AccountStatus';
 
 import { AccountDtoMapper } from '../_common_/dtos/base/AccountDtoMapper';
 
@@ -36,9 +35,8 @@ class GetAccountsByWilayaNumberUseCase
         request: GetAccountsByWilayaNumberUseCaseRequest,
     ): AccountRepositoryFindManyFilters {
         const wilayaNumber = new WilayaNumber(request.wilayaNumber);
-        const accountStatus = AccountStatus.ACTIVE;
 
-        return { wilayaNumber, accountStatus };
+        return { wilayaNumber };
     }
 }
 

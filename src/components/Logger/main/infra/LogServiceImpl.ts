@@ -1,6 +1,7 @@
 import os from 'os';
+import fs from 'fs';
 import path from 'path';
-import * as fs from 'node:fs/promises';
+import * as fsPromise from 'node:fs/promises';
 
 import { ErrorLog } from '../core/domain/ErrorLog';
 import { InformationLog } from '../core/domain/InformationLog';
@@ -11,8 +12,19 @@ class LogServiceImpl implements LogService {
     private readonly INFO_LOG_FILE = path.join(__dirname, '../../logs/info.log');
     private readonly ERROR_LOG_FILE = path.join(__dirname, '../../logs/error.log');
 
+    private static _instance: LogService = new LogServiceImpl();
+
+    static instance() {
+        return this._instance;
+    }
+
+    private constructor() {
+        this.createFileIfNotExist(this.INFO_LOG_FILE);
+        this.createFileIfNotExist(this.ERROR_LOG_FILE);
+    }
+
     async info(infoLog: InformationLog): Promise<void> {
-        await fs.appendFile(
+        await fsPromise.appendFile(
             this.INFO_LOG_FILE,
             JSON.stringify({
                 timestamp: infoLog.timestamp,
@@ -23,7 +35,7 @@ class LogServiceImpl implements LogService {
     }
 
     async error(errorLog: ErrorLog): Promise<void> {
-        await fs.appendFile(
+        await fsPromise.appendFile(
             this.ERROR_LOG_FILE,
             JSON.stringify({
                 timestamp: errorLog.timestamp,
@@ -31,6 +43,12 @@ class LogServiceImpl implements LogService {
                 stack: errorLog.stack,
             }) + os.EOL,
         );
+    }
+
+    private createFileIfNotExist(filepath: string) {
+        const dirname = path.dirname(filepath);
+        if (!fs.existsSync(dirname)) fs.mkdirSync(dirname);
+        if (!fs.existsSync(filepath)) fs.writeFileSync(filepath, '');
     }
 }
 

@@ -2,7 +2,8 @@ import { UsersService } from './domain/services/UsersService';
 import { WilayasService } from './domain/services/WilayasService';
 import { PicturesManager } from './domain/services/PicturesManager';
 import { PostIdGenerator } from './domain/services/PostIdGenerator';
-
+import { PostShareRepository } from './domain/services/PostRepository/PostShareRepository';
+import { FavouritePostRepository } from './domain/services/PostRepository/FavouritePostRepository';
 import { CallForHelpPostRepository } from './domain/services/PostRepository/CallForHelpPostRepository';
 import { CallForHelpPostEventPublisher } from './domain/services/PostEventPublisher/CallForHelpPostEventPublisher';
 
@@ -32,8 +33,12 @@ import { GetPostsByPublisherUseCaseRequest } from './usecases/GetPostsByPublishe
 
 import { CallForHelpPostDto } from './usecases/_common_/dtos/CallForHelpPostDto';
 import { CallForHelpPostDtoMapper } from './usecases/_common_/dtos/CallForHelpPostDtoMapper';
-import { GetPostsSummaryByPublisherUseCaseRequest } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCaseRequest';
+
 import { GetPostsSummaryByPublisherUseCase } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCase';
+import { GetPostsSummaryByPublisherUseCaseRequest } from './usecases/GetPostsSummaryByPublisherUseCase/GetPostsSummaryByPublisherUseCaseRequest';
+
+import { SharePostUseCase } from './usecases/SharePostUseCase/SharePostUseCase';
+import { SharePostUseCaseRequest } from './usecases/SharePostUseCase/SharePostUseCaseRequest';
 
 class CallForHelpPostsManagerFacade {
     constructor(
@@ -41,6 +46,8 @@ class CallForHelpPostsManagerFacade {
         private readonly wilayasService: WilayasService,
         private readonly picturesManager: PicturesManager,
         private readonly postIdGenerator: PostIdGenerator,
+        private readonly postShareRepository: PostShareRepository,
+        private readonly favouritePostRepository: FavouritePostRepository,
         private readonly callForHelpPostRepository: CallForHelpPostRepository,
         private readonly callForHelpPostEventPublisher: CallForHelpPostEventPublisher,
     ) {}
@@ -103,6 +110,7 @@ class CallForHelpPostsManagerFacade {
         return new DeletePostUseCase(
             this.callForHelpPostRepository,
             this.callForHelpPostEventPublisher,
+            this.favouritePostRepository,
         ).handle(request);
     }
 
@@ -116,6 +124,15 @@ class CallForHelpPostsManagerFacade {
             end: boolean;
             list: CallForHelpPostDto[];
         }>;
+    }
+
+    share(request: SharePostUseCaseRequest) {
+        return new SharePostUseCase(
+            this.usersService,
+            this.callForHelpPostRepository,
+            this.postShareRepository,
+            this.callForHelpPostEventPublisher,
+        ).handle(request);
     }
 }
 

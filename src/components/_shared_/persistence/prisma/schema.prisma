@@ -160,3 +160,12 @@ model TextMessageNotification {
   read            Boolean
   createdAt       DateTime
 }
+
+model PostShare {
+  postId    String
+  postType  String
+  userId    String?
+  createdAt DateTime
+
+  @@id([postId, postType, createdAt])
+}

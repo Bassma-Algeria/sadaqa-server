@@ -1,4 +1,5 @@
 import {
+    ApiBearerAuth,
     ApiHeader,
     ApiInternalServerErrorResponse,
     ApiNotFoundResponse,
@@ -34,6 +35,7 @@ class PostsController {
     }
 
     @Get('/me/summary')
+    @ApiBearerAuth()
     @ApiOperation({ description: 'get posts summary of the auth user' })
     @ApiHeader({ name: 'Authorization', description: 'the access token' })
     @ApiOkResponse({ description: 'posts summary found' })

@@ -25,6 +25,17 @@ describe('Get Families In Need Posts', function () {
         expect(list[1].publisherId).to.equal(post1.publisherId);
     });
 
+    it('should not get the disabled families in need posts', async () => {
+        const request = aFamilyInNeedPostCreationRequest();
+        const { postId } = await postsManager.create(request);
+
+        await postsManager.toggleEnablingStatus({ postId, userId: request.publisherId });
+
+        const { list } = await postsManager.getList();
+
+        expect(list.length).to.equal(0);
+    });
+
     it('should get all the families in need page per page 20 one per time, ordered by creation time descending', async () => {
         await create30FamilyInNeed();
 

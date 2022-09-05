@@ -8,7 +8,7 @@ import { UuidMessageIdGenerator } from '../../../../main/infra/real/UuidMessageI
 import { PostgresTextMessageRepository } from '../../../../main/infra/real/PostgresTextMessageRepository';
 import { TextMessageEventPublisherImpl } from '../../../../main/infra/real/TextMessageEventPublisherImpl';
 
-import { EventBus } from '../../../../../_shared_/event-bus/EventBus';
+import { InMemoryEventBus } from '../../../../../EventBus/main/InMemoryEventBus';
 
 interface Dependencies {
     usersService: UsersService;
@@ -23,7 +23,7 @@ const aMessagesManager = (dependencies?: Partial<Dependencies>) => {
         dependencies?.usersService || instance(mockUsersService),
         new UuidMessageIdGenerator(),
         new PostgresTextMessageRepository(),
-        new TextMessageEventPublisherImpl(EventBus.getInstance()),
+        new TextMessageEventPublisherImpl(InMemoryEventBus.instance()),
     );
 };
 

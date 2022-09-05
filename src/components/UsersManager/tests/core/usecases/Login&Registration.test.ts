@@ -1,4 +1,3 @@
-import { spy } from 'sinon';
 import { expect } from 'chai';
 
 import { aUsersManagerFacade } from './base/aUsersManagerFacade';
@@ -7,8 +6,6 @@ import { anAssociationRegistrationRequest } from './base/requests/anAssociationR
 
 import { ExceptionMessages } from '../../../main/core/domain/exceptions/ExceptionMessages';
 import { MultiLanguagesValidationException } from '../../../main/core/domain/exceptions/MultiLanguagesValidationException';
-
-import { EventBus } from '../../../../_shared_/event-bus/EventBus';
 
 describe('Login & Registration', () => {
     const usersManager = aUsersManagerFacade();
@@ -86,18 +83,6 @@ describe('Login & Registration', () => {
         await expect(
             usersManager.login({ email, password: ` ${password}  ` }),
         ).to.eventually.have.property('accountId', accountId);
-    });
-
-    it('should publish a user login event when login successfully', async () => {
-        const mockFn = spy();
-
-        EventBus.getInstance().subscribeTo('USER_LOGIN').by(mockFn);
-
-        const { email, password } = await registerRandomUser();
-        const { accountId } = await usersManager.login({ email, password });
-
-        expect(mockFn.calledOnce).to.equal(true);
-        expect(mockFn.args[0][0]).to.deep.equal({ accountId });
     });
 
     const registerRandomUser = async () => {
