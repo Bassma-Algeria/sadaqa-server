@@ -38,7 +38,6 @@ abstract class EditAccountInfoUseCase {
         await this.checkIfPhoneNumberUsedThrowIfSo(phoneNumber, account);
 
         return {
-            targetAccount: account,
             accountBuilder: this.getAccountBuilderFrom(account)
                 .withWilayaNumber(wilayaNumber)
                 .withPhone(phoneNumber),

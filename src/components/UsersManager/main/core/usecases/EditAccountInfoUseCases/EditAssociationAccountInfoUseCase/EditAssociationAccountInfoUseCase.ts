@@ -19,12 +19,8 @@ import { AssociationAccountRepository } from '../../../domain/services/AccountRe
 
 class EditAssociationAccountInfoUseCase
     extends EditAccountInfoUseCase
-    implements
-        UseCase<
-            EditAssociationAccountInfoUseCaseRequest,
-            EditAssociationAccountInfoUseCaseResponse
-        >
-{
+    implements UseCase<EditAssociationAccountInfoUseCaseRequest,
+        EditAssociationAccountInfoUseCaseResponse> {
     constructor(
         protected readonly wilayasService: WilayasService,
         protected readonly picturesManager: PicturesManager,
@@ -46,6 +42,7 @@ class EditAssociationAccountInfoUseCase
         const { accountBuilder } = await this.validateDataAndGetBasicAccountBuilderFrom(request);
 
         const associationName = new AssociationName(request.associationName);
+
 
         const editedAccount = (accountBuilder as AssociationAccountBuilder)
             .withName(associationName)

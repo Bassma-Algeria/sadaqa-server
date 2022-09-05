@@ -9,6 +9,7 @@ import { registerAssociation } from './base/operations/users/registerAssociation
 import { editAssociationInfo } from './base/operations/users/editAssociationInfo';
 import { getAssociationByToken } from './base/operations/users/getAssociationByToken';
 import { getRegularUserByToken } from './base/operations/users/getRegularUserByToken';
+import { activateAssociationAccount } from './base/operations/users/activateAssociationAccount';
 
 describe('User Register and Edit his info', () => {
     let server: any;
@@ -36,8 +37,13 @@ describe('User Register and Edit his info', () => {
         expect(updatedName).to.equal(firstName);
     });
 
-    it('association edit his info', async () => {
+    it('active association edit his info', async () => {
         const { accessToken, associationInfo } = await registerAssociation(server);
+
+        const {
+            info: { accountId },
+        } = await getAssociationByToken(server, accessToken);
+        await activateAssociationAccount(server, accountId);
 
         const associationName = 'some-name';
         await editAssociationInfo(server, { ...associationInfo, associationName }, accessToken);

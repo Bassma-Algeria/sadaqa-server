@@ -1,10 +1,9 @@
-import { EventBus } from './_shared_/event-bus/EventBus';
-
 import { EmailsManagerConfiguration } from './EmailsManager/main/EmailsManagerConfiguration';
 import { NotificationsManagerConfiguration } from './NotificationsManager/main/NotificationsManagerConfiguration';
 import { LoggerConfiguration } from './Logger/main/LoggerConfiguration';
+import { InMemoryEventBus } from './EventBus/main/InMemoryEventBus';
 
-const eventBus = EventBus.getInstance();
+const eventBus = InMemoryEventBus.instance();
 
 eventBus.subscribeTo('DONATION_POST_CREATED').by(payload => {
     NotificationsManagerConfiguration.aNotificationsManager().createNewDonationPostNotification(
