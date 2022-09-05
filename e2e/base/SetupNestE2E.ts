@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 
-import { AppModule } from '../../../src/web/rest/app.module';
-import { prisma } from '../../../src/components/_shared_/persistence/prisma/PrismaClient';
+import { AppModule } from '../../src/web/rest/app.module';
+import { prisma } from '../../src/components/_shared_/persistence/prisma/PrismaClient';
 
 const startNestTestingApp = async (): Promise<INestApplication> => {
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();

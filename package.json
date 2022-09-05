@@ -19,7 +19,7 @@
     "test:emails": "mocha 'src/components/EmailsManager/**/*.test.ts'",
     "test:logger": "mocha 'src/components/Logger/**/*.test.ts'",
     "test:event-bus": "mocha 'src/components/EventBus/**/*.test.ts'",
-    "test:e2e": "mocha 'tests/e2e/*.test.ts'",
+    "test:e2e": "mocha 'e2e/**/*.test.ts'",
     "test:coverage": "nyc --reporter=html --reporter=text npm test",
     "test": "npm run test:authentication && npm run test:users && npm run test:regions && npm run test:posts && npm run test:media && npm run test:messages && npm run test:notifications && npm run test:emails && npm run test:logger && npm run test:event-bus && npm run test:e2e",
     "lint": "eslint --ext .ts ."
