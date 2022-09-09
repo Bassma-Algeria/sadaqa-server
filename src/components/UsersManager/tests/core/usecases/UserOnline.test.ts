@@ -19,8 +19,22 @@ describe('User Online', () => {
 
         const { list } = await usersManager.getOnlineUsersList();
 
-        expect(list).to.have.lengthOf(1);
         expect(list).to.contain(accountId);
+    });
+
+    it('given a user became online, and then sending another user became online request with the same user, then should not have a duplicate in the list', async () => {
+        const accountId = faker.datatype.uuid();
+
+        const { list: listBefore } = await usersManager.getOnlineUsersList();
+
+        await usersManager.userBecameOnline({ accountId });
+        await usersManager.userBecameOnline({ accountId });
+
+        const { list: listAfter } = await usersManager.getOnlineUsersList();
+
+        expect(listAfter)
+            .to.have.lengthOf(listBefore.length + 1)
+            .and.contain(accountId);
     });
 
     it('given a user became online, when that user go offline, then should not have that user in the online users list', async () => {

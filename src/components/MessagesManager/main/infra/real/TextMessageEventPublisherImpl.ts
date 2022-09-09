@@ -22,6 +22,8 @@ class TextMessageEventPublisherImpl implements TextMessageEventPublisher {
     publishMessageRead(message: TextMessage) {
         this.eventBus.publish('MESSAGE_READ').withPayload({
             messageId: message.messageId.value(),
+            receiverId: message.receiverId.value(),
+            senderId: message.senderId.value(),
         });
     }
 

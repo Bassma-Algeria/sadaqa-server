@@ -49,9 +49,23 @@ describe('Event Bus', () => {
 
         expect(subscriber.calledTwice).to.equal(true);
         expect(subscriber.args[0][0]).to.equal('USER_START_TYPING');
-        expect(subscriber.args[0][1]).to.equal(payload1);
+        expect(subscriber.args[0][1]).to.deep.equal(payload1);
 
         expect(subscriber.args[1][0]).to.equal('DONATION_POST_CREATED');
-        expect(subscriber.args[1][1]).to.equal(payload2);
+        expect(subscriber.args[1][1]).to.deep.equal(payload2);
+    });
+
+    it('given a subscriber to all events excluding some events, when those excluded events occurs, then should not notify that subscriber', () => {
+        const subscriber = Sinon.spy();
+
+        eventBus
+            .subscribeToAllEvents()
+            .by(subscriber)
+            .excluding(['USER_START_TYPING', 'DONATION_POST_CREATED']);
+
+        eventBus.publish('USER_START_TYPING').withPayload({} as any);
+        eventBus.publish('DONATION_POST_CREATED').withPayload({} as any);
+
+        expect(subscriber.called).to.equal(false);
     });
 });

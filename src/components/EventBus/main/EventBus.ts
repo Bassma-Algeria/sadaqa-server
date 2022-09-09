@@ -12,6 +12,6 @@ export interface EventBus {
     unsubscribeFrom<E extends keyof Events>(e: E): { by(subscriber: EventSubscriber<E>): void };
 
     subscribeToAllEvents<E extends keyof Events>(): {
-        by(subscriber: AllEventsSubscriber<E>): void;
+        by(subscriber: AllEventsSubscriber<E>): { excluding: (events: E[]) => void };
     };
 }

@@ -77,16 +77,18 @@ interface FavouritePostPayload {
 }
 
 interface TextMessageSentPayload {
-    messageId: string;
-    senderId: string;
-    content: string;
-    receiverId: string;
-    createdAt: Date;
-    read: boolean;
+    readonly messageId: string;
+    readonly senderId: string;
+    readonly content: string;
+    readonly receiverId: string;
+    readonly createdAt: Date;
+    readonly read: boolean;
 }
 
 interface MessageReadPayload {
-    messageId: string;
+    readonly senderId: string;
+    readonly messageId: string;
+    readonly receiverId: string;
 }
 
 interface RegularUserAccountInfoEdited {
@@ -105,31 +107,31 @@ interface AssociationAccountInfoEdited {
 }
 
 interface PostNotificationPayload {
-    notificationId: string;
-    receiverId: string;
-    postId: string;
-    reason: string;
-    createdAt: Date;
+    readonly notificationId: string;
+    readonly receiverId: string;
+    readonly postId: string;
+    readonly reason: string;
+    readonly createdAt: Date;
 }
 
 interface TextMessageNotificationPayload {
-    notificationId: string;
-    receiverId: string;
-    messageContent: string;
-    messageSenderId: string;
-    createdAt: Date;
+    readonly notificationId: string;
+    readonly receiverId: string;
+    readonly messageContent: string;
+    readonly messageSenderId: string;
+    readonly createdAt: Date;
 }
 
 interface AssociationApprovalEmailPayload {
-    sender: string;
-    receiver: string;
-    associationId: string;
+    readonly sender: string;
+    readonly receiver: string;
+    readonly associationId: string;
 }
 
 interface PostSharedPayload {
-    postId: string;
-    userId: string | null;
-    shareTime: Date;
+    readonly postId: string;
+    readonly userId: string | null;
+    readonly shareTime: Date;
 }
 
 export interface Events {

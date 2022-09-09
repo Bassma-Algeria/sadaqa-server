@@ -14,7 +14,10 @@ describe('Info Log', () => {
     });
 
     it('should log the information passed to it', async () => {
-        await logger.info({ message: faker.lorem.words(7), payload: faker.random.words() });
+        await logger.info({
+            message: faker.lorem.words(7),
+            payload: { key: faker.random.words() },
+        });
 
         verify(logServiceMock.info(anything())).once();
     });

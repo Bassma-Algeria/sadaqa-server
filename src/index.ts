@@ -1,4 +1,4 @@
-import { bootstrapNestApp } from './web/rest/main';
+import { bootstrapNestApp } from './web/nestjs/main';
 
 const PORT = process.env.PORT || 5000;
 

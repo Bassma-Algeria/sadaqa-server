@@ -13,6 +13,10 @@ class AccountId {
     value() {
         return this.id;
     }
+
+    equals(another: AccountId) {
+        return this.id === another.id;
+    }
 }
 
 export { AccountId };

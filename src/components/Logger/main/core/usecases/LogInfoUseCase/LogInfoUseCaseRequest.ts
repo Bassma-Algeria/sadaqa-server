@@ -1,4 +1,4 @@
 export interface LogInfoUseCaseRequest {
     message: string;
-    payload: any;
+    payload: Record<string, any>;
 }

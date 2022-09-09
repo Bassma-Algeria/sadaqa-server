@@ -10,13 +10,7 @@ class InMemoryOnlineUserRepository implements OnlineUserRepository {
     }
 
     async getAll(): Promise<AccountId[]> {
-        const list: AccountId[] = [];
-
-        for (const id of this.store.values()) {
-            list.push(new AccountId(id));
-        }
-
-        return list;
+        return [...this.store].map(id => new AccountId(id));
     }
 
     async remove(accountId: AccountId): Promise<void> {

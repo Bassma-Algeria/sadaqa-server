@@ -7,4 +7,13 @@
       the decision to delete the tests that were referencing the event bus, and add them later, but make sure to
       test them properly by mocking the domain event publisher interface in the use cases tests, and test the event
       publisher implementation on Its own in the infra layer and always mock the EventBus interface and NEVER reference
-      the event bus directly 
+      the event bus directly
+
+
+- my socket use cases:
+    - user came online/go offline
+    - message:
+        - message read
+        - message sent
+        - user start/stop typing
+    - receive notifications

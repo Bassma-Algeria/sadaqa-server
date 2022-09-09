@@ -5,6 +5,11 @@ type Subscribers = {
     [Key in keyof Events]: EventSubscriber<Key>[];
 };
 
+type AllEventsSubscriberElement<E extends keyof Events> = {
+    subscriber: AllEventsSubscriber<E>;
+    excludedEvents: E[];
+};
+
 class InMemoryEventBus implements EventBus {
     private static readonly eventBus = new InMemoryEventBus();
 
@@ -15,7 +20,7 @@ class InMemoryEventBus implements EventBus {
     private constructor() {}
 
     private readonly subscribers: Partial<Subscribers> = {};
-    private readonly subscribersToAll: AllEventsSubscriber<any>[] = [];
+    private readonly subscribersToAll: AllEventsSubscriberElement<any>[] = [];
 
     subscribeTo<E extends keyof Events>(event: E) {
         return {
@@ -27,10 +32,21 @@ class InMemoryEventBus implements EventBus {
         };
     }
 
-    subscribeToAllEvents() {
+    subscribeToAllEvents<E extends keyof Events>() {
         return {
-            by: (subscriber: AllEventsSubscriber<any>) => {
-                this.subscribersToAll.push(subscriber);
+            by: (subscriber: AllEventsSubscriber<E>) => {
+                const subscriberToAll: AllEventsSubscriberElement<E> = {
+                    subscriber,
+                    excludedEvents: [],
+                };
+
+                this.subscribersToAll.push(subscriberToAll);
+
+                return {
+                    excluding: (excluded: E[]) => {
+                        subscriberToAll.excludedEvents = excluded;
+                    },
+                };
             },
         };
     }
@@ -48,8 +64,11 @@ class InMemoryEventBus implements EventBus {
     publish<E extends keyof Events>(event: E) {
         return {
             withPayload: (payload: Events[E]) => {
-                this.subscribers[event]?.forEach(subscriber => subscriber(payload));
-                this.subscribersToAll.map(subscriber => subscriber(event, payload));
+                this.subscribers[event]?.forEach(subscriber => subscriber({ ...payload }));
+
+                this.subscribersToAll
+                    .filter(s => !s.excludedEvents.includes(event))
+                    .forEach(({ subscriber }) => subscriber(event, { ...payload }));
             },
         };
     }

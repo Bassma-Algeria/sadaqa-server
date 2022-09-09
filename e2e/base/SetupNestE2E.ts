@@ -1,13 +1,19 @@
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 
-import { AppModule } from '../../src/web/rest/app.module';
+import { AppModule } from '../../src/web/nestjs/app.module';
 import { prisma } from '../../src/components/_shared_/persistence/prisma/PrismaClient';
 
+let app: INestApplication | undefined;
+
 const startNestTestingApp = async (): Promise<INestApplication> => {
+    if (app) return app;
+
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
 
-    return moduleRef.createNestApplication().init();
+    app = await moduleRef.createNestApplication().init();
+
+    return app;
 };
 
 const cleanupDB = async () => {
