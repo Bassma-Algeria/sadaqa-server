@@ -24,6 +24,7 @@ class LogServiceImpl implements LogService {
     }
 
     async info(infoLog: InformationLog): Promise<void> {
+        console.log(new Date());
         await fsPromise.appendFile(
             this.INFO_LOG_FILE,
             JSON.stringify({
@@ -46,8 +47,7 @@ class LogServiceImpl implements LogService {
     }
 
     private createFileIfNotExist(filepath: string) {
-        const dirname = path.dirname(filepath);
-        if (!fs.existsSync(dirname)) fs.mkdirSync(dirname);
+        if (!fs.existsSync(path.dirname(filepath))) fs.mkdirSync(path.dirname(filepath));
         if (!fs.existsSync(filepath)) fs.writeFileSync(filepath, '');
     }
 }

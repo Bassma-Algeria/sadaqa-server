@@ -18,7 +18,7 @@ npm test
 npm run test:coverage
 ```
 
-- #### start the dev server in watch mod
+- #### start the dev server in watch mode
 
 ```sh
 npm run start:dev
@@ -36,3 +36,22 @@ npm run start
 npm run build && npm run start:prod
 ```
 
+- #### run the dev server in Docker
+
+first create the containers and run them
+
+```sh
+docker-compose up
+```
+
+then access the shell of the container of the server app
+
+```sh
+docker exec -it <SERVER_APP_CONTAINER_ID> sh
+```
+
+and finally set up the database
+
+```sh
+npx prisma migrate dev && npx prisma db seed
+```

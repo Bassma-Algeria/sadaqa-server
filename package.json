@@ -8,7 +8,7 @@
     "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "start:prod": "node build/index",
+    "start:prod": "node build/src/index",
     "test:authentication": "mocha 'src/components/AuthenticationManager/**/*.test.ts'",
     "test:regions": "mocha 'src/components/RegionsManager/**/*.test.ts'",
     "test:users": "mocha 'src/components/UsersManager/**/*.test.ts'",
