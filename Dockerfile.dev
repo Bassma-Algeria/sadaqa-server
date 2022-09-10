@@ -3,16 +3,20 @@ FROM node:16.14-alpine
 WORKDIR /home/app
 
 COPY package.json ./
+COPY tsconfig.json ./
+COPY tsconfig.build.json ./
+COPY nest-cli.json ./
+COPY src ./src
 
 RUN npm install
 
-COPY src ./src
+RUN npx prisma generate
 
-ENV NODE_ENV=DEV
+RUN npm i -g @nestjs/cli
 
 RUN chown -R node:node /home/app
 USER node
 
 EXPOSE 5000
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start:dev"]

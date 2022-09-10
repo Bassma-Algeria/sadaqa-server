@@ -1,0 +1,5 @@
+export enum AccountStatus {
+    ACTIVE = 'ACTIVE',
+    WAITING_FOR_ADMIN_VALIDATION = 'WAITING_FOR_ADMIN_VALIDATION',
+    BLOCKED = 'BLOCKED',
+}

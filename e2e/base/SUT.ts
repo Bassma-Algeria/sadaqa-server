@@ -1,0 +1,3 @@
+class SUT {}
+
+export { SUT };

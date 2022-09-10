@@ -1,0 +1,10 @@
+.git
+.gitignore
+.github
+node_modules
+build
+README.md
+.env
+coverage
+.nyc_output
+e2e

@@ -1,46 +1,57 @@
-# **Database design**
+## Sadaqa REST API
 
-- [click here](https://dbdiagram.io/d/60fdb24428da596eb54c79e1)
+This is the REST API server of Sadaqa platform build in top nestjs.
+Following a modular monolithic architecture where each module is either following a simple CRUD architecture or a clean
+architecture depending on his complexity
 
-# **The api end points**
+## Available Scripts
 
-### 1. Users end points
+- #### Running all the tests
 
-- `/api/users/login` post request to login the user
-- `/api/users/signup` post request to create a new user
-- `/api/users/getUser/:userId` get request to get the target user info
-- `/api/users/getAllAssoctiations` get request to get all the registered associations
-- `/api/users/getAssociationPerWilaya` get request to get all the registered associations in the wialya passed using the query string
-- `/api/users/editGeneralInfo` put request to edit the auth user info
-- `/api/users/editCredentialsInfo` put request to edit the auth user credentials (email, password)
-- `/api/users/setPreferences` put request to set the auth user preferences (send theme in the query string) and make sure the name is the same as the columns name is the DB
-- `/api/users/getUsersIds` get request to get all the users ids
+```sh
+npm test
+```
 
-### 2. Posts end points
+- #### Checking test coverage
 
-- `/api/posts` get request to return a number given of posts filtred by the query string that we pass to it, the query string are: wilaya - adType - category - userId - active, also add: numOfPage - numOfAdsPerPage to specify the number of posts to return
-- `/api/posts/numOfPosts` same as the previous just return the number of filtred posts and not the posts info (note that numOfPage - numOfAdsPerPage are not valid here)
-- `/api/posts/createPost` post request to create a new post
-- `/api/posts/getPost/:postId` get request to return the target post
-- `/api/posts/search/:searchPhrase` get request to get the posts that match search phrase
-- `/api/posts/likePost/:postId` put request to add a like to the given post
-- `/api/posts/sharePost/:postId` put request to add a share to the given post
-- `/api/posts/makeInactive/:postId` put request to make the given post inactive
-- `/api/posts/deletePost/:postId` delete request to delete the given post
-- `/api/posts/getPostsIds` get request to get all the posts ids
+```sh
+npm run test:coverage
+```
 
-### 3. Messages end points
+- #### start the dev server in watch mode
 
-- `/api/messages/sendMessage` post request to send a message
-- `/api/messages/getContacts` get request to get the contacts of the auth user
-- `/api/messages/getConversation/:chatParticipantId` get request to get the conversation between the auth user and the given user
-- `/api/messages/makeMessagesRead/:chatParticipantId` put request to make the messages with the chatParticipant read
+```sh
+npm run start:dev
+```
 
-### 4. Notifications end points
+- #### start the normal dev server
 
-- `/api/notifications/getAuthUserNotifications` get request to get the notification of the auth user
-- `/api/notifications/makeNotificationsRead` put request to make the post notifications of the auth user read
+```sh
+npm run start
+```
 
-### 5. visits end points
+- #### start the prod server
 
-- `/api/visits/addVisit` post request to register the new visits with the userId and the device type
+```sh
+npm run build && npm run start:prod
+```
+
+- #### run the dev server in Docker
+
+first create the containers and run them
+
+```sh
+docker-compose up
+```
+
+then access the shell of the container of the server app
+
+```sh
+docker exec -it <SERVER_APP_CONTAINER_ID> sh
+```
+
+and finally set up the database
+
+```sh
+npx prisma migrate dev && npx prisma db seed
+```

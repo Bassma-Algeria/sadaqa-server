@@ -1,0 +1,171 @@
+// This is your Prisma schema file,
+// learn more about it in the docs https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Wilaya {
+  wilayaNumber Int    @id
+  arabicName   String
+  englishName  String
+}
+
+model RegularUserAccount {
+  accountId      String   @id
+  firstName      String
+  lastName       String
+  wilayaNumber   Int
+  phoneNumber    String   @unique
+  email          String   @unique
+  password       String
+  status         String
+  profilePicture String?
+  createdAt      DateTime
+}
+
+model AssociationAccount {
+  accountId       String   @id
+  associationName String
+  wilayaNumber    Int
+  phoneNumber     String   @unique
+  email           String   @unique
+  profilePicture  String?
+  password        String
+  status          String
+  createdAt       DateTime
+}
+
+model DonationPost {
+  postId       String   @id
+  title        String
+  description  String
+  category     String
+  wilayaNumber Int
+  pictures     String[]
+  publisherId  String
+  status       String
+  createdAt    DateTime
+}
+
+model DonationRequestPost {
+  postId       String   @id
+  title        String
+  description  String
+  category     String
+  wilayaNumber Int
+  pictures     String[]
+  publisherId  String
+  status       String
+  createdAt    DateTime
+}
+
+model FamilyInNeedPost {
+  postId          String   @id
+  title           String
+  description     String
+  wilayaNumber    Int
+  publisherId     String
+  pictures        String[]
+  ccp             String?
+  ccpKey          String?
+  baridiMobNumber String?
+  status          String
+  createdAt       DateTime
+}
+
+model CallForHelpPost {
+  postId          String   @id
+  title           String
+  description     String
+  wilayaNumber    Int
+  publisherId     String
+  pictures        String[]
+  ccp             String?
+  ccpKey          String?
+  baridiMobNumber String?
+  status          String
+  createdAt       DateTime
+}
+
+model FavouritePost {
+  userId   String
+  postId   String
+  postType String
+
+  @@id([userId, postId, postType])
+}
+
+model TextMessage {
+  messageId  String   @id
+  senderId   String
+  receiverId String
+  content    String
+  read       Boolean
+  createdAt  DateTime
+}
+
+model DonationPostNotification {
+  notificationId String   @id
+  receiverId     String
+  postId         String
+  reason         String
+  clicked        Boolean
+  read           Boolean
+  createdAt      DateTime
+}
+
+model DonationRequestPostNotification {
+  notificationId String   @id
+  receiverId     String
+  postId         String
+  reason         String
+  clicked        Boolean
+  read           Boolean
+  createdAt      DateTime
+}
+
+model FamilyInNeedPostNotification {
+  notificationId String   @id
+  receiverId     String
+  postId         String
+  reason         String
+  clicked        Boolean
+  read           Boolean
+  createdAt      DateTime
+}
+
+model CallForHelpPostNotification {
+  notificationId String   @id
+  receiverId     String
+  postId         String
+  reason         String
+  clicked        Boolean
+  read           Boolean
+  createdAt      DateTime
+}
+
+model TextMessageNotification {
+  notificationId  String   @id
+  receiverId      String
+  messageSenderId String
+  messageContent  String
+  clicked         Boolean
+  read            Boolean
+  createdAt       DateTime
+}
+
+model PostShare {
+  postId    String
+  postType  String
+  userId    String?
+  createdAt DateTime
+
+  @@id([postId, postType, createdAt])
+}
