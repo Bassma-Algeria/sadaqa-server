@@ -24,7 +24,6 @@ class LogServiceImpl implements LogService {
     }
 
     async info(infoLog: InformationLog): Promise<void> {
-        console.log(new Date());
         await fsPromise.appendFile(
             this.INFO_LOG_FILE,
             JSON.stringify({

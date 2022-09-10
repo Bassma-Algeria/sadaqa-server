@@ -91,7 +91,6 @@ class DonationPostsController {
                 wilayaNumber: Number(wilayaNumber),
             });
         } catch (e) {
-            console.log(e);
             handlePostsException(e);
         }
     }

@@ -17,10 +17,8 @@ class UserBecameOnlineUseCase implements UseCase<UserBecameOnlineUseCaseRequest,
 
         const onlineUsersIds = await this.onlineUserRepository.getAll();
 
-        console.log(onlineUsersIds.find(id => id.equals(accountId)));
         if (onlineUsersIds.find(id => id.equals(accountId))) return;
 
-        console.log('add');
         await this.onlineUserRepository.add(accountId);
 
         this.userEventPublisher.publishUserBecameOnlineEvent(accountId);
