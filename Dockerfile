@@ -38,6 +38,9 @@ RUN npm install -g pm2
 
 COPY --from=AppBuild /home/app/build .
 
+# Copy the prisma client to the production image
+COPY --from=AppBuild /home/app/node_modules/.prisma ./node_modules/.prisma
+
 ENV PORT=80 NODE_ENV=production
 
 # Set the privileges for our built app executable to run on privileged ports
