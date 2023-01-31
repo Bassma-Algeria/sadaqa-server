@@ -9,6 +9,10 @@ class FakeWilayasRepository implements WilayasRepository {
     getAll(): Promise<Wilaya[]> {
         throw new Error('Method not implemented.');
     }
+
+    save(): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
 }
 
 export { FakeWilayasRepository };
