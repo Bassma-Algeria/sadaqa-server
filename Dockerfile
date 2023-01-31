@@ -15,6 +15,8 @@ RUN npm install
 
 RUN npm i -g @nestjs/cli
 
+RUN npx prisma generate
+
 RUN npm run build
 
 # Build Stage 2
@@ -29,9 +31,7 @@ WORKDIR /home/app
 COPY package.json ./
 
 
-RUN npm install --only=production
-
-RUN npx prisma generate
+RUN npm install --omit=dev
 
 RUN npm install -g pm2
 
