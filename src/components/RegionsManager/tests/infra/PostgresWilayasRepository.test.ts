@@ -4,7 +4,7 @@ import { WilayaNumber } from '../../main/core/domain/WilayaNumber';
 import { PostgresWilayasRepository } from '../../main/infra/real/PostgresWilayasRepository';
 
 // TODO: Delete those tests. only test from the RegionsManagerFacade
-describe('PostgresWilayasRepository', () => {
+describe.skip('PostgresWilayasRepository', () => {
     const wilayasRepository = new PostgresWilayasRepository();
 
     it('should get the wilaya by its number', async () => {
@@ -25,7 +25,7 @@ describe('PostgresWilayasRepository', () => {
         expect(wilaya).to.equal(undefined);
     });
 
-    it.skip('should return all the wilayas', async () => {
+    it('should return all the wilayas', async () => {
         const TOTAL_NUMBER_OF_WILAYAS = 58;
 
         const allWilayas = await wilayasRepository.getAll();
