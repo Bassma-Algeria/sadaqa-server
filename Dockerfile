@@ -15,9 +15,9 @@ RUN npm install
 
 RUN npm i -g @nestjs/cli
 
-RUN npx prisma generate
-
 RUN npm run build
+
+COPY src/components/_shared_/persistence/prisma/schema.prisma build/src/components/_shared_/persistence/prisma/schema.prisma
 
 # Build Stage 2
 # This build takes the production build from staging build
@@ -33,13 +33,15 @@ COPY package.json ./
 
 RUN npm install --omit=dev
 
+# Setup prisma client
+RUN npm install -D prisma
+RUN npx prisma generate
+
+
 RUN npm install -g pm2
 
 
 COPY --from=AppBuild /home/app/build .
-
-# Copy the prisma client to the production image
-COPY --from=AppBuild /home/app/node_modules/.prisma ./node_modules/.prisma
 
 ENV PORT=80 NODE_ENV=production
 
@@ -51,4 +53,12 @@ USER node
 
 EXPOSE 80
 
-ENTRYPOINT ["pm2-runtime", "src/index.js"]
+RUN touch start.sh
+RUN echo " \
+    #!/bin/sh \n \
+    npx prisma db push \n \
+    npx prisma db seed \n \
+    pm2-runtime src/index.js \n \
+    " > start.sh
+
+ENTRYPOINT ["/bin/sh", "start.sh"]

@@ -58,5 +58,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Push To Docker Hub
+      - name: Push The current version To Docker Hub
         run: docker push yasserbelatreche/sadaqa-backend:${{ steps.package-version.outputs.current-version }}
+      - name: Update latest tag
+        run: docker tag yasserbelatreche/sadaqa-backend:${{ steps.package-version.outputs.current-version }} yasserbelatreche/sadaqa-backend:latest
+      - name: Push latest tag to Docker Hub
+        run: docker push yasserbelatreche/sadaqa-backend:latest
