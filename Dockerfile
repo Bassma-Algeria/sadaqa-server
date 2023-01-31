@@ -33,15 +33,14 @@ COPY package.json ./
 
 RUN npm install --omit=dev
 
+COPY --from=AppBuild /home/app/build .
+
 # Setup prisma client
 RUN npm install -D prisma
 RUN npx prisma generate
 
 
 RUN npm install -g pm2
-
-
-COPY --from=AppBuild /home/app/build .
 
 ENV PORT=80 NODE_ENV=production
 
@@ -54,6 +53,7 @@ USER node
 EXPOSE 80
 
 RUN touch start.sh
+RUN chmod +x start.sh
 RUN echo " \
     #!/bin/sh \n \
     npx prisma db push \n \
