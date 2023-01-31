@@ -95,7 +95,7 @@
   },
   "prisma": {
     "schema": "src/components/_shared_/persistence/prisma/schema.prisma",
-    "seed": "ts-node src/components/_shared_/persistence/prisma/seed.ts"
+    "seed": "node src/components/_shared_/persistence/prisma/seed.js"
   },
   "engines": {
     "node": ">=15.0.0"

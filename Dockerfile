@@ -55,10 +55,9 @@ EXPOSE 80
 RUN touch start.sh
 RUN chmod +x start.sh
 RUN echo " \
-    #!/bin/sh \n \
-    npx prisma db push \n \
-    npx prisma db seed \n \
-    pm2-runtime src/index.js \n \
+        #!/bin/bash \n \
+        npx prisma db push && npx prisma db seed \n \
+        pm2-runtime src/index.js \n \
     " > start.sh
 
 ENTRYPOINT ["/bin/sh", "start.sh"]
