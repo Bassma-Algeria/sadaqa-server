@@ -33,9 +33,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Setup the DB
-        run: |
-          npx prisma db push
-          npx prisma db seed
+        run: npx prisma db push
       - name: Run Tests
         run: npm test
 
