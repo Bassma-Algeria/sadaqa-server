@@ -52,11 +52,4 @@ USER node
 
 EXPOSE 80
 
-RUN touch start.sh
-RUN chmod +x start.sh
-RUN echo " \
-        #!/bin/bash \n \
-         pm2-runtime src/index.js \
-    " > start.sh
-
-ENTRYPOINT ["/bin/sh", "start.sh"]
+ENTRYPOINT ["sh", "-c", "npx prisma db push && pm2-runtime src/index.js"]
