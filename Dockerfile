@@ -12,6 +12,9 @@ COPY nest-cli.json ./
 COPY src ./src
 
 RUN npm install
+
+RUN npm i -g @nestjs/cli
+
 RUN npm run build
 
 # Build Stage 2
