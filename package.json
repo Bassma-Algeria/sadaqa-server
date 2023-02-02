@@ -22,13 +22,32 @@
     "test:e2e": "mocha 'e2e/**/*.test.ts'",
     "test:coverage": "nyc --reporter=html --reporter=text npm test",
     "test": "npm run test:authentication && npm run test:users && npm run test:regions && npm run test:posts && npm run test:media && npm run test:messages && npm run test:notifications && npm run test:emails && npm run test:logger && npm run test:event-bus && npm run test:e2e",
-    "lint": "eslint --ext .ts ."
-  },
-  "mocha": {
-    "env": "dotenv_config_path=./.env.test"
+    "lint": "eslint --ext .ts .",
+    "db:setup": "prisma migrate dev"
   },
   "author": "Bassma Team",
   "license": "ISC",
+  "dependencies": {
+    "@nestjs/common": "^9.0.3",
+    "@nestjs/core": "^9.0.3",
+    "@nestjs/platform-express": "^9.0.3",
+    "@nestjs/platform-socket.io": "^9.0.11",
+    "@nestjs/swagger": "^6.0.4",
+    "@nestjs/websockets": "^9.0.11",
+    "@prisma/client": "^4.1.1",
+    "@types/socket.io": "^3.0.2",
+    "bcrypt": "^5.0.1",
+    "cloudinary": "^1.30.0",
+    "dotenv": "^16.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "mime-types": "^2.1.35",
+    "nodemailer": "^6.7.8",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.5.5",
+    "sharp": "^0.31.3",
+    "source-map-support": "^0.5.21",
+    "uuid": "^8.3.2"
+  },
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
     "@nestjs/testing": "^9.0.3",
@@ -71,27 +90,6 @@
     "ts-mockito": "^2.6.1",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.4"
-  },
-  "dependencies": {
-    "@nestjs/common": "^9.0.3",
-    "@nestjs/core": "^9.0.3",
-    "@nestjs/platform-express": "^9.0.3",
-    "@nestjs/platform-socket.io": "^9.0.11",
-    "@nestjs/swagger": "^6.0.4",
-    "@nestjs/websockets": "^9.0.11",
-    "@prisma/client": "^4.1.1",
-    "@types/socket.io": "^3.0.2",
-    "bcrypt": "^5.0.1",
-    "cloudinary": "^1.30.0",
-    "dotenv": "^16.0.1",
-    "jsonwebtoken": "^8.5.1",
-    "mime-types": "^2.1.35",
-    "nodemailer": "^6.7.8",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.5.5",
-    "sharp": "^0.30.7",
-    "source-map-support": "^0.5.21",
-    "uuid": "^8.3.2"
   },
   "prisma": {
     "schema": "src/components/_shared_/persistence/prisma/schema.prisma",

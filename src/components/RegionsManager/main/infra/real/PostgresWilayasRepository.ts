@@ -73,10 +73,10 @@ const wilayas = [
     { wilayaNumber: 58, arabicName: 'المنيعة', englishName: 'El Menia' },
 ];
 
-prisma.wilaya.count().then(count => {
-    console.log(count);
-    if (count === 0) prisma.wilaya.createMany({ data: wilayas });
-});
+// prisma.wilaya.count().then(count => {
+//     console.log(count);
+//     if (count === 0) prisma.wilaya.createMany({ data: wilayas });
+// });
 
 class PostgresWilayasRepository implements WilayasRepository {
     async getAll(): Promise<Wilaya[]> {
@@ -97,7 +97,7 @@ class PostgresWilayasRepository implements WilayasRepository {
     private toWilayaEntity(model: DBModel): Wilaya {
         return new Wilaya(
             new WilayaName({ ar: model.arabicName, en: model.englishName }),
-            new WilayaNumber(wliayaDb.wilayaNumber),
+            new WilayaNumber(model.wilayaNumber),
         );
     }
 
