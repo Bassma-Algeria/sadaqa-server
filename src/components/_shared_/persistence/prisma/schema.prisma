@@ -12,9 +12,9 @@ datasource db {
 }
 
 model Wilaya {
-  wilayaNumber Int    @id
-  arabicName   String
-  englishName  String
+  code      Int    @id
+  name      String
+  addedAt   DateTime
 }
 
 model RegularUserAccount {

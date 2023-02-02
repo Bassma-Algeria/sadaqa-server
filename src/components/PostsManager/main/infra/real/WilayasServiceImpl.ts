@@ -8,7 +8,7 @@ class WilayasServiceImpl implements WilayasService {
 
     async isExist(wilayaNumber: WilayaNumber): Promise<boolean> {
         try {
-            await this.regionsManager.getWilaya({ wilayaNumber: wilayaNumber.value() });
+            await this.regionsManager.getWilaya({ code: wilayaNumber.value() });
 
             return true;
         } catch (e) {

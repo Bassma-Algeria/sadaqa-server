@@ -9,12 +9,10 @@ class GetAllWilayasUseCase implements UseCase<void, GetAllWilayasUseCaseResponse
     async handle(): Promise<GetAllWilayasUseCaseResponse> {
         const wilayas = await this.wilayasRepository.getAll();
 
-        return {
-            wilayas: wilayas.map(wilaya => ({
-                code: wilaya.wilayaNumber.value(),
-                name: wilaya.wilayaName.value(),
-            })),
-        };
+        return wilayas.map(wilaya => ({
+            code: wilaya.code.value(),
+            name: wilaya.name.value(),
+        }));
     }
 }
 

@@ -1,7 +1,7 @@
 # Build Stage 1
 # This build created a staging docker image
 #
-FROM node:16-alpine as AppBuild
+FROM node:18-alpine as AppBuild
 
 WORKDIR /home/app
 
@@ -22,7 +22,7 @@ COPY src/components/_shared_/persistence/prisma/schema.prisma build/src/componen
 # Build Stage 2
 # This build takes the production build from staging build
 #
-FROM node:16-alpine
+FROM node:18-alpine
 
 RUN apk add --no-cache libcap
 
@@ -52,4 +52,4 @@ USER node
 
 EXPOSE 80
 
-ENTRYPOINT ["sh", "-c", "npx prisma db push && pm2-runtime src/index.js"]
+ENTRYPOINT ["pm2-runtime", "src/index.js"]

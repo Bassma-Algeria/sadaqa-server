@@ -2,7 +2,7 @@ import { Wilaya } from '../../core/domain/Wilaya';
 import { WilayasRepository } from '../../core/domain/services/WilayasRepository';
 
 class FakeWilayasRepository implements WilayasRepository {
-    getByNumber(): Promise<Wilaya | undefined> {
+    getByCode(): Promise<Wilaya | undefined> {
         throw new Error('Method not implemented.');
     }
 

@@ -5,7 +5,7 @@ import { CreateDonationPostUseCaseRequest } from '../../../../../main/core/useca
 const CATEGORIES = [
     'clothes-accessories',
     'food',
-    'services',
+    'repositories',
     'electronics-appliances',
     'home-furnitures',
     'books-magazines',

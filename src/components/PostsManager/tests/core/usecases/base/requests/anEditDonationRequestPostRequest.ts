@@ -4,7 +4,7 @@ import { UpdateDonationRequestPostUseCaseRequest } from '../../../../../main/cor
 const CATEGORIES = [
     'clothes-accessories',
     'food',
-    'services',
+    'repositories',
     'electronics-appliances',
     'home-furnitures',
     'books-magazines',

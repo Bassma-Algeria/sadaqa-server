@@ -1,6 +1,3 @@
-export interface GetWilayaUseCaseResponse {
-    name: {
-        en: string;
-        ar: string;
-    };
-}
+import { WilayaDto } from '../../../presenters/WilayaDto';
+
+export type GetWilayaUseCaseResponse = WilayaDto;

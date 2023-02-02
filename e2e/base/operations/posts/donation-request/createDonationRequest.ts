@@ -36,7 +36,7 @@ const aDonationRequestCreationBody = () => {
 const DONATION_CATEGORIES = [
     'clothes-accessories',
     'food',
-    'services',
+    'repositories',
     'electronics-appliances',
     'home-furnitures',
     'books-magazines',
