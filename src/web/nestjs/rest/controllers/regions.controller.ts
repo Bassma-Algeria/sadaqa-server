@@ -8,6 +8,7 @@ import { Controller, Get, HttpException, HttpStatus, Param } from '@nestjs/commo
 
 import { RegionsService } from '../services/regions.service';
 import { NotFoundException } from '../../../../components/RegionsManager/main/core/domain/exceptions/NotFoundException';
+import { ValidationException } from '../../../../components/RegionsManager/main/core/domain/exceptions/ValidationException';
 
 @ApiTags('regions')
 @Controller('/api/regions')
@@ -30,7 +31,9 @@ class RegionsController {
             return await this.regionsService.getWilaya({ code: Number(wilayaNumber) });
         } catch (e) {
             if (e instanceof NotFoundException)
-                throw new HttpException({ error: 'not found' }, HttpStatus.NOT_FOUND);
+                throw new HttpException({ error: e.error, code: e.code }, HttpStatus.NOT_FOUND);
+            if (e instanceof ValidationException)
+                throw new HttpException({ error: e.error, code: e.code }, HttpStatus.BAD_REQUEST);
 
             throw new HttpException({ error: 'Server Error' }, HttpStatus.INTERNAL_SERVER_ERROR);
         }
