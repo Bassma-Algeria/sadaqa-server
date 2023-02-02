@@ -52,4 +52,4 @@ USER node
 
 EXPOSE 80
 
-ENTRYPOINT ["pm2-runtime", "src/index.js"]
+ENTRYPOINT ["sh", "-c", "npx prisma db push && pm2-runtime src/index.js"]
