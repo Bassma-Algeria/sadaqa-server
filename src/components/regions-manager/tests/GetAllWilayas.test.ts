@@ -1,9 +1,8 @@
 import { expect } from 'chai';
-
-import { RegionsManagerFactory } from '../main/RegionsManagerFactory';
+import { aRegionsManager } from './builders/aRegionsManager';
 
 describe('Get All Wilayas', () => {
-    const regionsManager = RegionsManagerFactory.aRegionsManager();
+    const regionsManager = aRegionsManager();
 
     it('should get all the 58 algerian wilayas', async () => {
         const wilayas = await regionsManager.getAlgerianWilayas();

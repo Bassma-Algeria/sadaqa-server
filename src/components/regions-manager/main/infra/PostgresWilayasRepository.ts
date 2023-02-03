@@ -1,18 +1,20 @@
-import { prisma } from '../../../_shared_/persistence/prisma/PrismaClient';
-
 import { Wilaya } from '../core/domain/Wilaya';
 import { WilayaCode } from '../core/domain/WilayaCode';
 import { WilayasRepository } from '../core/domain/repositories/WilayasRepository';
 
+import { WilayaDbClient } from '../../../persistence/postgres/prisma/PrismaClients';
+
 class PostgresWilayasRepository implements WilayasRepository {
+    constructor(private readonly dbClient: WilayaDbClient) {}
+
     async getAll(): Promise<Wilaya[]> {
-        const wilayas = await prisma.wilaya.findMany();
+        const wilayas = await this.dbClient.findMany();
 
         return wilayas.map(wilaya => Wilaya.FromState(wilaya));
     }
 
     async getByCode(code: WilayaCode): Promise<Wilaya | undefined> {
-        const wilaya = await prisma.wilaya.findUnique({
+        const wilaya = await this.dbClient.findUnique({
             where: { code: code.value() },
         });
 
@@ -23,7 +25,7 @@ class PostgresWilayasRepository implements WilayasRepository {
     async saveMany(wilayas: Wilaya[]): Promise<void> {
         const dbModels = wilayas.map(wilaya => wilaya.state);
 
-        await prisma.wilaya.createMany({
+        await this.dbClient.createMany({
             data: dbModels,
         });
     }

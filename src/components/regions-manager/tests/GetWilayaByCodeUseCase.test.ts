@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 
-import { RegionsManagerFactory } from '../main/RegionsManagerFactory';
+import { aRegionsManager } from './builders/aRegionsManager';
 
 import { NotFoundException } from '../main/core/domain/exceptions/NotFoundException';
 import { ValidationException } from '../main/core/domain/exceptions/ValidationException';
 
 describe('Get Wilaya By Code', () => {
-    const regionsManager = RegionsManagerFactory.aRegionsManager();
+    const regionsManager = aRegionsManager();
 
     it('given a wilaya code that does not exist, then should fail', async () => {
         const wilayaCode = 1000;
